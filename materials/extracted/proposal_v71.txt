@@ -1,0 +1,190 @@
+# 申报书_V7.1_实证修正版
+Source: F:\嵌赛\申报书_V7.1_实证修正版.docx
+Role: 申报书/历史版本
+Kind: docx
+
+项目申报书
+V7.1 实证修正版
+基于 STM32G474 的边缘网关型无感 FOC 工业驱动系统
+第九届全国大学生嵌入式芯片与系统设计竞赛 · ST赛道 · 工业4.0方向
+2026年4月21日 · 经 ST 官方 Datasheet DS13472 / UM2781 / UM2505 交叉核实后定稿
+第零章 V7.1 相对 V7 的实证修正清单
+本章列出 V7.1 在 V7 基础上新增的全部修正。每条均经 ST 官方 Datasheet、立创商城实时库存、MPS 原厂规格书交叉核实。这些是 V7 中由 AI 幻觉或信息过时导致的硬错误，必须修正。
+第一章 STDRIVE101 真实引脚定义（DS13472 Table 6 实证）
+以下引脚表完全来自 ST 官方 Datasheet DS13472 Rev 2，每个引脚名称和功能均为原文复现。
+⚠ 重要：STDRIVE101 没有 VDD 引脚。V7 中“VDD引脚：逻辑供电，接NUCLEO的3.3V”是错误的。STDRIVE101 的逻辑输入引脚（INHx/INLx）内部有 ESD 保护和电平转换电路，直接兼容 3.3V/5V TTL/CMOS 电平，无需外部提供 VDD 参考电压。
+第二章 修正后的 STDRIVE101 ↔ NUCLEO-G474RE 引脚映射表
+本表基于 DS13472 + UM2505 Rev 6 + STM32CubeG4 TIM_ComplementarySignals 官方示例交叉核实。
+2.1 TIM1 互补 PWM 引脚映射（6路 PWM + BKIN）
+2.2 ADC 采样引脚
+2.3 控制与状态引脚
+ℹ V7.1 全局使能方案（方案A）：采用 INHx/INLx 模式 + 软件 MOE 位控制 + PA5 LED 指示。无需外部硬件 EN 引脚。MCSDK 三电阻 FOC 标准配置。
+第三章 修正后的器件选型与 BOM
+3.1 栅极驱动器
+STDRIVE101 — 三相半桥栅极驱动 IC，VFQFPN 4x4mm 24L
+立创编号：C2969847（已核实）
+关键参数：工作电压 5.5–75V，驱动电流 600mA sink/source，内置自举二极管，内置 12V LDO，UVLO + VDS 监测 + 热关断
+3.2 功率 MOSFET（V7.1 修正）
+⚠ V7 原文仅列 NCEP40T11K(TO-252)，但该型号立创编号 C502980 为预订件（非现货）。V7.1 补充可靠备选。
+ℹ V7.1 推荐主选 NCEP40T11G (C182465)，DFN5x6 封装结构紧凑、热阻低、立创现货。若团队偏好 TO-252 手工可焦性，用 AOD4184 备选。两者均为 40V 耐压，对 24V 母线余量 66%。
+3.3 电源芯片（V7.1 重大修正）
+⚠ MP2359 最大 VIN = 24V（MPS Datasheet 明文），24V 母线已是绝对极限。电机刹车时反电动势回灌可轻松超过 24V，直接烧毁 MP2359。
+解决方案（二选一）：
+方案一（推荐）：将 MP2359 替换为 MP2456 或 MP2459，最大 VIN = 36V，对 24V 母线余量 50%。立创商城搜索 MP2456 即可找到 TSOT23-6 封装模块。
+方案二（应急）：保留 MP2359，但在 VIN 前加 SMBJ26A TVS 纳世管（钳位电压 26V，最大吸收 600W 浪涌）。这只是应急措施，长期建议方案一。
+3.4 完整 BOM 清单（V7.1 修正版）
+第四章 V7 各章节修正对照表
+本章列出 V7 原文中需要替换的具体段落，供团队手动对照修改或直接替换。
+4.1 第零章修正5（STDRIVE101 封装与电源架构锁定）
+✘ V7 原文（错误）：
+“VREG 引脚：内部 12V LDO 输出，50mA 驱动能力，仅接 1μF + 100nF 电容到 GND”
+“VDD 引脚：逻辑供电，接 NUCLEO 的 3.3V”
+“内置死区互锁防直通”
+✔ V7.1 替换文本（正确）：
+REG12 引脚（pin 5）：内部 12V LDO 输出，50mA max。必须接 4.7μF X7R 陶瓷电容 + 100nF 紧贴芯片引脚到 GND。严禁外接任何电压。（原始设计中 1μF 偏小，ST 社区工程师实测确认 4.7μF 可避免开关環节 REG12 电压跌落触发 UVLO。）
+STDRIVE101 无 VDD 引脚。芯片 24 个物理引脚中不包含 VDD 或 VCC。Datasheet 中的“VDD=3.3V”仅是对外部逻辑输入电平兼容性的标注（即 INHx/INLx 输入引脚兼容 3.3V 和 5V TTL/CMOS 电平），NUCLEO 的 3.3V GPIO 直接连接 INHx/INLx 即可，无需额外供电。
+INHx/INLx 模式下（DT/MODE 接 GND），STDRIVE101 提供引脚级互锁（interlocking）防止同一桥臂上下管同时导通，但不生成死区。死区必须由 STM32 TIM1_BDTR 寄存器的 DTG 字段配置（MCSDK 默认 500ns）。只有 ENx/INx 模式（DT/MODE 接 RDT 电阻）才通过芯片内部产生死区。
+4.2 第零章修正4（NCEP40T11 型号正本清源）
+✘ V7 原文（不完整）：
+“V7 最终选型：NCEP40T11K（TO-252 D-PAK 封装）”
+✔ V7.1 替换文本：
+V7.1 最终选型：NCEP40T11G（立创现货 C182465，DFN5x6-8L 封装，40V/110A/3.9mΩ）。TO-252 后缀 K 版本 C502980 为预订件，到货不确定。若团队强烈偏好 TO-252 封装（手工可焦性），备选 AOD4184 (C879026, TO-252, 40V/50A/8mΩ)，立创现货。DFN5x6 封装建议统一 SMT 代贴。
+4.3 第零章修正8（栅极电阻规格）
+✘ V7 原文（错误基准）：
+“在 STDRIVE101 的典型驱动能力（峰值拉出电流 ~1A）下”
+✔ V7.1 替换文本：
+“在 STDRIVE101 的典型驱动能力（600mA sink/source，DS13472 Features 页明文）下，22Ω 栅极电阻能有效抑制 15kHz PWM 开关瞬态振铃。”
+4.4 第二章 2.1.5（电源管理）
+✘ V7 原文（危险）：
+“24V 母线 → MP2359 → 5V ”
+✔ V7.1 替换文本：
+24V 母线 → MP2456/MP2459（36V max VIN）→ 5V → NUCLEO VIN 或 ESP32 供电。若暂时使用 MP2359，必须在其 VIN 引脚前并联 SMBJ26A TVS 纳世管（钳位 26V）保护。
+4.5 第十一章终检清单修正
+V7 终检表中以下条目需调整：
+第五章 嘉立创 EDA 工程落地路径（实证）
+⚠ 嘉立创 EDA 专业版 .epro 文件是 ZIP 归档，内部元件通过云端 libraryUuid 绑定。凭空生成的 .epro 几乎必然无法“一键导入无报错”。以下是工程上最可靠的落地方案。
+5.1 推荐操作流程（30-60 分钟可复制）
+1. 打开嘉立创 EDA 专业版，新建工程，选择“四层板”。
+2. 在元件库中搜索 C2969847（STDRIVE101），拖入原理图。确认封装为 VFQFPN 4x4mm 24L。
+3. 搜索 C182465（NCEP40T11G），拖入 6 颗。或搜索 C879026（AOD4184）作为 TO-252 备选。
+4. 按照第二章引脚映射表连线。核心连接：PA8→INH1、PB13→INL1、PA9→INH2、PA12→INL2、PA10→INH3、PB15→INL3、PB12→nFAULT。
+5. REG12(pin5) 只接 4.7μF + 100nF 到 GND。不要连接任何外部电压到此引脚。
+6. DT/MODE(pin2) 直接连接到 GND（选择 INHx/INLx 模式）。
+7. 每相 BOOT→OUT 之间接 1μF/50V X7R 自举电容。
+8. 每颗 MOSFET 栅极串联 22Ω/0603 电阻。
+9. 3 颗 20mΩ/2512 采样电阻置于低侧 MOS Source 与 GND 之间，开尔文差分走线引到 OPAMP 输入。
+10. PCB 第二层全层 GND 平面，禁止走信号线。强弱电分区，采样电阻下方单点接地。
+5.2 立创开源广场参考工程
+搜索关键词：“STDRIVE101”、“BLDC 驱动”、“FOC 驱动板”。找到高赞工程后，可直接克隆到自己的嘉立创 EDA 工作区，然后根据 V7.1 的修正进行调整。这比从零开始画更高效。
+第六章 答辩 Q&A 话术修正
+V7 第九章 Q&A 中部分话术需调整以反映 V7.1 修正。
+Q7 话术修正（电机堵转保护）：
+将“第一层：STDRIVE101 内置 VDS 过压监测”后补充：“栅极驱动电流 600mA，足以在微秒级内关断 MOSFET”。删除任何提及“1A”的表述。
+Q9 话术修正（四层板 ADC 噪声）：
+补充“死区由 STM32 TIM1 的 DTG 寄存器配置（MCSDK 默认 500ns），STDRIVE101 在 INHx/INLx 模式下提供引脚级互锁作为第二重保障”。删除任何“内置死区”的表述。
+第七章 V7.1 修正总结与行动指南
+7.1 核心结论
+V7 申报书的整体技术路线完全正确：STDRIVE101 + 分立 MOS + NUCLEO-G474RE + MCSDK + 边缘 WiFi 网关 + 三电阻开尔文采样 + CORDIC 加速。架构合规、选型合理、没有致命错误。
+V7.1 修正的 8 个问题属于细节级硬伤（引脚命名、参数数值、库存状态、电源余量），不影响架构，但如果不修正，会在答辩现场被评委精准狙击。
+7.2 立即行动清单
+1. 成员 A：打开嘉立创 EDA，搜索 C2969847 和 C182465，确认在库且有封装。按第五章流程建工程。
+2. 成员 A：在立创商城搜索 MP2456 或 MP2459 TSOT23-6 模块，确认现货和价格。
+3. 成员 B：在 STM32CubeMX 中配置 TIM1 互补 PWM：PA8/PB13、PA9/PA12、PA10/PB15，死区通过 BDTR.DTG 设为 500ns。
+4. 所有人：用本文档第四章的对照表，在 V7 Word 文档中“查找替换”全部 8 处错误。
+5. 答辩前：确保每人熟知“STDRIVE101 无 VDD 引脚”、“驱动电流 600mA”、“REG12 不是 VREG”这三个关键修正点。评委问到引脚细节时能正确回答。
+7.3 文档溢源声明
+本文档所有技术声明均可追溯至以下权威来源：
+• STDRIVE101 Datasheet DS13472 Rev 2 (st.com)
+• EVALSTDRIVE101 User Manual UM2781 (st.com)
+• NUCLEO-G474RE User Manual UM2505 Rev 6 (st.com)
+• MP2359 Datasheet Rev 1.21 (monolithicpower.com)
+• STM32CubeG4 TIM_ComplementarySignals 官方示例
+• LCSC/立创商城实时库存查询 (2026-04-21)
+• ST Community STDRIVE101 技术帖子（REG12 电容实测）
+— END · V7.1 · 2026年4月21日 ·
+所有器件选型请以原厂 Datasheet 为最终依据
+[Table 1]
+# | V7 原文错误 | V7.1 修正（含出处） | 影响范围
+1 | V7: "VDD引脚：逻辑供电，接NUCLEO的3.3V" | STDRIVE101 无 VDD 物理引脚。芯片仅有 VS(pin4)、REG12(pin5)、EPAD/GND。“VDD=3.3V”是 Datasheet 对外部逻辑电平的标注，不是芯片引脚。(来源: DS13472 Table 6, Figure 7) | 原理图必须删除 VDD 连线
+2 | V7: "多处写 VREG 引脚" | Datasheet 命名为 REG12 (pin 5)，不是 VREG。(DS13472 Table 6) | 所有引脚表重命名
+3 | V7: "内置死区互锁防直通" | INHx/INLx 模式（DT/MODE接GND）只有互锁(interlocking)，不生成死区。死区由 TIM1_BDTR.DTG 产生。ENx/INx模式才通过 RDT 电阻生成内部死区。(DS13472 §5.3.1) | 原理图说明修正
+4 | V7: "驱动峰值电流约1A" | Datasheet Features 明文：600 mA sink/source。(DS13472 Features 页) | 栅极电阻计算基准调整
+5 | V7: "NCEP40T11K (TO-252)" | NCEP40T11K 立创编号 C502980，但为预订件（非现货）。推荐主选 NCEP40T11G (C182465, DFN5x6, 现货) 或备选 AOD4184 (C879026, TO-252, 40V/50A) | BOM 必须重做
+6 | V7: "24V→5V 用 MP2359" | MP2359 最大 VIN = 24V（MPS Datasheet 明文），24V 母线已是绝对极限。电机刹车回灌可超 24V，必炸。建议改用 MP2456/MP2459 (36V) 或在 MP2359 VIN 前加 30V TVS 纳世 | 电源设计重做
+7 | V7: "REG12仅接 1μF + 100nF" | ST 社区工程师实测确认：REG12 必须接 4.7μF X7R 陶瓷 + 100nF 才能避免开关瞬态跌落触发 UVLO。(ST Community STDRIVE101 帖子实证) | BOM 电容值修改
+8 | V7: "没有独立 EN 引脚”未充分说明 | STDRIVE101 无独立 EN。本项目采用 INHx/INLx 模式（DT/MODE 接 GND），全局使能通过 STM32 TIM1_BDTR.MOE 位软件控制，PA5(LD2) 作为使能状态指示 LED。(DS13472 §5.3, §5.4) | 原理图 EN 连线删除
+[Table 2]
+引脚# | 名称 | 类型 | 功能说明
+1 | CP | 模拟输入 | 过流比较器输入。接采样电阻高端（可选）
+2 | DT/MODE | 模拟输入 | 死区/模式选择。接GND = INHx/INLx模式；接 RDT(50k-250k)到GND = ENx/INx模式
+3 | SCREF | 模拟输入 | VDS 监测保护阈值设置。电阻分压设定，悬空则禁用此保护
+4 | VS | 电源 | 主供电引脚，5.5–75V。接 24V 母线 + 100nF去耦
+5 | REG12 | 电源输出 | 内部 12V LDO 输出，50mA max。仅接 4.7μF X7R + 100nF 到 GND，严禁外接电压
+6 | nFAULT | 开漏输出 | 故障输出，低电平有效。需 10kΩ 上拉到 3.3V。接 PB12(TIM1_BKIN)
+7 | INH1/IN1 | 数字输入 | U相高侧驱动输入。INHx/INLx模式下接 PA8(TIM1_CH1)
+8 | INH2/IN2 | 数字输入 | V相高侧驱动输入。接 PA9(TIM1_CH2)
+9 | INH3/IN3 | 数字输入 | W相高侧驱动输入。接 PA10(TIM1_CH3)
+10 | INL1/EN1 | 数字输入 | U相低侧驱动输入。INHx/INLx模式下接 PB13(TIM1_CH1N)
+11 | INL2/EN2 | 数字输入 | V相低侧驱动输入。接 PA12(TIM1_CH2N)
+12 | INL3/EN3 | 数字输入 | W相低侧驱动输入。接 PB15(TIM1_CH3N)
+13 | BOOT3 | 电源 | 半桥3自举引脚。接 1μF/50V X7R 到 OUT3
+14 | GHS3 | 输出 | 半桥3高侧栅极驱动输出。接 W相上管栅极（串 22Ω）
+15 | OUT3 | 电源 | 半桥3相输出。接 W相上下管中点（电机 W 线）
+16 | GLS3 | 输出 | 半桥3低侧栅极驱动输出。接 W相下管栅极（串 22Ω）
+17 | BOOT2 | 电源 | 半桥2自举引脚。接 1μF/50V X7R 到 OUT2
+18 | GHS2 | 输出 | 半桥2高侧栅极驱动输出
+19 | OUT2 | 电源 | 半桥2相输出（电机 V 线）
+20 | GLS2 | 输出 | 半桥2低侧栅极驱动输出
+21 | BOOT1 | 电源 | 半桥1自举引脚。接 1μF/50V X7R 到 OUT1
+22 | GHS1 | 输出 | 半桥1高侧栅极驱动输出
+23 | OUT1 | 电源 | 半桥1相输出（电机 U 线）
+24 | GLS1 | 输出 | 半桥1低侧栅极驱动输出
+EPAD | GND | 电源 | 底部裸露散热焊盘，必须连接 GND，多过孔散热
+[Table 3]
+STDRIVE101引脚 | 引脚名 | STM32G474引脚 | TIM1信号 | Morpho位置 | 功能
+Pin 7 | INH1/IN1 | PA8 (AF6) | TIM1_CH1 | CN10 pin 23 | U相高侧 PWM
+Pin 10 | INL1/EN1 | PB13 (AF6) | TIM1_CH1N | CN10 pin 30 | U相低侧 PWM
+Pin 8 | INH2/IN2 | PA9 (AF6) | TIM1_CH2 | CN10 pin 21 | V相高侧 PWM
+Pin 11 | INL2/EN2 | PA12 (AF6) | TIM1_CH2N | CN10 pin 12 | V相低侧 PWM
+Pin 9 | INH3/IN3 | PA10 (AF6) | TIM1_CH3 | CN10 pin 33 | W相高侧 PWM
+Pin 12 | INL3/EN3 | PB15 (AF4) | TIM1_CH3N | CN10 pin 26 | W相低侧 PWM
+Pin 6 | nFAULT | PB12 (AF6) | TIM1_BKIN | CN10 pin 16 | 硬件刹车输入
+[Table 4]
+信号 | G474引脚 | ADC通道 | Morpho位置 | 备注
+VBUS_SENSE | PA1 | ADC1_IN2 | CN7 pin 30 | 56kΩ/4.7kΩ 分压 (24V→1.87V)
+I_U (电流) | PA0 | ADC1_IN1/OPAMP1 | CN7 pin 28 | 经 G474 内置 OPAMP1 PGA×8
+I_V (电流) | PA3 | ADC1_IN4/OPAMP2 | CN6 pin 1 | 经 G474 内置 OPAMP2 PGA×8
+[Table 5]
+信号 | G474引脚 | 备注
+DRV_EN 指示 | PA5 (LD2) | NUCLEO 板载 LED，软件使能状态指示，MOE=1 亮 / MOE=0 灭
+FAULT_RST | PC13 (USER按键) | 清除软件故障锁存，按下后软件重置 MOE 位
+DT/MODE | 接 GND | 选择 INHx/INLx 模式（无内部死区，死区由 TIM1 产生）
+SCREF | 分压电阻 | 20kΩ到3.3V + 33kΩ到GND ≈ 1.25V，设定 VDS 保护阈值
+[Table 6]
+型号 | 立创编号 | 封装 | Vds | Id | Rds(on) | 状态
+NCEP40T11K | C502980 | TO-252 | 40V | 110A | 2.4mΩ | 预订件
+NCEP40T11G | C182465 | DFN5x6-8L | 40V | 110A | 3.9mΩ | 现货★
+AOD4184 | C879026 | TO-252 | 40V | 50A | 8mΩ | 现货备选
+[Table 7]
+序号 | 器件 | 立创编号 | 封装 | 数量 | 参数 | 备注
+1 | STDRIVE101 | C2969847 | VFQFPN 4x4 | 1 | — | SMT代贴
+2 | NCEP40T11G | C182465 | DFN5x6-8L | 6 | 40V/110A | SMT代贴
+3 | 22Ω电阻 | 搜 0603 22R | 0603 | 6 | 1% | 栅极防振铃
+4 | 20mΩ采样电阻 | 搜 2512 R020 | 2512 | 3 | 合金 1% | 开尔文采样
+5 | 1μF/50V MLCC | 搜 0603 1uF | 0603 | 3 | X7R | 自举电容
+6 | 4.7μF X7R MLCC | 搜 0805 4.7uF | 0805 | 1 | 25V X7R | REG12滤波
+7 | 100nF MLCC | 搜 0603 100nF | 0603 | 10+ | 50V X7R | 去耦
+8 | 470μF/50V电解 | 搜 10x10 470uF | 10x10mm | 3 | 低 ESR | 母线滤波
+9 | 10kΩ电阻 | 搜 0603 10K | 0603 | 1 | 1% | nFAULT上拉
+10 | 20kΩ+33kΩ电阻 | 搜 0603 | 0603 | 各1 | 1% | SCREF分压
+11 | MP2456模块 | 搜 MP2456 | TSOT23-6 | 1 | 36V→5V | 替代MP2359
+12 | NUCLEO-G474RE | — | — | 1 | — | 插拔式
+13 | ESP32-C3-MINI-1 | 搜 ESP32-C3 | SMD | 1 | — | WiFi网关
+14 | SMBJ26A TVS | 搜 SMBJ26A | SMB | 1 | 26V | 备选保护
+[Table 8]
+V7 原条目 | V7.1 修正
+“STDRIVE101 VREG 只接滤波电容” | → “STDRIVE101 REG12 接 4.7μF + 100nF，严禁外接电压”
+“24V→5V 用 MP2359” | → “24V→5V 用 MP2456/MP2459 (36V)，或 MP2359 + TVS 保护”
+“NCEP40T11K 选型(TO-252)” | → “主选 NCEP40T11G (C182465, DFN5x6)，备选 AOD4184 (C879026, TO-252)”
+新增检查项： | “STDRIVE101 无 VDD 引脚，原理图中确认已删除 VDD 连线”
+新增检查项： | “死区由 TIM1_BDTR.DTG 生成，STDRIVE101 INHx/INLx 模式只提供互锁”

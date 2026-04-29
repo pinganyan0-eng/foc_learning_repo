@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-04-30T01:28:06",
+  "workspace": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat",
+  "sources": [
+    {
+      "id": "algo_b_8week",
+      "title": "算法工程师_B_8周保姆级学习计划",
+      "role": "B 算法/主控",
+      "kind": "html",
+      "source_path": "C:\\Users\\gregrg\\Desktop\\算法工程师_B_8周保姆级学习计划.html",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\algo_b_8week.txt",
+      "characters": 201842
+    },
+    {
+      "id": "algo_56day",
+      "title": "56天算法工程师冲刺学计划",
+      "role": "B 算法/主控",
+      "kind": "html",
+      "source_path": "C:\\Users\\gregrg\\Desktop\\56天算法工程师冲刺学计划.html",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\algo_56day.txt",
+      "characters": 223780
+    },
+    {
+      "id": "tech_report_v1",
+      "title": "STM32G474_FOC_线上初赛技术报告_V1.0",
+      "role": "项目报告",
+      "kind": "docx",
+      "source_path": "F:\\嵌赛\\STM32G474_FOC_线上初赛技术报告_V1.0.docx",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\tech_report_v1.txt",
+      "characters": 44700
+    },
+    {
+      "id": "v9_final",
+      "title": "V9_终极无错版",
+      "role": "最终方案/高优先级",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\V9_终极无错版.pdf",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\v9_final.txt",
+      "characters": 21999
+    },
+    {
+      "id": "proposal_v8",
+      "title": "申报书_V8_深度工程盲区修正版",
+      "role": "申报书/高优先级",
+      "kind": "docx",
+      "source_path": "F:\\嵌赛\\申报书_V8_深度工程盲区修正版.docx",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\proposal_v8.txt",
+      "characters": 26142
+    },
+    {
+      "id": "proposal_v71",
+      "title": "申报书_V7.1_实证修正版",
+      "role": "申报书/历史版本",
+      "kind": "docx",
+      "source_path": "F:\\嵌赛\\申报书_V7.1_实证修正版.docx",
+      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\proposal_v71.txt",
+      "characters": 9734
+    }
+  ]
+}

@@ -46,6 +46,7 @@ def chunk_text(text: str, size: int = 1200) -> list[str]:
 
 def source_files() -> list[Path]:
     files: list[Path] = []
+    files.extend(p for p in ROOT.glob("*.md") if p.is_file())
     for folder in ["docs", "templates", "workflow", "materials", "materials/extracted"]:
         base = ROOT / folder
         if base.exists():

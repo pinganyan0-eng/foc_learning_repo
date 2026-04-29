@@ -17,3 +17,12 @@
 - 这里配置的是 Codex 学习助手环境，不是 STM32CubeIDE、CubeMX、MCSDK、Arduino IDE 等开发环境。
 - 真实固件源码、真实实验日志、真实硬件资料还没有提供；后续给出后应分别放入 `firmware/`、`experiments/`、`hardware/`。
 - 对真实硬件的任何结论都不能只凭测试脚本，需要限流上电、空载 PWM、示波器波形、nFAULT 和故障链路证据。
+
+## 新链接补充
+
+2026-04-30 根据 `https://chatgpt.com/s/t_69f24b8e5b188191a50b0c69a5e2ccaa` 增补：
+
+- `AGENTS.md`：固定 Codex 行为规则。
+- `docs/00_project_truth/project_context.md`：建立最高优先级项目事实源。
+- `docs/00_project_truth/internet_verification_rules.md`：建立必须联网核查的触发条件和输出格式。
+- `templates/internet_verification_template.md`：建立联网核查模板。

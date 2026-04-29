@@ -26,3 +26,9 @@
 - `docs/00_project_truth/project_context.md`：建立最高优先级项目事实源。
 - `docs/00_project_truth/internet_verification_rules.md`：建立必须联网核查的触发条件和输出格式。
 - `templates/internet_verification_template.md`：建立联网核查模板。
+
+2026-04-30 根据 `https://chatgpt.com/s/t_69f259fcb988819194d1c21ef795da43` 增补：
+
+- 新增 `apps/`、`interfaces/`、`experiments/`、`assets/`、`deliverables/`、`references/`，把仓库升级为工程、学习、实验、答辩分层结构。
+- 新增 `apps/stm32_g474_foc/AGENTS.md`、`apps/esp32_c3_gateway/AGENTS.md`、`docs/AGENTS.md`，固定 STM32/ESP32/文档三类子工作区规则。
+- 新增 `workflow/link_69f259fc_status.md`，记录第三个链接已落地项和仍需真实材料。

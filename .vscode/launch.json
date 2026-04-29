@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Placeholder STM32 debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stm32_g474_foc/build/firmware.elf",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "",
+      "externalConsole": false
+    }
+  ]
+}

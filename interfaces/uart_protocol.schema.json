@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "STM32 ESP32 UART command frame",
+  "type": "object",
+  "required": [
+    "cmd"
+  ],
+  "properties": {
+    "cmd": {
+      "type": "string",
+      "enum": [
+        "heartbeat",
+        "arm",
+        "set_speed",
+        "stop",
+        "clear_fault"
+      ]
+    },
+    "rpm": {
+      "type": "integer",
+      "minimum": -4000,
+      "maximum": 4000
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,5 @@
+{
+  "files.encoding": "utf8",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "codex.projectRules": "AGENTS.md"
+}

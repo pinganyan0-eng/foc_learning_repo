@@ -46,11 +46,11 @@ def chunk_text(text: str, size: int = 1200) -> list[str]:
 
 def source_files() -> list[Path]:
     files: list[Path] = []
-    for folder in ["docs", "templates", "workflow", "materials/extracted"]:
+    for folder in ["docs", "templates", "workflow", "materials", "materials/extracted"]:
         base = ROOT / folder
         if base.exists():
             files.extend(sorted(p for p in base.rglob("*") if p.suffix.lower() in {".md", ".txt"}))
-    return files
+    return sorted(set(files))
 
 
 def main() -> None:

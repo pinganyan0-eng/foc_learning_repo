@@ -136,7 +136,12 @@ echo
 echo "For normal two-computer use, sync project changes through Git after this first setup."
 '@
 
-Set-Content -Path (Join-Path $stageRoot "INSTALL_ON_MAC.sh") -Value $installer -Encoding UTF8
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText(
+    (Join-Path $stageRoot "INSTALL_ON_MAC.sh"),
+    ($installer -replace "`r`n", "`n"),
+    $utf8NoBom
+)
 
 $readme = @"
 # MacBook Codex Setup Bundle
@@ -171,7 +176,11 @@ This bundle intentionally does not include Codex account data, API keys, or conv
 After this first setup, use the same Git remote from both computers to keep the two project copies synchronized.
 "@
 
-Set-Content -Path (Join-Path $stageRoot "README_SETUP_MAC_CODEX.md") -Value $readme -Encoding UTF8
+[System.IO.File]::WriteAllText(
+    (Join-Path $stageRoot "README_SETUP_MAC_CODEX.md"),
+    ($readme -replace "`r`n", "`n"),
+    $utf8NoBom
+)
 
 if (Test-Path $OutputPath) {
     Remove-Item -Force $OutputPath

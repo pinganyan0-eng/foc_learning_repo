@@ -7,14 +7,18 @@
 
 ## 先读这里
 
+- `CURRENT_STATUS.md`：项目总控页，记录当前阶段、缺口和下一步最小动作。
 - `AGENTS.md`：Codex 在本仓库里的行为规则，包含事实源优先级、联网核查和硬件安全边界。
+- `workflow/phase_gate_checklist.md`：阶段闸门表，规定每个阶段的进入条件、证据和禁止动作。
+- `workflow/intake_checklist.md`：首次资料导入清单，规定新工程、硬件资料和实验日志放哪里。
+- `workflow/macbook_codex_replica.md`：在 MacBook Codex 上再配置一份同源项目环境，并用 Git 做后续双机同步。
 - `docs/00_project_truth/project_context.md`：最高优先级项目事实源。
 - `docs/00_project_truth/internet_verification_rules.md`：什么时候必须联网、查什么来源、怎么输出证据。
 
 ## 当前边界
 
 - 已放入：共享链接文章规则、本地 HTML/PDF/DOCX 抽取文本、V9 方案、技术报告、申报书版本、B 同学学习计划。
-- 未放入：真实 STM32CubeIDE/MCSDK 源码树、真实实验日志、真实串口日志。等你给出后放到 `firmware/`、`experiments/`、`logs/`。
+- 未放入：真实 VS Code/STM32CubeIDE 插件 + STM32CubeMX/MCSDK 源码树、真实 ESP32-C3 工程、真实实验日志、真实串口日志。等你给出后分别放到 `apps/stm32_g474_foc/`、`apps/esp32_c3_gateway/`、`experiments/`、`logs/`。
 - 开发环境不在本仓库范围内；本仓库只配置“Codex 学习助手环境”。
 
 ## 常用命令
@@ -24,4 +28,5 @@ python tools/build_vector_store.py
 python tools/ask_local.py "JEOC 中断里能不能 printf"
 python tools/ask_local.py "什么时候必须联网核查官方资料"
 python -m unittest discover -s tests
+powershell -ExecutionPolicy Bypass -File .\tools\create_mac_codex_setup_bundle.ps1
 ```

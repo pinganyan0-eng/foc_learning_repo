@@ -1,6 +1,7 @@
 {
-  "generated_at": "2026-04-30T01:28:06",
-  "workspace": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat",
+  "generated_at": "2026-04-30T04:22:39",
+  "workspace": ".",
+  "path_policy": "extracted_file uses repository-relative paths; source_path records the original import location for provenance only.",
   "sources": [
     {
       "id": "algo_b_8week",
@@ -8,7 +9,7 @@
       "role": "B 算法/主控",
       "kind": "html",
       "source_path": "C:\\Users\\gregrg\\Desktop\\算法工程师_B_8周保姆级学习计划.html",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\algo_b_8week.txt",
+      "extracted_file": "materials/extracted/algo_b_8week.txt",
       "characters": 201842
     },
     {
@@ -17,7 +18,7 @@
       "role": "B 算法/主控",
       "kind": "html",
       "source_path": "C:\\Users\\gregrg\\Desktop\\56天算法工程师冲刺学计划.html",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\algo_56day.txt",
+      "extracted_file": "materials/extracted/algo_56day.txt",
       "characters": 223780
     },
     {
@@ -26,7 +27,7 @@
       "role": "项目报告",
       "kind": "docx",
       "source_path": "F:\\嵌赛\\STM32G474_FOC_线上初赛技术报告_V1.0.docx",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\tech_report_v1.txt",
+      "extracted_file": "materials/extracted/tech_report_v1.txt",
       "characters": 44700
     },
     {
@@ -35,7 +36,7 @@
       "role": "最终方案/高优先级",
       "kind": "pdf",
       "source_path": "F:\\嵌赛\\V9_终极无错版.pdf",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\v9_final.txt",
+      "extracted_file": "materials/extracted/v9_final.txt",
       "characters": 21999
     },
     {
@@ -44,7 +45,7 @@
       "role": "申报书/高优先级",
       "kind": "docx",
       "source_path": "F:\\嵌赛\\申报书_V8_深度工程盲区修正版.docx",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\proposal_v8.txt",
+      "extracted_file": "materials/extracted/proposal_v8.txt",
       "characters": 26142
     },
     {
@@ -53,8 +54,96 @@
       "role": "申报书/历史版本",
       "kind": "docx",
       "source_path": "F:\\嵌赛\\申报书_V7.1_实证修正版.docx",
-      "extracted_file": "C:\\Users\\gregrg\\Documents\\Codex\\2026-04-30\\new-chat\\learning_assistant\\extracted\\proposal_v71.txt",
+      "extracted_file": "materials/extracted/proposal_v71.txt",
       "characters": 9734
+    },
+    {
+      "id": "st_an4144_stm32f0_foc_mcsdk",
+      "title": "AN4144 - Field-oriented control using STM32F0 and ST Motor Control SDK",
+      "role": "FOC and MCSDK background reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\an4144-fieldoriented-control-using-the-stm32f0-and-the-stmicroelectronics-motor-control-sdk-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_an4144_stm32f0_foc_mcsdk.txt",
+      "pages": 28,
+      "characters": 42485,
+      "notes": "Legacy STM32F0 FOC application note. Useful for MCSDK/FOC concepts, not for STM32G474-specific peripherals."
+    },
+    {
+      "id": "st_an5306_opamp_stm32g4",
+      "title": "AN5306 - Operational Amplifier (OPAMP) usage in STM32G4 Series",
+      "role": "STM32G4 OPAMP/current-sense reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\an5306-dual-motor-control-using-the-stm32g4-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_an5306_opamp_stm32g4.txt",
+      "pages": 43,
+      "characters": 59288,
+      "notes": "The local file name mentions dual motor control, but the extracted PDF title is AN5306 OPAMP usage in STM32G4 Series. Use it for OPAMP/PGA/current-sense analog front-end concepts."
+    },
+    {
+      "id": "st_an5397_sensorless_pmsm_foc",
+      "title": "AN5397 - Sensorless PMSM FOC controller",
+      "role": "Sensorless FOC algorithm reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\an5397-sensorless-pmsm-foc-controller-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_an5397_sensorless_pmsm_foc.txt",
+      "pages": 17,
+      "characters": 23125,
+      "notes": "High-value sensorless FOC reference. Use for observer/startup concepts before changing project parameters."
+    },
+    {
+      "id": "st_nucleo_g474re_brief",
+      "title": "NUCLEO-G474RE board brief",
+      "role": "Board quick reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\nucleo-g474re.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_nucleo_g474re_brief.txt",
+      "pages": 13,
+      "characters": 19492,
+      "notes": "Quick board reference for NUCLEO-G474RE. Use with UM2505 for connectors, jumpers, and ST-LINK details."
+    },
+    {
+      "id": "st_rm0440_stm32g4_reference_manual",
+      "title": "RM0440 - STM32G4 Series reference manual",
+      "role": "Authoritative STM32G4 peripheral reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\rm0440-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_rm0440_stm32g4_reference_manual.txt",
+      "pages": 2140,
+      "characters": 4264829,
+      "notes": "Highest priority for STM32G4 peripheral behavior: TIM1/TIM8, ADC, DMA, DMAMUX, OPAMP, COMP, CORDIC, FMAC, RCC, GPIO, USART."
+    },
+    {
+      "id": "st_stm32g474re_datasheet",
+      "title": "STM32G474RE datasheet",
+      "role": "Authoritative MCU electrical and feature reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\stm32g474re.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_stm32g474re_datasheet.txt",
+      "pages": 236,
+      "characters": 363571,
+      "notes": "Highest priority for STM32G474RE package, pinout, memory, alternate functions, and electrical limits."
+    },
+    {
+      "id": "st_um2505_nucleo64_mb1367",
+      "title": "UM2505 - STM32 Nucleo-64 boards MB1367 user manual",
+      "role": "NUCLEO-G474RE board user manual",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\um2505-stm32-nucleo64-boards-mb1367-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_um2505_nucleo64_mb1367.txt",
+      "pages": 48,
+      "characters": 67400,
+      "notes": "Board-level reference for NUCLEO-64 MB1367: connectors, solder bridges, power, ST-LINK, Arduino and morpho headers."
+    },
+    {
+      "id": "st_um3027_motor_control_sdk",
+      "title": "UM3027 - STM32 Motor Control SDK user manual",
+      "role": "MCSDK workflow reference",
+      "kind": "pdf",
+      "source_path": "F:\\嵌赛\\1手册\\um3027-stm32-motor-control-sdk-stmicroelectronics.pdf",
+      "extracted_file": "materials/extracted/st_manuals/st_um3027_motor_control_sdk.txt",
+      "pages": 42,
+      "characters": 34570,
+      "notes": "High-value MCSDK reference for Workbench, Motor Profiler, generated project structure, run-time control, and tuning workflow."
     }
   ]
 }

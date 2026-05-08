@@ -36,6 +36,7 @@
 
 ## 待你补充
 
-- `firmware/`：STM32CubeIDE 或 MCSDK 生成工程。
+- `apps/stm32_g474_foc/`：VS Code/STM32CubeIDE 插件使用的 STM32CubeMX 或 MCSDK 生成工程。
+- `apps/esp32_c3_gateway/`：ESP32-C3 网关真实工程。
 - `experiments/`：每次联调记录、波形截图、串口日志。
-- `hardware/`：原理图 PDF、PCB 截图、BOM、Gerber/坐标文件。
+- `hardware/`：原理图 PDF、PCB 截图、BOM、Gerber/坐标文件；当前仓库还未创建该目录，等硬件资料开始沉淀时再建立。

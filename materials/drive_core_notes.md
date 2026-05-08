@@ -45,7 +45,7 @@
 
 ## 算法工程师八周冲刺学习清单
 
-- 主线：CubeIDE/CubeMX/MCSDK -> UART DMA + IDLE -> MCSDK 3-shunt -> Motor Profiler -> Hall -> PI -> CORDIC/FMAC -> SMO -> 故障状态机 -> 报告。
+- 主线：VS Code + STM32CubeIDE 插件 / CubeMX / MCSDK -> UART DMA + IDLE -> MCSDK 3-shunt -> Motor Profiler -> Hall -> PI -> CORDIC/FMAC -> SMO -> 故障状态机 -> 报告。
 - 禁区：不在 FOC ISR 中放 printf/delay/JSON/WebSocket；不一开始追求无感。
 
 ## 主控同学嵌入式竞赛学习计划

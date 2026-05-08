@@ -1,0 +1,936 @@
+# AN4144 - Field-oriented control using STM32F0 and ST Motor Control SDK
+
+Source path: F:\嵌赛\1手册\an4144-fieldoriented-control-using-the-stm32f0-and-the-stmicroelectronics-motor-control-sdk-stmicroelectronics.pdf
+Role: FOC and MCSDK background reference
+Pages: 28
+Extracted at: 2026-04-30T04:22:39
+
+Extraction note: text was extracted with pypdf for local retrieval. Use the original PDF for figures, tables, electrical limits, and final page citations.
+
+
+
+--- Page 1 ---
+
+August 2017 DocID023491 Rev 4 1/28
+28
+AN4144
+Application note
+Voltage mode control operation and parameter optimization
+Enrico Poli
+Introduction
+Voltage mode driving is the stepper motor driving method patented by STMicroelectronics® 
+which improves the performance of classic control systems.
+This driving method performs smoother operation and higher microstepping resolutions and 
+is the best solution for applications where high precision positioning and low mechanical 
+noise are mandatory.
+This application note describes the operating principles of Voltage mode driving and the 
+strategies for the regulation of the control parameters in order to fit the application 
+requirements.
+The application note also investigates and provides solutions to one of the most common 
+issues in Voltage mode driving systems: the resonances of the stepper motors. 
+www.st.com
+
+
+--- Page 2 ---
+
+Contents AN4144
+2/28 DocID023491 Rev 4
+Contents
+1 Voltage mode driving . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+1.1 Basic principles . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+1.2 Back EMF compensation algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+1.3 Motor supply voltage compensation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .11
+1.4 Compensation of thermal drift of the phase resistance . . . . . . . . . . . . . . 12
+2 Tuning of the BEMF compensat ion parameters . . . . . . . . . . . . . . . . . . 13
+2.1 Collecting the application characteristics . . . . . . . . . . . . . . . . . . . . . . . . . 13
+2.2 First dimensioning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+2.2.1 Holding, acceleration, deceleration and running currents . . . . . . . . . . . 15
+2.2.2 Compensation register values out of range . . . . . . . . . . . . . . . . . . . . . . 16
+2.3 Fine tuning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+2.3.1 Step 1: verify the phase current during the speed sweep . . . . . . . . . . . 17
+2.3.2 Step 2: adjust t he starting amplitude (KVAL) . . . . . . . . . . . . . . . . . . . . . . 18
+2.3.3 Step 3: adjust the intersect speed value . . . . . . . . . . . . . . . . . . . . . . . . 19
+2.3.4 Step 4: adjust the starting and final slopes . . . . . . . . . . . . . . . . . . . . . . 19
+2.3.5 Step 5: final check . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+3 Supply voltage compensation guidelines . . . . . . . . . . . . . . . . . . . . . . . 22
+4 Thermal drift compensation guidelines . . . . . . . . . . . . . . . . . . . . . . . . 23
+5 Stepper motor resonances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+5.1 The effects of the resonances on Voltage mode driving . . . . . . . . . . . . . 25
+5.2 Facing resonances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+5.2.1 Damping resonances using the mechanical load . . . . . . . . . . . . . . . . . 26
+5.2.2 Reducing motor current . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+5.2.3 Skipping the resonance points increasi ng the acceleration . . . . . . . . . . 26
+6 Revision history . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+
+
+--- Page 3 ---
+
+DocID023491 Rev 4 3/28
+AN4144 List of tables
+28
+List of tables
+Table 1. BEMF compensation parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+Table 2. BEMF compensation parameters normalized to the supply voltage (V BUS) . . . . . . . . . . . . 10
+Table 3. BEMF compensation register values according to application parameters . . . . . . . . . . . . 15
+Table 4. Motor status and BEMF compensation registers rela tionship. . . . . . . . . . . . . . . . . . . . . . . 15
+Table 5. Output current according to the electrical position . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+Table 6. Document revision history . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+
+
+--- Page 4 ---
+
+List of figures AN4144
+4/28 DocID023491 Rev 4
+List of figures
+Figure 1. Motor phase electrical model . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+Figure 2. Phasor representation of motor phase equation. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+Figure 3. BEMF compensation curve. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+Figure 4. Maximum output current limitation example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+Figure 5. Supply voltage compensation system . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+Figure 6. Phase inductance measurement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+Figure 7. Bad k
+e measurement waveform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+Figure 8. Good k e measurement waveform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+Figure 9. Running current limit. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+Figure 10. Speed sweep with first dimensioning parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+Figure 11. Evaluation of the optimal intersect speed value . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+Figure 12. Tuned starting slope value . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+Figure 13. Tuned final slope value. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+Figure 14. Final check acquisition showing artifacts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+Figure 15. Magnified acquisition verifies the presence of artifacts . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+Figure 16. Position ripple caused by the step change . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+Figure 17. Phase current distortion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+Figure 18. Motor stall caused by resonances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+
+
+--- Page 5 ---
+
+DocID023491 Rev 4 5/28
+AN4144 Voltage mode driving
+28
+1 Voltage mode driving
+This section describes the basic principles of Voltage mode driving and its implementation in 
+STMicroelectronics devices with a focus on the compensation of: 
+ The back electromotive force (Section 1.2 on page 7)
+ The motor supply voltage variation (Section 1.3 on page 11)
+ The thermal drift of the phase resistance (Section 1.4 on page 12).
+1.1 Basic principles
+The classic current mode driving method limits the phase current to a reference value using 
+a comparator and a current sensor (usually an external resistor). This control is the most 
+intuitive but brings with it some drawbacks: the current ripple can be significant and 
+obtaining an acceptable control of the current can be challenging. In trying to solve these 
+problems, current control algorithms were made more and more complex, including 
+techniques such as fast decay and mixed decay. With the introduction of microstepping in 
+stepper motor driving a new current control algorithm limit became evident: the analog 
+circuitry and the control loop should be able to manage lower currents with higher 
+resolution.
+Voltage mode totally changes the control approach implementing an open-loop control: 
+a sinusoidal voltage is applied to the motor phases and the electro-mechanical system 
+response with a sinusoidal current.
+Note: Due to its principle of operation, Voltage mo de driving is not suited to full step driving. The 
+best performance is always obtained using microstepping operation.
+This result can be obtained through the analysis of the stepper motor electrical model. 
+Equation 1, extracted from the model in Figure 1, shows how the current of a generic motor 
+phase is related to:
+ Phase voltage V
+PH
+ Back electromotive force (BEMF)
+ Phase resistance (Rm) and inductance (Lm).
+The back electromotive force is typically a sinusoidal voltage with frequency and amplitude 
+proportional to motor rotation speed. The BEMF frequency (fel) is equal to one quarter of the 
+rotation speed expressed in steps per second (fSTEP); this frequency is exactly the same as 
+the hypothetical current sine wave that should be applied to the motor phase in order to 
+make the motor turn at f
+STEP step rate. The BEMF amplitude is proportional to step 
+frequency through a linear coefficient ke: this parameter depends on motor characteristics 
+and structure (rotor material, coil turns, etc.).
+
+
+--- Page 6 ---
+
+Voltage mode driving AN4144
+6/28 DocID023491 Rev 4
+Figure 1. Motor phase electrical model
+Equation 1
+Considering all the currents and voltages of the electrical model as sinusoidal, Equation 1 
+can be written as a vector equation (Equation 2). The resulting vector system, which is 
+shown in Figure 2, adds a new variable to the current vs. voltage relationship: the load angle 
+ which is the angle between stator and rotor magnetic field vectors. The load angle is in 
+direct relation with the angle  lying between the phase current and BEMF phasors, as 
+shown in Equation 3.
+The torque (Tq) applied to the motor shaft is proportional to both the phase current and the 
+sine of the load angle, as shown by Equation 4, where the kt parameter is the motor torque 
+constant which is equal to the ke constant, but expressed in Nm/A instead of V/Hz.
+Figure 2. Phasor representation of motor phase equation
+VPH(t)
+BEMF(fel, t)
+Lm
+Rm
+Stepper motor
+Motor phase
+AM12849v1
+iPH t
+VPH t BEMF f el t+
+Rm i2 fel Lm+---------------------------------------------------------=
+α
+β
+δ
+VPH
+IPHΦ STA
+Φ ROT
+BEMF
+Rm · IPH
+δ = arctan(2πfel · Lm/Rm)
+2πfel · Lm · IPH
+AM12850v1
+
+
+--- Page 7 ---
+
+DocID023491 Rev 4 7/28
+AN4144 Voltage mode driving
+28
+Equation 2
+Equation 3
+Equation 4
+ 
+Starting from Equation 2, it is possible to obtain the voltage amplitude which, when applied 
+to the motor phase, makes the amplitude of phase current constant. The basic principle of 
+Voltage mode control is based on this relationship. The resulting formula (Equation 5) 
+shows how the voltage amplitude is a complex function of phase current, motor parameters 
+and other factors.
+Equation 5
+Resolving this equation, to obtain the phase voltage to be applied for various speeds, is very 
+complex and computationally onerous. In addition, the phase relationship between the 
+current and the BEMF phasors () is difficult to measure or evaluate for a specific 
+application.
+The STMicroelectronics control method, starting from this complex model, implements an 
+effective driving strategy that overcomes these issues with the classic current mode control 
+method in most microstepping applications.
+1.2 Back EMF compensation algorithm
+In order to devise a simple but effective compensation method, consider the formulas in 
+Equation 6. In this manner, the dependence on the load angle () can be removed, 
+obtaining a formula which allows the evaluation of the VPH voltage that is able to produce 
+a constant IPH current independent of the motor speed (or its equivalent fel).
+Equation 6
+Using this formula, a compensation algorithm that gives the phase voltage amplitude (VPH) 
+for a target phase current (IPH) and motor speed (fel) is defined.
+IPH fel
+VPH fel BEMF f el+
+Rm i2 fel Lm+---------------------------------------------------------=
+ 
+2--- –=
+Tq Kt IPH cos K t IPH
+
+2--- –
+cos==
+Kt Nm/A Ke V/Hz=
+VPH
+2 Rm
+2 2fel 2 Lm
+2+ IPH
+2 ke fel 2+=
+2 – arc 2 fel Lm/Rmtan– IPH Ke fel Rm
+2 2fel 2 Lm
+2
++ cos–
+VPH R m i2 fel Lm+ IPH VBEMF fel+
+VPH Rm
+2 2fel 2 Lm
+2+ IPH Ke fel+=
+
+
+--- Page 8 ---
+
+Voltage mode driving AN4144
+8/28 DocID023491 Rev 4
+The compensation algorithm of Equation 6 can be further simplified according to the 
+electrical frequency. Two different cases can be considered, when the motor speed is low 
+(2
+fel << R/L) and when it is high (2fel >> R/L).
+Equation 7 shows how the formula can be approximated when these two cases are 
+considered.
+Equation 7
+ 
+The Voltage mode control implemented in STMicroelectronics’ products is based on the 
+simplified model described by Equation 7. 
+In particular, the following parameters are extracted and used to describe the compensation 
+curve:
+ KVAL is the voltage applied to the motor phase at zero speed. It is the starting point of 
+the BEMF compensation curve
+ Intersect speed is the motor speed that determines the switching from the low-speed 
+compensation factor (starting slope) to the high-speed one (final slope)
+ Starting slope is the rate at which the phase voltage is increased in the low-speed 
+range (i.e. motor speed is less than intersect speed)
+ Final slope is the rate at which the phase voltage is increased in the high-speed range 
+(i.e. motor speed is greater than intersect speed).
+These parameters are listed inTable 1.
+ 
+VPH_APPLIED
+Rm IPH_TARGET Ke fel for 2 fel Rm/Lm«+
+2fel Lm IPH_TARGET Ke fel for 2 fel Rm/Lm«+
+
+
+
+
+
+=
+Table 1. BEMF compensation parameters
+Parameter Description Formula Unit
+KVAL
+Voltage applied to the phase at zero speed 
+in order to obtain the target current value.
+ 
+Intersect 
+speed
+Motor speed discriminating the 
+compensation slope that should be used.
+ 
+Starting 
+slope
+Compensation slope used when motor 
+speed is lower than intersect speed.
+ 
+Final slope Compensation slope used when motor 
+speed is higher than intersect speed.
+ 
+Rm IPH_TARGET  A V=
+4R m/2L m
+step
+cycle---------------  /H
+step
+cycle---------------= Hz
+step/s=
+Ke/4
+V
+Hz-------/ step
+cycle--------------- =
+V s/step
+2 Lm IPH-TARGET Ke+ /4
+V
+Hz-------/ step
+cycle--------------- =
+V s/step
+
+
+--- Page 9 ---
+
+DocID023491 Rev 4 9/28
+AN4144 Voltage mode driving
+28
+The control system generates the phase voltage using a PWM modulation. The outputs 
+switch between supply voltage VBUS and ground at a fixed frequency. The mean voltage of 
+the resulting square-wave is adjusted through its duty cycle (on time over square-wave 
+period ratio) according to Equation 8:
+Equation 8
+The duty cycle ranges from 0% (the output is always forced to ground) to 100% (the output 
+is always forced to V
+BUS).
+The BEMF compensation curve is implemented adjusting the PWM duty cycle, so all the 
+voltage values must be normalized to the supply voltage of the power stage (Figure 3).
+Figure 3. BEMF compensation curve
+VPH VBUS
+tON
+tSW
+---------VBUS DutyCycle PMW==
+VPH /VBUS
+Speed
+[step/s]
+Intersect
+speed
+Kva l Starting
+slope
+Final
+slope
+AM12859v1
+
+
+--- Page 10 ---
+
+Voltage mode driving AN4144
+10/28 DocID023491 Rev 4
+ 
+The supply voltage of the systems limits the maximum phase current which is a function of 
+the motor speed. If the phase voltage which is needed to obtain the target current is greater 
+than the supply voltage, the phase current cannot reach the expected value (Figure 4).
+Figure 4. Maximum output current limitation example
+Table 2. BEMF compensation parameters normalized to the supply voltage (V
+BUS)
+Parameter Formula Unit
+KVAL 
+ 
+Intersect speed
+ 
+Starting slope
+ 
+ 
+Final slope
+ 
+ 
+Rm IPH_TARGET /VBUS  A /V =%
+4R m/2 Lm step
+cycle---------------= Hz
+step
+cycle---------------  /H
+step/s=
+Ke/4 /VBUS
+V
+Hz-------/ step
+cycle---------------
+ =/ V =% s/step
+2 Lm IPH-TARGET Ke+ /4 /VBUS
+V
+Hz-------/ step
+cycle---------------
+ =/ V =% s/step
+
+
+
+
+
+
+
+
+
+          
+$VSSFOU <">
+4QFFE<TUFQT>
+.BYJNVNDVSSFOUWBMVFBDDPSEJOHUPCVTWPMUBHF
+ 7  7  7  7
+.PUPSDIBSBDUFSJTUJDT
+3N  
+-N N)
+LF7)[
+".
+
+
+--- Page 11 ---
+
+DocID023491 Rev 4 11/28
+AN4144 Voltage mode driving
+28
+1.3 Motor supply voltage compensation
+The power stage generates the voltage sine waves using a PWM modulation method, so 
+the average output voltage value is proportional to the motor supply voltage (VBUS) and 
+power bridge duty cycle (see Equation 9). Therefore, perturbations on this voltage cause 
+errors on the output voltage and then on the phase currents.
+Equation 9
+In most industrial applications, the supply voltage is not well regulated and it may undergo 
+significant voltage fluctuations, due to various factors, e.g.: variations of load conditions.
+The Voltage mode algorithm implemented in STMicroelectronics devices provides 
+a compensation system that increases the supply voltage rejection of PWM modulator.
+The supply voltage is constantly monitored through a voltage divider and an integrated 
+analog-to-digital converter and the power stage duty cycle is changed in order to 
+compensate for its variations.
+Figure 5. Supply voltage compensation system
+The voltage divider should be sized in order to obtain V
+REF/2 at the ADC input when the 
+supply voltage is at its nominal value. When the supply voltage is perturbed, the same 
+distortion is proportionally applied to the ADC input and the nominal duty cycle is multiplied 
+by a compensation coefficient k
+, as shown in Equation 10.
+Equation 10
+where k= 1/
+In any case, the compensation system is limited by the actual supply voltage: if the 
+compensated duty cycle (DutyCyclePWM  ke) is greater than 100%, the supply voltage is not 
+VPH VBUS DutyCycle PMW=
+9%86
+95(*
+'(9,&(
+$'&,1
+$'&
+
+$0Y
+VPH VBUS  DutyCycle PMW K VBUS DutyCycle PMW==
+
+
+--- Page 12 ---
+
+Voltage mode driving AN4144
+12/28 DocID023491 Rev 4
+large enough to obtain the target current (maximum output current limit has been reached) 
+and the compensation algorithm fails.
+1.4 Compensation of thermal drift of the phase resistance
+During operation, the motor dissipates energy and increases its temperature, therefore the 
+phase resistance. The relationship between phase resistance and temperature is shown in 
+Equation 11: the change in the phase resistance is proportional to the temperature variation, 
+its nominal value (phase resistance at room temperature T0) and the temperature coefficient 
+() of the material composing the coil.
+Equation 11
+As described in previous paragraphs, the voltage to current relation depends on different 
+motor parameters, including phase resistance (Rm in Equation 1 on page 6). In particular, 
+a higher phase resistance reduces the load current at the same applied voltage.
+The duty cycle of the PWM output is multiplied by a scalar factor in order to compensate for 
+the resistance variation. 
+Rm T RmT 0 RT RmT 0 RmT 0  TT 0–+=+=
+
+
+--- Page 13 ---
+
+DocID023491 Rev 4 13/28
+AN4144 Tuning of the BEMF compensation parameters
+28
+2 Tuning of the BEMF compensation parameters
+This paragraph describes how the BEMF compensation parameters can be tuned in order to 
+obtain the best results. Setting the correct compensation parameters is fundamental to 
+Voltage mode algorithm performance.
+The tuning sequence can be divided into the following steps:
+ Collecting the characteristics of the application and motor (Section 2.1)
+ Obtaining a preliminary set of parameters (Section 2.2)
+ Tuning the parameters in order to obtain the needed results (Section 2.3 on page 17).
+2.1 Collecting the application characteristics
+The compensation system is based on the electrical model of the stepper motor, so its setup 
+is strongly dependent on the motor characteristics.
+The required information is:
+ Resistance of the motor phase (Rm)
+ Inductance of the motor phase (Lm)
+ Electrical constant of the motor (ke).
+The Rm and Lm values are usually reported on the motor datasheet. They can also be 
+measured with common measuring instruments.
+If the user has an RLC meter, they can connect it to one of the motor phases and measure 
+the series R and L at 100 Hz (make sure the motor does not move). The resulting values are 
+considered to be R
+m and Lm.
+If they do not have an RLC meter, the Rm can be measured using a bench multimeter 
+applied to one of the phases.
+To measure the Lm, use the following procedure:
+ Connect a DC voltage at one motor phase and apply the voltage and current probes of 
+the oscilloscope, as shown in Figure 6 A
+ Increase the voltage up to the value where the current equals the nominal value
+ For a better measurement, lock the rotor position
+ Unplug one terminal of the voltage source cable without switching it off and disable (or 
+set to the max.) the current limitation
+ Connect the voltage source rapidly and monitor, on the scope, the voltage and current 
+waveform
+ The measurement is good if the voltage trace is similar to a step and the current 
+increases exponentially (Figure 6 B)
+ Measure the time for the current waveform to rise up to 63% of the nominal value 
+(Figure 6 B)
+ This time is equal to the Lm/Rm ratio.
+
+
+--- Page 14 ---
+
+Tuning of the BEMF compensation parameters AN4144
+14/28 DocID023491 Rev 4
+Figure 6. Phase inductance measurement
+The ke is the coefficient that relates the motor speed to the BEMF amplitude. This value is 
+not usually present on stepper motor datasheets, but it can be easily measured by means of 
+an oscilloscope:
+ Connect one of the motor phases to an oscilloscope channel
+ Set the oscilloscope to the trigger value on the rising or falling edge of the channel and 
+set the threshold value close to zero (few mV above or below zero)
+ Turn the motor shaft. This can be done by hand or by means of another motor. The 
+most important thing is to obtain a rotation speed as constant as possible
+ Set oscilloscope time and voltage scales in order to display a sine wave during the 
+motor rotation.
+If the rotor is turned by hand, the operations should be repeated until a good sine wave is 
+obtained. A good sine wave keeps its amplitude constant for at least 2 or 3 cycles (Figure 7 
+and Figure 8). This operation might require several attempts. 
+ Measure the peak voltage to frequency ratio of the sine wave. The resulting value is the 
+motor electric constant expressed in V/Hz.
+ 
+Phase A
+Phase B
+V
+Iph
+Iph
+Vph
+Vph
+(A) (B)
+63%
+T = Lph/Rph
+AM12862v1
+Figure 7. Bad ke measurement waveform Figure 8. Good k e measurement waveform
+
+
+--- Page 15 ---
+
+DocID023491 Rev 4 15/28
+AN4144 Tuning of the BEMF compensation parameters
+28
+2.2 First dimensioning
+A preliminary set of parameters can be obtained starting from the simplified model of the 
+stepper motor described in Section 1.1 on page 5.
+Starting from the formulas listed in Table 2 of Section 1.2 on page 7, it is possible to define 
+the BEMF compensation register values as shown in Table 3:
+ 
+The resulting values are not the optimal compensation values because they are obtained 
+starting from a simplified model of the motor. They can be used as a starting point for further 
+optimization of the control system.
+The same result can be easily obtained using the BEMF compensation tool which is 
+integrated into the L6470 evaluation software.
+2.2.1 Holding, acceleration, d eceleration and running currents
+The BEMF compensation system allows different current values according to motion status. 
+The different current values are set through a specific set of registers, as shown in Table 4.
+ 
+The holding current generates the magnetic field that keeps the motor in position after the 
+motion is completed. Its value is usually lower than the others because it is not necessary to 
+face the friction and the inertial component of the load torque. In these conditions the BEMF 
+value is zero, so no compensation is needed and the only parameter defining the current is 
+KVAL_HOLD.
+Table 3. BEMF compensation register values according to application parameters
+Parameter Register name Register value
+KVAL
+KVAL_HOLD, KVAL_ACC, 
+KVAL_DEC, KVAL_RUN
+ 
+Intersect speed INT_SPEED
+where ttick = 250 ns
+Starting slope ST_SLP
+Final slope FN_SLP_ACC, FN_SLP_DEC
+Rm IPH_TARGET /VBUS 28
+4R m/2 Lm 226 ttick
+Ke/4 /VBUS 216
+2 Lm IPH-TARGET Ke+ /4 /VBUS 216
+Table 4. Motor status and BEMF compensation registers relationship
+Motor status Registers
+Hold (motor stopped) KVAL_HOLD
+Acceleration KVAL_ACC, INT_ SPEED, ST_SLP , FN_SLP_ACC
+Deceleration KVAL_DEC, INT_ SPEED, ST_SLP , FN_SLP_DEC
+Constant speed KVA L_RUN, INT_SPEED, ST_SLP , FN_SLP_ACC
+
+
+--- Page 16 ---
+
+Tuning of the BEMF compensation parameters AN4144
+16/28 DocID023491 Rev 4
+During the acceleration phase the current is set through the KVAL_ACC, INT_SPEED, 
+ST_SLP and FN_SLP_ACC parameters.
+The constant speed current setup shares most of the parameters with the acceleration 
+setup (INT_SPEED, ST_SLP and FN_SLP_ACC), so the two currents are closely related. 
+The BEMF compensation curve for the acceleration phase (INT_SPEED, ST_SLP and 
+FN_SLP_ACC parameters) defines the minimum output voltage at each speed limiting the 
+minimum constant speed current (Figure 9). 
+Figure 9. Running current limit
+2.2.2 Compensation regist er values out of range
+In some cases the values obtained using the formulas listed in Table 3 may be out of the 
+range of the respective registers.
+If one of the KVAL registers exceeds the maximum limit of 255 (corresponding to a PWM 
+duty cycle close to 100%), the motor supply voltage is not large enough to force the target 
+current into the phase resistance. In this case, the application parameters (supply voltage, 
+target current and motor characteristics) are not consistent and they should be changed.
+Example 1
+V
+BUS = 12 V; Rm = 9 ; IPH TARGET = 2 A
+KVAL= Rm|IPH_TARGET | / VBUS  28 = 384 > max. KVAL value (255)
+Target current is not achievable.
+If the intersect speed exceeds the maximum value, the resistive component of the motor 
+phase impedance dominates the inductive component, so the increase of the impedance 
+with speed can be considered negligible and its compensation is unnecessary. In this case, 
+the maximum intersect speed value may be used and during the fine tuning phase particular 
+attention should be paid to the intersect speed region.
+Example 2
+L
+m = 4 mH; Rm = 1 
+4  (Rm/2Lm) ≈ 15920 steps/s -> maximum value should be used.
+
+92879%86
+0LQLPXPRXWSXW
+YROWDJH
+&RPSHQVDWLRQ
+FXUYHIRU,581%
+&RPSHQVDWLRQ
+FXUYHIRU,581$
+7KH,581%FXUYH
+FDQQRWEHSHUIRUPHG
+6SHHG
+>VWHSV@
+$0Y
+
+
+--- Page 17 ---
+
+DocID023491 Rev 4 17/28
+AN4144 Tuning of the BEMF compensation parameters
+28
+If one or more of the compensation slope parameters (ST_SLP, FN_SLP_ACC and 
+FN_SLP_DEC) exceeds the maximum value, the motor supply voltage is not enough to 
+counteract the BEMF voltage increase.
+The maximum compensation rate is 0.004% of the bus voltage at step/s. Considering 
+a starting KVAL value equal to zero, this compensation rate reaches 100% of the bus voltage 
+at a rotation speed of only 250 step/s.
+So a high compensation value does not correspond to any real application. The application 
+parameters (supply voltage, target current and motor characteristics) are not consistent and 
+they should be changed.
+2.3 Fine tuning
+In some cases, the results obtained after the first dimensioning of the BEMF parameters 
+(Section 2.2) do not fit with the performance required by the application. In these cases the 
+optimal compensation can be obtained by fine tuning the system.
+Performing these adjustments requires a current probe that is able to measure the phase 
+currents over the entire operating range of the application.
+The following procedure describes how to tune the acceleration parameters of the BEMF 
+compensation system (KVAL_ACC, INT_SPEED, ST_SLP and FN_SLP_ACC). Replacing 
+the KVAL_ACC and FN_SLP_ACC values with the respective deceleration parameters 
+(KVAL_DEC and FN_SLP_DEC), the same procedure can be used to tune the BEMF 
+compensation in the deceleration phase. Intersect speed and starting slope parameters are 
+shared by both the acceleration and deceleration compensation setups (Section 2.2.1), so 
+their tuning should be performed one time only.
+2.3.1 Step 1: verify the ph ase current during the speed sweep
+The most important step in the fine tuning of the BEMF compensation system is the analysis 
+of the result obtained through the first dimensioning procedure.
+This check can be performed monitoring the phase current of the motor during a slow 
+acceleration (e.g.: 200 - 400 step/s2) up to the maximum speed of the application.
+If the amplitude of the phase current is constant during the entire acceleration, the BEMF is 
+well compensated. Otherwise, the BEMF compensation parameters should be tuned.
+Figure 10 shows an example of sub-optimal BEMF compensation obtained using the first 
+dimensioning formulas (target peak current equal to 1 A).
+
+
+--- Page 18 ---
+
+Tuning of the BEMF compensation parameters AN4144
+18/28 DocID023491 Rev 4
+Figure 10. Speed sweep with first dimensioning parameters
+2.3.2 Step 2: adjust the starting amplitude (K VAL)
+The first value which must be adjusted is the starting amplitude (KVAL). The value is tuned 
+using the following method:
+1. Copy the first dimensioning value of the parameter into the KVAL_HOLD register.
+2. Set the electrical position register EL_P OS to one of the full step position values 
+(0x000, 0x080, 0x100 or 0x180).
+3. Turn on the device outputs sending a HardStop command to the IC (only one phase of 
+the motor is driven according to the electrical position value as listed in Table 5, the 
+other outputs are forced to ground through the low-side MOSFETs).
+4. Measure the driving current and adjust the K VAL value in order to obtain the required 
+peak current.
+ 
+Table 5. Output current according to the electrical position
+Electrical position Output current
+0x000 OUTB1 source, OUTB2 sink.
+OUTA1 and OUTA2 shorted to ground.
+0x080 OUTA1 source, OUTA2 sink 
+OUTB1 and OUTB2 shorted to ground.
+0x100 OUTB2 source, OUTB1 sink 
+OUTA1 and OUTA2 shorted to ground.
+0x180 OUTA2 source, OUTA1 sink 
+OUTB1 and OUTB2 shorted to ground.
+
+
+--- Page 19 ---
+
+DocID023491 Rev 4 19/28
+AN4144 Tuning of the BEMF compensation parameters
+28
+2.3.3 Step 3: adjust the intersect speed value
+The most important parameter in the BEMF compensation algorithm is the intersect speed. 
+Its optimal value can be determined by performing a speed sweep (i.e. a slow acceleration 
+as described in Section 2.3.1) setting the final slope value equal to the starting slope value 
+which has been obtained during the first dimensioning.
+The resulting phase current is almost constant in the first part of the motion and it decreases 
+at higher speed (a motor stall may occur before the maximum speed is reached). The 
+intersect speed value is the motor speed at which the phase current begins decreasing; 
+e.g.: in Figure 11 the optimal intersect speed value is about 138.9 step/s.
+Figure 11. Evaluation of the optimal intersect speed value
+2.3.4 Step 4: adjust the starting and final slopes
+After setting the new value for the intersect speed, the starting and final slopes must be 
+adjusted. It is recommended to change one of the two values at a time; changing both the 
+starting and final slopes simultaneously may make it more difficult to find the optimal 
+combination. As for the intersect speed, the correct values can be obtained by measuring 
+the phase current during a series of speed sweeps.
+To tune the starting slope value, the initial part of the acceleration (from zero to the intersect 
+speed) must be considered (Figure 12). If the current amplitude increases, the starting slope 
+value must be reduced, otherwise it must be increased.
+The same operation must be done for the evaluation of the final slope value, but the final 
+part of the acceleration must be considered (Figure 13).
+
+
+--- Page 20 ---
+
+Tuning of the BEMF compensation parameters AN4144
+20/28 DocID023491 Rev 4
+Figure 12. Tuned starting slope value
+Figure 13. Tuned final slope value
+
+
+--- Page 21 ---
+
+DocID023491 Rev 4 21/28
+AN4144 Tuning of the BEMF compensation parameters
+28
+2.3.5 Step 5: final check
+When all the values have been tuned and the optimal compensation is obtained, a final 
+check should be done. Performing a speed sweep the measured current amplitude must be 
+almost constant. According to the oscilloscope characteristics, some artifacts (Figure 14) 
+may be displayed when long time acquisitions are performed.
+Figure 14. Final check acquisition showing artifacts 
+In order to avoid mistaking artifacts for real compensation errors, the following suggestions 
+should be considered:
+ If present, use the ZOOM function of the oscilloscope to magnify the critical areas 
+(Figure 15)
+ Split the acceleration into more parts.
+Figure 15. Magnified acquisition verifies the presence of artifacts
+
+
+--- Page 22 ---
+
+Supply voltage compensation guidelines AN4144
+22/28 DocID023491 Rev 4
+3 Supply voltage compensation guidelines
+The effectiveness of the compensation is strongly dependent on the actual duty cycle value 
+because the system is not able to overcome the maximum duty cycle of 100%. When the 
+variations of the application supply voltage make the use of the compensation system 
+essential, the maximum target current is limited by the lower voltage value which is 
+expected from the power supply output.
+For this reason, the application setup, i.e. motor characteristics and phase currents, should 
+be chosen considering the minimum expected supply voltage.
+For example, suppose 85% of the 24 V bus is needed in order to reach the target current at 
+1000 step/s. If the bus voltage is reduced by 20% (i.e. the actual voltage is: 
+24 V 
+ 0.8 = 19.2 V), the compensation system increases the duty cycle by a factor of 
+1/0.8 = 1.25. In this case the resulting duty cycle is 106.25%, which is greater than the 
+maximum available value (100%).
+Example 3
+VBUS = VBUS,nom = 24 V -> DutyCyclePWM at 1000 step/s = 85%
+VBUS = 0.8  VBUS,nom = 19.2 V -> DutyCyclePWM at 1000 step/s = 85% / 0.8 = 106.25%.
+
+
+--- Page 23 ---
+
+DocID023491 Rev 4 23/28
+AN4144 Thermal drift compensation guidelines
+28
+4 Thermal drift compensation guidelines
+The compensation of the thermal drift of the phase resistance is not automatically performed 
+by STMicroelectronics devices, but a compensation factor (KTHERM) is made available 
+through a dedicated register.
+The thermal compensation factor (KTHERM) is a scalar value between 1 (no compensation) 
+and 1.5, which is applied to the PWM value obtained by the other compensation systems 
+(BEMF compensation and supply voltage compensation). 
+As shown in Equation 11 of Section 1.4 on page 12, the thermal drift of the resistance is 
+directly proportional to the nominal resistance value (Rm,T0) and the temperature variation. 
+For this reason the thermal drift compensation becomes more important when the driven 
+motor has a high phase resistance value.
+A suggested implementation of the thermal drift compensation is based upon the phase 
+current measurement during the non-operative period of the motor (if present).
+The proposed method requires an initial calibration of the system (performed when the 
+motor is cold) and described by the following sequence:
+1. The motor is stopped in a specific electrical position.
+2. The overcurrent or stall detection threshold is set to a calibration value (I
+cal).
+3. The output voltage is increased at a low rate through the KVAL_HOLD parameter.
+4. When the calibration current is reached, the respective KVAL_HOLD value must be 
+stored (KCAL) in the MCU memory.
+Since the KCAL value is related to the design parameters only, this calibration can also be 
+performed during the design of the application. However, because of the variation of the 
+application characteristics (bus voltage, motor phase resistance, etc.) and the device 
+circuitry (current sensing), it would be useful to perform the calibration sequence on each 
+system instead of defining a single KCAL value during the application design.
+When a significant change of the motor temperature is expected, the following 
+compensation sequence can be performed:
+1. The motor is stopped in the same electr ical position used during the calibration.
+2. The overcurrent or stall detection threshold is set to a calibration value (I
+cal).
+3. The KVAL_HOLD value is set to KCAL.
+4. The compensation coefficient (K_THERM) is increased or decreased in order to reach 
+the calibration current using the overcurrent/stall information provided by the device.
+
+
+--- Page 24 ---
+
+Stepper motor resonances AN4144
+24/28 DocID023491 Rev 4
+5 Stepper motor resonances
+The stepper motors, as in all complex mechanical systems, have one or more resonance 
+points. These resonances are strictly related to the motion performed by the stepper motors: 
+at each step (or microstep) the rotor approaches the new position and it oscillates around 
+this position before stopping (Figure 16). When the step rate matches the oscillation 
+frequency, the mechanical resonance is stimulated which results in a jittering motion. In 
+some cases the vibration can be strong enough to cause a step loss or motor stall.
+Figure 16. Position ripple caused by the step change
+The position, and the strength of these resonance points, depends on the relationship 
+between motor characteristics (in particular the inertia and the stiffness of the rotor) and 
+mechanical load connected to the shaft.
+VWHS
+W
+SRVLWLRQ
+$0Y
+
+
+--- Page 25 ---
+
+DocID023491 Rev 4 25/28
+AN4144 Stepper motor resonances
+28
+5.1 The effects of the resonanc es on Voltage mode driving
+The vibrations caused by the motor resonances distort the back electromotive force making 
+the model described in Section 1.1 on page 5 no longer valid. In fact, if the back EMF is not 
+sinusoidal, applying a sinusoidal voltage to the motor phase results in a distorted current 
+(Figure 17).
+The distortion of the phase current may amplify the resonances and cause a motor stall 
+(Figure 18).
+Figure 17. Phase current distortion
+Figure 18. Motor stall caused by resonances
+3FTPOBODFDPOEJUJPO
+ DVSSFOUEJTUPSUFE
+4UBMMDPOEJUJPO
+ OP#&.'OPDVSSFOUEJTUPSUJPO
+$0Y
+
+
+--- Page 26 ---
+
+Stepper motor resonances AN4144
+26/28 DocID023491 Rev 4
+5.2 Facing resonances
+Facing resonances is a critical issue in the development of a stepper motor application. This 
+section lists the most common solutions to reduce or avoid resonance effects.
+5.2.1 Damping resonances using the mechanical load
+The worst condition for stepper motor driving is when the shaft is unloaded. When the shaft 
+remains unloaded, all the energy provided to the motor is dissipated by the rotor itself 
+exciting its resonance points.
+Even a small load can dampen the rotor oscillations enough to make the motion smoother. 
+Moreover, the mechanical load adds inertia to the system shifting the resonance points. The 
+stepper motor mounting can also influence the resonance frequencies.
+5.2.2 Reducing motor current
+As previously described, the resonances are caused by the rotor oscillations during a step 
+change. The amplitude of these oscillations is proportional to the intensity of the stimulating 
+magnetic field, i.e. the current value. Reducing the phase current to the minimum required 
+reduces the strength of the resonances.
+Many times the resonance points of the stepper motor are represented as a lack of torque 
+on the speed-torque curve. This representation may cause misunderstandings with this 
+issue. The reduced torque is not the root cause of the problem (resonance), but it is the 
+consequence of it. Therefore, increasing the phase current in order to compensate for the 
+torque reduction is usually not a solution.
+5.2.3 Skipping the resonance po ints increasing the acceleration
+The most common method to avoid resonance points is to quickly accelerate past their 
+positions. Working within the range of the system resonances is never recommended even 
+for a short period of time.
+High acceleration values allow the motor to pass through the resonance points faster, 
+reducing the negative effects.
+
+
+--- Page 27 ---
+
+DocID023491 Rev 4 27/28
+AN4144 Revision history
+28
+6 Revision history
+ 
+Table 6. Document revision history
+Date Revision Changes
+26-Jul-2012 1 Initial release.
+14-Feb-2014 2 Updated Figure 4 on page 10 (updated data).
+Minor modifications throughout document.
+26-Mar-2015 3
+Updated Section 2.2.2 on page 16 (updated Example 2, maximum 
+compensation rate).
+Minor modifications throughout document.
+04-Aug-2017 4 Updated Figure 4 on page 10 (replaced by new figure).
+
+
+--- Page 28 ---
+
+AN4144
+28/28 DocID023491 Rev 4
+IMPORTANT NOTICE – PLEASE READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and 
+improvements to ST products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on 
+ST products before placing orders. ST products are sold pursuant to ST’s terms and conditions of sale in place at the time of order 
+acknowledgement.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or 
+the design of Purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. All other product or service names are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2017 STMicroelectronics – All rights reserved

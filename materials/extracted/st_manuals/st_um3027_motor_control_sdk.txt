@@ -1,0 +1,793 @@
+# UM3027 - STM32 Motor Control SDK user manual
+
+Source path: F:\嵌赛\1手册\um3027-stm32-motor-control-sdk-stmicroelectronics.pdf
+Role: MCSDK workflow reference
+Pages: 42
+Extracted at: 2026-04-30T04:22:39
+
+Extraction note: text was extracted with pypdf for local retrieval. Use the original PDF for figures, tables, electrical limits, and final page citations.
+
+
+
+--- Page 1 ---
+
+Introduction
+The STM32 motor control software development kit (MC SDK) is part of the STMicroelectronics motor-control
+ecosystem. It is referenced as X-CUBE-MCSDK or X-CUBE-MCSDK-FUL according to the software license
+agreement applied. It includes:
+• ST MC FOC firmware library for permanent magnet synchronous motor (PMSM) field-oriented control (FOC)
+• ST MC 6-step firmware library
+• ST motor profiler
+• ST motor pilot
+• ST MC workbench software tool, a graphical user interface (GUI) for the configuration of MC SDK firmware
+library parameters
+This user manual explains how to use the ST MC workbench software tool included within the MC SDK firmware
+version 6.0.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+How to use STM32 motor control SDK v6.0 workbench
+UM3027
+User manual
+UM3027 - Rev 1 - April 2022
+For further information contact your local STMicroelectronics sales office.
+www.st.com
+
+
+--- Page 2 ---
+
+1 General information
+The ST MC workbench software tool is part of the MC SDK that is used for the development of motor control
+applications running on STM32 32-bit microcontrollers, based on the Arm® Cortex®‑M processor.
+The ST MC workbench provides the user with an easy and friendly way to configure his MC application software
+matching his hardware setup.
+When completed, the user can directly generate his project which is compatible with the STM32CubeMX usage
+for a further MC application extension.
+The ST MC workbench runs on a PC system using Windows® and requires a USB Type-A connector.
+Note: Arm is a registered trademark of Arm Limited (or its subsidiaries) in the US and/or elsewhere.
+UM3027
+General information
+UM3027 - Rev 1 page 2/42
+
+
+--- Page 3 ---
+
+2 Related documents
+Documents available from Arm® infocenter website
+• Cortex ®-M0 Technical Reference Manual
+• Cortex ®-M3 Technical Reference Manual
+• Cortex ®-M4 Technical Reference Manual
+Documents available from www.st.com or your STMicroelectronics sales office
+• STM32F0xx datasheets
+• STM32F3xx datasheets
+• STM32F4xx datasheets
+• STM32G4xx datasheets
+• STM32G0xx datasheets
+• STM32F7xx datasheets
+• STM32H7xx datasheets
+• STM32L4xx datasheets
+Motor control reference documents
+Table 1 presents the documentation that helps to get a deeper understanding of the STMicroelectronics motor
+control solution.
+Table 1. Reference documentation
+Reference Document
+[AN5143] Application note How to migrate motor control application software from SDK v4.3 to SDK
+v5.x
+[AN5166] Application note Guidelines for control and customization of power boards with STM32 MC
+SDK v5.0
+[AN5464] Application note Position control of a three-phase permanent magnet motor using X-CUBE-
+MCSDK or X-CUBE-MCSDK-FUL
+[DB3548] Data brief STM32 MC SDK software expansion for STM32Cube
+[UM2374](1) User manual Getting started with STM32 motor control SDK v5.x
+[UM2380](1) User manual Getting started with STM32 motor control SDK v5.x
+[UM2392] User manual STM32 motor control SDK v5.0.0 firmware
+[UM2916] User manual MCSDK - 6-step firmware examples: insights of the firmware and how to
+customize it
+[UM3016] User manual STM32 MC SDK motor profiler
+[UM3026](1) User manual Getting started with STM32 motor control SDK v6.0
+[UM3027](1) User manual Workbench tools for STM32 motor control SDK 6.0
+[wiki] Refer to the motor control pages at the wiki.st.com/stm32mcu STMicroelectronics wiki site
+ 
+1. UM3026 and UM3027 are respectively the evolutions of UM2374 and UM2380 for MC SDK 6.0.
+ 
+UM3027
+Related documents
+UM3027 - Rev 1 page 3/42
+
+
+--- Page 4 ---
+
+3 ST motor-control workbench
+Launch the ST motor-control workbench software tool by clicking either its icon (Figure 1) or running directly from
+the installation folder.
+Figure 1. ST MC workbench – Icon
+The ST MC workbench GUI presents the following home area (start-up page) where there are the following
+sections:
+1. The user buttons area (Area 1 in Figure 2) to start either a new project or load a previous one, as well as
+launch the ST Motor Profiler or Motor Pilot software tools.
+2. The recent projects area (Area 2 in Figure 2) to load a user's recent project.
+3. The example projects area (Area 3 in Figure 2) to load a project example.
+Figure 2. ST MC workbench – GUI (Home view)
+3.1 Editing field behavior
+One of the common developing paths in the ST MC workbench is the editing and combo field behavior. Each edit
+or combo field has the following format and behavior:
+Figure 3. ST MC workbench – Editing field
+UM3027
+ST motor-control workbench
+UM3027 - Rev 1 page 4/42
+
+
+--- Page 5 ---
+
+Label area
+In this area, the field name is shown with optionally a number notification bullet that shows specific notes on the
+field. The bullet must be info (Blue), warning (Orange), or error (Red), and the specific messages pop up on the
+bullet mouse over.
+Editing area
+In this area, the user can set its value. The field (Edit or combo) assumes different styles depending on its editing
+state:
+• Field with default value: No value specified by the user (Value in light grey). The default value can be
+changed silently by the application itself.
+Edit fields Combo fields
+• Field with default value in editing mode (Value in light grey): The user can edit its value. The user can
+transform the default value into an explicit user value by clicking the upper-right small icon (
+ ).
+Edit fields
+• Field with explicit user value (Value in black): The explicit user value cannot be recalculated by the
+application. The user can reset the field to its default value by pressing the upper-right small icon (
+ ).
+Edit fields Combo fields
+• Field with error on value (Value in red): The user must review the field or reset the field to its default pressing
+the upper-right small icon.
+Edit fields Combo fields
+Unit and legend area
+This area is optional: It indicates the unit or the legend of the field, meaning the valid range.
+3.2 New project wizard
+When clicking the New Project button (Figure 2. ST MC workbench – GUI (Home view)), a window pops up that
+helps the user to define step‑by‑step the project configuration ().
+UM3027
+New project wizard
+UM3027 - Rev 1 page 5/42
+
+
+--- Page 6 ---
+
+3.2.1 General Info
+In the General Info step the user can set the following info:
+• Project Name & Description
+– Insert a Project name (Optional field), if specified it is used as the default file name in save as….
+– Insert a Description (Optional field).
+• Select Motor Control Algorithm & Hardware
+– Selects Num. Motors usage.
+– Selects Algorithm type, such as FOC or 6-step.
+– Selects the ST Hardware type boards:
+◦ Custom if the system is composed of a control evaluation board together with a power evaluation
+board.
+◦ Kit if the ST board is an ST MC kit, meaning P-NUCLEO-IHM003.
+◦ Inverter if the ST board is a complete inverter board (Single board with both power and control
+electronics).
+Figure 4. ST MC workbench – New project window
+UM3027
+New project wizard
+UM3027 - Rev 1 page 6/42
+
+
+--- Page 7 ---
+
+3.2.2 Motors
+In the Motors step, the user selects the motor to use in the project. The user can select a Generic Motor or a
+Profiled Motor. The Profiled Motors are identified by an icon 
+ (Refer to the example in Figure 5). This step
+is not available in case the user selects as Hardware an ST MC kit (Refer to the example in Figure 9. ST MC
+workbench – New project window – Kit). The list provides a set of motors delivered with the application as well as
+the user motors.
+Figure 5. ST MC workbench – New project window – Motors
+3.2.3 Power board
+In the Power step, a list of available power boards is shown. The power boards are sorted by compatibility with
+the previously selected motor supply. A yellow warning triangle is shown if the board output power supply is not
+properly compatible with the motor.
+Figure 6. ST MC workbench – New project window – Power
+UM3027
+New project wizard
+UM3027 - Rev 1 page 7/42
+
+
+--- Page 8 ---
+
+3.2.4 Control board
+In the Control step, a list of supported control boards is proposed. The list is sorted by compatibility with the
+selected power. An extra Bridge step is shown if the connectors for power and control are not compatible and
+require an adapter board.
+Figure 7. ST MC workbench – New project window – Control
+3.2.5 Bridge
+In the Bridge step, a list of available adapters is shown to be selected. The bridge selection allows the usage of
+boards (power and control) that are not directly connectable because they have different connectors, such as ST
+morpho or motor‑control connectors.
+Figure 8. ST MC workbench – New project window – Bridge
+UM3027
+New project wizard
+UM3027 - Rev 1 page 8/42
+
+
+--- Page 9 ---
+
+3.2.6 Kit
+The Kit step allows the selection of available supported kits. A kit is composed of a control board, a power board,
+and a motor.
+Figure 9. ST MC workbench – New project window – Kit
+3.2.7 Inverter
+The Inverter step allows the selection of available inverters. The inverter is a complete board, meaning a single
+board with both power and control parts.
+Figure 10. ST MC workbench – New project window – Inverter
+3.2.8 Creating the project
+At the end of the new project wizard, the user can click on the OK button to create the project. All hardware must
+be explicitly selected by the user and depends on the hardware type field.
+UM3027
+New project wizard
+UM3027 - Rev 1 page 9/42
+
+
+--- Page 10 ---
+
+A post‑selection procedure is executed to check if the configuration allows the creation of the project. If the user
+selection is not valid a dialog pops up to inform the user that the choices do not allow the project creation and ask
+to refine them (Figure 11).
+Figure 11. ST MC workbench – New project creation error
+Otherwise, the user selection is valid, a motorcontrol project is created, and the project view (Figure 12) is shown
+with all the information that depends on the selected boards and motor.
+Figure 12. ST MC workbench – Project view
+3.3 Loading an existing project
+When clicking the Load Project button (Figure 2. ST MC workbench – GUI (Home view)), a system dialog window
+appears and the user can select the project file (.stwb6) to load. The loaded project appears in the Project view
+(Figure 12) where the user can refine it.
+UM3027
+Loading an existing project
+UM3027 - Rev 1 page 10/42
+
+
+--- Page 11 ---
+
+3.4 Project view
+The project view is composed by:
+• The toolbar area
+• The hardware area info
+• The Project Steps area to select the hardware part to parametrize:
+– The motor,
+– The power supply,
+– The PWM generation,
+– And other parameters.
+• The hardware configuration details area. This is used to fine ‑tune the selected hardware functionality and
+view all the main info and protection at a first glance.
+Figure 13. ST MC workbench – Project view (Global view)
+3.4.1 Toolbar area
+The toolbar area is useful to control application navigation, project saving, and generation.
+3.4.1.1 Home
+Clicking 
+ provides the user with an easy way to close the current project and come back to the home
+view (Figure 2. ST MC workbench – GUI (Home view)). When not already saved, a confirmation window pops up
+(Figure 14) asking the user to save the current project or not, as well as to cancel the action, then go back to the
+hardware configuration window (Figure 13).
+Figure 14. ST MC workbench – Close project confirmation window
+UM3027
+Project view
+UM3027 - Rev 1 page 11/42
+
+
+--- Page 12 ---
+
+3.4.1.2 Save
+Click 
+ to open the Save menu.
+Figure 15. ST MC workbench – Save menu
+• Save: Saves the user's current project. When not already saved, a file manager window pops up to save the
+user's current project as a new one (Figure 16).
+• Save as…: Saves the user project as a new file. A file manager window pops up to save the user project as
+a new one (Figure 16).
+Figure 16. ST MC workbench – Project save as window
+3.4.1.3 Generate the project
+Clicking 
+ generates the user application project files. If the project file is not already saved,
+an information window pops up to indicate that this project needs to be saved before to generate. Use the Save &
+Generate button to save and generate.
+Figure 17. ST MC workbench – Save and generate
+UM3027
+Project view
+UM3027 - Rev 1 page 12/42
+
+
+--- Page 13 ---
+
+A window pops up (Figure 18) to allow the user to select the target toolchain, firmware package version, drive
+type, and generate the motor‑control firmware application throw the selected STM32CubeMX.
+Figure 18. ST MC workbench – Project generation
+3.4.1.4 Motor Pilot
+Clicking the Motor Pilot toolbar button launches the motor pilot application.
+3.4.1.5 About
+Clicking the About menu opens a window showing some application information and useful links.
+Figure 19. ST MC workbench – About
+3.4.2 Hardware information area
+Hardware information for the current project is presented in this area.
+UM3027
+Project view
+UM3027 - Rev 1 page 13/42
+
+
+--- Page 14 ---
+
+3.4.2.1 MCU pin usage and conflicts
+Moving over 
+ MCU a window pop-up is shown (Figure 20):
+Figure 20. ST MC workbench – MCU
+• Product Folder: Clicking it opens the product folder page for the MCU selected.
+• Pin usage & Conflicts: To control the pin assignment of the MCU and receive feedback about the pin
+conflicts (Figure 21).
+Figure 21. ST MC workbench – Pin usage & Conflicts
+UM3027
+Project view
+UM3027 - Rev 1 page 14/42
+
+
+--- Page 15 ---
+
+3.4.2.2 Control Board
+Moving over 
+ Control Board a window pops up to give general information about the control board selected
+and it shows:
+• Data Brief folder: Clicking it opens the relative data brief.
+• Product Folder: Clicking it opens the relative product folder page.
+Figure 22. ST MC workbench – Control board
+UM3027
+Project view
+UM3027 - Rev 1 page 15/42
+
+
+--- Page 16 ---
+
+3.4.2.3 Power board
+Moving over 
+ Power Board, a window pops up, gives general information about the selected power board,
+and shows:
+• Data Brief folder: Clicking it opens the relative data brief page.
+• Product Folder: Clicking it opens the relative product folder page.
+Figure 23. ST MC workbench – Power board
+3.4.3 Project steps and hardware configuration details
+All the hardware configurations alternatives depend on the hardware selected and are accessible from the wizard
+steps. The wizard steps are available from the left application pane (Project Steps area) as well as from the
+hardware configuration details area (main project view) by clicking the boxes. The information shown in the
+schematic is aligned with the wizard steps choices.
+3.5 Project wizard
+The project wizard is accessible from the left pane items or the relative main schematic view. Clicking one of
+these items displays the full wizard pops up and the relative step. The wizard is customized depending on the
+selected algorithm and in any case all the steps are available, and the user can move over all of them. The project
+wizard is the smart way to customize and configure the motor-control application for the hardware selected. Each
+wizard step contains several checks and info that help the user to make the right configurations. In case of errors,
+the wizard does not allow the project update and asks the user to fix the errors before applying the changes. In
+any case, if there are errors, the firmware project generation is not allowed.
+The step sequence on the wizard has a special meaning: the values of a field on a step can depend only on fields
+on previous steps (and not for the forward steps). The field sequence dependency is also followed inside each
+step: it is from top to bottom and from left to right.
+UM3027
+Project wizard
+UM3027 - Rev 1 page 16/42
+
+
+--- Page 17 ---
+
+3.5.1 Product Info
+This is a common step where the user can set the project description, to better identify the project, specifying
+project characteristics and extra‑user information. The project description is also visible as a small pop-up icon in
+the recent project list (Area 2 in Figure 2. ST MC workbench – GUI (Home view)).
+Figure 24. ST MC workbench – Project Info
+UM3027
+Project wizard
+UM3027 - Rev 1 page 17/42
+
+
+--- Page 18 ---
+
+3.5.2 User Interface
+This is a common step where the user can configure the Start and Stop button and the Motor Control Protocol
+(MCP), if these features are available for the selected hardware.
+Figure 25. ST MC workbench – User interface
+The user can change only the configurations that are available for the specific selected hardware. In the case
+shown in Figure 25, the Start/Stop is available only on the PC13 pin. If the hardware selected allows more
+possibilities a combo is available to allow the user to select the right pin to use. The Start/Stop feature can be
+disabled if the user does not want to use it.
+UM3027
+Project wizard
+UM3027 - Rev 1 page 18/42
+
+
+--- Page 19 ---
+
+3.5.3 Motor
+This step is relative to the motor parameters. The default values are loaded from the selected motor during the
+creation of the project (Figure 5. ST MC workbench – New project window – Motors). The user can modify each
+motor parameter (Figure 26) and activate and configure the Hall sensor or quadrature encoder for the used motor
+(Figure 27).
+Figure 26. ST MC workbench – Motor
+Figure 27. ST MC workbench – Motor – Hall effect – Quadrature encoder
+UM3027
+Project wizard
+UM3027 - Rev 1 page 19/42
+
+
+--- Page 20 ---
+
+3.5.4 Power Supply
+In this step, the Max. application Current and the Bus Voltage levels that are used by the application can be set.
+The values in this step must be the ones provided by the power supply and must be compatible with the power
+board and motor.
+Figure 28. ST MC workbench – Power supply
+3.5.5 PWM Generation
+In this step, the user can select the PWM driving topology available for the selected hardware, PWM frequency,
+modulation flags, and the MCU pin configuration for the topology used. For different driving topologies, different
+configurations are available.
+UM3027
+Project wizard
+UM3027 - Rev 1 page 20/42
+
+
+--- Page 21 ---
+
+3.5.5.1 High and low side topology
+Figure 29 shows the step for high and low side driving topology.
+Figure 29. ST MC workbench - PWM Generation - High and low side
+UM3027
+Project wizard
+UM3027 - Rev 1 page 21/42
+
+
+--- Page 22 ---
+
+3.5.5.2 High side and three‑enable topology
+Figure 30 shows the step for the high side and three‑enables driving topology.
+Figure 30. ST MC workbench – PWM generation – High side and three enables
+3.5.6 Current Sensing
+In this step, the user can select the available current reading topology and amplification (Figure 31). Depending
+on topology, amplification, and gain, the user is prompted with the relative fields to set and MCU Pin for that
+configuration, a schema shows the configuration graphically selected. The information on the step depends also
+on the selected algorithm (FOC or 6-step).
+UM3027
+Project wizard
+UM3027 - Rev 1 page 22/42
+
+
+--- Page 23 ---
+
+3.5.6.1 FOC 3-shunt external amplification
+In this Current Sensing topology, the user can set the regulator execution time, T-Rise, and T-Noise. The current
+amplification in this case is done on the power board. Figure 31 shows the configuration.
+Figure 31. ST MC workbench – Current sensing – FOC 3-shunt external amplification
+UM3027
+Project wizard
+UM3027 - Rev 1 page 23/42
+
+
+--- Page 24 ---
+
+3.5.6.2 FOC 3-shunt internal amplification - Internal Gain
+In this Current Sensing topology, the user can set the regulator execution time, the internal PGA gain factor, the
+T-Rise and T-Noise. In this case, the current amplification is done using an internal MCU operational amplifier.
+Figure 32 shows the configuration.
+Figure 32. ST MC workbench – Current sensing – FOC 3-shunt internal amplification – Internal gain
+UM3027
+Project wizard
+UM3027 - Rev 1 page 24/42
+
+
+--- Page 25 ---
+
+3.5.6.3 FOC 3-shunt internal amplification - External gain
+In this current-sensing topology, the user can set the regulator execution time, and the T-Rise and T-Noise. In this
+case, the current amplification is done using an internal MCU operational amplifier. The gain depends on the gain
+net in the control board. Figure 33 shows the configuration.
+Figure 33. ST MC workbench – Current sensing – FOC 3-shunt internal amplification – External gain
+UM3027
+Project wizard
+UM3027 - Rev 1 page 25/42
+
+
+--- Page 26 ---
+
+3.5.6.4 6-step current mode
+This is only available for the 6-step algorithm and the user can enable or disable the current mode. The current
+mode can be enabled only if the feature is available for the selected hardware (Figure 34). By default, the current
+mode is disabled (Figure 35).
+Figure 34. ST MC workbench – 6-step – Current mode
+Figure 35. ST MC workbench – 6-step – Current mode disabled
+UM3027
+Project wizard
+UM3027 - Rev 1 page 26/42
+
+
+--- Page 27 ---
+
+3.5.6.5 Over-current protection
+From the Current Sensing step, the user can enable and configure also the over-current protection (OCP) shown
+in Figure 36 the settings depend on the available OCP mode for the selected hardware. A generic schema will
+show the hardware connections between signals and the MCU.
+Figure 36. ST MC workbench – Current sensing – Over-current protection
+3.5.7 Bus voltage sensing
+In the Bus Voltage Sensing step, the user can configure the sensing of bus voltage if available for the hardware
+specified, and the relative Over Voltage and/or Under Voltage protection.
+Figure 37. ST MC workbench – Bus voltage sensing
+UM3027
+Project wizard
+UM3027 - Rev 1 page 27/42
+
+
+--- Page 28 ---
+
+3.5.8 Temperature sensing
+In the Temperature Sensing step, the user can configure the sensing of temperature if available for the specified
+hardware and the relative Over Temperature protection.
+Figure 38. ST MC workbench – Temperature sensing
+3.5.9 Speed‑sensing
+In the Speed-Sensing step, the user can select the speed sensing to use. There are different speed sensing
+modes that are available for both main and auxiliary sensors. The auxiliary sensor is optional and disabled by
+default. The speed sensing modes depend on the selected algorithm (FOC or 6-step).
+UM3027
+Project wizard
+UM3027 - Rev 1 page 28/42
+
+
+--- Page 29 ---
+
+3.5.9.1 FOC observer with PLL (Sensorless)
+This speed sensing mode is the default for the main sensor and is always available.
+Figure 39. ST MC workbench – Speed‑sensing – Observer PLL
+3.5.9.2 FOC observer with Cordic (Sensorless)
+This speed sensing mode is always available.
+Figure 40. ST MC workbench – Speed-sensing – Observer Cordic
+UM3027
+Project wizard
+UM3027 - Rev 1 page 29/42
+
+
+--- Page 30 ---
+
+3.5.9.3 FOC quadrature encoder
+This speed‑sensor mode depends on hardware availability and motor capability. The motor must have the sensor
+enabled and the feature must be supported by the hardware.
+Figure 41. ST MC workbench – Speed‑sensing – Quadrature encoder
+UM3027
+Project wizard
+UM3027 - Rev 1 page 30/42
+
+
+--- Page 31 ---
+
+3.5.9.4 Hall sensor 
+This speed sensor mode depends on hardware availability and motor capability. The sensor must be enabled for
+the motor and the hardware must support the feature. This speed sensor mode can be used in FOC and 6-step
+algorithms.
+Figure 42. ST MC workbench – Speed‑sensing – Hall sensor
+UM3027
+Project wizard
+UM3027 - Rev 1 page 31/42
+
+
+--- Page 32 ---
+
+3.5.9.5 FOC sensor-less start-up parameters
+The settings of the sensor-less start-up parameters are available only if the main sensor selected is sensorless
+(Observer with PLL or observer with Cordic).
+Figure 43. ST MC workbench – Speed‑sensing – Sensor-less start-up parameters
+UM3027
+Project wizard
+UM3027 - Rev 1 page 32/42
+
+
+--- Page 33 ---
+
+3.5.9.6 6-step sensor-less ADC
+Sensor‑less ADC is a specific speed‑sensing mode for the 6-step algorithm.
+Figure 44. ST MC workbench – 6-step sensor‑less ADC
+3.5.9.7 6-step sensorless start-up parameters
+The 6-step algorithm has specific Sensorless Start-up parameters settings, available if the selected
+speed‑sensing mode is sensor‑less-ADC.
+UM3027
+Project wizard
+UM3027 - Rev 1 page 33/42
+
+
+--- Page 34 ---
+
+Figure 45. ST MC workbench – 6-step – Sensor‑less – Start-up parameters
+3.5.10 Drive settings
+In the Drive Settings step, the user can configure the current regulator as one of the following three control
+modes.
+UM3027
+Project wizard
+UM3027 - Rev 1 page 34/42
+
+
+--- Page 35 ---
+
+3.5.10.1 Speed control
+This Drive Settings mode is always available.
+Figure 46. ST MC workbench – Drive settings – Speed control
+UM3027
+Project wizard
+UM3027 - Rev 1 page 35/42
+
+
+--- Page 36 ---
+
+3.5.10.2 Torque control
+This Drive Settings mode is always available.
+Figure 47. ST MC workbench – Drive Settings – Torque control
+UM3027
+Project wizard
+UM3027 - Rev 1 page 36/42
+
+
+--- Page 37 ---
+
+3.5.10.3 Position control
+This Drive Settings mode is available only if the quadrature encoder is selected as the main speed‑sensing
+sensor.
+Figure 48. ST MC workbench – Drive settings – Position control
+UM3027
+Project wizard
+UM3027 - Rev 1 page 37/42
+
+
+--- Page 38 ---
+
+Revision history
+Table 2. Document revision history
+Date Revision Changes
+27-Apr-2022 1 Initial release.
+UM3027
+UM3027 - Rev 1 page 38/42
+
+
+--- Page 39 ---
+
+Contents
+1 General information ............................................................... 2
+2 Related documents ................................................................ 3
+3 ST motor-control workbench....................................................... 4
+3.1 Editing field behavior ........................................................... 4
+3.2 New project wizard ............................................................. 5
+3.2.1 General Info ............................................................ 6
+3.2.2 Motors................................................................. 7
+3.2.3 Power board ............................................................ 7
+3.2.4 Control board ........................................................... 8
+3.2.5 Bridge ................................................................. 8
+3.2.6 Kit .................................................................... 9
+3.2.7 Inverter ................................................................ 9
+3.2.8 Creating the project....................................................... 9
+3.3 Loading an existing project ..................................................... 10
+3.4 Project view .................................................................. 11
+3.4.1 Toolbar area ........................................................... 11
+3.4.2 Hardware information area ................................................ 13
+3.4.3 Project steps and hardware configuration details ............................... 16
+3.5 Project wizard ................................................................ 16
+3.5.1 Product Info ........................................................... 17
+3.5.2 User Interface .......................................................... 18
+3.5.3 Motor ................................................................ 19
+3.5.4 Power Supply .......................................................... 20
+3.5.5 PWM Generation ....................................................... 20
+3.5.6 Current Sensing ........................................................ 22
+3.5.7 Bus voltage sensing ..................................................... 27
+3.5.8 Temperature sensing..................................................... 28
+3.5.9 Speed‑sensing ......................................................... 28
+3.5.10 Drive settings .......................................................... 34
+Revision history ....................................................................... 38
+List of tables .......................................................................... 40
+List of figures.......................................................................... 41
+UM3027
+Contents
+UM3027 - Rev 1 page 39/42
+
+
+--- Page 40 ---
+
+List of tables
+Table 1. Reference documentation .............................................................. 3
+Table 2. Document revision history ............................................................. 38
+UM3027
+List of tables
+UM3027 - Rev 1 page 40/42
+
+
+--- Page 41 ---
+
+List of figures
+Figure 1. ST MC workbench – Icon............................................................. 4
+Figure 2. ST MC workbench – GUI (Home view).................................................... 4
+Figure 3. ST MC workbench – Editing field ....................................................... 4
+Figure 4. ST MC workbench – New project window.................................................. 6
+Figure 5. ST MC workbench – New project window – Motors ........................................... 7
+Figure 6. ST MC workbench – New project window – Power ........................................... 7
+Figure 7. ST MC workbench – New project window – Control........................................... 8
+Figure 8. ST MC workbench – New project window – Bridge ........................................... 8
+Figure 9. ST MC workbench – New project window – Kit .............................................. 9
+Figure 10. ST MC workbench – New project window – Inverter .......................................... 9
+Figure 11. ST MC workbench – New project creation error ............................................ 10
+Figure 12. ST MC workbench – Project view ...................................................... 10
+Figure 13. ST MC workbench – Project view (Global view) ............................................ 11
+Figure 14. ST MC workbench – Close project confirmation window....................................... 11
+Figure 15. ST MC workbench – Save menu....................................................... 12
+Figure 16. ST MC workbench – Project save as window .............................................. 12
+Figure 17. ST MC workbench – Save and generate ................................................. 12
+Figure 18. ST MC workbench – Project generation .................................................. 13
+Figure 19. ST MC workbench – About........................................................... 13
+Figure 20. ST MC workbench – MCU ........................................................... 14
+Figure 21. ST MC workbench – Pin usage & Conflicts................................................ 14
+Figure 22. ST MC workbench – Control board ..................................................... 15
+Figure 23. ST MC workbench – Power board...................................................... 16
+Figure 24. ST MC workbench – Project Info....................................................... 17
+Figure 25. ST MC workbench – User interface ..................................................... 18
+Figure 26. ST MC workbench – Motor........................................................... 19
+Figure 27. ST MC workbench – Motor – Hall effect – Quadrature encoder .................................. 19
+Figure 28. ST MC workbench – Power supply ..................................................... 20
+Figure 29. ST MC workbench - PWM Generation - High and low side ..................................... 21
+Figure 30. ST MC workbench – PWM generation – High side and three enables ............................. 22
+Figure 31. ST MC workbench – Current sensing – FOC 3-shunt external amplification ......................... 23
+Figure 32. ST MC workbench – Current sensing – FOC 3-shunt internal amplification – Internal gain ............... 24
+Figure 33. ST MC workbench – Current sensing – FOC 3-shunt internal amplification – External gain............... 25
+Figure 34. ST MC workbench – 6-step – Current mode ............................................... 26
+Figure 35. ST MC workbench – 6-step – Current mode disabled ........................................ 26
+Figure 36. ST MC workbench – Current sensing – Over-current protection ................................. 27
+Figure 37. ST MC workbench – Bus voltage sensing ................................................ 27
+Figure 38. ST MC workbench – Temperature sensing................................................ 28
+Figure 39. ST MC workbench – Speed‑sensing – Observer PLL......................................... 29
+Figure 40. ST MC workbench – Speed-sensing – Observer Cordic ....................................... 29
+Figure 41. ST MC workbench – Speed‑sensing – Quadrature encoder .................................... 30
+Figure 42. ST MC workbench – Speed‑sensing – Hall sensor .......................................... 31
+Figure 43. ST MC workbench – Speed‑sensing – Sensor-less start-up parameters............................ 32
+Figure 44. ST MC workbench – 6-step sensor‑less ADC .............................................. 33
+Figure 45. ST MC workbench – 6-step – Sensor‑less – Start-up parameters ................................ 34
+Figure 46. ST MC workbench – Drive settings – Speed control.......................................... 35
+Figure 47. ST MC workbench – Drive Settings – Torque control ......................................... 36
+Figure 48. ST MC workbench – Drive settings – Position control ........................................ 37
+UM3027
+List of figures
+UM3027 - Rev 1 page 41/42
+
+
+--- Page 42 ---
+
+IMPORTANT NOTICE – READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgment.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or the design of
+purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. For additional information about ST trademarks, refer to www.st.com/trademarks. All other product or service names
+are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2022 STMicroelectronics – All rights reserved
+UM3027
+UM3027 - Rev 1 page 42/42

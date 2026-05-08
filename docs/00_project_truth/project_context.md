@@ -11,12 +11,14 @@
 - 电流采样：低侧三电阻，Kelvin 走线，G474 内部 OPAMP/PGA + ADC injected。
 - 网关：ESP32-C3，本地 AP/WebSocket/ECharts/OLED，负责边缘看板和告警展示。
 - 实时控制：STM32 负责 FOC 实时环，ESP32 不进入实时控制环。
+- 开发工具链：VS Code + STM32CubeIDE 插件 + STM32CubeMX + MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。
 - 算法路线：先 Motor Profiler + MCSDK，Hall 有感闭环保底，再冲刺 SMO/PLL 无感。
 - 实时时序：TIM1 center-aligned PWM -> TIM1_TRGO2 -> ADC injected -> JEOC -> FOC。
 
 ## 当前团队策略
 
 - 不从零手写完整 FOC 数学，优先使用 ST 官方 MCSDK 生成工程框架。
+- 工程配置和代码生成仍以 STM32CubeMX/MCSDK 为准，日常编辑、构建和调试以 VS Code + STM32CubeIDE 插件为准。
 - 不一开始追求无感，先把 Hall 闭环稳定跑起来。
 - 不在 JEOC/FOC ISR 内放 `printf`、`HAL_Delay`、JSON 解析、WebSocket、动态内存或长耗时逻辑。
 - UART 通信默认采用 DMA + IDLE + 一行一个 JSON 帧，`\n` 结尾。

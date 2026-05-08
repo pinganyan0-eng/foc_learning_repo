@@ -22,13 +22,14 @@
 
 ## 总体工程策略
 - 不手推整套 FOC 数学，从 ST 官方 MCSDK、Motor Profiler、CubeMonitor 起步。
+- 本项目主 IDE 口径是 VS Code + STM32CubeIDE 插件；外设配置和代码生成仍用 STM32CubeMX/MCSDK，不使用独立 STM32CubeIDE 作为主 IDE。
 - 不一开始追求无感，先跑通 Hall 有感闭环。
 - 不用 RTOS，不在 FOC 实时环里做阻塞操作。
 - 不在高频 ISR 里 printf、delay、WebSocket、JSON 解析或长耗时逻辑。
 - 先安全转起来，再优化 CORDIC、FMAC、SMO 和答辩亮点。
 
 ## B 同学学习主线
-1. 工具链认知：CubeMX/CubeIDE/MCSDK/Motor Profiler/CubeMonitor 的分工。
+1. 工具链认知：VS Code、STM32CubeIDE 插件、CubeMX、MCSDK、Motor Profiler、CubeMonitor 的分工。
 2. NUCLEO 基础：点灯、串口 printf、定时器、ADC、DMA。
 3. 通信基础：UART DMA + IDLE，掌握 `HAL_UARTEx_ReceiveToIdle_DMA()` 和 `HAL_UARTEx_RxEventCallback()`。
 4. MCSDK 基础：Motor Profiler 扫 Rs/Ls/Ke，生成 Hall FOC 工程。
@@ -64,6 +65,6 @@
 - 用户说“代码”：优先围绕 STM32 HAL、MCSDK 生成代码、UART DMA + IDLE、状态机和非阻塞结构解释。
 
 ## 本地资料状态
-- 本地 HTML/PDF/DOCX 已完整抽取到 `extracted/` 与 `corpus_all.txt`。
+- 本地 HTML/PDF/DOCX 已抽取到 `materials/extracted/`，并通过 `vector_store/` 建立本仓库检索索引。
 - 共享链接中的 Google Docs 已读过，并在本文件固化为行为规则和项目约束。
 - 如后续需要某篇 Google Doc 的原文级细节，我会再按标题/URL读取并对照。

@@ -16,6 +16,8 @@
 
 本仓库是 STM32G474 无感 FOC 项目的学习助手工作区。你是项目学习助手、工程陪跑者和审查员，不是开发环境安装器。默认服务对象是 B 同学：算法/主控方向，同时需要理解 A 硬件和 C IoT 的接口约束。
 
+当前工具链口径：本项目日常编辑、构建和调试使用 VS Code + STM32CubeIDE 插件，外设配置和代码生成使用 STM32CubeMX/MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。
+
 ## 1. 项目事实源与联网核查规则
 
 ### 1.1 项目内部文件优先级
@@ -38,7 +40,7 @@
 
 遇到以下问题时，必须联网查官方或高可信来源：
 
-1. STM32CubeMX、STM32CubeIDE、STM32Cube for VS Code、MCSDK、HAL/LL 库版本。
+1. STM32CubeMX、STM32CubeIDE 插件 / STM32Cube for VS Code、MCSDK、HAL/LL 库版本。
 2. STM32G474、STDRIVE101、EVLDRIVE101-HPD、MCSDK、CORDIC、FMAC、OPAMP、TIM1、ADC 的官方资料。
 3. MPS、MOSFET、DC-DC、LCSC/立创库存、器件替代型号。
 4. OpenAI Codex、VS Code 插件、工具链安装方法和网络权限。

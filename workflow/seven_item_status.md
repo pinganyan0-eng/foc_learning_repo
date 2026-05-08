@@ -14,8 +14,8 @@
 
 ## 关键边界
 
-- 这里配置的是 Codex 学习助手环境，不是 STM32CubeIDE、CubeMX、MCSDK、Arduino IDE 等开发环境。
-- 真实固件源码、真实实验日志、真实硬件资料还没有提供；后续给出后应分别放入 `firmware/`、`experiments/`、`hardware/`。
+- 这里配置的是 Codex 学习助手环境，不是 VS Code、STM32CubeIDE 插件、CubeMX、MCSDK、Arduino IDE 等开发环境。
+- 真实固件源码、真实实验日志、真实硬件资料还没有提供；后续给出后应分别放入 `apps/stm32_g474_foc/`、`apps/esp32_c3_gateway/`、`experiments/`、`hardware/`。
 - 对真实硬件的任何结论都不能只凭测试脚本，需要限流上电、空载 PWM、示波器波形、nFAULT 和故障链路证据。
 
 ## 新链接补充

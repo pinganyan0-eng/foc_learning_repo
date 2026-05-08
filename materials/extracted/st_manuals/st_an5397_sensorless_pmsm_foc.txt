@@ -1,0 +1,605 @@
+# AN5397 - Sensorless PMSM FOC controller
+
+Source path: F:\嵌赛\1手册\an5397-sensorless-pmsm-foc-controller-stmicroelectronics.pdf
+Role: Sensorless FOC algorithm reference
+Pages: 17
+Extracted at: 2026-04-30T04:22:39
+
+Extraction note: text was extracted with pypdf for local retrieval. Use the original PDF for figures, tables, electrical limits, and final page citations.
+
+
+
+--- Page 1 ---
+
+Introduction
+The most common method to read the current flowing in a motor is to use a resistor connected on the source of each low side
+MOSFET of the power stage. The value of these resistors ranges from few milliohms to hundreds of milliohms, depending on
+the target current in the motor. Such small values help reduce the power dissipation, but imply small voltage drops. In order to
+properly acquire the small signal coming from the sense resistors, an amplification network is sometimes required.
+This application note describes how to configure and size the amplifying network, providing some handy formulas.
+ Current Sensing in motion control applications 
+AN5397
+Application note
+AN5397 - Rev 1 - October 2019
+For further information contact your local STMicroelectronics sales office.
+www.st.com
+
+
+--- Page 2 ---
+
+1 Amplification for current sensing
+1.1 List of definitions
+Table 1 reports all the acronyms used in this application note.
+Table 1. List of acronyms and definitions
+Acronym Definition
+HS High side MOSFET. When closed, it connects the load to the positive supply voltage. Refer
+to Figure 1.
+LS Low side MOSFET. When closed, it connects the load to the GND. Refer to Figure 1 .
+Half bridge Structure composed by one HS and one LS MOSFET connected together. Refer to
+Figure 1.
+Full bridge In this configuration each side of the load is connected to a half bridge: the full bridge can
+force the current in the load in both directions.
+GND Ground voltage. It is the reference or common voltage of the circuit.
+RS
+Sense resistor or shunt resistor, placed on the source of the low side MOSFET, in order to
+measure the value of the current flowing in the load. Refer to Figure 1.
+PWM
+Pulse Width Modulation: it is a driving technique which uses a square wave with a
+modulated duty cycle in order to change the amount of current flowing through an inductive
+load.
+DC Direct current: more generally refers to currents and voltages which do not change in the
+time.
+Op-amp Operational amplifier.
+GBWP Gain Bandwidth Product of an operational amplifier.
+SR Slew Rate of the operational amplifier output.
+ADC Analog to Digital converter.
+MCU Microcontroller Unit.
+PCB Printed Circuit Board.
+1.2 Sense resistor configuration
+The typical configuration used for the current sensing is represented in Figure 1. The current can be sensed only
+when the low side MOSFET is turned on. According to the direction of the current in the inductive load, the
+voltage signal on the sense resistor can be positive or negative, as shown in Figure 2.
+AN5397
+Amplification for current sensing
+AN5397 - Rev 1 page 2/17
+
+
+--- Page 3 ---
+
+Figure 1. Basic configuration for current sensing using a sense resistor
+V M
+Load
+Sense 
+resistor
+Half 
+Bridge
+Sense resistor 
+Read -out
+R s
+High Side MOSFET
+Low Side MOSFET
+Figure 2. Representation of the voltages on the sense resistor according to the load current
+Negative voltage
+(below GND)
+VM
+Positive voltage
+Current from load 
+to LS MOSFET
+Rs RsVs,in
+IL IL
+Vs,in
+VM
+Current from LS 
+MOSFET to load
+Some current control methods just consider the positive voltage on the sense resistor in order to have an
+estimation of the current flowing in the motor phases, for example a peak current controller described in Section
+ 1.2.1 . Some other control algorithms, e.g. Field Oriented Control, require the measurement of both positive and
+negative voltages on the sense resistor RS. This application note focuses on this second configuration and
+explains how to acquire and condition bipolar signals, in order to make them compatible with the input of an ADC
+referred to GND.
+AN5397
+Sense resistor configuration
+AN5397 - Rev 1 page 3/17
+
+
+--- Page 4 ---
+
+1.2.1 Unipolar current sensing example
+The unipolar current sensing refers to a current controller which monitors only the positive value of voltage on the
+sense resistor and regulates the current in the load according to this value. A typical example is the control of the
+peak current. The power stage uses the PWM technique in order to limit the peak of the current flowing in the
+load. Usually this kind of control uses a single sense resistor common to more than one half bridge; as an
+example consider Figure 3, where two half bridges are connected together in order to form a full bridge
+configuration, but only one sense resistor is used. The same image explains the meaning of on-time (TON) and
+off-time (TOFF). The waveforms related to the peak current control are shown in Figure 4.
+Figure 3. Current in the power stage during on-time and off-time
+VM
+Rs
+VM VM
+Rs
+VM
+TON: 
+the current is charged in the 
+load turning on one HS 
+MOSFET and an LS MOSFET 
+TOFF: 
+the current is discharged 
+in the load turning on 
+both LS MOSFETs 
+Load CurrentLoad Current
+Vs,in Vs,in = 0
+AN5397
+Sense resistor configuration
+AN5397 - Rev 1 page 4/17
+
+
+--- Page 5 ---
+
+Figure 4. PWM current control based on the current peak
+Load Current
+T ON T OFF T ON T OFF
+Target peak 
+current
+Reference 
+Voltage
+Rs Voltage
+V s,in t
+t
+When a TON is performed, the current in the load increases: the voltage on the RS increases as well. When the
+voltage reaches the target value, a TOFF is triggered, discharging the current in the load for a fixed amount of
+time. Switching between TON and TOFF allows to control the current in the load, and its level can be controlled just
+monitoring the positive value of the sense resistor’s voltage and comparing it with a reference.
+1.2.2 Bipolar current sensing
+Other algorithms need to monitor the profile of the current in order to control it. Since the current can vary from a
+positive value to a negative one, the current flowing through the sense resistors generates both positive and
+negative voltage values. Consider for example a power stage in which each half bridge is connected to a sense
+resistor: when the LS of the half bridge is turned on the current flows in the sense resistor. According to the
+direction of the current, the voltage drop can be positive or negative (as depicted in Figure 2). The current is
+sampled at each PWM cycle, i.e. every time the LS turns on, and the profile of the current can be tracked. The
+control algorithm can calculate the PWM driving signals, according to the current profiles measured. While the
+positive voltages on the sense resistor can be directly acquired, negative signals (below GND reference) need a
+voltage translation before sampling, as explained in Section 1.3 .
+1.3 Amplification network schematic for bipolar current sensing
+The signal coming from the sense resistor is usually sampled by a microcontroller using an ADC: the input
+dynamic range of the ADC ranges from GND to VDD, where VDD is the supply voltage of the ADC. The signal of
+the sense resistor ranges from – Imax∙RS to + Imax∙RS, where Imax is the maximum current of the application and
+RS is the sense resistor’s value. In order to match the two ranges, a level shifting is needed before amplifying the
+signal.
+The circuit proposed for current sensing is represented in Figure 5: referring to the image, Ra and Rb operate the
+signal level shifting.
+AN5397
+Amplification network schematic for bipolar current sensing
+AN5397 - Rev 1 page 5/17
+
+
+--- Page 6 ---
+
+Figure 5. Schematic of the amplification network
+R s Vs,in
+R a
+R b
+R 1 R 2
+C
+V DD
+To 
+microcontroller 
+ADC
+ILOAD
+In case of zero current in the sense resistor, the ADC input should be at VDD/2 (in the middle of the dynamic
+range), so the following relation must be satisfied:
+Equation 1
+(1)
+VDD ∙
+Rb
+Ra + Rb
+∙ 1 +
+R2
+R1
+≈
+VDD
+2
+Ra and Rb are supposed to be much greater than RS, so this latter can be neglected in the formula. Satisfying Eq.
+(1) ensures a proper bias of the amplifier; then the gain of the amplifier must be adjusted in order to fit the
+application requirements (further details are provided in Section 1.3 ). The resistors’ values can be sized to meet
+the selected gain G, according to the following equation:
+Equation 2
+(2)
+Vs, in ∙
+Ra
+Ra + Rb
+∙ 1 +
+R2
+R1
+≈ G ∙ Vs, in
+Eq. (1) and Eq. (2) can be combined together to find a set of values for resistors in order to have the signal at the
+ADC input centered at VDD/2 and amplified by a given gain G:
+Equation 3
+(3)
+Ra
+Rb
+= 2G
+R2
+R1
+= G − 0.5
+Moreover, the bias current of the op-amp can introduce an error: in fact, the circuit presented in Figure 5 can be
+analyzed, considering the bias currents one at a time, as shown in Figure 6.
+AN5397
+Amplification network schematic for bipolar current sensing
+AN5397 - Rev 1 page 6/17
+
+
+--- Page 7 ---
+
+Figure 6. Equivalent circuit of the bias currents contributions
+Ra
+Rb
+R1 R2
+Ib+
+Vo,b+
+Ib+·(Ra //Rb)
+Ra
+Rb
+R1 R2
+Ib-
+Vo,b-
+0V
+Not-inverting input bias current 
+contribution
+Inverting input bias current 
+contribution
+The resulting output due to bias currents is the sum of two contributions: Vo,b+ and Vo,b-:
+Vo, b + = Ib + ∙ Ra/ /Rb ∙ 1 +
+R2
+R1
+Vo, b − = − Ib − ∙ R2
+In order to cancel the error introduced by bias currents, one contribution must compensate the other one, thus
+Vo,b+ = -Vo,b-. Considering that in most of the op-amps the two bias currents have the same value (Ib+ = Ib-), it is
+possible to compensate the error choosing the resistors as stated in the following equation:
+Equation 4
+(4)
+Vo, b + = − Vo, b −  
+RaRb
+Ra + Rb
+=
+R1R2
+R1 + R2
+According to Eq. (4), Eq. (3) can be rewritten as:
+Equation 5
+(5)
+Ra
+Rb
+= 2G
+R2
+R1
+= G − 0.5
+Rb
+R1
+= 1 − 0.5
+G
+1.4 Gain selection and dynamic performance
+The gain G of the amplifier should be adjusted in order to exploit the entire dynamic range of the ADC that is
+sampling the signal. Usually the dynamic range is equal to the voltage supply of the microcontroller VDD (a typical
+value is 3.3 V). Considering a maximum target current for the application Imax, that can be positive or negative as
+shown in Figure 2, it is possible to calculate the maximum gain Gmax as follows:
+Equation 6
+(6)
+Gmax =
+VDD
+2 ∙ ImaxRS
+AN5397
+Gain selection and dynamic performance
+AN5397 - Rev 1 page 7/17
+
+
+--- Page 8 ---
+
+Using a gain greater than Gmax results in a saturation of the ADC at higher currents. The trade-off to be
+considered for gain selection is given by the gain-bandwidth product (GBWP) of the selected op-amp. Choosing a
+higher gain reduces the bandwidth of the system; the following relation can be used in order to estimate the
+bandwidth of the system:
+Equation 7
+(7)
+BW =   GBWP
+1 +
+R2
+R1
+The Slew Rate (SR) of the op-amp should be considered as well: this parameter is crucial especially when the
+load current approaches its maximum value Imax.The output of the op-amp continuously switches, with an output
+variation equal to ΔVOUT = Imax∙RS∙G. The slew rate of the op-amp determines the minimum settling time (Tsettling)
+to be waited in order to have the output stable after the LS MOSFET is turned on
+Equation 8
+(8)
+Tsettling >
+Imax ∙ RS ∙ G
+SR
+The op-amp should be chosen in order to have a very small settling time compared to the PWM period driving the
+motor.
+Another aspect to be considered is the noise coming from the switching of the power stage. In order to improve
+the noise filtering while ensuring the integrity of the signal coming from the sense resistor, a capacitor C can be
+added in the feedback loop of the op-amp, as shown in Figure 5. The cut-off frequency of the low pass filter is
+given by:
+Equation 9
+(9)
+fLP = 1
+2πR2C
+The capacitor should be selected according to the application parameters (such as the PWM frequency of the
+driver) and to be effective, the cutoff frequency fLP stated in Eq. (9) should be smaller than the frequency limitation
+introduced by the op-amp (BW in Eq. (7)). It should be noted that the capacitor is in the feedback loop, so its
+value must be properly selected in order to guarantee the stability of the op-amp. When stability of the loop
+cannot be guaranteed, the low pass filter can be implemented removing the capacitor from the feedback loop and
+using an RC filter on the op-amp output (Figure 7). This solution can be used if the ADC input is a high
+impedance input, so the signal is not attenuated by the partition between the ADC input resistance and RLP.
+Referring to Figure 7, the low-pass cut-off frequency is given by:
+Equation 10
+(10)
+fLP, o = 1
+2πRLPCLP
+AN5397
+Gain selection and dynamic performance
+AN5397 - Rev 1 page 8/17
+
+
+--- Page 9 ---
+
+Figure 7. RC low-pass filter added on the operational amplifier output
+Rs Vs,in
+Ra
+Rb
+R1 R2
+VDD
+To 
+microcontroller 
+ADC
+ILOAD
+RLP
+CLP
+1.5 Numerical example
+This paragraph summarizes the concepts explained previously using a numerical example. The first parameter to
+be considered is the maximum current of the application. Let’s assume for this example that Imax=10A. A
+reasonable value of the sense resistor RS could be 20 mΩ; this guarantees that the maximum voltage drop on it is
+0.2 V and thus the maximum power is 2W. Actually the average power is smaller, because the sense resistor
+dissipates only when the LS MOSFET is turned on. Choosing a resistor with a power rating of 2W ensures a safe
+margin from the thermal point of view.
+Knowing the Imax and the RS, it is possible to find the maximum amplification gain using Eq. (6): assuming VDD =
+3.3 V (typical digital voltage for microcontrollers) Gmax = 8.25. Keeping some margin on the amplified signal, we
+can select G = 7.5 and using Eq. (5) we find:
+Ra
+Rb
+= 15
+R2
+R1
+= 7
+Rb
+R1
+≈ 0.933
+Selecting R1 = 2 kΩ, it is possible to select the other resistors among the commercial values available:
+• R 2 = 14 kΩ
+• R a = 30 kΩ
+• R b = 2 kΩ
+It can be seen that the ratio Rb/R1 is an approximate value, however the impact of this mismatch is reduced using
+an op-amp with low bias current inputs. A suggested part number is the TSV99x family. The TSV991, TSV992 or
+TSV994 op-amp (single, dual or quad respectively) are rail to rail input/output with a 20 MHz GBWP and a SR =
+10 V/µs. The stability is guaranteed for closed loop gains greater than 4: there are no stability issues in this case,
+since the closed loop gain is 1+ R2/R1=8.
+The bandwidth of the entire amplification network is given by Eq. (7) and it is BW = 2.5 MHz. According to Eq. (8),
+the minimum settling time of the op-amp is 150 ns. After the LS MOSFET turns on, the ADC should wait at least
+150 ns before sampling the signal. Eventually considering for this example a PWM frequency of 25 kHz, the
+settling time is much smaller than the period of 40 µs, thus a proper sampling can be achieved.
+AN5397
+Numerical example
+AN5397 - Rev 1 page 9/17
+
+
+--- Page 10 ---
+
+2 Improved circuit
+The amplification network described in Section 1 and represented in Figure 5 and Figure 7 shows some
+disadvantages:
+1. In most cases the values found using Eq. (5) are not available in commercial format, so approximation in the
+resistors’ values leads to a mismatch error
+2. The common mode is not rejected, so parasitic elements on the GND path can introduce errors in the
+readout
+In order to overcome these disadvantages, the circuit represented in Figure 5 and Figure 7 can be improved
+adding one more resistor, as explained hereafter.
+2.1 Improved schematic diagram
+The schematic of the improved solution is represented in Figure 8. The signal coming from the sense resistor is
+acquired as a differential signal. The ground reference is split between the power GND, which the sense resistor
+is referred to, and the signal GND, which is the reference for the amplified signal and the ADC. In fact, when high
+currents flow through the GND path, a common mode voltage is generated on the sense resistor, due to parasitic
+inductances distributed on the path (see Figure 9). If not rejected, the common mode voltage is amplified as a
+signal and it can introduce an error. The differential configuration depicted in Figure 8 allows to overcome this
+issue. As shown in Figure 8, the different GND paths must be kept separated and connected together just in one
+point of the PCB, usually the GND of the main power supply. Moreover, the two traces coming from the sense
+resistor must be treated as differential traces: they are connected as close as possible to the sense resistor
+terminals and run symmetrically and side by side towards the op-amp.
+Figure 8. Improved schematic for current sensing network
+Rs Vs,in
+RLP
+R1 R2
+C
+VDD
+Microcontroller 
+ADC
+ILOAD
+ADC IN
+ADC GNDCLP
+R1
+2R2
+2R2
+V+
+V-
+Power GND Signal GND
+Differential pair
+Vo
+AN5397
+Improved circuit
+AN5397 - Rev 1 page 10/17
+
+
+--- Page 11 ---
+
+Figure 9. GND connections and parasitic elements on the power GND path
+Rs
+Distributed parasitic inductance on 
+the power GND path
++
+–
+VM
+Single point connection between power GND 
+and signal GND, close to the power supply
+High currents flowing through parasitic inductance can create a voltage drop and a 
+misalignment of the power GND and acommon mode voltage on the sense resistor
+IL
+Load 
+Current
+Common 
+mode 
+voltage
+OP-AMP Circuitry
+Differential pair
+IL·RS
+Power
+Supply
+The op-amp network is sized in order to obtain the same gain on the inverting input and non-inverting input;
+referring to Figure 8, V+ and V- must have the same gain, as stated in Eq. (11) (DC transfer for V+signal) and Eq.
+(12) (DC transfer for V-signal).
+Equation 11
+(11)
+Vo, + =
+R2
+R1 + R2
+∙ 1 +
+R2
+R1
+∙ V+ =
+R2
+R1
+∙ V+
+Equation 12
+(12)
+Vo, − = −
+R2
+R1
+∙ V−
+Combining Eq. (11) and Eq. (12) it is possible to find the gain G for this amplification network:
+Equation 13
+(13)
+G =
+Vo
+Vs, in
+=
+Vo, + + Vo, −
+V+ − V−
+=
+R2
+R1
+Each differential signal (i.e. every signal generated by the current flowing in the power stage) is amplified
+according to Eq. (13), while each common mode signal (i.e. every signal coming from ground misalignment) is
+rejected.
+Then, it can be verified that when Vs,in = 0 (no current is flowing in the sense resistor), the output Vo is equal to
+VDD/2 (considering that RS << R1):
+Equation 14
+(14)
+Vo Vs, in = 0 ≈ VDD ∙
+R1 ∥ 2R2
+2R2 + R1 ∥ 2R2
+∙ 1 +
+R2
+R1
+=
+VDD
+2
+It should be noted that the resistors' configuration on the input pins of the op-amp ensures the compensation of
+the bias currents of the op-amp.
+According to the numerical example in Section 1.4 , where a gain G = 7.5 is required, the following resistors can
+be selected: R1 = 2 kΩ, R2 = 15 kΩ and consequently , 2R2 = 30 kΩ. The simplified relation between components
+allows to easily find commercial values matching the requirements.
+AN5397
+Improved schematic diagram
+AN5397 - Rev 1 page 11/17
+
+
+--- Page 12 ---
+
+The equations reported in section Section 1.4 are valid also for the circuit proposed in Figure 8, and can be
+applied in order to determine the maximum gain, the bandwidth and the settling time of the system.
+AN5397
+Improved schematic diagram
+AN5397 - Rev 1 page 12/17
+
+
+--- Page 13 ---
+
+Revision history
+Table 2. Document revision history
+Date Version Changes
+17-Oct-2019 1 Initial release.
+AN5397
+AN5397 - Rev 1 page 13/17
+
+
+--- Page 14 ---
+
+Contents
+1 Amplification for current sensing .................................................. 2
+1.1 List of definitions ............................................................... 2
+1.2 Sense resistor configuration ..................................................... 2
+1.2.1 Unipolar current sensing example............................................ 3
+1.2.2 Bipolar current sensing .................................................... 5
+1.3 Amplification network schematic for bipolar current sensing ........................... 5
+1.4 Gain selection and dynamic performance .......................................... 7
+1.5 Numerical example ............................................................. 9
+2 Improved circuit .................................................................. 10
+2.1 Improved schematic diagram.................................................... 10
+Revision history ....................................................................... 13
+Contents .............................................................................. 14
+List of tables .......................................................................... 15
+List of figures.......................................................................... 16
+AN5397
+Contents
+AN5397 - Rev 1 page 14/17
+
+
+--- Page 15 ---
+
+List of tables
+Table 1. List of acronyms and definitions .......................................................... 2
+Table 2. Document revision history ............................................................. 13
+AN5397
+List of tables
+AN5397 - Rev 1 page 15/17
+
+
+--- Page 16 ---
+
+List of figures
+Figure 1. Basic configuration for current sensing using a sense resistor.................................... 3
+Figure 2. Representation of the voltages on the sense resistor according to the load current ..................... 3
+Figure 3. Current in the power stage during on-time and off-time ........................................ 4
+Figure 4. PWM current control based on the current peak ............................................. 5
+Figure 5. Schematic of the amplification network ................................................... 6
+Figure 6. Equivalent circuit of the bias currents contributions ........................................... 7
+Figure 7. RC low-pass filter added on the operational amplifier output ..................................... 9
+Figure 8. Improved schematic for current sensing network............................................ 10
+Figure 9. GND connections and parasitic elements on the power GND path................................ 11
+AN5397
+List of figures
+AN5397 - Rev 1 page 16/17
+
+
+--- Page 17 ---
+
+IMPORTANT NOTICE – PLEASE READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgement.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or the design of
+Purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. For additional information about ST trademarks, please refer to www.st.com/trademarks. All other product or service
+names are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2019 STMicroelectronics – All rights reserved
+AN5397
+AN5397 - Rev 1 page 17/17

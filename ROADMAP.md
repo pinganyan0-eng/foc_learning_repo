@@ -8,7 +8,7 @@
 
 ## 下一阶段
 
-1. 放入真实 STM32CubeMX / MCSDK 工程到 `apps/stm32_g474_foc/`。
+1. 放入真实 STM32CubeMX / MCSDK 工程到 `apps/stm32_g474_foc/`，并按 VS Code + STM32CubeIDE 插件路线打开、构建和调试。
 2. 放入真实 ESP32-C3 网关工程到 `apps/esp32_c3_gateway/`。
 3. 把每次联调记录放到 `experiments/YYYY-MM-DD_topic/`。
 4. 把答辩报告、PPT、视频脚本放到 `deliverables/`。

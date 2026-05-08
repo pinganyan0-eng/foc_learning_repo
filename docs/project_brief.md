@@ -11,16 +11,17 @@
 - 功率驱动：STDRIVE101 自研三相功率板。
 - 采样：低侧三电阻，Kelvin 走线，STM32G474 内部 OPAMP/PGA + ADC injected。
 - 网关：ESP32-C3，本地 AP/WebSocket/ECharts/OLED，不进入 FOC 实时控制环。
+- 工具链：VS Code + STM32CubeIDE 插件 + STM32CubeMX + MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。
 
 ## 团队角色
 
 - A 硬件：功率板、采样链路、保护链路、上电安全、版图与实测波形。
-- B 算法/主控：CubeMX、MCSDK、Motor Profiler、Hall 闭环、PI 调参、JEOC 时序、UART DMA + IDLE、SMO 冲刺。
+- B 算法/主控：VS Code + STM32CubeIDE 插件、CubeMX、MCSDK、Motor Profiler、Hall 闭环、PI 调参、JEOC 时序、UART DMA + IDLE、SMO 冲刺。
 - C IoT：ESP32-C3 网关、WebSocket 看板、OLED、报警转发、断网演示。
 
 ## B 同学默认学习路线
 
-1. 工具链认知：CubeMX/CubeIDE/MCSDK/Motor Profiler/CubeMonitor 各干什么。
+1. 工具链认知：VS Code、STM32CubeIDE 插件、CubeMX、MCSDK、Motor Profiler、CubeMonitor 各干什么。
 2. NUCLEO 基础：GPIO、USART、TIM、ADC、DMA、调试输出。
 3. 通信基础：`HAL_UARTEx_ReceiveToIdle_DMA()` + `HAL_UARTEx_RxEventCallback()` + 环形缓冲。
 4. MCSDK 起步：Motor Profiler 测 Rs/Ls/Ke，先生成 Hall FOC 工程。

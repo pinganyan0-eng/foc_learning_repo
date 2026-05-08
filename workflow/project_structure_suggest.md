@@ -30,7 +30,7 @@
 
 ## 还缺什么
 
-- 真实 STM32CubeIDE/MCSDK 源码树：放到 `firmware/` 后才能审查真实 JEOC、ADC、TIM1、UART、状态机代码。
+- 真实 VS Code/STM32CubeIDE 插件 + STM32CubeMX/MCSDK 源码树：放到 `apps/stm32_g474_foc/` 后才能审查真实 JEOC、ADC、TIM1、UART、状态机代码。
 - 真实实验日志：放到 `experiments/` 或 `logs/`，以后定位问题必须附带供电限流、nFAULT、串口日志、波形截图和操作步骤。
 - 真实硬件资料：原理图、PCB、BOM、Gerber、关键波形，放到 `hardware/`。
 - Codex CLI 只读执行状态：本次 `codex exec -s read-only` 在当前桌面环境被系统权限拦截，错误为 `Access is denied`；因此这里先固化等价只读讲解稿，真实 CLI Suggest 需要在能正常运行 `codex exec` 的终端里复跑。

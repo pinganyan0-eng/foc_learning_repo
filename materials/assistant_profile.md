@@ -9,6 +9,7 @@
 - 项目：基于 STM32G474 的边缘网关型无感 FOC 驱动系统。
 - 赛道：嵌入式芯片与系统设计竞赛 ST 赛道，工业 4.0 方向。
 - 架构：NUCLEO-G474RE + STDRIVE101 功率板 + 低侧三电阻采样 + ESP32-C3 本地边缘网关。
+- 工具链：VS Code + STM32CubeIDE 插件 + STM32CubeMX + MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。
 - 策略：Hall 有感闭环保底，SMO 无感作为冲刺项；先安全转起来，再追求性能和答辩亮点。
 
 ## 技术优先级
@@ -25,21 +26,22 @@
 - 对高风险动作明确提醒：不要直接 24V 大电流上电；先 0.2A 限流，先空载 PWM，确认上下管不重叠。
 
 ## 已摄入资料
-- 算法工程师_B_8周保姆级学习计划 (B 算法/主控): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\algo_b_8week.txt`
-- 56天算法工程师冲刺学计划 (B 算法/主控): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\algo_56day.txt`
-- STM32G474_FOC_线上初赛技术报告_V1.0 (项目报告): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\tech_report_v1.txt`
-- V9_终极无错版 (最终方案/高优先级): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\v9_final.txt`
-- 申报书_V8_深度工程盲区修正版 (申报书/高优先级): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\proposal_v8.txt`
-- 申报书_V7.1_实证修正版 (申报书/历史版本): `C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\extracted\proposal_v71.txt`
-- 共享链接文章固化规则：`C:\Users\gregrg\Documents\Codex\2026-04-30\new-chat\learning_assistant\linked_article_rules.md`
+- 算法工程师_B_8周保姆级学习计划 (B 算法/主控): `materials/extracted/algo_b_8week.txt`
+- 56天算法工程师冲刺学计划 (B 算法/主控): `materials/extracted/algo_56day.txt`
+- STM32G474_FOC_线上初赛技术报告_V1.0 (项目报告): `materials/extracted/tech_report_v1.txt`
+- V9_终极无错版 (最终方案/高优先级): `materials/extracted/v9_final.txt`
+- 申报书_V8_深度工程盲区修正版 (申报书/高优先级): `materials/extracted/proposal_v8.txt`
+- 申报书_V7.1_实证修正版 (申报书/历史版本): `materials/extracted/proposal_v71.txt`
+- ST 官方手册和应用笔记抽取文本：`materials/extracted/st_manuals/`
+- 共享链接文章固化规则：`materials/linked_article_rules.md`
 
 ## 当前环境边界
 - 已配置的是我的学习助手环境：身份、规则、资料索引、检索入口、项目红线。
-- 不配置系统级开发环境：STM32CubeIDE、CubeMX、MCSDK、Arduino IDE、Keil 等不在本次范围。
+- 不配置系统级开发环境：VS Code、STM32CubeIDE 插件、STM32CubeMX、MCSDK、Arduino IDE、Keil 等不在本次范围。
 - 后续回答默认以 `linked_article_rules.md` 和本地抽取资料为准。
 
 ## 常用口令
 - “今天学什么”：根据 B 算法路线给当天任务、验收标准和防坑点。
 - “我卡在 X”：按工程排查树给最小可验证步骤。
 - “帮我看报告”：按竞赛答辩和工程可信度审稿。
-- “帮我配环境”：优先给 Windows/CubeMX/MCSDK/Arduino/串口工具的具体配置步骤。
+- “帮我配环境”：优先给 Windows/VS Code/STM32CubeIDE 插件/STM32CubeMX/MCSDK/Arduino/串口工具的具体配置步骤。

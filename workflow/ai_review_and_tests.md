@@ -9,5 +9,5 @@
 
 ## 后续接入真实固件
 
-- 把真实协议解析代码放入 `firmware/` 后，优先用 Unity/Ceedling 或 CMocka 做 C 侧单元测试。
+- 把真实协议解析代码放入 `apps/stm32_g474_foc/` 后，优先用 Unity/Ceedling 或 CMocka 做 C 侧单元测试。
 - 若暂时没有 C 测试框架，先保留本仓库 Python 模型作为规格测试和审查基准。

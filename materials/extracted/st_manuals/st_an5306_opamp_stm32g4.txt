@@ -1,0 +1,1703 @@
+# AN5306 - Operational Amplifier (OPAMP) usage in STM32G4 Series
+
+Source path: F:\嵌赛\1手册\an5306-dual-motor-control-using-the-stm32g4-stmicroelectronics.pdf
+Role: STM32G4 OPAMP/current-sense reference
+Pages: 43
+Extracted at: 2026-04-30T04:22:39
+
+Extraction note: text was extracted with pypdf for local retrieval. Use the original PDF for figures, tables, electrical limits, and final page citations.
+
+
+
+--- Page 1 ---
+
+Introduction
+The operational amplifier (OPAMP) embedded in the STM32G4 Series device extends the analog capabilities of the
+microcontroller. This application note describes how to implement an OPAMP to support a number of analog applications using
+a minimum number of external components and outline the OPAMP configuration using the digital controls.
+This application note explains how to implement the OPAMP in a number of operating modes and outlines some specific
+practical examples.
+Operational Amplifier (OPAMP) usage in STM32G4 Series
+AN5306
+Application note
+AN5306 - Rev 1 - May 2019
+For further information contact your local STMicroelectronics sales office.
+www.st.com
+
+
+--- Page 2 ---
+
+1 General information
+This document applies to the STM32G4 Series Arm®-based microcontrollers.
+Note: Arm is a registered trademark of Arm Limited (or its subsidiaries) in the US and/or elsewhere.
+AN5306
+General information 
+AN5306 - Rev 1 page 2/43
+
+
+--- Page 3 ---
+
+2 What is an OPAMP – basics.
+2.1 OPAMP operation basics
+Figure 1. Basic OPAMP representation
++
+OUTPUT
+Non inverting 
+input
+Inverting 
+input
++
+-
+The operational amplifier is an analog device that amplifies differential input signals (difference between inverting
+and non-inverting input) to give a resulting output voltage. Figure 1. Basic OPAMP representation illustrates the
+circuit representation of an OPAMP.
+The ideal operational amplifier must have the following properties:
+• Infinite amplification gain (open loop)
+• Infinite input impedance
+• Zero output impedance
+• Infinite frequency bandwidth
+• Zero input offset voltage
+If the OPAMP has infinite gain, then the differential signal at input must be zero (in closed loop linear operation)-
+because the gain is infinite and output voltage is at finite level:
+Uout = Uin x Gain = 0 x ∞ = finite voltage.
+This basic idea (input voltage at zero) simplifies the OPAMP usage in real applications.
+Real operational amplifier requires properties close to ideal requirements:
+• High amplification gain (open loop) – for example: gain = 1,000,000 (120 dB)
+• High input impedance – for example Z in = 100 MΩ
+• Low output impedance – for example Z out = 10 Ω
+• High frequency bandwidth – for example f -3 dB = fGBW = 10 MHz (for closed gain loop = 1)
+• Low input offset voltage – for example U offset = 1 mV
+AN5306
+What is an OPAMP – basics. 
+AN5306 - Rev 1 page 3/43
+
+
+--- Page 4 ---
+
+2.2 OPAMP in practice – operation example
+The ideal OPAMP has infinite gain. This means that if output needs to be set at a defined value then the input
+differential signal should be zero. The output signal should influence input differential voltage through negative
+feedback to balance the operation point. Figure 2. Inverting amplifier by using OPAMP below illustrates an
+example of an inverting amplifier setup:
+Figure 2. Inverting amplifier by using OPAMP
+I diff
+R1 R2
+U in
+U out
+U diff
+-
++
+I1 I2
+A voltage is applied to Uin on the negative OPAMP input of Udiff through R1 resistor. This increase on the negative
+input causes a voltage decrease on Uout – due to the OPAMP gain ratio. Then the Uout voltage causes a
+decrease of the voltage on the negative OPAMP input through R2 resistor – this is the negative feedback set up
+on Uin. The feedback then stabilizes the differential voltage of the OPAMP input (Udiff) to reach zero and the Uout
+voltage reaches the required level (Uout = Udiff x ∞). If Udiff is zero then Uout voltage is calculated based on Uin
+using the following formulas:
+• U diff = 0 V (zero differential voltage)
+Idiff = 0 A (zero current on the OPAMP input – because input impedance is ∞)
+• I1 = U in / R1 (current through R1, because Udiff = 0 and non-inverting OPAMP input is grounded)
+I2 = Uout / R2 (current through R2, because Udiff = 0 and non-inverting OPAMP input is grounded)
+• I2 = -I1 (because I diff = 0)
+• U out / R2 = -Uin / R1
+Uout = -Uin . (R2/R1)
+The final circuit gain is calculated as a ratio between the output and the input voltage (gain = Uout/Uin). Final gain
+is given here only by external resistors values of R1 and R2 and is not depend on the OPAMP (if its gain is ∞).
+AN5306
+OPAMP in practice – operation example 
+AN5306 - Rev 1 page 4/43
+
+
+--- Page 5 ---
+
+3 Brief description of the OPAMP in the STM32G4 Series
+The STM32G4 Series integrates OPAMPs that can be used in high speed analog to digital applications as analog
+signal pre-conditioning for ADC data sampling or as standalone amplifiers. Main application areas are:
+• Motor control applications (current and voltage sensing)
+• Digital switched-mode power supplies – DSMPS (current and voltage sensing, control loop)
+• Light control applications (current and voltage sensing)
+• Analog sensors measurement applications (thermometers, low signals measurement and so on)
+• Medical applications (analog signals sensing/amplification)
+• Audio applications (signal amplification)
+• General purpose analog signal usage (oscillators, comparators and so on).
+3.1 OPAMP parameters
+Basic performance parameters of the STM32G4 Series operational amplifier are:
+• Input voltage offset: approx. +/- 3 mV (after built-in calibration of offset)
+• Bandwidth: approx. 13 MHz
+• Slew rate:
+– Normal mode: approx. 6.5 V/µs
+– High speed mode: approx. 45 V/µs.
+• Output saturated voltage: less than 100 mV (rai-to-rail)
+• Gains:
+– Positive: +1, +2, +4, +8, +16, +32, +64
+– Negative: -1, -3, -7, -15, -31, -63
+– Typical gain error: 2%.
+• Open loop gain: ~ 95 dB
+• Wakeup time: 3 µs.
+AN5306
+Brief description of the OPAMP in the STM32G4 Series 
+AN5306 - Rev 1 page 5/43
+
+
+--- Page 6 ---
+
+3.2 OPAMP connections
+The OPAMP in STM32G4 Series works across several operational configurations. The OPAMP configuration is
+defined using a set of analog multiplexers which interconnect the OPAMP input and output terminals through an
+internal resistor network. Final gain of this programmable gain amplifier (PGA) is defined by the resistor ratios on
+the feedback.
+Figure 3. Internal OPAMP connections in STM32G4 Series illustrates the basic schematic of the OPAMP
+integrated in STM32G4 Series.
+Figure 3. Internal OPAMP connections in STM32G4 Series
++
+-
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VOUT
+VINM0
+VINM1
+Opamp_
+out
+STM32G4 Series OPAMP
+AN5306
+OPAMP connections 
+AN5306 - Rev 1 page 6/43
+
+
+--- Page 7 ---
+
+3.3 Simple examples of OPAMP configuration
+3.3.1 Inverting amplifier
+Basic schematic of a general inverting amplifier is illustrated in Figure 4. Inverting amplifier using an OPAMP.
+Figure 4. Inverting amplifier using an OPAMP
+I diff
+R1 R2
+U in
+U out
+U diff
+-
++
+I1 I2
+To implement this setup using the STM32G4 Series, configure the multiplexers as shown in Figure 5. Inverting
+amplifier implementation by OPAMP in the STM32G4 Series. Connect the analog input signal to VINM0 OPAMP
+pin. Connect the reference ground to VINP0 OPAMP pin. The internal feedback resistors define the gain. The
+gain is set in the OPAMP configuration registers to: -1, -3, -7, -15, -31 and -63.
+Figure 5. Inverting amplifier implementation by OPAMP in the STM32G4 Series
++
+-
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32G4 Series OPAMP
+U IN
+U OUT
+R1
+R2
+AN5306
+Simple examples of OPAMP configuration 
+AN5306 - Rev 1 page 7/43
+
+
+--- Page 8 ---
+
+External resistors can be used to implement the same inverting amplifier design. The use of external resistors
+offers a greater choice of gain values together with more accurate amplification values with the use of taylored
+resistors. Figure 6. Inverting amplifier by using external resistors illustrates the implementation of an inverting
+amplifier using external resistors.
+Figure 6. Inverting amplifier by using external resistors
++
+-
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32G4 Series
+U IN
+U OUT
+R1
+R2
+3.3.2 Non-inverting amplifier
+Basic schematic of non inverting amplifier is illustrated in Figure 7. Non- inverting amplifier using an OPAMP.
+Figure 7. Non- inverting amplifier using an OPAMP
+R1 R2
+U in
+U out
+U diff
+-
++
+To implement this setup using the STM32G4 Series, configure the multiplexers as shown in Figure 8. Non-
+inverting amplifier implementation by OPAMP in the STM32G4 Series. Connect the analog input signal to VINP0
+AN5306
+Simple examples of OPAMP configuration 
+AN5306 - Rev 1 page 8/43
+
+
+--- Page 9 ---
+
+OPAMP pin. The internal feedback resistors define the gain. The gain is set in the OPAMP configuration registers
+to: 2, 4, 8, 16, 32, 64.
+Figure 8. Non-inverting amplifier implementation by OPAMP in the STM32G4 Series
++
+-
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VOUT
+VINM0
+VINM1
+Opamp_
+out
+STM32G4 Series
+R2
+R1
+U IN
+U OUT
+External resistors are used to implement the same non-inverting amplifier design. The use of external resistors
+offers a greater choice of gain values together with more accurate amplification values with the use of taylored
+resistors. Figure 9. Non-inverting amplifier by using external resistors illustrates this implementation of non-
+inverting amplifier using external resistors (with possible filter implementation given by external capacitor C in
+parallel to R2 resistor).
+Figure 9. Non-inverting amplifier by using external resistors
++
+-
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+.VOUT
+VINM0
+Opamp_out
+STM32G4 Series
+U OUT
+R1
+R2
+U IN
+VINM1
+AN5306
+Simple examples of OPAMP configuration 
+AN5306 - Rev 1 page 9/43
+
+
+--- Page 10 ---
+
+3.4 Configuration of the OPAMP – multiplexers with internal gain settings
+3.4.1 Input multiplexer setting options
+Each of the OPAMP input terminals (non-inverting and inverting) are each connected to an analog multiplexer (a
+set of analog switches). The OPAMP is correctly set up by configuring all analog multiplexers. The multiplexer
+configuration is programmed through the OPAMP control bits in the control/status register (OPAMP1_CSR):
+• VM_SEL[1:0] – controls the multiplexer on the OPAMP inverting input as illustrated in
+Figure 10. Multiplexer on inverting OPAMP input below:
+– 00: inverting input connected to external pin VINM0
+– 01: inverting input connected to external pin VINM1
+– 10: inverting input connected to feedback resistors (PGA mode)
+– 11: inverting input connected to the OPAMP output (Follower mode).
+Figure 10. Multiplexer on inverting OPAMP input
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32 G4 Series
+VINM1
+• VP_SEL[1:0] – controls the on the OPAMP non-inverting input as illustrated in Figure 11. Multiplexer on
+non-inverting OPAMP input below:
+– 00: non-inverting input connected to external pin VINP0
+– 01: non-inverting input connected to external pin VINP1
+– 10: non-inverting input connected to external pin VINP2
+– 11: in dependency from given OPAMP configuration:
+◦ For OPAMP2: non-inverting input connected to external pin VINP3.
+◦ For other OPAMPs: non-inverting input connected internally to DACx_CHy:OPAMP1: DAC3_CH1,
+OPAMP3: DAC3_CH2, OPAMP4: DAC4_CH1, OPAMP5: DAC4_CH2, OPAMP6: DAC3_CH1.
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 10/43
+
+
+--- Page 11 ---
+
+Figure 11. Multiplexer on non-inverting OPAMP input
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32G4 Series
+VINM1
+• OPAINTOEN (OPAMP internal output enable) – controls the multiplexer on the OPAMP output (see
+Figure 12. Multiplexer on OPAMP output).
+– 0: OPAMP output connected to the external pin VOUT
+– 1: OPAMP output connected internally to an ADC channel and disconnected from the external VOUT
+pin (the VOUT pin is free and available to be used for another purpose) .
+Figure 12. Multiplexer on OPAMP output
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+Vout
+VINM0
+Opamp_out
+STM32G4 Series
+VINM1
+The multiplexer of the inverting OPAMP input offers an additional interconnection option (besides the options
+described above) and allows access to additional OPAMP modes. The additional connections are controlled by
+the PGA_GAIN[4:0] gain setting bits:
+1. PGA_GAIN[4:0]= 0 to 5 : Standard configuration for simple non-inverting amplifier setting – multiplexer
+set according VM_SEL[1:0]. See Figure 10. Multiplexer on inverting OPAMP input
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 11/43
+
+
+--- Page 12 ---
+
+2. PGA_GAIN[4:0] = 8 to 13 : Implementation of an inverting amplifier – one terminal of the internal
+resistor is connected to the external pin VINM0 through the multiplexer. The OPAMP inverting input is kept
+connected to the feedback resistor which defines the gain, see Figure 13. Inverting amplifier or non-inverting
+amplifier with external bias. The non-inverting amplifier implementation also uses this mode. The difference
+is that the input signal is connected on the non-inverting OPAMP terminal. The advantage is the possibility of
+bias level setting by the external pin VINM0. An external bias voltage control is a nice feature in practical
+applications, to adjust the reference voltage level for the input signal in particular if the ground signal is
+shifted or the ground is noisy.
+Figure 13. Inverting amplifier or non-inverting amplifier with external bias
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32G4 Series
+3. PGA_GAIN[4:0] = 16 to 21 : The inverting OPAMP input is connected according VM_SEL[1:0] setting
+and also connected to external VINM0 pin. This mode is useful for adding an external capacitor as low pass
+filter for non-inverting amplifier. See Figure 14. Non-inverting amplifier with external filter.
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 12/43
+
+
+--- Page 13 ---
+
+Figure 14. Non-inverting amplifier with external filter
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+VOUT
+VINM0
+Opamp_out
+STM32G4 Series
+Equivalent capacitors
+4. PGA_GAIN[4:0] = 24 to 29 : Implementation of an inverting amplifier or non-inverting amplifier with the
+possibility of connecting an external filtering capacitor on VINM1 pin.This mode is very similar to the case of
+the PGA_GAIN[4:0] = 8 to 13 (case 2 described above) but there is the additional option to connect an
+external capacitor for filtering on pin VINM1. See Figure 15. Inverting amplifier or non-inverting amplifier with
+external bias and with external filter.
+Figure 15. Inverting amplifier or non-inverting amplifier with external bias and with external filter
++
+-
+VINP0
+VINP1
+VINP2
+VINP3 or DACx_CHy
+VOUT
+VINM1
+Opamp_out
+STM32G4 Series
+Equivalent capacitors
+VINM0
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 13/43
+
+
+--- Page 14 ---
+
+3.4.2 Frequency compensation of OPAMP
+In many practical applications, the bandwidth needs to be limited of the designed amplifier. For example,
+suppressing high frequency noise or removing glitches in transient states.
+The OPAMP implements the amplifier with low pass filtering by using an external capacitor. This capacitor is used
+in internal or external gain setting modes for both inverting and non-inverting configurations:
+• Frequency compensation implementation for non-inverting PGA amplifier is in Figure 14. Non-inverting
+amplifier with external filter.
+• Frequency compensation implementation for inverting PGA amplifier is in Figure 15. Inverting amplifier or
+non-inverting amplifier with external bias and with external filter.
+• Frequency compensation for gain set with external components is implemented by adding a capacitor to the
+feedback resistor R2 – see Figure 9. Non-inverting amplifier by using external resistors and
+Figure 6. Inverting amplifier by using external resistors.
+The -3 dB low pass bandwidth is given by the formula:
+fLP = 1/ (2.π.R2.C)
+where: R2 is the feedback resistor and C is the external capacitor connected in parallel to the R2 resistor.
+3.4.3 DAC output to OPAMP input – offset/bias voltage setting
+On the non-inverting OPAMP input, it is possible to connect the output from internal DAC (Digital to Analog
+Converter) by configuring the multiplexer on the non-inverting input (bits VP_SEL[1:0] = 3). See
+Figure 11. Multiplexer on non-inverting OPAMP input .
+The internal DAC generates a fixed voltage on the non-inverting OPAMP input and sets a bias voltage for the
+inverting amplifier implementation. Basic schematic for inverting amplifier implementation (see Figure 5. Inverting
+amplifier implementation by OPAMP in the STM32G4 Series and Figure 6. Inverting amplifier by using external
+resistors) uses the non-inverting OPAMP input connected to ground – reference voltage for the input signal is
+ground. However, if the input signal ground reference is shifted, for example to VDD/2, then the bias voltage is set
+to VDD/2 by the DAC. This bias voltage (virtual signal ground) shift allows the application to use higher gains
+(because the OPAMP does not then amplify the offset). It is very useful to amplify small modulated signals on a
+relatively high DC offset voltage (this offset voltage is set by DAC on the non-inverting OPAMP input).
+3.4.4 DAC output to OPAMP input – internal DAC output redirection to external pin
+The DAC output connected to the non-inverting OPAMP input (described in Section 3.4.3 DAC output to OPAMP
+input – offset/bias voltage setting) is always the internal DAC output with no connection to any output pin: either
+DAC3 or DAC4. Internal DACs have no direct output to external pins and are available to be used internally as
+COMP or OPAMP inputs. The internal DAC output signal is “redirected” to the output pin through the OPAMP. The
+multiplexer on the non-inverting input is set as input from the internal DAC output (option VP_SEL[1:0] = 3). The
+OPAMP is then set in the follower mode. The OPAMP output pin (VOUT) is now the signal from the internal DAC
+output. Alternatively, the OPAMP is set to some higher gain mode (instead of follower mode where the gain = 1) to
+amplify the signal from internal DAC.
+The internal DAC redirection to the output pin through OPAMP takes advantage of the internal DAC speed to
+generate high-speed analog output waveforms. Internal DACs are much faster (15 Msps data rate) than the
+external DACs (with 1 Msps data rate). The final analog waveform is limited by combination of the OPAMP
+bandwidth and the internal DAC bandwidth.
+The Figure 16. Internal DAC redirected through OPAMP to output pin – update steps and Figure 17. Internal DAC
+redirected through OPAMP to output pin – OPAMP slew rate are screenshot examples where the internal DAC is
+redirected to OPAMP output pin. The DAC generates full scale (2.048 V) saw tooth signal with 15 Msps data rate
+(step = 40 LSBs) and the OPAMP is set to follower mode. The output analog signal is measured on the pin –
+OPAMP output.
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 14/43
+
+
+--- Page 15 ---
+
+Figure 16. Internal DAC redirected through OPAMP to output pin – update steps
+Figure 17. Internal DAC redirected through OPAMP to output pin – OPAMP slew rate
+AN5306
+Configuration of the OPAMP – multiplexers with internal gain settings 
+AN5306 - Rev 1 page 15/43
+
+
+--- Page 16 ---
+
+3.4.5 OPAMP internal output only to ADC
+In many applications, the OPAMP is only used as an analog signal amplifier for the ADC sampling. In this case, it
+may only be necessary to connect the OPAMP to the ADC using the internal signal. There is no need to put the
+OPAMP output to an external pin.
+The external OPAMP output pin is then available for another purpose. The collateral advantage is that in a noisy
+environment the external pin cannot “receive” any external noise and therefore does not disturb the ADC
+measurement.
+The OPAMP output redirection to the internal ADC is only performed by configuring the output multiplexer
+(OPAINTOEN = 1). See Figure 12. Multiplexer on OPAMP output.
+3.4.6 OPAMP offset trimming
+The offset parameter is the basic parameter for operational amplifiers. Ideally, it should be close to zero, it is good
+to minimize it as much as possible. The OPAMP in STM32G4 Series features a programmable hardware offset
+voltage calibration/trimming. The OPAMP contains trimming value registers for offset correction. The reference
+manual documents the recommended procedure for offset calibration. There is no need to add any additional
+external components to perform such trimming. Offsets are calibrated in the final application design with no
+influence of the rest of application. By default, the offset trimming value is programmed by ST at the time of
+production.
+Please refer to the datasheet for the factory test conditions.
+3.5 Timing parameters of OPAMP
+The OPAMP has 2 speed settings to select from:
+• Normal mode, which offers a typical slew rate of 6.5 V/µs
+• High speed mode, which offers a typical slew rate of 45 V/µs.
+The high speed mode is suitable for applications which process high frequency analog signals with large
+amplitudes on the OPAMP output. Both modes have different power consumptions; high speed mode power
+consumption is higher than consumption in the normal mode.
+The high speed mode is typically used in redirecting the internal DAC output to a pin through the OPAMP; see
+Section 3.4.4 DAC output to OPAMP input – internal DAC output redirection to external pin. Here, the fast slew
+rate performance is important because the OPAMP is able to follow large voltage changes from the DAC output.
+See Figure 17. Internal DAC redirected through OPAMP to output pin – OPAMP slew rate .
+The gain bandwidth (GBW) is defined as the frequency when the OPAMP gain decreases to 1. This is almost the
+same for both normal and high speed modes. The GBW of the OPAMP is 13 MHz allowing high frequency signal
+processing. If the OPAMP is configured as PGA with an internal or external gain greater than 1 then the
+bandwidth lowers proportionally to the gain.
+The OPAMP in STM32G4 Series is stable with unity gain but very fast. This allows it to be used in many
+applications without final amplifier design stability problems (because very fast operational amplifiers are usually
+unstable with gain = 1 and may produce an oscillating output).
+AN5306
+Timing parameters of OPAMP 
+AN5306 - Rev 1 page 16/43
+
+
+--- Page 17 ---
+
+4 Practical usage of STM32G4 Series OPAMP peripherals
+4.1 Introduction
+The OPAMP embedded in theSTM32G4 Series microcontroller is a general purpose analog operational amplifier
+designed reduce the need for external stand-alone operational amplifier circuit. The STM32G4 Series OPAMP
+peripheral is configured using the internal switching circuitry setup. Both non-inverting and inverting OPAMP
+inputs are each connected to a 4-to-1 mux (refer to the reference manual for a full description). The OPAMP
+output is connected to a 1-to-2 mux to route the OPAMP output signal either externally or internally.
+• OPAMP non-inverting input(+): 4 external signals are available: VINP0,VINP1,VINP2 and VINP3.
+• OPAMP inverting input(-): 2 external signals are available VINM0 and VINM1; 2 internal signal
+opamp_output and resistor_array_feedback.
+• OPAMP output (opamp_out): 2 path are available, an internal path to ADC peripheral or an external to
+VOUT pin.
+Note: When opamp_out is redirected internally to an ADC channel, the I/O on which is mapped V OUT is available to be
+used for any purpose.
+Figure 18. OPAMP peripheral overview (principle)
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VINM0
+VINM1
++
+-
+VOUT
+VDDA
+ADC_in
+VP_SEL[1:0]=<00>
+VM_SEL[1:0]=<00>
+opamp_out
+resistor_array_feedback
+OPAINTOEN[0]=<0>
+VSSA
+STM32G4 Series
+VINM0
+PGA_GAIN[3]=<0>
+R
+VSS_opamp
+VDD_opamp
+PGA_GAIN[4:3]=<00>
+PGA_GAIN[3]=<0>
+PGA_GAIN[2:0]=<000>
+xR
+with x=1,3,7,15,31,63
+AN5306
+ Practical usage of STM32G4 Series OPAMP peripherals 
+AN5306 - Rev 1 page 17/43
+
+
+--- Page 18 ---
+
+4.2 OPAMP in stand-alone mode
+The OPAMP stand-alone mode is the default OPAMP configuration. Both non-inverting and inverting inputs are
+available externally. A basic application would consist in comparing VINP and VINN level and get the comparison
+result with the level of OPAMP output VDDA when VINP>VINN or VSSA when VINP<VINN. Another interesting
+application using this mode is the current to voltage converter described in the following chapter.
+4.2.1 Stand-alone Photodiode amplifier application
+Brightness sensors are often required in consumer applications. The STM32G4 Series OPAMP peripheral in
+stand-alone mode matches the circuitry design needed. The following figure shows the principle of a photodiode
+sensor or transimpedance amplifier: the photodiode generates a reversed current depending of the amount of
+light received. The feedback resistor (R) should be selected to set the photodiode sensitivity and OPAMP supply
+range.The current generated from the photodiode is converted into an output voltage inline with the following
+equation : VOUT = Ip x R.
+Figure 19. Transimpedance amplifier circuitry and Vout plot vs light level
+R
+LIGHT
++
+-
+VOUT
+ip
+Ip
+0
+Light level increasing
+Vp
+Ip0
+Ip1
+Ip2
+Ip3
+Vp(V)
+Ip
+0
+Light level increasing
+Ip0
+Ip1
+Ip2
+Ip3
+Voutx=Ipx * R
+OPAMP Vout(V)
+Characteristic of photodiode biased with 0V
+Characteristic of photodiode vs light level and DC biasing
+Variation of OPAMP Vout vs light level (photodiode biased with 0V)
+R
+Figure 20. STM32G4 Series OPAMP transimpedance configuration illustrates the STM32G4S Series OPAMP
+connected to the external photodiode and the associated resistor R. The resistor value should be chosen inline
+AN5306
+OPAMP in stand-alone mode 
+AN5306 - Rev 1 page 18/43
+
+
+--- Page 19 ---
+
+with the maximum photocurrent of the photodiode. If VDDA=3.3V and maximum photocurrent is 10µA then
+maximum value for R should be lower than VDDA/ip_max=3.3/10e-6=330kOHms to not saturate the OPAMP.
+Figure 20. STM32G4 Series OPAMP transimpedance configuration
+VINP0
+VINP1
+VINP2
+VINP4
+VINM0
+VINM1
++
+-
+VOUT
+VDDA
+ADC_in
+VP_SEL[1:0]=<00>
+VM_SEL[1:0]=<00>
+opamp_out
+resistor_array_feedback
+OPAINTOEN[0]=<0>
+VSSA
+STM32G4 Series
+VINM0
+PGA_GAIN[3]=<0>
+R
+VSS_opamp
+VDD_opamp
+PGA_GAIN[4:3]=<00>
+PGA_GAIN[3]=<0>
+PGA_GAIN[2:0]=<000>
+R(x+1) 
+with x=1,3,7,15,31,63
+R
+LIGHT
+AN5306
+OPAMP in stand-alone mode 
+AN5306 - Rev 1 page 19/43
+
+
+--- Page 20 ---
+
+4.3 OPAMP in Follower mode
+This is a simple operational amplifier mode used for buffering the voltage between 2 devices. The purpose is to
+prevent an excessive voltage drop from the first device with a high impedance output which is connected to the
+second device with a low input impedance. The OPAMP configured in this mode is associated to other STM32G4
+Series peripheral such as the ADC or the DAC to answer application impedance issues such as when very high
+output impedance component connected to the ADC input or a very low input component is connected to DAC
+output.
+4.3.1 Very high impedance sensor acquisition with STM32G4 Series ADC
+Figure 21. OPAMP follower mode to ADC example
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VINM0
+VINM1
++
+-
+VOUT
+VDDA
+ADC_in
+VP_SEL[1:0]=<00>
+VM_SEL[1:0]=<11>
+opamp_out
+resistor_array_feedback
+OPAINTOEN[0]=<1>
+VSSA
+STM32G4 Series
+VINM0
+R
+VSS_opamp
+VDD_opamp
+PGA_GAIN[4:3]=<00>
+PGA_GAIN[3]=<0>
+PGA_GAIN[2:0]=<000>
+xR 
+with x=1,3,7,15,31,63
+One typical application where the OPAMP is used in follower mode is the current sensing using an Hall effect. The
+Hall effect sensor with the following parameters is selected:
+• Sensitivity equal to 15 mV/A
+• A nominal RMS current of 100 A
+• A reference output voltage equal to 1.65 V
+The sensor is directly connected to OPAMP input as shown in Figure 22. Current sensing using Hall effect sensor.
+AN5306
+OPAMP in Follower mode 
+AN5306 - Rev 1 page 20/43
+
+
+--- Page 21 ---
+
+Figure 22. Current sensing using Hall effect sensor
+Hall sensor
+TIMER
+icibia
+STM32G4 Series
+OPAMP
+ADC
+TIMER
+CPU
+Motor 
+control 
+firmware
+Low Power supply
+g d
+s
+gggg
+g d
+s
+g
+High power supply
+ggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+Motor
+TIMER
+ss
+Hall sensor
+Hall sensor
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+Level shifters
+Level shifters
+AN5306
+OPAMP in Follower mode 
+AN5306 - Rev 1 page 21/43
+
+
+--- Page 22 ---
+
+4.4 OPAMP Programmable Gain Amplifier (PGA) mode
+The PGA mode is a dedicated OPAMP peripheral circuit configuration. It amplifies the input signal with a
+programmable gain depending on the ratio of R1 and R2 (see Figure 23. Simplified circuitry example of a non-
+inverted PGA without input biasing and Figure 24. Simplified circuitry example of inverted PGA ). There are two
+possible PGA circuit layouts: non-inverted where the input signal is connected to the OPAMP non-inverting input
+VINP and inverted where the input signal is connected to inverting input VINN (VINP input should be externally
+connected to ground in this case). The OPAMP peripheral contains integrated switches to allow the software to
+change the value R1, the feedback resistor.
+Figure 23. Simplified circuitry example of a non-inverted PGA without input biasing
+VINN
++
+-
+VOUT
+R1R2
+VDDA
+VINP
+STM32G4 Series OPAMP
+Figure 24. Simplified circuitry example of inverted PGA
++
+-
+VOUT
+R1
+R2
+VDDA
+VINP
+STM32G4 Series OPAMP
+VINN
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 22/43
+
+
+--- Page 23 ---
+
+4.4.1 Amplification of small positive signals
+The available OPAMP peripheral gains are 2,4,8,16,32 and 64 when it is used in non-inverter mode and
+-1,-3,-7,-15,-31 and -63 in the inverting mode. Figure 25. STM32G4 Series OPAMP internal circuitry in PGA mode
+configuration non-inverter shows the OPAMP PGA configuration with the gain selection defined by the
+PGA_GAIN[4:0] register.
+Figure 25. STM32G4 Series OPAMP internal circuitry in PGA mode configuration non-inverter
+VINP0
+VINP1
+VINP2
+VINP4 or DACx_CHy
+VINM0
+VINM1
++
+-
+VOUT
+VDDA
+ADC_in
+VP_SEL[1:0]
+VM_SEL[1:0]
+opamp_out
+resistor_array_feedback
+OPAINTOEN[0]
+VSSA
+STM32G4 Series
+VINM0
+R
+VSS_opamp
+VDD_opamp
+PGA_GAIN[4:3]
+PGA_GAIN[3]
+PGA_GAIN[2:0]
+xR
+with x=1,3,7,15,31,63
+IN
+OUT
+A simple application based on the OPAMP non-inverting configuration is DC current sensing where a 3 phase
+motor control application requires the real time current monitor on each motor branch in order to adjust the motor
+control with the proportional, integral and differential (PID) loop controller. The STM32G4 Series OPAMP
+peripheral is easily connected to an external circuit which is either a simple ground shunt resistor or a hall sensor.
+These applications are presented in Figure 26. Current sensing using grounded shunt resistor.
+Figure 26. Current sensing using grounded shunt resistor
+shunt 
+resistors 
+<1 Ohm
+TIMER
+STM32
+OPAMP
+ADCTIMER
+CPU
+Motor 
+control 
+firmware
+Low Power supply
+g d
+s
+gggg
+g d
+s
+g
+High Power supply
+ggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+s
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+g d
+gggg
+Motor
+TIMER
+ss
+shunt 
+resistors 
+<1 Ohm
+shunt 
+resistors 
+<1 Ohm
+Level shifters
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+d
+s
+Level shifters
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 23/43
+
+
+--- Page 24 ---
+
+4.4.2 Filtering capacitor option
+The drawback of the previous example (analog to digital conversion using ADC) is the absence of an anti-alias
+filter (AAF) which should be implemented before sampling a signal in order to limit the required conversion
+bandwidth and to follow the Nyquist-Shannon sampling theorem. Figure 27. ADC conversion comparison when
+using an AAF shows the usage of an AAF with converting analog signals.
+Figure 27. ADC conversion comparison when using an AAF
+Sampling frequency
+FsFs/2
+Nyquist frequency
+Frequency
+Level
+Sampling frequency
+FsFs/2
+Nyquist frequency
+Frequency
+Level
+bandwith of interest
+bandwith of interest
+f1
+f2
+f3
+extra toneoutside of band of 
+interest
+f3
+unwanted 
+folding 
+toneafter 
+conversion
+Attenuated 
+folding tone 
+after 
+conversion
+filterattenuation
+anti-alias filter response
+OPAMP output 
+spectrum withan 
+anti-alias filter
+OPAMP output spectrum 
+Adding an external capacitor between OPAMP VOUT and OPAMP VINN creates a low-pass filter circuit when it is
+used as an AAF. The cut-off frequency of the filter is given by:
+• Fc= 1/(2.π.R1.Cext)
+Figure 28. Active low-pass filter using STM32G4 Series OPAMP and an external capacitor shows a simplified low-
+pass filter implemented with an operational amplifier.
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 24/43
+
+
+--- Page 25 ---
+
+Figure 28. Active low-pass filter using STM32G4 Series OPAMP and an external capacitor
++
+-
+R1R2
+VDDA
+VINP
+STM32G4 Series OPAMP
+VINN
+Cext
+feedback resistor
+VOUT
+Here is an application example where :
+• The sampling rate of the ADC is 100 kHz
+• The sampling bandwidth is 10kHz (+/-0.1 dB accuracy).
+• OPAMP in PGA mode with x2 gain ( PGA_GAIN[4:0]=0x00)
+In the specified bandwidth, the gain should be flat (+/- 0.1 dB), the filter frequency response should calculated and
+the correct nominal value for the external capacitor (Cext) chosen. The STM32G4 Series OPAMP internal
+feedback resistor value is 10 kΩ when PGA_GAIN[4:0]=0x00. Anantenuation value of 0.1 dB is achieved with
+the following parameter
+• C ext = 220 pF (nominal value E12)
+• OPAMP feedback Resistor =10 kΩ ( PGA_GAIN[4:0]=0x00)
+• -3 dB Cut-off frequency =72.3 kHz
+• Bandwidth attenuation: -0.1 dB @ 10 kHz
+The AAF cut-off frequency is changed depending on the OPAMP gain (feedback resistor selected with
+PGA_GAIN[4:0] value). When the OPAMP PGA mode is set to x4 gain, the feedback resistor is switched to
+30 kΩ and the low pass filter cut-off frequency is changed.
+• C ext = 220 pF
+• OPAMP feedback Resistor =30 kΩ ( PGA_GAIN[4:0]=0x01)
+• -3 dB cut-off frequency = 24.1 kHz
+• Bandwidth attenuation: -0.7 dB which is out of application requirements
+Figure 29. 1st order low-pass filter frequency response with OPAMP gain x2 and x4 shows the 1st order low-pass
+filter frequency response with OPAMP gain x2 and x4.
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 25/43
+
+
+--- Page 26 ---
+
+Figure 29. 1st order low-pass filter frequency response with OPAMP gain x2 and x4
+Figure 30. OPAMP using PGA configuration with external capacitor option shows the complete OPAMP
+configuration with the associated external capacitor.
+Figure 30. OPAMP using PGA configuration with external capacitor option
+VINP0
+VINP1VINP2VINP4 or DACx_CHy
+VINM0
+VINM1
++
+-
+VOUT
+VDDA
+ADC_in
+VP_SEL[1:0]
+VM_SEL[1:0]
+opamp_out
+resistor_array_feedback
+OPAINTOEN[0]
+VSSA
+STM32
+VINM0
+PGA_GAIN[3]
+R
+VSS_opamp
+VDD_opamp
+PGA_GAIN[4:3]
+PGA_GAIN[3]
+PGA_GAIN[2:0]
+xR
+with x=1,3,7,15,31,63
+220pF
+IN
+OUT
+Internal ADC channel shared with OPAMP VOUT pin
+Cext
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 26/43
+
+
+--- Page 27 ---
+
+4.4.3 Amplification of high impedance small signals on some DC offset
+The previous OPAMP PGA mode circuit allows an easy amplification of an analog signal and to filter it as needed.
+The limitation of this application schematic : both DC and AC components are amplified. This is a constraint only
+when the sensor AC signal needs to be amplified. The alternative is the following OPAMP schematic proposal.
+4.4.4 Example: AC signal modulated on DC offset (sensor)
+The following circuitry is useful for only amplifying the AC signal and to change the DC polarization with the DC
+blocker (C1 capacitor). A new DC polarization (VDDA/2 for example) is done through the voltage bridge divider
+(R1, R2) and the OPAMP centers the VOUT signal around VDDA/2.
+Figure 31. DC blocker / AC PGA circuitry with STM32G4 Serie OPAMP
+R4=630k
++
+-
+VOUTC1=10uF
+C2=10uF
+VDDA
+R3=10k
+R1=100k
+R2=100k
+SensorsignalDC+AC
+VDDA
+VINP
+STM32G4 Series OPAMP
+Zeq
+This circuitry was simulated, the results with Vsensor are DC=2.5 V + AC=20 mV (peak - peak) and VDDA=3.3 V
+are illustrated in Figure 32. AC gain simulation result (timing).
+Figure 32. AC gain simulation result (timing)
+The AC signal is correctly amplified and the DC signal is also correct, however as several capacitors are used
+and it is recommended to validate the circuit’s transfer function .
+The complete circuit response frequency is computed using the following equation.
+VINP
+Z eq
+VOUT - VINP
+R4
+with Z eq = R3 +
+jC2ω
+= 1
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 27/43
+
+
+--- Page 28 ---
+
+jC2 
+R3 +
+=
+VINP VOUT - VINP
+R41
+VOUT
+1+ 
+VINP
+= 
+R4
+R3 + 1
+jC2ω 
+VOUT = 1+ 
+1+ jC2ωR3VINP
+jC2ωR4
+VOUT
+VINP
+1+ jC2ωR3+ jC2ωR4
+1+ jC2ω R3
+1+ jC2ω( R3+ R4)
+1+ jC2ωR3
+= = 
+VOUT 1+ ( C2ω ( R3+ R4)) 
+2
+1+ ( C2ω R3) 
+2VINPmodule
+=
+Finally, the simulation and mathematical model had been be plotted out and the response frequencies compared.
+The mathematical model doesn’t take into account the frequency response of the OPAMP (blue plot) as it is
+considered as an ideal amplifier. The analysis of the three curves in low frequency range correlate. See
+Figure 33. Frequency response comparison mathematic/measurement/design simulator:
+• Mathematicallycalculated response (blue plot)
+• Measured responset (green plot)
+• Circuit simulation using LTspice for example (red plot)
+Figure 33. Frequency response comparison mathematic/measurement/design simulator
+This proposed circuit layout is particularly appropriate when the application requires AC signal amplification only
+and a new DC value to match the supply range of the MCU. Another interesting feature, where several external
+circuit signals are connected to seperate OPAMP non-inverting inputs.
+AN5306
+ OPAMP Programmable Gain Amplifier (PGA) mode 
+AN5306 - Rev 1 page 28/43
+
+
+--- Page 29 ---
+
+4.5 Negative gain with offset
+In this example, the STM32G4 Series OPAMP PGA is used in an inverted configuration which also reduces the
+number of external components needed. The drawback of this circuit design is the 180° phase shift introduced
+between the OPAMP input and output.
+4.5.1 Amplification of small signals on some DC offset
+The DC biasing at OPAMP VOUT is given by the voltage at VINP input. If an application requires a voltage
+centered around VDDA/2 for the VOUT signal, VINP input voltage must be polarized at the same voltage. An
+external voltage divider bridge should be designed with R1=100 kΩ and R2=100 kΩ to get the correct voltage at
+VINP input. The circuit diagram layout is givn in Figure 34. Simplified circuitry with inverted input
+Figure 34. Simplified circuitry with inverted input
+R4=630k
++
+-
+VOUT
+C1=10uF
+VDDA
+R3=10k
+R1=100k
+R2=100k
+SensorsignalDC+AC
+VDDA
+VINP
+STM32G4 Series OPAMP
+DC=1.65V DC=1.65V
+VINM
+4.5.2 External bias (offset) control by DAC/ADC
+The same application is achieved with a reduced bill of material (BOM) which also frees space on PCB
+application board. In this case, the non-inverting input of the OPAMP is internally connected to the DAC output
+and the output of the OPAMP is also internally connected to the ADC input. Table 1. Application levels calculation
+Sensor/OPAMP/DAC/ADC presents the optimized configuration for the ADC acquisition with VREF+/VDDA=3.3V.
+Table 1. Application levels calculation Sensor/OPAMP/DAC/ADC
+OPAMP pins Elements and electrical parameter
+OPAMP
+OPAMP_VINM
+Sensor connected via a 10 µF capacitor to remove DC
+DC level=2.5V
+Maximum peak-peak amplitude from the sencor = 40 mVpp
+OPAMP
+OPAMP_VOUT
+OPAMP_VOUT DC level = VDDA/2=VREF+/2=1.65 V
+Maximum peak-peak amplitude VSSA+100 mV .. VDDA-100 mV=3.1 Vpp due to OPAMP saturation voltage
+OPAMP
+OPAMP_VINP
+DAC is connected internally to VINP
+DAC code calculation is needed to fix the OPAMP_VOUT DC biasing around voltage 1.65 V(VDDA/
+2=3.3V/2). The DAC output volatge is set according formula:
+DACoutput = VREF × DAC_DOR/4096
+For setting VDDA/2 (=VREF/2) voltage the DAC_DOR register must be set to 2048.
+OPAMP
+GAIN
+OPAMP gain calculation: OPAMP_VOUT maximum amplitude/Sensor maximum amplitude which is equal to
+3.1/0.04=77.5 nearest available lower gain = “-63”. Updated OPAMP_VOUT maximum amplitude is
+0.04*63=2.52 Vpp
+AN5306
+ Negative gain with offset 
+AN5306 - Rev 1 page 29/43
+
+
+--- Page 30 ---
+
+Signals levels in the application are updated at the ADC input: the maximum AC amplitude is reduced from 3.1
+Vpp to 2.52 Vpp (81.3% of the full OPAMP_VOUT amplitude is used) and the DC range is 1.65V. Levels are
+correct regarding the OPAMP saturation voltage specification: Vmin_sat = 1.65 V-(2.52/2) = 390 mV and
+Vmax_sat = 3.3-(1.65+(2.52/2)) = 390 mV.
+Figure 35. OPAMP PGA inverting connected to DAC and ADC for AC signal amplification
+R4=630k
++
+-
+C1=10uF
+R3=10kSensorsignalDC+AC
+VDDA
+STM32G4 Series
+VDDA
+OPAMP ADC
+DAC
+VINM0
+digital signal from MCU
+digital signal to 
+MCU
+internalconnection
+internalconnection
+VDDAVREF+
+VOUT
+VREF+
+This application circuitry shows how to connect and configure on demand the OPAMP, DAC and ADC together to
+acquire an external voltage from a sensor. It also brings flexibility if an application variant is designed with a
+different value of VREF+ voltage (only the DAC should be updated and not an external voltage bridge divider).
+Finally, it is important to calculate correctly the OPAMP gain and the DC voltage of OPAMP VOUT to maximize
+the ADC dynamic range and optimize the post signal processing.
+AN5306
+ Negative gain with offset 
+AN5306 - Rev 1 page 30/43
+
+
+--- Page 31 ---
+
+5 OPAMP Timer controlled multiplexer mode feature
+The STM32G4 Series OPAMP integrates a new feature oriented to dual motor control. It is however available to
+be used for any other application purpose. The objective of this feature is to control the input multiplexers on the
+non-inverting and inverting input of the OPAMP by hardware (according the signal from timer peripheral).
+5.1 Presentation
+The multiplexer input selection depends on the control signal level: default input is selected when the control
+signal is low and secondary input is selected when the control signal is high. The default configuration is defined
+with OPAMPx_CSR register and the secondary configuration is defined with OPAMPx_TCM register. The OPAMP
+switch control signal is connected to the advanced-control timers (TIM1/TIM8/TIM20) capture/compare 6 timer
+signals. This is illustrated in Figure 36. OPAMP multiplexer switch per hardware feature principle
+Figure 36. OPAMP multiplexer switch per hardware feature principle
++
+-
+VOUT
+VDDA
+VINP0
+STM32G4 Series OPAMP
+VINP1
+VINP2
+T1cc6
+T20cc6
+T8cc6
+MUX
+T6cc6
+VOUT Default Secondary Default Secondary Default Secondary Default Secondary Default Secondary Default Secondary
+Figure 37. OPAMP multiplexer switch feature signal capture is an oscilloscope capture showing the OPAMP
+output signal (red curve) while OPAMP output is switched from default to secondary input with the timer CC6
+signal (blue curve).
+AN5306
+ OPAMP Timer controlled multiplexer mode feature 
+AN5306 - Rev 1 page 31/43
+
+
+--- Page 32 ---
+
+Figure 37. OPAMP multiplexer switch feature signal capture
+5.2 Dual motor control application
+Figure 38. Dual motors control application overview using STM32G4 Series microcontroller shows a basic
+STM32G4 Series configuration dedicated to a time multiplexed dual motor control application. The two motors are
+connected to the STM32G4 Series microcontroller through two types of signal: PWM digital signals from the
+TIMER peripheral to independently control each motor branch high side and low side nMOS transistors. The
+Isense analog signals measure the motor current value in each branch of the motor (A,B,C). This application needs
+three OPAMPs to measure the current couples A/B, A/C and B/C for both motors. The three OPAMPs are
+connected to 2 ADCs which acquire (in injected mode) simultaneously the motors’ current couples. ADC
+conversion results are processed with the STM32G4 Sereis Motor Control software libraries. Finally both timers
+associated to each motors are updated to adjust the correct PWM width value for the next PWM cycle. The
+peripheral TIM1 is the synchronous master timer for this application; it triggers the second timer start and the
+OPAMPs multiplexer input selection. The second timer, TIM8 (slave to TIM1) triggers both ADCs for each motor
+control cycle which is illustrated in Figure 39. Dual motors control application timing using STM32G4 Series
+microcontroller.
+AN5306
+ Dual motor control application 
+AN5306 - Rev 1 page 32/43
+
+
+--- Page 33 ---
+
+Figure 38. Dual motors control application overview using STM32G4 Series microcontroller
++
+-
+M1_I_sense_A/VINP0/PA1
+STM32 G4 DUAL MOTOR CONTROL PERIPHERAL CONFIGURATION
+M2_I_sense_A/VINP1/PA3
+MUX
++
+-
++
+-
+MUX
++
+-
+MUX
++
+-
+TIM1_CC6
+MUXM1_I_sense_C/VINP0/PB0M2_I_sense_C/VINP1/PB13
+M1_I_sense_B/VINP0/PA7M2_I_sense_B/VINP1/PB14
+OPAMP1
+OPAMP2
+OPAMP3
+MUX
+OPAMP2_VOUT/PA6
+ADC1_Channel
+MUXVOUT
+VOUT
+VOUT
+ADC1
+ADC2
+ADC1IN1/PA0
+external path 
+ADC2_Channel
+ADC1IN13
+ADC2IN16
+ADC2IN18
+ADC1IN1
+TIMER 1M1_PWM_CTRL_A_H&L/PA8 & PC13M1_PWM_CTRL_B_H&L/PA9 & PA12Capture/Compare 1Capture/Compare 2Capture/Compare 3Capture/Compare 4
+Capture/Compare 6
+M1_PWM_CTRL_C_H&L/PA10 & PB9
+TIM1_CC6
+Capture/Compare 5
+TIMER 8M2_PWM_CTRL_A_H&L/PA15 & PC10M2_PWM_CTRL_B_H&L/PA14 & PC11
+TIM8_TRGO2
+Capture/Compare 1Capture/Compare 2Capture/Compare 3Capture/Compare 4Capture/Compare 5Capture/Compare 5
+M2_PWM_CTRL_C_H&L/PB9 & PC12
+Capture/Compare 1Capture/Compare 2Capture/Compare 3Capture/Compare 4Capture/Compare 5Capture/Compare 6
+TIM8_TRGO2
+CPU
+TIM8_TRGO2
+TIM8_TRGO2
+TIM1_CC6
+TIM1_CC6
+TIM1_CC6
+adc_jext_trg10
+adc_jext_trg10
+INJECTEDREGISTERS
+INJECTEDREGISTERS
+JEOC
+TIM1_TRGO
+TIM8_ITRx
+TIMER START SYNC
+Input data 
+Output data
+Input data 
+INTERRUPTshunt resistors <1 Ohmic ib ia
+High Power supply
+gMotor1
+shunt resistors <1 Ohmshunt resistors <1 Ohm
+Level shifters
+d
+snMOS Level shiftersgd
+snMOS gd
+snMOS
+gd
+snMOSgd
+snMOSgd
+snMOS
+M1_I_sense_AM1_I_sense_BM1_I_sense_C
+M1_PWM_A_HM1_PWM_B_HM1_PWM_C_H
+M1_PWM_A_LM1_PWM_B_LM1_PWM_C_L
+shunt resistors <1 Ohmic ib ia
+High Power supply
+gMotor2
+shunt resistors <1 Ohmshunt resistors <1 Ohm
+Level shifters
+d
+snMOS Level shiftersgd
+snMOS gd
+snMOS
+gd
+snMOSgd
+snMOSgd
+snMOS
+M2_I_sense_AM2_I_sense_BM2_I_sense_C
+M2_PWM_A_HM2_PWM_B_HM2_PWM_C_H
+M2_PWM_A_LM2_PWM_B_LM2_PWM_C_L
+MOTOR CONTROL SIGNAL PROCESSING
+AN5306 - Rev 1page 33/43
+AN5306
+
+
+--- Page 34 ---
+
+Figure 39. Dual motors control application timing using STM32G4 Series microcontroller
+AN5306
+ 
+AN5306 - Rev 1 page 34/43
+
+
+--- Page 35 ---
+
+5.2.1 Conclusion
+The STM32G4 Series architecture is designed to fit dual motor control applications with time multiplexing by using
+the STM32G4 Series internal OPAMP and software libraries. The application’s bill of materials is minimized.
+Therefore external components (OPAMPs, ADCs) are removed from the design where appropriate.
+AN5306
+ 
+AN5306 - Rev 1 page 35/43
+
+
+--- Page 36 ---
+
+6 OPAMP user offset trimming feature
+The STM32G4 Series OPAMP integrates the user offset trimming feature which allows the user to switch from
+‘factory’ values to ‘user’ trimmed values using the USERTRIM bit in the OPAMPx_CSR register. TRIMOFFSETP and
+TRIMOFFSETN values can be adjusted to address an application requirement where the OPAMP input is
+connected to an external circuitry which includes a residual offset of a few millivolts. TRIMOFFSETP parameter
+adjusts the OPAMP P differential pairs in the OPAMP low voltage range (<VDDA/2) while the TRIMOFFSETN
+parameter adjusts the OPAMP P differential pairs in the OPAMP high voltage range (>VDDA/2).
+Figure 40. OPAMP user trimming adjustment in follower mode shows the OPAMP VOUT offset variation in
+follower mode versus input level (100 mV to 3000 mV) with VDDA=3.3 V. Both TRIMOFFSETP and
+TRIMOFFSETN are set to the same value (0x00,0x10 and 0x1F).
+Figure 40. OPAMP user trimming adjustment in follower mode
+The user trimming feature compensates an external offset from the acquisition path. When the application
+requires the maximum amplitude from the OPAMP output, the user trimming allows the DC value of VOUT to be
+adjusted and remove the output signal from the OPAMP voltage saturation area which will create signal distortion.
+AN5306
+ OPAMP user offset trimming feature 
+AN5306 - Rev 1 page 36/43
+
+
+--- Page 37 ---
+
+7 Conclusion
+The STM32G4 Series OPAMP peripheral integrates many functionalities and features to answer a wide range of
+applications such as motor control, audio, power management. The STM32G4 Series OPAMP is designed to
+simplify the circuit layout around the MCU and reduce the number of external components needed. However, the
+application analog signals should be correctly mastered depending on the OPAMP configuration and datasheet
+parameters to optimize the performance for the application.
+The OPAMP is often the conditioning stage between the sensing stage (sensor) and the processing stage
+(software algorithm) which requires a good understanding of the sensor specifications and maybe an electrical
+simulation or a mathematical verification to ensure a correct application behavior in all conditions: environment
+variations (temperature, conducted or radiated electrical interference), component tolerances, power supply
+variations, start-up and shut-down conditions, stabilizing of the sensor in timing.
+Finally, the STM32G4 Series OPAMP also optimizes the application design and reduces the number of platform
+variations. The integrated OPAMP circuit allows the management of various signal levels through application
+firmware and a minimum number of additional external components.
+AN5306
+Conclusion 
+AN5306 - Rev 1 page 37/43
+
+
+--- Page 38 ---
+
+Revision history
+Table 2. Document revision history
+Date Version Changes
+10-May-2019 1 Initial release.
+AN5306
+ 
+AN5306 - Rev 1 page 38/43
+
+
+--- Page 39 ---
+
+Contents
+1 General information ............................................................... 2
+2 What is an OPAMP – basics. ....................................................... 3
+2.1 OPAMP operation basics ........................................................ 3
+2.2 OPAMP in practice – operation example ........................................... 4
+3 Brief description of the OPAMP in the STM32G4 Series............................. 5
+3.1 OPAMP parameters ............................................................ 5
+3.2 OPAMP connections............................................................ 6
+3.3 Simple examples of OPAMP configuration.......................................... 7
+3.3.1 Inverting amplifier ........................................................ 7
+3.3.2 Non-inverting amplifier .................................................... 8
+3.4 Configuration of the OPAMP – multiplexers with internal gain settings ................. 10
+3.4.1 Input multiplexer setting options ............................................ 10
+3.4.2 Frequency compensation of OPAMP......................................... 14
+3.4.3 DAC output to OPAMP input – offset/bias voltage setting ......................... 14
+3.4.4 DAC output to OPAMP input – internal DAC output redirection to external pin ......... 14
+3.4.5 OPAMP internal output only to ADC ......................................... 15
+3.4.6 OPAMP offset trimming................................................... 16
+3.5 Timing parameters of OPAMP................................................... 16
+4 Practical usage of STM32G4 Series OPAMP peripherals .......................... 17
+4.1 Introduction .................................................................. 17
+4.2 OPAMP in stand-alone mode.................................................... 18
+4.2.1 Stand-alone Photodiode amplifier application .................................. 18
+4.3 OPAMP in Follower mode ...................................................... 20
+4.3.1 Very high impedance sensor acquisition with STM32G4 Series ADC ................ 20
+4.4 OPAMP Programmable Gain Amplifier (PGA) mode................................ 22
+4.4.1 Amplification of small positive signals ....................................... 23
+4.4.2 Filtering capacitor option .................................................. 24
+4.4.3 Amplification of high impedance small signals on some DC offset .................. 26
+4.4.4 Example: AC signal modulated on DC offset (sensor) ........................... 27
+4.5 Negative gain with offset ....................................................... 28
+AN5306
+Contents 
+AN5306 - Rev 1 page 39/43
+
+
+--- Page 40 ---
+
+4.5.1 Amplification of small signals on some DC offset ............................... 29
+4.5.2 External bias (offset) control by DAC/ADC .................................... 29
+5 OPAMP Timer controlled multiplexer mode feature ............................... 31
+5.1 Presentation ................................................................. 31
+5.2 Dual motor control application .................................................. 32
+5.2.1 Conclusion ............................................................ 34
+6 OPAMP user offset trimming feature.............................................. 36
+7 Conclusion ....................................................................... 37
+Revision history ....................................................................... 38
+AN5306
+Contents 
+AN5306 - Rev 1 page 40/43
+
+
+--- Page 41 ---
+
+List of figures
+Figure 1. Basic OPAMP representation .......................................................... 3
+Figure 2. Inverting amplifier by using OPAMP...................................................... 4
+Figure 3. Internal OPAMP connections in STM32G4 Series ............................................ 6
+Figure 4. Inverting amplifier using an OPAMP ..................................................... 7
+Figure 5. Inverting amplifier implementation by OPAMP in the STM32G4 Series.............................. 7
+Figure 6. Inverting amplifier by using external resistors ............................................... 8
+Figure 7. Non- inverting amplifier using an OPAMP.................................................. 8
+Figure 8. Non-inverting amplifier implementation by OPAMP in the STM32G4 Series .......................... 9
+Figure 9. Non-inverting amplifier by using external resistors ............................................ 9
+Figure 10. Multiplexer on inverting OPAMP input ................................................... 10
+Figure 11. Multiplexer on non-inverting OPAMP input ................................................ 11
+Figure 12. Multiplexer on OPAMP output......................................................... 11
+Figure 13. Inverting amplifier or non-inverting amplifier with external bias .................................. 12
+Figure 14. Non-inverting amplifier with external filter ................................................. 13
+Figure 15. Inverting amplifier or non-inverting amplifier with external bias and with external filter .................. 13
+Figure 16. Internal DAC redirected through OPAMP to output pin – update steps ............................. 15
+Figure 17. Internal DAC redirected through OPAMP to output pin – OPAMP slew rate ......................... 15
+Figure 18. OPAMP peripheral overview (principle) .................................................. 17
+Figure 19. Transimpedance amplifier circuitry and Vout plot vs light level................................... 18
+Figure 20. STM32G4 Series OPAMP transimpedance configuration ...................................... 19
+Figure 21. OPAMP follower mode to ADC example.................................................. 20
+Figure 22. Current sensing using Hall effect sensor ................................................. 21
+Figure 23. Simplified circuitry example of a non-inverted PGA without input biasing ........................... 22
+Figure 24. Simplified circuitry example of inverted PGA............................................... 22
+Figure 25. STM32G4 Series OPAMP internal circuitry in PGA mode configuration non-inverter ................... 23
+Figure 26. Current sensing using grounded shunt resistor ............................................. 23
+Figure 27. ADC conversion comparison when using an AAF ........................................... 24
+Figure 28. Active low-pass filter using STM32G4 Series OPAMP and an external capacitor ...................... 25
+Figure 29. 1st order low-pass filter frequency response with OPAMP gain x2 and x4 ........................... 26
+Figure 30. OPAMP using PGA configuration with external capacitor option ................................. 26
+Figure 31. DC blocker / AC PGA circuitry with STM32G4 Serie OPAMP ................................... 27
+Figure 32. AC gain simulation result (timing) ...................................................... 27
+Figure 33. Frequency response comparison mathematic/measurement/design simulator........................ 28
+Figure 34. Simplified circuitry with inverted input ................................................... 29
+Figure 35. OPAMP PGA inverting connected to DAC and ADC for AC signal amplification....................... 30
+Figure 36. OPAMP multiplexer switch per hardware feature principle ..................................... 31
+Figure 37. OPAMP multiplexer switch feature signal capture ........................................... 32
+Figure 38. Dual motors control application overview using STM32G4 Series microcontroller ..................... 33
+Figure 39. Dual motors control application timing using STM32G4 Series microcontroller ....................... 34
+Figure 40. OPAMP user trimming adjustment in follower mode.......................................... 36
+AN5306
+List of figures 
+AN5306 - Rev 1 page 41/43
+
+
+--- Page 42 ---
+
+List of tables
+Table 1. Application levels calculation Sensor/OPAMP/DAC/ADC........................................ 29
+Table 2. Document revision history ............................................................. 38
+AN5306
+List of tables 
+AN5306 - Rev 1 page 42/43
+
+
+--- Page 43 ---
+
+IMPORTANT NOTICE – PLEASE READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgement.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or the design of
+Purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. For additional information about ST trademarks, please refer to www.st.com/trademarks. All other product or service
+names are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2019 STMicroelectronics – All rights reserved
+AN5306
+ 
+AN5306 - Rev 1 page 43/43

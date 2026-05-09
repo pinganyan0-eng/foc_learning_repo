@@ -38,6 +38,17 @@ function Run-Tests {
     }
 }
 
+function Install-ProjectSkill {
+    $installer = Join-Path $repoRoot "tools\install_project_skill.ps1"
+    if (Test-Path $installer) {
+        Write-Host "Installing repo-managed project skill..."
+        & powershell -ExecutionPolicy Bypass -File $installer
+        if ($LASTEXITCODE -ne 0) {
+            throw "Project skill install failed"
+        }
+    }
+}
+
 Write-Host "Repository: $repoRoot"
 Run-Git @("status", "--short", "--branch")
 
@@ -56,6 +67,7 @@ if ($Mode -eq "pull") {
     }
 
     Run-Git @("pull", "--ff-only")
+    Install-ProjectSkill
     Run-Tests
     exit 0
 }

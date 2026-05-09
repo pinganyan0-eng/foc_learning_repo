@@ -14,6 +14,14 @@ run_tests() {
   fi
 }
 
+install_project_skill() {
+  local installer="$REPO_ROOT/tools/install_project_skill.sh"
+  if [[ -f "$installer" ]]; then
+    echo "Installing repo-managed project skill..."
+    bash "$installer"
+  fi
+}
+
 echo "Repository: $REPO_ROOT"
 git -C "$REPO_ROOT" status --short --branch
 
@@ -31,6 +39,7 @@ case "$MODE" in
       exit 1
     fi
     git -C "$REPO_ROOT" pull --ff-only
+    install_project_skill
     run_tests
     ;;
 

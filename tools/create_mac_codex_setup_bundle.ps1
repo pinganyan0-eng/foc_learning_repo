@@ -41,9 +41,18 @@ $robocopyArgs = @(
     ".venv",
     "venv",
     "node_modules",
+    "build",
+    ".cache",
+    "CMakeFiles",
     "/XF",
     "*.pyc",
-    "*.pyo"
+    "*.pyo",
+    "*.o",
+    "*.obj",
+    "*.elf",
+    "*.bin",
+    "*.hex",
+    "*.map"
 )
 
 & robocopy.exe @robocopyArgs | Out-Host
@@ -58,16 +67,21 @@ $skillNames = @(
     "screenshot"
 )
 
+$repoSkillsRoot = Join-Path $projectRoot "codex_skills"
 $sourceSkillsRoot = Join-Path $env:USERPROFILE ".codex\skills"
 foreach ($skillName in $skillNames) {
-    $sourceSkill = Join-Path $sourceSkillsRoot $skillName
+    $repoSkill = Join-Path $repoSkillsRoot $skillName
+    $installedSkill = Join-Path $sourceSkillsRoot $skillName
     $targetSkill = Join-Path $skillsStage $skillName
 
-    if (Test-Path $sourceSkill) {
+    if (Test-Path $repoSkill) {
+        Write-Host "Including repo-managed Codex skill: $skillName"
+        Copy-Item -Recurse -Force -Path $repoSkill -Destination $targetSkill
+    } elseif (Test-Path $installedSkill) {
         Write-Host "Including Codex skill: $skillName"
-        Copy-Item -Recurse -Force -Path $sourceSkill -Destination $targetSkill
+        Copy-Item -Recurse -Force -Path $installedSkill -Destination $targetSkill
     } else {
-        Write-Warning "Codex skill not found and will be skipped: $sourceSkill"
+        Write-Warning "Codex skill not found and will be skipped: $skillName"
     }
 }
 

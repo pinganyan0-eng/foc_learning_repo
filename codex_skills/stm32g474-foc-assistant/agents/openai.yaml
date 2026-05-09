@@ -1,0 +1,4 @@
+interface:
+  display_name: "STM32G474 FOC Assistant"
+  short_description: "FOC project guidance, safety workflow, and learning feedback"
+  default_prompt: "Use $stm32g474-foc-assistant to continue the STM32G474 FOC project from current status, weak points, and review queue."

@@ -58,6 +58,7 @@ def source_files() -> list[Path]:
         "learning",
         "materials",
         "materials/extracted",
+        "notes",
         "references",
         "templates",
         "tools",

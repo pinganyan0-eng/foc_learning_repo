@@ -42,6 +42,7 @@
 - NUCLEO 基础工程实验记录：`experiments/2026-05-09_nucleo_baseline/`。
 - 学习闭环维护脚本：`tools/normalize_learning_loop.py`、`tools/start_learning_session.*`、`tools/end_learning_session.*`。
 - 项目自动化契约：`workflow/automation_playbook.md`；当前 Codex 自动化包括每日学习视频邮件、每日项目进化巡检邮件和每周项目复盘邮件，均绑定项目根目录运行。
+- Obsidian 笔记工作区：仓库根目录已配置 `.obsidian/`，个人笔记和看板放在 `notes/`，入口为 `notes/00_home/foc_dashboard.md`。
 
 ## 当前未开始
 
@@ -72,6 +73,7 @@
 ## 常用入口
 
 - 项目规则：`AGENTS.md`
+- Obsidian 总控台：`notes/00_home/foc_dashboard.md`
 - 学习入口：`materials/START_HERE.md`
 - 项目事实：`docs/00_project_truth/project_context.md`
 - 阶段闸门：`workflow/phase_gate_checklist.md`

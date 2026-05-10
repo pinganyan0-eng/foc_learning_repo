@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "ctime": 1778457600000,
+      "path": "notes/00_home/foc_dashboard.md",
+      "title": "FOC 总控台",
+      "type": "file"
+    },
+    {
+      "ctime": 1778457600000,
+      "path": "CURRENT_STATUS.md",
+      "title": "项目当前状态",
+      "type": "file"
+    },
+    {
+      "ctime": 1778457600000,
+      "path": "docs/00_project_truth/project_context.md",
+      "title": "最高优先级项目事实",
+      "type": "file"
+    },
+    {
+      "ctime": 1778457600000,
+      "path": "notes/90_system/plugin_setup.md",
+      "title": "插件安装清单",
+      "type": "file"
+    }
+  ]
+}

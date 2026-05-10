@@ -1,0 +1,9 @@
+{
+  "accentColor": "#1f7a6d",
+  "baseFontSize": 16,
+  "enabledCssSnippets": [
+    "foc-vault"
+  ],
+  "nativeMenus": true,
+  "theme": "obsidian"
+}

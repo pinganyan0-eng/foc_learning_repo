@@ -10,6 +10,7 @@
 - 更新 `tools/sync_project.*`，在 `push` 前自动整理学习队列、重建 `vector_store/` 并运行测试，降低 Windows/Mac 双机同步时的状态漂移。
 - 新增 `.gitattributes`，强制 `.sh` 使用 LF，避免 Mac 端执行脚本时遇到 Windows 换行问题。
 - 整理 `learning/weak_points.md` 与 `learning/review_queue.md`，把已有 NUCLEO 基础学习记录从临时 `WP-new` 归档为稳定 `WP-001` 至 `WP-007`。
+- 同步 Mac 端 Obsidian 工作流：新增 `.obsidian/` 配置、`notes/` 看板与模板、`assets/obsidian/` 附件入口，并将 `notes/` 纳入本地检索索引。
 
 ## 2026-05-09
 

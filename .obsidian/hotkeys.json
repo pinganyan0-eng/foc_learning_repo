@@ -1,0 +1,28 @@
+{
+  "global-search:open": [
+    {
+      "key": "F",
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ]
+    }
+  ],
+  "switcher:open": [
+    {
+      "key": "O",
+      "modifiers": [
+        "Mod"
+      ]
+    }
+  ],
+  "templates:insert-template": [
+    {
+      "key": "T",
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ]
+    }
+  ]
+}

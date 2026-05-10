@@ -1,0 +1,6 @@
+{
+  "auto_jump_to_cursor": true,
+  "enable_folder_templates": false,
+  "template_folder": "notes/99_templates",
+  "trigger_on_file_creation": false
+}

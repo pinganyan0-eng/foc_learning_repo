@@ -34,6 +34,17 @@
 3. B 同学 8 周/56 天学习计划。
 4. V7.1、早期采购清单、早期设计方案只作历史参考；冲突时不优先采用。
 
+## Obsidian 本地笔记层
+
+| 位置 | 用途 |
+| --- | --- |
+| `.obsidian/` | 打开仓库即用的 Obsidian vault 配置、插件启用清单、模板路径和样式片段 |
+| `notes/00_home/foc_dashboard.md` | Obsidian 总控台，聚合当前状态、项目事实、学习、实验、调试和答辩入口 |
+| `notes/99_templates/` | 日报、学习卡片、实验草稿、问题闭环、资料核查和答辩素材模板 |
+| `notes/90_system/plugin_setup.md` | Obsidian 插件安装与配置说明 |
+
+`notes/` 是个人笔记层，不是项目事实源。可复核结论仍需回写到 `docs/`、`experiments/` 或 `interfaces/`。
+
 ## 待你补充
 
 - `apps/stm32_g474_foc/`：VS Code/STM32CubeIDE 插件使用的 STM32CubeMX 或 MCSDK 生成工程。

@@ -1,0 +1,23 @@
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-preview-view {
+  line-height: 1.72;
+}
+
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3 {
+  letter-spacing: 0;
+}
+
+.markdown-preview-view table {
+  font-size: 0.95em;
+}
+
+.markdown-preview-view code {
+  border-radius: 4px;
+  padding: 0.1em 0.3em;
+}
+
+.markdown-preview-view blockquote {
+  border-left-color: var(--interactive-accent);
+}

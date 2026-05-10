@@ -35,6 +35,7 @@
 - STM32/ESP32 工程占位目录：`apps/stm32_g474_foc/`、`apps/esp32_c3_gateway/`。
 - STM32 与 ESP32 协议契约：`interfaces/`。
 - 实验记录与答辩交付物目录：`experiments/`、`deliverables/`。
+- Obsidian 笔记工作区：仓库根目录已配置 `.obsidian/`，个人笔记和看板放在 `notes/`，入口为 `notes/00_home/foc_dashboard.md`。
 
 ## 当前未开始
 
@@ -64,6 +65,7 @@
 ## 常用入口
 
 - 项目规则：`AGENTS.md`
+- Obsidian 总控台：`notes/00_home/foc_dashboard.md`
 - 学习入口：`materials/START_HERE.md`
 - 项目事实：`docs/00_project_truth/project_context.md`
 - 阶段闸门：`workflow/phase_gate_checklist.md`

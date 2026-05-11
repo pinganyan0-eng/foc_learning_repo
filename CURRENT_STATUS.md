@@ -45,6 +45,7 @@
 - 项目自动化契约：`workflow/automation_playbook.md`；当前 Codex 自动化包括每日学习视频邮件、每日项目进化巡检邮件和每周项目复盘邮件，均绑定项目根目录运行。
 - 双师制任务入口：`workflow/ACTIVE_TASK.md`、`workflow/task_packet_template.md`、`workflow/session_close_checklist.md`。
 - 双师制审计与恢复文件：`workflow/task_state_machine.md`、`workflow/definition_of_done.md`、`workflow/evidence_register.md`、`workflow/risk_gate_matrix.md`、`workflow/prompt_recipes.md`。
+- 双师制教学契约：`workflow/teaching_contract.md`，规定 ChatGPT/Codex 教学时的新名词解释、代码讲解顺序、课后学习记录和 GitHub PR 写入规则。
 - Obsidian 笔记工作区：仓库根目录已配置 `.obsidian/`，个人笔记和看板放在 `notes/`，入口为 `notes/00_home/foc_dashboard.md`。
 
 ## 当前未开始
@@ -88,6 +89,7 @@
 - 完成定义：`workflow/definition_of_done.md`
 - 证据登记：`workflow/evidence_register.md`
 - 风险矩阵：`workflow/risk_gate_matrix.md`
+- 教学契约：`workflow/teaching_contract.md`
 - 提示词模板：`workflow/prompt_recipes.md`
 - 本地检索：`python tools/ask_local.py "你的问题"`
 - 开工入口：`powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1`

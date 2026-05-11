@@ -20,6 +20,7 @@
 | `definition_of_done` | `workflow/definition_of_done.md` | 各类任务的完成标准、伪完成边界和最小验收证据 |
 | `evidence_register` | `workflow/evidence_register.md` | 构建、测试、实验、截图、波形和复核证据登记表 |
 | `risk_gate_matrix` | `workflow/risk_gate_matrix.md` | L0-L4 风险等级、允许动作、证据要求和禁止动作 |
+| `teaching_contract` | `workflow/teaching_contract.md` | ChatGPT/Codex 双师制教学规则、代码讲解顺序、新名词解释和课后学习记录要求 |
 | `prompt_recipes` | `workflow/prompt_recipes.md` | ChatGPT/Codex 双师制常用提示词 |
 
 ## 共享链接中已读 Google Docs

@@ -12,6 +12,7 @@
 - `workflow/phase_gate_checklist.md`：阶段闸门表，规定每个阶段的进入条件、证据和禁止动作。
 - `workflow/intake_checklist.md`：首次资料导入清单，规定新工程、硬件资料和实验日志放哪里。
 - `workflow/macbook_codex_replica.md`：在 MacBook Codex 上再配置一份同源项目环境，并用 Git 做后续双机同步。
+- `workflow/teaching_contract.md`：ChatGPT/Codex 双师制教学规则，规定新名词解释、代码讲解顺序和课后学习记录。
 - `docs/00_project_truth/project_context.md`：最高优先级项目事实源。
 - `docs/00_project_truth/internet_verification_rules.md`：什么时候必须联网、查什么来源、怎么输出证据。
 

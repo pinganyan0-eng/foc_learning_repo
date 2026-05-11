@@ -13,9 +13,10 @@ Do not use it for purely administrative tasks unless they reveal a learning gap.
 Read, in this order when available:
 
 1. `CURRENT_STATUS.md`
-2. `learning/LEARNING_STATUS.md`
-3. `learning/weak_points.md`
-4. `learning/review_queue.md`
+2. `workflow/teaching_contract.md`
+3. `learning/LEARNING_STATUS.md`
+4. `learning/weak_points.md`
+5. `learning/review_queue.md`
 
 Use the active project stage and weak points to choose the depth of explanation.
 
@@ -23,6 +24,8 @@ Use the active project stage and weak points to choose the depth of explanation.
 
 - Prefer one small executable task over broad theory.
 - Teach plainly before formally: start with a concrete analogy, visible board behavior, code line, UART log, or measurement, then introduce the technical term.
+- Explain new terms, concepts, and abbreviations in plain language before using them in the lesson.
+- For code lessons, use the sequence in `workflow/teaching_contract.md`: feature sentence -> rule table -> function responsibilities -> C code -> test.
 - Tie concepts to STM32G474, MCSDK, FOC, STDRIVE101, ESP32-C3, or the current project artifact when possible.
 - Use evidence levels L0-L6 from `learning/README.md`.
 - Ask one teach-back or practice question when it would reveal whether the user actually understood.

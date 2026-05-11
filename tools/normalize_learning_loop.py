@@ -145,6 +145,11 @@ def render_review_queue(rows: list[list[str]]) -> str:
     )
 
 
+def write_lf(path: Path, text: str) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
+
+
 def normalize_files(
     weak_path: Path = LEARNING / "weak_points.md",
     review_path: Path = LEARNING / "review_queue.md",
@@ -158,8 +163,8 @@ def normalize_files(
     normalized_review, removed_review = normalize_review_rows(review_rows, assigned_by_topic)
 
     if not dry_run:
-        weak_path.write_text(render_weak_points(normalized_weak), encoding="utf-8", newline="\n")
-        review_path.write_text(render_review_queue(normalized_review), encoding="utf-8", newline="\n")
+        write_lf(weak_path, render_weak_points(normalized_weak))
+        write_lf(review_path, render_review_queue(normalized_review))
 
     return NormalizeResult(
         weak_rows=len(normalized_weak),

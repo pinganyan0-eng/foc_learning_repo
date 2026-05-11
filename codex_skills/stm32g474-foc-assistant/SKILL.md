@@ -70,7 +70,9 @@ Be conservative around power electronics. For PWM, dead time, overcurrent thresh
 For teaching, explanation, tutoring, homework review, or debugging that reveals understanding:
 
 - Read `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` before choosing depth when practical.
+- Teach in plain language first: use a concrete analogy, visible board behavior, code line, UART log, or measurement before naming formal terms.
 - Teach through one small executable step, one concrete project link, and one useful check for understanding.
+- Avoid repeated low-value simple questions after the user has clearly answered the same pattern; summarize the mastered point and move to practice or the next meaningful concept.
 - Use evidence levels L0-L6 from `learning/README.md`; do not claim mastery without L4+ evidence.
 - At the end, update `learning/session_notes.md`, `learning/weak_points.md`, and `learning/review_queue.md` when new evidence appears.
 - Prefer `python tools/record_learning_session.py` for simple append-only notes.
@@ -83,6 +85,7 @@ For learning help:
 
 - Classify the stage: tools, NUCLEO basics, MCSDK, Hall closed-loop, self-board power-up, SMO, UART/IoT, report/defense.
 - Give a small executable task, acceptance criteria, common failure points, and a teach-back or practice question when useful.
+- Do not overuse tiny confirmation questions; once the learner shows the basic mapping, move to an applied task or a more important safety/engineering check.
 - Record weak points and review prompts after the lesson if evidence appears.
 
 For debugging:

@@ -22,9 +22,9 @@
 | 1 | CubeMX 新建 NUCLEO-G474RE 工程 | 已完成 | `apps/stm32_g474_foc/nucleo_g474re_baseline/`，含 `Core/`、`Drivers/`、`CMakeLists.txt`、`CMakePresets.json` |
 | 2 | 空工程编译 | 已完成 | `build/Debug/nucleo_g474re_baseline.elf`，RAM 1776 B，FLASH 10600 B |
 | 3 | LED/串口测试固件编译 | 已完成 | `main.c` 已加入 `BSP_LED_Toggle(LED_GREEN)`、`printf("BOOT OK\\r\\n")`、`printf("LD2 toggle\\r\\n")`，构建通过 |
-| 4 | 下载到 NUCLEO-G474RE | 待做 | VS Code/STM32Cube Debug 记录 |
-| 5 | LED 闪烁 | 待做 | 现象描述或短视频 |
-| 6 | LPUART1 串口输出 `BOOT OK` | 待做 | 日志放 `logs/` |
+| 4 | 下载到 NUCLEO-G474RE | 已完成 | 2026-05-11 用户提供 VOFA+ 截图显示 COM5 收到当前固件串口输出 |
+| 5 | LED 闪烁 | 部分完成 | 串口日志中 `led` 和 `led_toggle` 按 100 ms 任务节奏变化；仍可补肉眼观察或短视频 |
+| 6 | LPUART1 串口输出 | 已完成 | `logs/2026-05-11_vofa_mode_name_log.md` |
 | 7 | TIM 定时器基础 | 待做 | 配置截图/日志 |
 | 8 | UART DMA + IDLE 接收一行命令 | 待做 | 原始串口日志 |
 
@@ -58,12 +58,12 @@
 - 做了什么：CubeMX 以 `CMake` 工具链生成 NUCLEO-G474RE baseline 工程。
 - 遇到什么问题：第一次生成时 `ToolChainLocation` 路径出现嵌套和空格，CubeMX 卡在 `Generating Project...`；已将坏目录归档为 `apps/stm32_g474_foc/nucleo_g474re_baseline_bad_cubemx_stuck_20260509_200431/` 后重新生成成功。
 - 编译检查：生成工程完整；虽然系统 PATH 中缺少 `ninja` 和 `arm-none-eabi-gcc`，但 VS Code STM32Cube bundle 路径下的 CMake/Ninja/GCC 可用。2026-05-09 已在沙盒外用 bundle 工具完成 Debug 构建。
-- 串口日志：尚未产生。
+- 串口日志：2026-05-11 用户提供 VOFA+ 1.3.10 截图，COM5 / 115200 8N1 收到状态机日志；整理见 `logs/2026-05-11_vofa_mode_name_log.md`。
 - 截图文件：待补。
 - 构建输出：`nucleo_g474re_baseline.elf`，RAM 1776 B / 128 KB，FLASH 10600 B / 512 KB。
 - LED/串口测试固件：已加入 `BOOT OK` 启动打印、`LD2 toggle` 周期打印和 `LD2` 500 ms 翻转；构建输出 RAM 2208 B / 128 KB，FLASH 13892 B / 512 KB。
-- 结论：CubeMX 生成、空工程编译和 LED/串口测试固件编译已完成；尚未完成下载、调试和板上运行验证。
+- 结论：CubeMX 生成、空工程编译、LED/串口测试固件编译、下载运行和 COM5 串口日志验证已完成；当前证据仍限于 NUCLEO baseline，不代表功率板、电机、MCSDK、Hall 闭环或无感 FOC 已验证。
 
 ## 6. 下一步
 
-先用 VS Code/STM32Cube 扩展把 Debug 构建下载到 NUCLEO-G474RE，确认 ST-LINK 连接正常；然后观察 LD2 闪烁，并在 COM5 串口查看 `BOOT OK` / `LD2 toggle`。
+继续在 NUCLEO-G474RE 上做基础固件练习：保留“不接 24V、不接功率板、不接电机”的边界，下一步可以补一段肉眼 LD2 闪烁证据，或继续做 UART DMA + IDLE 接收一行命令。

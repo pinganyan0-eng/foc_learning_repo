@@ -22,9 +22,11 @@ Use the active project stage and weak points to choose the depth of explanation.
 ## During Teaching
 
 - Prefer one small executable task over broad theory.
+- Teach plainly before formally: start with a concrete analogy, visible board behavior, code line, UART log, or measurement, then introduce the technical term.
 - Tie concepts to STM32G474, MCSDK, FOC, STDRIVE101, ESP32-C3, or the current project artifact when possible.
 - Use evidence levels L0-L6 from `learning/README.md`.
 - Ask one teach-back or practice question when it would reveal whether the user actually understood.
+- Avoid repeated low-value simple questions after the user has clearly answered the same pattern; batch the conclusion and move to practice, debugging, or the next meaningful concept.
 - Mark safety-critical weak points clearly.
 
 ## After Teaching

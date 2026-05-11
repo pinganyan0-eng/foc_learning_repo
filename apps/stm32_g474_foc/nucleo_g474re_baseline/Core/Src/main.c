@@ -21,16 +21,24 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <string.h>
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef enum
+{
+  APP_MODE_IDLE = 0U,
+  APP_MODE_ARMED = 1U,
+  APP_MODE_RUN_SIM = 2U
+} app_mode_t;
 
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define APP_CMD_LINE_MAX 32U
 
 /* USER CODE END PD */
 
@@ -51,11 +59,113 @@ COM_InitTypeDef BspCOMInit;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
+static const char *AppModeName(app_mode_t mode);
+static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count);
+static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static const char *AppModeName(app_mode_t mode)
+{
+  switch (mode)
+  {
+    case APP_MODE_IDLE:
+      return "IDLE";
+
+    case APP_MODE_ARMED:
+      return "ARMED";
+
+    case APP_MODE_RUN_SIM:
+      return "RUN_SIM";
+
+    default:
+      return "UNKNOWN";
+  }
+}
+
+static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count)
+{
+  if (strcmp(cmd, "PING") == 0)
+  {
+    printf("PONG\r\n");
+  }
+  else if (strcmp(cmd, "MODE?") == 0)
+  {
+    printf("OK unchanged mode=%u mode_name=%s\r\n",
+           (unsigned int)(*app_mode),
+           AppModeName(*app_mode));
+  }
+  else if (strcmp(cmd, "ARM") == 0)
+  {
+    if (*app_mode == APP_MODE_IDLE)
+    {
+      *app_mode = APP_MODE_ARMED;
+      (*mode_change_count)++;
+      printf("OK changed mode=%u mode_name=%s\r\n",
+             (unsigned int)(*app_mode),
+             AppModeName(*app_mode));
+    }
+    else
+    {
+      printf("ERR bad_state cmd=ARM mode=%u mode_name=%s\r\n",
+             (unsigned int)(*app_mode),
+             AppModeName(*app_mode));
+    }
+  }
+  else if (strcmp(cmd, "STOP") == 0)
+  {
+    if (*app_mode == APP_MODE_IDLE)
+    {
+      printf("OK unchanged mode=%u mode_name=%s\r\n",
+             (unsigned int)(*app_mode),
+             AppModeName(*app_mode));
+    }
+    else
+    {
+      *app_mode = APP_MODE_IDLE;
+      (*mode_change_count)++;
+      printf("OK changed mode=%u mode_name=%s\r\n",
+             (unsigned int)(*app_mode),
+             AppModeName(*app_mode));
+    }
+  }
+  else
+  {
+    printf("ERR unknown_cmd cmd=%s\r\n", cmd);
+  }
+}
+
+static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count)
+{
+  static char rx_line[APP_CMD_LINE_MAX];
+  static uint32_t rx_len = 0U;
+  uint8_t rx_ch = 0U;
+
+  while (HAL_UART_Receive(&hcom_uart[COM1], &rx_ch, 1U, 0U) == HAL_OK)
+  {
+    if ((rx_ch == '\r') || (rx_ch == '\n'))
+    {
+      if (rx_len > 0U)
+      {
+        rx_line[rx_len] = '\0';
+        AppHandleCommand(rx_line, app_mode, mode_change_count);
+        rx_len = 0U;
+      }
+    }
+    else if (rx_len < (APP_CMD_LINE_MAX - 1U))
+    {
+      rx_line[rx_len] = (char)rx_ch;
+      rx_len++;
+    }
+    else
+    {
+      rx_len = 0U;
+      printf("ERR line_too_long\r\n");
+    }
+  }
+}
 
 /* USER CODE END 0 */
 
@@ -120,13 +230,8 @@ int main(void)
   /* 统计用户按下 B1 的有效次数 */
   uint32_t button_press_count = 0U;
 
-  /* 应用状态编号：先用简单整数，下一步再升级成 enum */
-  #define APP_MODE_IDLE     0U
-  #define APP_MODE_ARMED    1U
-  #define APP_MODE_RUN_SIM  2U
-
   /* 当前应用模式：0=IDLE, 1=ARMED, 2=RUN_SIM */
-  uint8_t app_mode = APP_MODE_IDLE;
+  app_mode_t app_mode = APP_MODE_IDLE;
 
   /* 统计模式切换次数, 用来验证状态机只在有效按键事件发生时切换 */
   uint32_t mode_change_count = 0U;
@@ -172,6 +277,9 @@ int main(void)
     /* USER CODE BEGIN 3 */
     /* HAL_GetTick() 是系统毫秒计数器，来自 SysTick */
     uint32_t now = HAL_GetTick();
+
+    /* 轮询接收一行串口命令；当前阶段先不用中断/DMA，方便观察命令表行为 */
+    AppPollCommand(&app_mode, &mode_change_count);
 
     /* 每 100 ms 翻转一次 LD2：亮 100 ms，灭 100 ms */
     if ((now - led_last_tick) >= 100U)
@@ -244,15 +352,16 @@ int main(void)
       /* 每上报一次就加 1，验证 500 ms 任务的执行次数 */
       report_count++;
 
-     /* 每 500 ms 打印一次状态，观察两个任务的执行次数关系 */
-     printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_chg=%lu\r\n",
+      /* 每 500 ms 打印一次状态，观察两个任务的执行次数关系 */
+      printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_name=%s, mode_chg=%lu\r\n",
        (unsigned long)now,
        led_state,
        (unsigned long)led_toggle_count,
        (unsigned long)report_count,
        button_state,
        (unsigned long)button_press_count,
-       app_mode,
+       (unsigned int)app_mode,
+       AppModeName(app_mode),
        (unsigned long)mode_change_count);
 
 

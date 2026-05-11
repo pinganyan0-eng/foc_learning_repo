@@ -13,6 +13,14 @@
 | `hardware_initial_parts_2026_05_09` | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 用户确认版功率板关键器件、电源轨、保护外围和阈值线索，尚待 Datasheet/原理图/BOM/PCB/实测复核 |
 | `power_board_schematic_screenshot_2026_05_09` | `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md` | 用户提供的功率板原理图截图元数据和截图初审观察 |
 | `automation_playbook` | `workflow/automation_playbook.md` | Codex 每日/每周项目自动化的项目侧契约、边界和人工维护命令 |
+| `active_task` | `workflow/ACTIVE_TASK.md` | 当前唯一执行任务包 |
+| `task_packet_template` | `workflow/task_packet_template.md` | ChatGPT/Codex 任务包模板 |
+| `session_close_checklist` | `workflow/session_close_checklist.md` | 收工、测试、证据与提交前检查清单 |
+| `task_state_machine` | `workflow/task_state_machine.md` | ACTIVE_TASK 状态流与 Codex 执行条件 |
+| `definition_of_done` | `workflow/definition_of_done.md` | 各类任务的完成标准、伪完成边界和最小验收证据 |
+| `evidence_register` | `workflow/evidence_register.md` | 构建、测试、实验、截图、波形和复核证据登记表 |
+| `risk_gate_matrix` | `workflow/risk_gate_matrix.md` | L0-L4 风险等级、允许动作、证据要求和禁止动作 |
+| `prompt_recipes` | `workflow/prompt_recipes.md` | ChatGPT/Codex 双师制常用提示词 |
 
 ## 共享链接中已读 Google Docs
 

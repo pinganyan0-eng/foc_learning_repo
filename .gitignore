@@ -13,3 +13,7 @@ __pycache__/
 *.bin
 *.hex
 *.map
+
+# Obsidian local window state
+.obsidian/graph.json
+.obsidian/workspace*.json

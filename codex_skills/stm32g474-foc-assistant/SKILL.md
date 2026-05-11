@@ -76,6 +76,8 @@ For teaching, explanation, tutoring, homework review, or debugging that reveals 
 - Use evidence levels L0-L6 from `learning/README.md`; do not claim mastery without L4+ evidence.
 - At the end, update `learning/session_notes.md`, `learning/weak_points.md`, and `learning/review_queue.md` when new evidence appears.
 - Prefer `python tools/record_learning_session.py` for simple append-only notes.
+- Do not put every "next step" into `review_queue.md`. Queue only observed weak points, repeated misconceptions, safety-critical checks, or deliberately chosen milestone reviews.
+- Keep the active review queue small, normally 5-8 open items. Park old low-risk weak points instead of letting them stay active forever.
 - Run `python tools/normalize_learning_loop.py` after several learning updates or before pushing, so temporary `WP-new` placeholders become stable `WP-001` style IDs and review references stay consistent.
 - Keep notes short: observed weak point, repair plan, next check.
 

@@ -48,7 +48,7 @@ def build_entries(args: argparse.Namespace) -> dict[Path, str]:
         weak = f"| {args.weak_id} | {args.topic} | {args.evidence} | {args.weak} | {args.repair or args.next or 'Define a repair task.'} | {args.next or 'Next learning turn'} | open |"
         entries[LEARNING / "weak_points.md"] = weak
 
-    if args.next:
+    if args.next and (args.weak or getattr(args, "queue_review", False)):
         review = f"| {args.due} | {args.topic} | {args.next} | {args.weak_id if args.weak else '-'} | open |"
         entries[LEARNING / "review_queue.md"] = review
 
@@ -68,6 +68,11 @@ def main() -> None:
     parser.add_argument("--confidence", default="medium")
     parser.add_argument("--source", default="")
     parser.add_argument("--date", default="")
+    parser.add_argument(
+        "--queue-review",
+        action="store_true",
+        help="Add a review-queue item even when no weak point was recorded.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 

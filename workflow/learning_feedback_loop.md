@@ -36,13 +36,14 @@ Use the active project stage and weak points to choose the depth of explanation.
 
 Update learning memory when there is new evidence:
 
-- Append a concise entry to `learning/session_notes.md`.
-- Add or update rows in `learning/weak_points.md`.
-- Add the next review prompt to `learning/review_queue.md`.
+- Append a concise entry to `learning/session_notes.md` when the turn changes project understanding, learner state, or next action.
+- Add or update rows in `learning/weak_points.md` only for a real observed gap, safety-critical misunderstanding, or repeated pattern.
+- Add a review prompt to `learning/review_queue.md` only when it is tied to an open weak point or an explicit safety-critical check.
 - Add reusable questions to `learning/question_bank.md` when a pattern repeats.
 
 Prefer `python tools/record_learning_session.py` for simple append-only updates.
 The script now assigns stable `WP-001` style IDs automatically when a weak point is recorded with the default `WP-new` placeholder.
+By default, it does not queue review items when no weak point is recorded; pass `--queue-review` only for deliberately chosen safety or milestone checks.
 
 After several learning turns, run:
 
@@ -50,7 +51,7 @@ After several learning turns, run:
 python tools/normalize_learning_loop.py
 ```
 
-This keeps `learning/weak_points.md` and `learning/review_queue.md` sorted into their tables, replaces any temporary weak-point IDs, and updates review references.
+This keeps `learning/weak_points.md` and `learning/review_queue.md` sorted into their tables, replaces any temporary weak-point IDs, updates review references, removes review items linked to parked/closed weak points, and trims the active queue to a small working set.
 
 Use the session helpers when useful:
 
@@ -70,6 +71,7 @@ bash tools/end_learning_session.sh --topic "topic" --summary "what happened" --w
 
 - Record what was observed, not what was guessed.
 - Keep weak points specific enough to repair.
-- Include the next check that can prove improvement.
+- Include the next check that can prove improvement, but do not queue every next step.
+- Keep the active review queue near 5-8 items; park old low-risk weak points when the project has moved on.
 - Do not claim mastery unless the user shows L4+ evidence.
 - Do not let note-taking consume the lesson; one precise note is better than a long diary.

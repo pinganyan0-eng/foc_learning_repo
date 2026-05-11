@@ -43,6 +43,7 @@ Use this as a lightweight spaced review queue. Each item should be small enough 
 | next learning turn | NUCLEO ARM branch state assignment | Explain why the APP_MODE_IDLE guard must come before that assignment, then ask what would go wrong if ARM always assigned ARMED. | - | open |
 | next learning turn | NUCLEO ARM guard prevents invalid transition | Move to STOP branch and explain accepted unchanged versus accepted changed behavior. | - | open |
 | next learning turn | NUCLEO STOP unchanged counter rule | Teach AppPollCommand line assembly: receive chars, detect newline, terminate string, dispatch command, handle overflow. | - | open |
+| next learning turn | NUCLEO UART raw buffer vs C string | Given partial input AB without newline, identify rx_line contents, rx_len, whether it is a valid C string, then repeat after newline adds the null terminator. | WP-029 | open |
 
 ## Review Cadence
 

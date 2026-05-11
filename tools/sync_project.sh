@@ -22,6 +22,19 @@ install_project_skill() {
   fi
 }
 
+run_project_maintenance() {
+  echo "Normalizing learning loop..."
+  if command -v python3 >/dev/null 2>&1; then
+    (cd "$REPO_ROOT" && python3 tools/normalize_learning_loop.py)
+    echo "Rebuilding local retrieval index..."
+    (cd "$REPO_ROOT" && python3 tools/build_vector_store.py)
+  else
+    (cd "$REPO_ROOT" && python tools/normalize_learning_loop.py)
+    echo "Rebuilding local retrieval index..."
+    (cd "$REPO_ROOT" && python tools/build_vector_store.py)
+  fi
+}
+
 echo "Repository: $REPO_ROOT"
 git -C "$REPO_ROOT" status --short --branch
 
@@ -49,6 +62,7 @@ case "$MODE" in
       echo "  bash tools/sync_project.sh push \"update project state\"" >&2
       exit 1
     fi
+    run_project_maintenance
     run_tests
     git -C "$REPO_ROOT" add -A
     if [[ -z "$(git -C "$REPO_ROOT" diff --cached --name-only)" ]]; then

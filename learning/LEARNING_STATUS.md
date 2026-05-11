@@ -1,6 +1,6 @@
 # LEARNING_STATUS
 
-Last updated: 2026-05-09
+Last updated: 2026-05-11
 
 ## Current Learning Mode
 
@@ -26,4 +26,10 @@ For teaching or Q&A turns:
 
 ## Active Weak Point Summary
 
-No specific weak points recorded yet in this learning loop. Add entries to `weak_points.md` as soon as evidence appears.
+Current evidence is mainly L1 from NUCLEO-G474RE baseline practice. Active review should focus on:
+
+- Nonblocking tick scheduling and the difference between toggle interval and full LED cycle.
+- Multi-rate task counters, especially fractional average rates versus discrete counter changes.
+- B1 button edge detection, debounce, and the distinction between current level and historical event count.
+- Event-gated state transitions, explicit transition tables, and safe FAULT recovery logic.
+- Embedded source layout: keep state definitions near top-level declarations instead of inside executable code blocks.

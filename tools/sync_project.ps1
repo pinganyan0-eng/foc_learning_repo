@@ -49,6 +49,25 @@ function Install-ProjectSkill {
     }
 }
 
+function Run-ProjectMaintenance {
+    Write-Host "Normalizing learning loop..."
+    Push-Location $repoRoot
+    try {
+        python tools/normalize_learning_loop.py
+        if ($LASTEXITCODE -ne 0) {
+            throw "Learning loop normalization failed"
+        }
+
+        Write-Host "Rebuilding local retrieval index..."
+        python tools/build_vector_store.py
+        if ($LASTEXITCODE -ne 0) {
+            throw "Vector store rebuild failed"
+        }
+    } finally {
+        Pop-Location
+    }
+}
+
 Write-Host "Repository: $repoRoot"
 Run-Git @("status", "--short", "--branch")
 
@@ -77,6 +96,7 @@ if ($Mode -eq "push") {
         Write-Error "Push mode requires -Message `"your commit message`"."
     }
 
+    Run-ProjectMaintenance
     Run-Tests
 
     Run-Git @("add", "-A")

@@ -37,6 +37,29 @@ Update learning memory when there is new evidence:
 - Add reusable questions to `learning/question_bank.md` when a pattern repeats.
 
 Prefer `python tools/record_learning_session.py` for simple append-only updates.
+The script now assigns stable `WP-001` style IDs automatically when a weak point is recorded with the default `WP-new` placeholder.
+
+After several learning turns, run:
+
+```powershell
+python tools/normalize_learning_loop.py
+```
+
+This keeps `learning/weak_points.md` and `learning/review_queue.md` sorted into their tables, replaces any temporary weak-point IDs, and updates review references.
+
+Use the session helpers when useful:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1
+powershell -ExecutionPolicy Bypass -File .\tools\end_learning_session.ps1 -Topic "topic" -Summary "what happened" -Weak "observed gap" -Next "next check"
+```
+
+On macOS/Linux:
+
+```bash
+bash tools/start_learning_session.sh
+bash tools/end_learning_session.sh --topic "topic" --summary "what happened" --weak "observed gap" --next "next check"
+```
 
 ## Quality Bar
 

@@ -9,6 +9,7 @@
 - 主控：NUCLEO-G474RE / STM32G474RE。
 - 功率驱动：STDRIVE101 自研三相功率板。
 - 电流采样：低侧三电阻，Kelvin 走线，G474 内部 OPAMP/PGA + ADC injected。
+- 用户确认版功率板关键器件与阈值线索：`hardware/bom/2026-05-09_user_provided_power_stage_parts.md`；来源为用户在 2026-05-09 按原理图确认，但用户说明不能保证全部正确，尚未做 Datasheet、库存、原理图文件、PCB 或实测复核。
 - 网关：ESP32-C3，本地 AP/WebSocket/ECharts/OLED，负责边缘看板和告警展示。
 - 实时控制：STM32 负责 FOC 实时环，ESP32 不进入实时控制环。
 - 开发工具链：VS Code + STM32CubeIDE 插件 + STM32CubeMX + MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。

@@ -10,6 +10,9 @@
 | `v9_final` | `materials/extracted/v9_final.txt` | V9 最终方案，硬件/系统高优先级参考 |
 | `proposal_v8` | `materials/extracted/proposal_v8.txt` | V8 申报书，工程盲区修正版 |
 | `proposal_v71` | `materials/extracted/proposal_v71.txt` | V7.1 申报书，历史版本 |
+| `hardware_initial_parts_2026_05_09` | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 用户确认版功率板关键器件、电源轨、保护外围和阈值线索，尚待 Datasheet/原理图/BOM/PCB/实测复核 |
+| `power_board_schematic_screenshot_2026_05_09` | `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md` | 用户提供的功率板原理图截图元数据和截图初审观察 |
+| `automation_playbook` | `workflow/automation_playbook.md` | Codex 每日/每周项目自动化的项目侧契约、边界和人工维护命令 |
 
 ## 共享链接中已读 Google Docs
 
@@ -39,4 +42,5 @@
 - `apps/stm32_g474_foc/`：VS Code/STM32CubeIDE 插件使用的 STM32CubeMX 或 MCSDK 生成工程。
 - `apps/esp32_c3_gateway/`：ESP32-C3 网关真实工程。
 - `experiments/`：每次联调记录、波形截图、串口日志。
-- `hardware/`：原理图 PDF、PCB 截图、BOM、Gerber/坐标文件；当前仓库还未创建该目录，等硬件资料开始沉淀时再建立。
+- `hardware/`：已记录用户确认版关键器件清单和原理图截图；仍待补 EDA 源文件、原理图 PDF、PCB 截图、正式 BOM、Gerber/坐标文件和器件 Datasheet。
+- `learning/`：已开始记录 NUCLEO 基础学习过程、薄弱点和复习队列；使用 `tools/normalize_learning_loop.py` 保持编号与表格整洁。

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import re
 from datetime import datetime
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 LEARNING = ROOT / "learning"
+WEAK_ID_RE = re.compile(r"\|\s*WP-(\d{3,})\s*\|")
 
 
 def append(path: Path, text: str) -> None:
@@ -14,6 +16,16 @@ def append(path: Path, text: str) -> None:
     existing = path.read_text(encoding="utf-8") if path.exists() else ""
     separator = "" if existing.endswith("\n") or not existing else "\n"
     path.write_text(existing + separator + text.strip() + "\n", encoding="utf-8")
+
+
+def next_weak_id(path: Path = LEARNING / "weak_points.md") -> str:
+    if not path.exists():
+        return "WP-001"
+
+    highest = 0
+    for match in WEAK_ID_RE.finditer(path.read_text(encoding="utf-8", errors="ignore")):
+        highest = max(highest, int(match.group(1)))
+    return f"WP-{highest + 1:03d}"
 
 
 def build_entries(args: argparse.Namespace) -> dict[Path, str]:
@@ -58,6 +70,9 @@ def main() -> None:
     parser.add_argument("--date", default="")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+
+    if args.weak and args.weak_id == "WP-new":
+        args.weak_id = next_weak_id()
 
     entries = build_entries(args)
     for path, text in entries.items():

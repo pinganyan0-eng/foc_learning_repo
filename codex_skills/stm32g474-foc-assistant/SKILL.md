@@ -74,6 +74,7 @@ For teaching, explanation, tutoring, homework review, or debugging that reveals 
 - Use evidence levels L0-L6 from `learning/README.md`; do not claim mastery without L4+ evidence.
 - At the end, update `learning/session_notes.md`, `learning/weak_points.md`, and `learning/review_queue.md` when new evidence appears.
 - Prefer `python tools/record_learning_session.py` for simple append-only notes.
+- Run `python tools/normalize_learning_loop.py` after several learning updates or before pushing, so temporary `WP-new` placeholders become stable `WP-001` style IDs and review references stay consistent.
 - Keep notes short: observed weak point, repair plan, next check.
 
 ## Workflows
@@ -110,7 +111,10 @@ Run these from the project root when relevant:
 ```powershell
 python tools/ask_local.py "your question"
 python tools/build_vector_store.py
+python tools/normalize_learning_loop.py
 python tools/record_learning_session.py --topic "Hall sensors" --summary "Explained Hall state sequence" --weak "Confused electrical angle with mechanical angle" --next "Explain the difference with one example"
+powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1
+powershell -ExecutionPolicy Bypass -File .\tools\end_learning_session.ps1 -Topic "Hall sensors" -Summary "Explained Hall state sequence"
 python -m unittest discover -s tests
 powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1
 ```
@@ -119,6 +123,9 @@ On macOS/Linux:
 
 ```bash
 python3 tools/build_vector_store.py
+python3 tools/normalize_learning_loop.py
+bash tools/start_learning_session.sh
+bash tools/end_learning_session.sh --topic "Hall sensors" --summary "Explained Hall state sequence"
 bash tools/install_project_skill.sh
 ```
 

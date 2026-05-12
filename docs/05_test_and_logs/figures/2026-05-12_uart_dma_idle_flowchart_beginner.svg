@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
+  <title id="title">UART DMA + IDLE 接收流程（零基础版）</title>
+  <desc id="desc">解释 Size、rx_buf、rx_line、AppFeedRxByte 和换行符如何配合完成 UART DMA + IDLE 接收。</desc>
+  <defs>
+    <style>
+      .title { font: 700 42px Arial, 'Microsoft YaHei', sans-serif; fill: #10204a; }
+      .subtitle { font: 22px Arial, 'Microsoft YaHei', sans-serif; fill: #222; }
+      .box-title { font: 700 26px Arial, 'Microsoft YaHei', sans-serif; fill: #111; }
+      .box-text { font: 20px Arial, 'Microsoft YaHei', sans-serif; fill: #222; }
+      .small { font: 18px Arial, 'Microsoft YaHei', sans-serif; fill: #333; }
+      .tiny { font: 16px Arial, 'Microsoft YaHei', sans-serif; fill: #333; }
+      .blue { fill: #1554b7; }
+      .green { fill: #087a36; }
+      .orange { fill: #d95700; }
+      .purple { fill: #6c2bb8; }
+      .panel { fill: #ffffff; stroke: #6aa3ff; stroke-width: 2.5; }
+      .side-panel { fill: #ffffff; stroke: #1f8a43; stroke-width: 2.5; }
+      .example-panel { fill: #ffffff; stroke: #7d45c4; stroke-width: 2.5; }
+      .note-panel { fill: #fff8e7; stroke: #e49a24; stroke-width: 2.5; }
+      .arrow { stroke: #1554b7; stroke-width: 5; fill: none; marker-end: url(#arrowhead); }
+      .thin-arrow { stroke: #555; stroke-width: 3; fill: none; marker-end: url(#arrowhead-gray); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#1554b7" />
+    </marker>
+    <marker id="arrowhead-gray" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#555" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1050" fill="#fbfdff"/>
+
+  <text x="800" y="58" text-anchor="middle" class="title">UART DMA + IDLE 接收流程（零基础版）</text>
+  <rect x="180" y="82" width="1240" height="52" rx="18" fill="#fff8dc" stroke="#efb44a" stroke-width="2"/>
+  <text x="800" y="116" text-anchor="middle" class="subtitle">一句话：<tspan class="orange">Size 只会数数</tspan>；<tspan class="blue">rx_buf 记住这一批字节</tspan>；<tspan class="green">rx_line 拼完整命令</tspan>；看到 <tspan class="purple">\n</tspan> 后才执行。</text>
+
+  <!-- left column -->
+  <g id="left-flow">
+    <rect x="55" y="165" width="640" height="90" rx="20" class="panel"/>
+    <rect x="75" y="185" width="48" height="48" rx="12" class="blue"/><text x="99" y="218" text-anchor="middle" font-size="28" font-weight="700" fill="white">1</text>
+    <text x="150" y="202" class="box-title">电脑发送字符</text><text x="150" y="232" class="box-text">例子：P I N G \n</text>
+
+    <path d="M375 255 L375 288" class="arrow"/>
+    <rect x="55" y="290" width="640" height="90" rx="20" class="panel"/>
+    <rect x="75" y="310" width="48" height="48" rx="12" class="blue"/><text x="99" y="343" text-anchor="middle" font-size="28" font-weight="700" fill="white">2</text>
+    <text x="150" y="327" class="box-title">DMA 自动搬运</text><text x="150" y="357" class="box-text">把这一批收到的字节放进 <tspan class="blue">rx_buf[]</tspan></text>
+
+    <path d="M375 380 L375 413" class="arrow"/>
+    <rect x="55" y="415" width="640" height="90" rx="20" class="panel"/>
+    <rect x="75" y="435" width="48" height="48" rx="12" class="blue"/><text x="99" y="468" text-anchor="middle" font-size="28" font-weight="700" fill="white">3</text>
+    <text x="150" y="452" class="box-title">IDLE 触发</text><text x="150" y="482" class="box-text">表示这一批暂时收完了</text>
+
+    <path d="M375 505 L375 538" class="arrow"/>
+    <rect x="55" y="540" width="640" height="95" rx="20" class="panel"/>
+    <rect x="75" y="562" width="48" height="48" rx="12" class="blue"/><text x="99" y="595" text-anchor="middle" font-size="28" font-weight="700" fill="white">4</text>
+    <text x="150" y="575" class="box-title">拿到 Size</text><text x="150" y="606" class="box-text"><tspan class="orange">Size</tspan> = 这一次收到几个字节</text><text x="150" y="630" class="small">只知道数量，不知道内容</text>
+
+    <path d="M375 635 L375 668" class="arrow"/>
+    <rect x="55" y="670" width="640" height="95" rx="20" class="panel"/>
+    <rect x="75" y="692" width="48" height="48" rx="12" class="blue"/><text x="99" y="725" text-anchor="middle" font-size="28" font-weight="700" fill="white">5</text>
+    <text x="150" y="706" class="box-title">CPU 开始循环</text><rect x="150" y="723" width="335" height="32" rx="8" fill="#eef3ff" stroke="#b5c7ff"/><text x="168" y="746" class="small">for (i = 0; i &lt; Size; i++)</text>
+  </g>
+
+  <path d="M695 717 C745 717, 745 210, 795 210" class="arrow" stroke-dasharray="10 10"/>
+
+  <!-- right column -->
+  <g id="right-flow">
+    <rect x="795" y="165" width="640" height="90" rx="20" class="panel"/>
+    <rect x="815" y="185" width="48" height="48" rx="12" class="blue"/><text x="839" y="218" text-anchor="middle" font-size="28" font-weight="700" fill="white">6</text>
+    <text x="890" y="202" class="box-title">逐个读取 rx_buf[i]</text><text x="890" y="232" class="box-text">把每个真实字符取出来</text>
+
+    <path d="M1115 255 L1115 288" class="arrow"/>
+    <rect x="795" y="290" width="640" height="90" rx="20" class="panel"/>
+    <rect x="815" y="310" width="48" height="48" rx="12" class="blue"/><text x="839" y="343" text-anchor="middle" font-size="28" font-weight="700" fill="white">7</text>
+    <text x="890" y="327" class="box-title">AppFeedRxByte(ch)</text><text x="890" y="357" class="box-text">把字符一个一个送进命令拼接区</text>
+
+    <path d="M1115 380 L1115 413" class="arrow"/>
+    <rect x="795" y="415" width="640" height="90" rx="20" class="panel"/>
+    <rect x="815" y="435" width="48" height="48" rx="12" class="blue"/><text x="839" y="468" text-anchor="middle" font-size="28" font-weight="700" fill="white">8</text>
+    <text x="890" y="452" class="box-title">拼到 rx_line[]</text><text x="890" y="482" class="box-text">没看到 <tspan class="purple">\n</tspan>：只缓存，不执行</text>
+
+    <path d="M1115 505 L1115 538" class="arrow"/>
+    <rect x="795" y="540" width="640" height="95" rx="20" class="panel"/>
+    <rect x="815" y="562" width="48" height="48" rx="12" class="blue"/><text x="839" y="595" text-anchor="middle" font-size="28" font-weight="700" fill="white">9</text>
+    <text x="890" y="575" class="box-title">看到 \n</text><text x="890" y="606" class="box-text">一条完整命令结束</text><text x="890" y="630" class="small">补 '\0' → AppHandleCommand()</text>
+
+    <path d="M1115 635 L1115 668" class="arrow"/>
+    <rect x="795" y="670" width="640" height="95" rx="20" class="panel"/>
+    <rect x="815" y="692" width="48" height="48" rx="12" class="blue"/><text x="839" y="725" text-anchor="middle" font-size="28" font-weight="700" fill="white">10</text>
+    <text x="890" y="706" class="box-title">执行命令并重启接收</text><text x="890" y="737" class="box-text">例如 PING / STOP / SET_RPM，然后重启 DMA + IDLE</text>
+  </g>
+
+  <!-- role panel -->
+  <rect x="55" y="800" width="640" height="205" rx="20" class="side-panel"/>
+  <rect x="55" y="800" width="640" height="44" rx="20" fill="#0b7c3a"/>
+  <text x="375" y="830" text-anchor="middle" font-size="25" font-weight="700" fill="white">四个角色，一眼分清</text>
+  <text x="85" y="875" class="box-text"><tspan class="orange">Size：计数器</tspan> —— 只回答：这批来了几个字节？</text>
+  <text x="85" y="910" class="box-text"><tspan class="blue">rx_buf[]：本批收纳盒</tspan> —— 保存这一批真实字节</text>
+  <text x="85" y="945" class="box-text"><tspan class="green">rx_line[]：整句记事本</tspan> —— 把多批数据拼成命令</text>
+  <text x="85" y="980" class="box-text"><tspan class="purple">\n：结束标志</tspan> —— 告诉系统一条命令到此结束</text>
+
+  <!-- example panel -->
+  <rect x="735" y="800" width="365" height="205" rx="20" class="example-panel"/>
+  <rect x="735" y="800" width="365" height="44" rx="20" fill="#7442b8"/>
+  <text x="918" y="830" text-anchor="middle" font-size="24" font-weight="700" fill="white">跨两批拼一条命令</text>
+  <text x="765" y="875" class="box-text">第 1 批：['S','T','O'] → 先缓存</text>
+  <text x="765" y="920" class="box-text">第 2 批：['P','\n'] → 凑成 STOP</text>
+  <rect x="780" y="950" width="275" height="38" rx="12" fill="#f5eeff" stroke="#7442b8"/>
+  <text x="918" y="977" text-anchor="middle" font-size="25" font-weight="700" fill="#6c2bb8">最终执行：STOP</text>
+
+  <!-- common mistakes -->
+  <rect x="1135" y="800" width="410" height="205" rx="20" class="note-panel"/>
+  <text x="1165" y="838" font-size="25" font-weight="700" fill="#c9412b">最容易记错的点</text>
+  <text x="1165" y="878" class="small">1. count / Size 不是命令内容，只是数量。</text>
+  <text x="1165" y="913" class="small">2. rx_buf[] 只保存这一批，不一定完整。</text>
+  <text x="1165" y="948" class="small">3. rx_line[] 才负责跨批次拼完整命令。</text>
+  <text x="1165" y="983" class="small">4. 只有遇到 \n 后，才真正解析执行。</text>
+
+  <text x="800" y="1030" text-anchor="middle" class="tiny">当前阶段：NUCLEO UART 接收学习图；这是教学/文档产物，不是编译、串口或硬件验证证据。</text>
+</svg>

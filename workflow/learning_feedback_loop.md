@@ -13,16 +13,20 @@ Do not use it for purely administrative tasks unless they reveal a learning gap.
 Read, in this order when available:
 
 1. `CURRENT_STATUS.md`
-2. `workflow/teaching_contract.md`
-3. `learning/LEARNING_STATUS.md`
-4. `learning/weak_points.md`
-5. `learning/review_queue.md`
+2. `workflow/algo_b_teaching_delivery_plan.md`
+3. `workflow/teaching_contract.md`
+4. `learning/LEARNING_STATUS.md`
+5. `learning/weak_points.md`
+6. `learning/review_queue.md`
 
-Use the active project stage and weak points to choose the depth of explanation.
+Use the active project stage, the current planned deliverable, and weak points to choose the depth of explanation.
 
 ## During Teaching
 
 - Prefer one small executable task over broad theory.
+- Start with a short progress checkpoint: current real stage, planned milestone, lesson target, deliverable, pace status, and forbidden scope.
+- Tie each lesson to one small submission or evidence item from `workflow/algo_b_teaching_delivery_plan.md`.
+- If the user is behind the planned deliverable, switch to catch-up mode before teaching new material.
 - Teach plainly before formally: start with a concrete analogy, visible board behavior, code line, UART log, or measurement, then introduce the technical term.
 - Explain new terms, concepts, and abbreviations in plain language before using them in the lesson.
 - For code lessons, use the sequence in `workflow/teaching_contract.md`: feature sentence -> rule table -> function responsibilities -> C code -> test.

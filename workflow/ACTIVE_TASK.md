@@ -4,100 +4,110 @@
 
 ## Task ID
 
-- ID：TASK-2026-05-11-dual-teacher-workflow
-- 主题：优化 ChatGPT + Codex 双师制为可检查、可审计、可恢复流程
+- ID：TASK-2026-05-12-algo-b-teaching-delivery-plan
+- 主题：消化 B 算法/主控 8 周与 56 天计划，固化教学节奏、补进度机制和上交物规则
 - Status：done
 - Risk Level：L0
 - Definition of Done：`workflow/definition_of_done.md#仓库维护任务`
-- Evidence ID：EV-2026-05-11-WORKFLOW-HARDENING-001
+- Evidence ID：EV-2026-05-12-WORKFLOW-PLAN-001
 - Review Required：yes
 
 ## 背景
 
-项目已经把 ChatGPT 与 Codex 的分工固定到仓库中；现在继续补齐状态机、完成定义、证据登记、风险矩阵和常用提示词，让流程可检查、可审计、可恢复。
+用户指出两份 B 算法/主控 HTML 计划里有明确的每日/每周上交物、验收、Git tag、周报和里程碑要求，但当前教学只在讲局部知识点，没有让教学节奏追上计划，也没有把每课/每周交付物写进规则。
 
 ## 当前阶段
 
-阶段 0/流程固化，不进入硬件或电机动作。
+阶段 0/教学与交付计划固化；真实工程仍处于 P1 NUCLEO 基础与 UART 命令阶段。此任务只改工作流、计划、索引和教学规则，不进入硬件或电机动作。
 
 ## 任务目标
 
-建立任务状态机、完成定义、证据登记表、风险闸门矩阵和提示词模板，并更新项目总控文件，使后续 ChatGPT 与 Codex 通过仓库稳定交接、审计和恢复。
+把 `materials/extracted/algo_b_8week.txt` 和 `materials/extracted/algo_56day.txt` 消化为一份可执行的教学与交付总计划，并把“教学必须做进度检查点、必须绑定上交物、落后先 catch-up、阶段闸门高于日历计划”写入规则文件。
 
 ## 允许做
 
-- 新增 `workflow/task_state_machine.md`。
-- 新增 `workflow/definition_of_done.md`。
-- 新增 `workflow/evidence_register.md`。
-- 新增 `workflow/risk_gate_matrix.md`。
-- 新增 `workflow/prompt_recipes.md`。
-- 更新 `workflow/ACTIVE_TASK.md`。
-- 更新 `workflow/task_packet_template.md`。
-- 更新 `CURRENT_STATUS.md`。
-- 更新 `docs/file_map.md`。
-- 运行文档和索引维护相关检查命令。
+- 新增 `workflow/algo_b_teaching_delivery_plan.md`。
+- 更新 `workflow/teaching_contract.md`。
+- 更新 `workflow/learning_feedback_loop.md`。
+- 更新 `workflow/prompt_recipes.md`。
+- 更新 `workflow/session_close_checklist.md`。
+- 更新 `codex_skills/stm32g474-foc-assistant/SKILL.md`。
+- 更新 `deliverables/submission_checklist.md`。
+- 更新 `learning/LEARNING_STATUS.md`。
+- 更新 `CURRENT_STATUS.md`、`README.md`、`materials/START_HERE.md`、`docs/file_map.md`。
+- 更新 `workflow/evidence_register.md`。
+- 运行文档、学习记录和索引维护命令。
 
 ## 禁止做
 
 - 不接 24V。
 - 不接功率板。
 - 不接电机。
-- 不改 STM32 控制代码。
-- 不改硬件参数。
-- 不改 MCSDK/CubeMX 工程配置。
+- 不改 PWM、Gate、FOC 实时控制路径。
+- 不改 MCSDK/CubeMX/ESP-IDF 工程配置。
+- 不修改硬件参数或保护阈值。
 - 不自动 commit。
 - 不自动 push。
 
 ## 输入文件
 
+- `materials/extracted/algo_b_8week.txt`
+- `materials/extracted/algo_56day.txt`
 - `CURRENT_STATUS.md`
-- `AGENTS.md`
-- `docs/00_project_truth/project_context.md`
-- `workflow/ACTIVE_TASK.md`
-- `workflow/task_packet_template.md`
-- `docs/file_map.md`
+- `workflow/phase_gate_checklist.md`
+- `workflow/teaching_contract.md`
+- `workflow/learning_feedback_loop.md`
+- `workflow/prompt_recipes.md`
+- `learning/LEARNING_STATUS.md`
+- `deliverables/submission_checklist.md`
+- `codex_skills/stm32g474-foc-assistant/SKILL.md`
 
 ## 输出文件
 
-- `workflow/task_state_machine.md`
-- `workflow/definition_of_done.md`
-- `workflow/evidence_register.md`
-- `workflow/risk_gate_matrix.md`
+- `workflow/algo_b_teaching_delivery_plan.md`
+- `workflow/teaching_contract.md`
+- `workflow/learning_feedback_loop.md`
 - `workflow/prompt_recipes.md`
-- `workflow/ACTIVE_TASK.md`
-- `workflow/task_packet_template.md`
+- `workflow/session_close_checklist.md`
+- `codex_skills/stm32g474-foc-assistant/SKILL.md`
+- `deliverables/submission_checklist.md`
+- `learning/LEARNING_STATUS.md`
 - `CURRENT_STATUS.md`
+- `README.md`
+- `materials/START_HERE.md`
 - `docs/file_map.md`
+- `workflow/evidence_register.md`
+- `workflow/ACTIVE_TASK.md`
 
 ## 验收证据
 
-- 状态机文件存在，并明确 Codex 不执行 `draft` 状态任务。
-- Definition of Done 覆盖学习、工程代码、实验记录、硬件审查、文档/答辩和仓库维护任务。
-- 证据登记表存在，并包含 NUCLEO baseline 构建证据初始记录。
-- 风险闸门矩阵存在，并明确 24V、PWM、Gate、nFAULT、电流采样、SCREF/VDS、Hall/SMO、电机接入至少 L3/L4。
-- 提示词模板存在，并覆盖 ChatGPT 与 Codex 的常用交接场景。
-- `ACTIVE_TASK.md` 和 `task_packet_template.md` 包含 Status、Risk Level、Definition of Done、Evidence ID、Review Required。
-- `CURRENT_STATUS.md` 和 `docs/file_map.md` 能找到新增入口。
+- 总计划文件存在，明确来源、官方核验、冲突处理、进度检查点、补进度机制、阶段路线、当前阶段上交物和 ChatGPT/Codex 规则补丁。
+- 教学契约和学习反馈流程要求每次教学先做进度检查点，并绑定上交物。
+- prompt recipes 和 Skill 源文件包含新计划读取顺序。
+- `CURRENT_STATUS.md`、`docs/file_map.md`、`README.md` 和 `materials/START_HERE.md` 能找到新计划入口。
+- `deliverables/submission_checklist.md` 包含周交付包模板。
+- 证据登记表包含本任务证据行。
 - 维护命令已运行并记录结果。
 
 ## 安全边界
 
-本任务仅固化流程，不进入硬件、电机或功率动作。涉及 24V、PWM、Gate、nFAULT、电流采样、Hall/SMO 的后续任务，必须回到 `workflow/phase_gate_checklist.md`。
+本任务仅固化教学与交付工作流，不进入硬件、电机或功率动作。涉及 24V、PWM、Gate、nFAULT、电流采样、Hall/SMO、电机接入的后续任务，必须回到 `workflow/phase_gate_checklist.md`。
 
 ## 执行步骤
 
-1. 新增状态机、完成定义、证据登记、风险矩阵和提示词模板。
-2. 更新当前任务入口和任务包模板。
-3. 更新项目总控和文件索引。
-4. 运行指定维护命令。
-5. 输出修改摘要、命令结果、`git status` 摘要和建议 commit message。
+1. 读取两份 B 算法/主控计划和当前阶段文件。
+2. 联网核验 MCSDK、STM32CubeIDE for VS Code、STM32G474、STDRIVE101、CORDIC/FMAC、ESP32-C3 UART 等关键假设。
+3. 新增教学与交付总计划。
+4. 更新教学契约、学习反馈、提示词、Skill、索引、状态页和提交清单。
+5. 运行维护命令。
+6. 输出修改摘要、命令结果、`git status` 摘要和建议 commit message。
 
 ## Definition of Done
 
-- 新增 workflow 文档存在且内容覆盖本任务要求。
-- `CURRENT_STATUS.md` 和 `docs/file_map.md` 已加入入口。
-- 指定命令已运行并记录结果。
-- 未修改 STM32 固件控制逻辑、CubeMX/MCSDK/ESP-IDF 配置、硬件参数、PWM、Gate 或 FOC 实时控制代码。
+- 新计划覆盖教学、交付、进度、补课、阶段闸门和双师分工。
+- 入口文件和索引均指向新计划。
+- 指定命令已运行并记录结果，或明确说明未运行原因。
+- 未修改功率相关代码、CubeMX/MCSDK/ESP-IDF 配置、硬件参数、PWM、Gate 或 FOC 实时控制代码。
 
 ## Blocked Handling
 
@@ -106,26 +116,14 @@
 ## Codex 结果区
 
 - 执行状态：done
-- 修改文件：`workflow/task_state_machine.md`、`workflow/definition_of_done.md`、`workflow/evidence_register.md`、`workflow/risk_gate_matrix.md`、`workflow/prompt_recipes.md`、`workflow/ACTIVE_TASK.md`、`workflow/task_packet_template.md`、`CURRENT_STATUS.md`、`docs/file_map.md`
-- 证据：`python tools/normalize_learning_loop.py` 成功；`python tools/build_vector_store.py` 成功并生成 7478 chunks；`python -m unittest discover -s tests` 成功，12 tests OK
-- Evidence ID：EV-2026-05-11-WORKFLOW-HARDENING-001
+- 修改文件：`workflow/algo_b_teaching_delivery_plan.md`、`workflow/teaching_contract.md`、`workflow/learning_feedback_loop.md`、`workflow/prompt_recipes.md`、`workflow/session_close_checklist.md`、`codex_skills/stm32g474-foc-assistant/SKILL.md`、`deliverables/submission_checklist.md`、`learning/LEARNING_STATUS.md`、`CURRENT_STATUS.md`、`README.md`、`materials/START_HERE.md`、`docs/file_map.md`、`workflow/evidence_register.md`、`workflow/ACTIVE_TASK.md`
+- 证据：`workflow/evidence_register.md` 中新增 `EV-2026-05-12-WORKFLOW-PLAN-001`；`python tools\normalize_learning_loop.py` 成功；`python tools\build_vector_store.py` 成功并生成 7503 chunks；`python -m unittest discover -s tests` 成功，14 tests OK
+- Evidence ID：EV-2026-05-12-WORKFLOW-PLAN-001
 - 失败命令：无已知失败
-- 剩余风险：需要 ChatGPT 或用户复盘后才能将 Status 改为 `reviewed`
-
-## 需要更新的文件
-
-- `workflow/task_packet_template.md`
-- `workflow/ACTIVE_TASK.md`
-- `workflow/task_state_machine.md`
-- `workflow/definition_of_done.md`
-- `workflow/evidence_register.md`
-- `workflow/risk_gate_matrix.md`
-- `workflow/prompt_recipes.md`
-- `CURRENT_STATUS.md`
-- `docs/file_map.md`
+- 剩余风险：需要后续真实执行周交付包；P1 当前 UART 命令副作用表和 DMA + IDLE 流程图仍需补齐为正式上交物
 
 ## 建议 commit message
 
 ```text
-docs: 强化双师制任务审计工作流
+docs: 固化 B 算法教学与交付计划
 ```

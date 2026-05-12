@@ -5,12 +5,13 @@
 ## Read Order
 
 1. `CURRENT_STATUS.md`
-2. `workflow/teaching_contract.md`
-3. `workflow/learning_feedback_loop.md`
-4. `learning/LEARNING_STATUS.md`
-5. `learning/weak_points.md`
-6. `learning/review_queue.md`
-7. 最近的 `learning/session_notes.md`
+2. `workflow/algo_b_teaching_delivery_plan.md`
+3. `workflow/teaching_contract.md`
+4. `workflow/learning_feedback_loop.md`
+5. `learning/LEARNING_STATUS.md`
+6. `learning/weak_points.md`
+7. `learning/review_queue.md`
+8. 最近的 `learning/session_notes.md`
 
 ## Teaching Rules
 
@@ -21,6 +22,15 @@
 - 一次只推进一个小概念或一个小可执行任务；用户已经掌握的低价值确认题不要反复问。
 - 发现用户答错、卡住或概念混淆时，记录为具体弱点，不要笼统写“基础差”。
 - 不声称掌握，除非用户有 L4 以上证据；代码能复述通常只是 L1-L2，板上运行、日志或实验验证才是更高证据。
+
+## Progress And Delivery Rules
+
+- 每次教学开始前必须做一次“进度检查点”：当前真实阶段、对应原计划位置、本轮教学目标、本轮要产出的东西、进度状态和禁止范围。
+- 教学必须追着计划走，但以证据和阶段闸门为准；不能因为原计划日历已经到了后面，就跳过当前未完成的上交物。
+- 每次课至少绑定一个小产物：规则表、代码行职责、命令副作用表、流程图、实验记录、截图、日志、复盘或 Codex 接力点。
+- 如果发现进度落后，先进入 catch-up：补关键表格、日志、学习记录或证据；不要继续扩展新概念制造“学过了”的假象。
+- ChatGPT 负责把概念课推到上交物；Codex 负责把上交物、验证结果和学习证据写进仓库。
+- 周期性检查 `workflow/algo_b_teaching_delivery_plan.md` 的当前阶段上交物，避免只聊天不交付。
 
 ## Teacher Handoff Rule
 

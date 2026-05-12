@@ -5,6 +5,7 @@
 ## 学习收工
 
 - [ ] 是否更新 `CURRENT_STATUS.md`。
+- [ ] 是否对照 `workflow/algo_b_teaching_delivery_plan.md` 确认本轮小产物或 catch-up 任务已经交代清楚。
 - [ ] 是否更新 `learning/weak_points.md` 或 `learning/review_queue.md`。
 - [ ] 是否把临时想法回写到 `docs/`、`experiments/` 或 `interfaces/`。
 - [ ] 是否运行 `python tools/normalize_learning_loop.py`。
@@ -12,6 +13,7 @@
 ## 工程收工
 
 - [ ] 是否更新 `CURRENT_STATUS.md`。
+- [ ] 是否更新或引用本阶段上交物、进度债或周交付包。
 - [ ] 是否把影响接口、状态机、命令协议或工程约束的内容回写到 `docs/` 或 `interfaces/`。
 - [ ] 是否运行 `python tools/build_vector_store.py`。
 - [ ] 是否运行 `python -m unittest discover -s tests`。

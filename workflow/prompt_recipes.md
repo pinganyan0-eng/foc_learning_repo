@@ -1,6 +1,6 @@
 # 常用提示词
 
-本文件保存 ChatGPT + Codex 双师制工作流常用提示词。使用时先读 `CURRENT_STATUS.md`、`workflow/teaching_contract.md`、`workflow/ACTIVE_TASK.md`、`workflow/risk_gate_matrix.md` 和 `workflow/definition_of_done.md`。
+本文件保存 ChatGPT + Codex 双师制工作流常用提示词。使用时先读 `CURRENT_STATUS.md`、`workflow/algo_b_teaching_delivery_plan.md`、`workflow/teaching_contract.md`、`workflow/ACTIVE_TASK.md`、`workflow/risk_gate_matrix.md` 和 `workflow/definition_of_done.md`。
 
 ## ChatGPT：继续教学并写学习记录 PR
 
@@ -12,6 +12,7 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 
 请先读取：
 - CURRENT_STATUS.md
+- workflow/algo_b_teaching_delivery_plan.md
 - workflow/teaching_contract.md
 - workflow/learning_feedback_loop.md
 - learning/LEARNING_STATUS.md
@@ -21,12 +22,15 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 
 教学要求：
 1. 从最新学习进度继续，不要从头讲。
-2. 新名词、新概念、新缩写首次出现时，先用一句白话解释。
-3. 教代码时按“功能句子 -> 规则表 -> 函数职责 -> C 代码 -> 测试”展开。
-4. 不要只给结论；要手把手说明功能如何落实到代码。
-5. 不要反复问已经掌握的低价值简单题。
-6. 不要无限独占教学；讲到真实仓库代码、编译验证、GitHub 文件更新或学习记录写入时，明确提醒我切回 Codex。
-7. 当前默认只做 NUCLEO 基础工程学习；不接 24V、不接功率板、不接电机。
+2. 开头必须输出“进度检查点”：当前真实阶段、对应原计划位置、本轮教学目标、本轮要产出的东西、on-track/catch-up/blocked、禁止范围。
+3. 新名词、新概念、新缩写首次出现时，先用一句白话解释。
+4. 教代码时按“功能句子 -> 规则表 -> 函数职责 -> C 代码 -> 测试”展开。
+5. 不要只给结论；要手把手说明功能如何落实到代码。
+6. 不要反复问已经掌握的低价值简单题。
+7. 每轮教学必须绑定一个小产物，例如命令副作用表、流程图、代码行职责、复习题结果或 Codex 接力点。
+8. 如果发现进度落后，先补上交物或证据，不继续扩展新概念。
+9. 不要无限独占教学；讲到真实仓库代码、编译验证、GitHub 文件更新或学习记录写入时，明确提醒我切回 Codex。
+10. 当前默认只做 NUCLEO 基础工程学习；不接 24V、不接功率板、不接电机。
 
 课后请直接更新 GitHub 仓库学习记录：
 - learning/session_notes.md
@@ -66,6 +70,7 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 
 ```text
 请作为本项目主老师，先读取 CURRENT_STATUS.md、workflow/ACTIVE_TASK.md、workflow/risk_gate_matrix.md 和 workflow/definition_of_done.md。
+同时读取 workflow/algo_b_teaching_delivery_plan.md，确保任务包能追上当前计划和本周上交物。
 
 请为今天生成一个可交给 Codex 执行的任务包，必须包含：
 - Task ID
@@ -76,6 +81,7 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 - Review Required
 - 背景
 - 当前阶段
+- 对应原计划位置和本轮上交物
 - 任务目标
 - 允许做
 - 禁止做
@@ -117,6 +123,7 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 请读取：
 - CURRENT_STATUS.md
 - AGENTS.md
+- workflow/algo_b_teaching_delivery_plan.md
 - workflow/ACTIVE_TASK.md
 - workflow/task_state_machine.md
 - workflow/risk_gate_matrix.md

@@ -19,6 +19,7 @@
 - `../vector_store/`：本仓库资料生成的本地检索索引。
 - `../tools/ask_local.py`：本地资料检索问答工具。
 - `../CURRENT_STATUS.md`：项目总控页，记录当前阶段、缺口和下一步。
+- `../workflow/algo_b_teaching_delivery_plan.md`：B 算法/主控计划的执行版，规定教学进度、补课机制、每课/每周上交物和禁止推进范围。
 - `../workflow/phase_gate_checklist.md`：阶段闸门表，判断能不能进入下一阶段。
 - `../workflow/intake_checklist.md`：首次资料导入清单，判断新资料应该放哪里。
 

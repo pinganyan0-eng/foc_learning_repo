@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
 #include <string.h>
 
 /* USER CODE END Includes */
@@ -39,6 +40,8 @@ typedef enum
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define APP_CMD_LINE_MAX 32U
+#define APP_TARGET_RPM_MIN (-4000L)
+#define APP_TARGET_RPM_MAX 4000L
 
 /* USER CODE END PD */
 
@@ -60,8 +63,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 static const char *AppModeName(app_mode_t mode);
-static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count);
-static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count);
+static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
+static void AppFeedRxByte(uint8_t rx_ch, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
+static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
 
 /* USER CODE END PFP */
 
@@ -85,7 +89,7 @@ static const char *AppModeName(app_mode_t mode)
   }
 }
 
-static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count)
+static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm)
 {
   if (strcmp(cmd, "PING") == 0)
   {
@@ -94,6 +98,64 @@ static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mo
   else if (strcmp(cmd, "MODE?") == 0)
   {
     printf("OK unchanged mode=%u mode_name=%s\r\n",
+           (unsigned int)(*app_mode),
+           AppModeName(*app_mode));
+  }
+  else if (strncmp(cmd, "SET_RPM", 7U) == 0)
+  {
+    const char *arg = &cmd[7];
+    char *end = NULL;
+    long requested_rpm = 0L;
+
+    if (*arg != ' ')
+    {
+      printf("ERR parse cmd=SET_RPM\r\n");
+      return;
+    }
+
+    while (*arg == ' ')
+    {
+      arg++;
+    }
+
+    requested_rpm = strtol(arg, &end, 10);
+    if ((end == arg) || (*arg == '\0'))
+    {
+      printf("ERR parse cmd=SET_RPM\r\n");
+      return;
+    }
+
+    while (*end == ' ')
+    {
+      end++;
+    }
+
+    if (*end != '\0')
+    {
+      printf("ERR parse cmd=SET_RPM\r\n");
+      return;
+    }
+
+    if ((requested_rpm < APP_TARGET_RPM_MIN) || (requested_rpm > APP_TARGET_RPM_MAX))
+    {
+      printf("ERR range cmd=SET_RPM rpm=%ld min=%ld max=%ld\r\n",
+             requested_rpm,
+             APP_TARGET_RPM_MIN,
+             APP_TARGET_RPM_MAX);
+      return;
+    }
+
+    if (*app_mode == APP_MODE_IDLE)
+    {
+      printf("ERR bad_state cmd=SET_RPM mode=%u mode_name=%s\r\n",
+             (unsigned int)(*app_mode),
+             AppModeName(*app_mode));
+      return;
+    }
+
+    *target_rpm = (int32_t)requested_rpm;
+    printf("OK target_rpm=%ld mode=%u mode_name=%s\r\n",
+           (long)(*target_rpm),
            (unsigned int)(*app_mode),
            AppModeName(*app_mode));
   }
@@ -116,11 +178,14 @@ static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mo
   }
   else if (strcmp(cmd, "STOP") == 0)
   {
+    *target_rpm = 0;
+
     if (*app_mode == APP_MODE_IDLE)
     {
-      printf("OK unchanged mode=%u mode_name=%s\r\n",
+      printf("OK unchanged mode=%u mode_name=%s target_rpm=%ld\r\n",
              (unsigned int)(*app_mode),
-             AppModeName(*app_mode));
+             AppModeName(*app_mode),
+             (long)(*target_rpm));
     }
     else
     {
@@ -137,33 +202,39 @@ static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mo
   }
 }
 
-static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count)
+static void AppFeedRxByte(uint8_t rx_ch, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm)
 {
   static char rx_line[APP_CMD_LINE_MAX];
   static uint32_t rx_len = 0U;
+
+  if ((rx_ch == '\r') || (rx_ch == '\n'))
+  {
+    if (rx_len > 0U)
+    {
+      rx_line[rx_len] = '\0';
+      AppHandleCommand(rx_line, app_mode, mode_change_count, target_rpm);
+      rx_len = 0U;
+    }
+  }
+  else if (rx_len < (APP_CMD_LINE_MAX - 1U))
+  {
+    rx_line[rx_len] = (char)rx_ch;
+    rx_len++;
+  }
+  else
+  {
+    rx_len = 0U;
+    printf("ERR line_too_long\r\n");
+  }
+}
+
+static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm)
+{
   uint8_t rx_ch = 0U;
 
   while (HAL_UART_Receive(&hcom_uart[COM1], &rx_ch, 1U, 0U) == HAL_OK)
   {
-    if ((rx_ch == '\r') || (rx_ch == '\n'))
-    {
-      if (rx_len > 0U)
-      {
-        rx_line[rx_len] = '\0';
-        AppHandleCommand(rx_line, app_mode, mode_change_count);
-        rx_len = 0U;
-      }
-    }
-    else if (rx_len < (APP_CMD_LINE_MAX - 1U))
-    {
-      rx_line[rx_len] = (char)rx_ch;
-      rx_len++;
-    }
-    else
-    {
-      rx_len = 0U;
-      printf("ERR line_too_long\r\n");
-    }
+    AppFeedRxByte(rx_ch, app_mode, mode_change_count, target_rpm);
   }
 }
 
@@ -236,6 +307,9 @@ int main(void)
   /* 统计模式切换次数, 用来验证状态机只在有效按键事件发生时切换 */
   uint32_t mode_change_count = 0U;
 
+  /* 当前只作为通信层学习用的模拟目标转速，不驱动电机或 PWM */
+  int32_t target_rpm = 0;
+
 
   /* Initialize led */
   BSP_LED_Init(LED_GREEN);
@@ -279,7 +353,7 @@ int main(void)
     uint32_t now = HAL_GetTick();
 
     /* 轮询接收一行串口命令；当前阶段先不用中断/DMA，方便观察命令表行为 */
-    AppPollCommand(&app_mode, &mode_change_count);
+    AppPollCommand(&app_mode, &mode_change_count, &target_rpm);
 
     /* 每 100 ms 翻转一次 LD2：亮 100 ms，灭 100 ms */
     if ((now - led_last_tick) >= 100U)
@@ -353,7 +427,7 @@ int main(void)
       report_count++;
 
       /* 每 500 ms 打印一次状态，观察两个任务的执行次数关系 */
-      printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_name=%s, mode_chg=%lu\r\n",
+      printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_name=%s, mode_chg=%lu, target_rpm=%ld\r\n",
        (unsigned long)now,
        led_state,
        (unsigned long)led_toggle_count,
@@ -362,7 +436,8 @@ int main(void)
        (unsigned long)button_press_count,
        (unsigned int)app_mode,
        AppModeName(app_mode),
-       (unsigned long)mode_change_count);
+       (unsigned long)mode_change_count,
+       (long)target_rpm);
 
 
     }

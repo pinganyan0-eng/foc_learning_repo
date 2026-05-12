@@ -291,3 +291,77 @@ Append one entry after teaching, Q&A, homework review, debugging help, or experi
 - Weak point observed: None recorded.
 - Next review: Teach AppPollCommand line assembly: receive chars, detect newline, terminate string, dispatch command, handle overflow.
 - Source: User answer in Codex chat on 2026-05-11
+## 2026-05-12 NUCLEO UART DMA + IDLE learning closeout
+
+- Topic: UART receive path from polling command assembly into DMA + IDLE batching.
+- Summary: User confirmed the previous AppPollCommand line-assembly material was already covered, then passed a short check on newline detection, string termination, command dispatch, and overflow handling. The lesson moved into DMA + IDLE: user correctly identified DMA as the byte mover into `rx_buf`, IDLE as the batch-complete signal, and the need to restart DMA + IDLE reception after handling each batch.
+- Evidence level: L2
+- Confidence: medium
+- Weak point observed: User initially answered that `Size = 6` should process 5 bytes, showing a count-versus-final-index mix-up. After correction, user answered that `Size = 3` processes indices `0, 1, 2`, showing immediate repair at concept-check level.
+- Next review: Before showing real HAL callback code, ask the user to restate: `Size` is count, the loop condition is `i < Size`, and the final processed index is `Size - 1`.
+- Not validated: No firmware edit, build, flash, or VOFA+/serial log validation was performed in this ChatGPT turn.
+- Source: `learning/session_notes/2026-05-12_uart_dma_idle.md` from PR #2.
+
+## 2026-05-12 NUCLEO UART receive layering and Codex workflow correction
+
+- Topic: UART receive layering from polling input toward DMA + IDLE.
+- Summary: User corrected the `Size = 10` check to indices `0..9` with final index `9`, explained that a partial `PI` batch must wait for `\n`, and identified `'\0'` as the C string terminator before `strcmp`/`%s` use. User also called out that the dual-teacher workflow had drifted; Codex switched from chat-only teaching to repo execution, refactored `AppFeedRxByte(...)` out of `AppPollCommand(...)`, and rebuilt the NUCLEO baseline successfully.
+- Evidence level: L3
+- Confidence: medium
+- Weak point observed: Earlier `Size` count/index mix-up is repaired at guided-example level, but still needs transfer to real callback code and serial-log validation before closing.
+- Next review: Read the new `AppFeedRxByte` / `AppPollCommand` split and explain how a future DMA callback can feed `rx_buf[0..Size-1]` into the same parser without changing `AppHandleCommand`.
+- Validation: `cmake --build build\Debug` succeeded after the refactor; no flash or VOFA+/serial-log validation was performed in this turn.
+- Source: Codex teaching, code change, and build on 2026-05-12.
+
+## 2026-05-12 STM32 realtime boundary and ESP32 gateway command split
+
+- Topic: STM32 realtime boundary for UART/JSON gateway commands.
+- Summary: User correctly answered that a JSON speed command should be handled on the ESP32 gateway side first, then sent to STM32 as a simplified command, rather than being parsed inside the STM32 FOC/JEOC interrupt.
+- Evidence level: L2
+- Confidence: medium
+- Weak point observed: None recorded.
+- Next review: Map one gateway command into a safe STM32-side command format and identify which layer may parse JSON, which layer may update command variables, and which layer must remain hard realtime.
+- Source: User answer in Codex chat on 2026-05-12.
+
+## 2026-05-12 STM32 command range guard
+
+- Topic: STM32 communication-layer command validation.
+- Summary: User correctly answered that an obviously unreasonable target speed such as `rpm = 999999` should be rejected or clamped in the STM32 communication layer before it can affect FOC control. User then correctly classified `IDLE + SET_RPM 1200` as `ERR bad_state`, because the system has not entered an armed/pre-run state, `ARMED + SET_RPM 999999` as `ERR range` because the state is acceptable but the value is out of range, and `SET_RPM abc` as a parse error.
+- Evidence level: L2
+- Confidence: medium
+- Weak point observed: None recorded.
+- Next review: Define a simple accepted/rejected response table for a future `SET_RPM` command before wiring it to any motor-control variable.
+- Source: User answer in Codex chat on 2026-05-12.
+
+## 2026-05-12 NUCLEO simulation-only SET_RPM implementation
+
+- Topic: Communication-layer `SET_RPM` guard implementation in the NUCLEO baseline.
+- Summary: Codex implemented a learning-only `SET_RPM <rpm>` command in `AppHandleCommand`. It parses the numeric argument, rejects malformed input, enforces the documented `-4000..4000` range, rejects valid speed targets in `IDLE`, updates only a simulated `target_rpm` variable in `ARMED`/`RUN_SIM`, and clears that target on `STOP`.
+- Evidence level: L0 for user execution, L3 for code path implementation.
+- Confidence: medium.
+- Weak point observed: None recorded.
+- Next review: Flash/run the NUCLEO baseline and validate `SET_RPM abc`, `SET_RPM 999999`, `SET_RPM 1200` in `IDLE`, then `ARM` + `SET_RPM 1200` over COM5/VOFA+.
+- Validation: `cmake --build build\Debug` succeeded after the implementation; no flash or serial-log validation was performed in this turn.
+- Source: Codex code change and build on 2026-05-12.
+
+## 2026-05-12 NUCLEO SET_RPM serial validation
+
+- Topic: Board-level serial validation of the learning-only `SET_RPM` command.
+- Summary: Codex flashed the NUCLEO baseline through ST-LINK mass storage and validated COM5 command responses. `SET_RPM abc` returned parse error, `SET_RPM 999999` returned range error, `IDLE + SET_RPM 1200` returned bad state, `ARM` entered `ARMED`, `ARMED + SET_RPM 1200` updated `target_rpm=1200`, `STOP` returned to `IDLE` and cleared `target_rpm=0`, and `PING` returned `PONG`.
+- Evidence level: L5 for firmware behavior, L2 for user's command-guard reasoning.
+- Confidence: high for NUCLEO serial command behavior; not evidence for motor or power-stage behavior.
+- Weak point observed: None recorded.
+- Next review: Explain why this validates only the communication/state guard layer, then move toward UART DMA + IDLE receive without changing the safety boundary.
+- Validation: Evidence saved in `experiments/2026-05-09_nucleo_baseline/logs/2026-05-12_com5_set_rpm_validation.md`.
+- Source: Codex COM5 serial validation on 2026-05-12.
+
+## 2026-05-12 NUCLEO STOP side-effect practice and dual-teacher handoff
+
+- Topic: Reading command side effects in the `STOP` branch.
+- Summary: User correctly identified that `*target_rpm = 0` is the unconditional safe side effect in `STOP`, while `*app_mode = APP_MODE_IDLE` only executes in the non-IDLE branch. User first predicted `ARMED + STOP` would leave `mode = ARMED`, then corrected the related `IDLE + STOP` and `mode_change_count` checks: `IDLE + STOP` leaves `mode = IDLE`, clears `target_rpm`, and does not increment `mode_change_count`.
+- Evidence level: L2
+- Confidence: medium.
+- Weak point observed: STOP branch execution is partly repaired, but one transfer check remains for non-IDLE STOP paths.
+- Next review: In the ChatGPT-led concept turn, classify PING, MODE?, ARM, SET_RPM, and STOP as read-only, safety command, or guarded command; then predict final `mode`, `target_rpm`, and `mode_change_count` for both `IDLE + STOP` and `ARMED + STOP`.
+- Workflow note: User again reminded Codex to preserve the dual-teacher split. Codex should stop at repo sync/handoff when the next step is concept teaching, and ChatGPT should lead the next concept segment.
+- Source: User answers and workflow correction in Codex chat on 2026-05-12.

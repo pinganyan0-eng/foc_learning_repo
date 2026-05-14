@@ -1,6 +1,6 @@
 # MASTERY_MAP
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 This file summarizes what has evidence, what is only partially repaired, and what must not be claimed yet. It complements `weak_points.md`: weak points show repair targets; this map prevents repeated low-value review of already demonstrated basics.
 
@@ -30,13 +30,14 @@ This file summarizes what has evidence, what is only partially repaired, and wha
 | P2 no-power artifact planning | User listed pin map, motor-parameter table/template, no-power configuration file, risk/no-go checklist, and Motor Profiler plan; user separated real measured motor parameters as later hardware evidence | L3-L4 | Begin creating the P2 artifact set; keep measured motor parameters explicitly out of P2. |
 | P2 MCSDK config evidence boundary | User explained that `.stmcx` proves planned/saved configuration choices such as MCU, PWM pins, current sensing, Hall/sensorless mode, and protection input; user also stated that a compiled MCSDK project still lacks nFAULT, PWM, sensing, Hall, power-board, current-limit, and rollback evidence | L3-L4 | Next review should use a real Workbench/CubeMX screenshot or `.stmcx` and ask which fields are planning evidence versus hardware-stage proof. |
 | STDRIVE101 source ingestion | Official STDRIVE101 datasheet DS13472 Rev 2 is now in the repo-local ST mirror, hash-recorded, text-extracted, and digested for no-power review | L5 for source-management workflow | Use the local PDF/text/digest for gate-driver protection review; do not treat it as hardware validation. |
+| P2 NUCLEO CubeMX hands-on pin evidence | User used the NUCLEO-G474RE Board Selector flow, identified SWD, VCP, SWO, `PB12/TIM1_BKIN`, and `PB14/TIM1_CH2N`, saved a readable `.ioc` draft, and Codex captured that `.ioc` reopened in CubeMX `Pinout & Configuration` | L4 for hands-on configuration evidence classification; L5 for saved repo artifact and GUI fallback evidence | Move next to MCSDK/Workbench MotorControl evidence, CN8/EDA/netlist, and STDRIVE101 protection-path evidence; do not repeat basic board-selector navigation. |
 
 ## Active Transfer Gaps
 
 | Gap | Why It Still Matters | Next Proof Needed |
 | --- | --- | --- |
 | Branch condition vs side effect in future code | Current UART command and callback examples are repaired, but this distinction must be rechecked when real HAL callback or new commands are implemented | During implementation/review, mark match condition, guard, assignment side effect, counter side effect, response line, and callback-only responsibilities. |
-| P2 artifact implementation | First artifact file exists and now contains current no-power tool/status evidence, baseline `.ioc` readback, pin/config draft, ST source cross-check, local ST PDF mirror note, pin-function conflict resolution, and expanded future Motor Profiler stop/rollback plan; GUI/config evidence and board-routing proof are still missing | Add Workbench/CubeMX screenshot or `.stmcx`, confirm `PB12/TIM1_BKIN` nFAULT and `PB14/TIM1_CH2N` choices against CubeMX/Workbench plus CN8/EDA/netlist, and keep all hardware actions blocked. |
+| P2 artifact implementation | First artifact file exists and now contains current no-power tool/status evidence, baseline `.ioc` readback, pin/config draft, ST source cross-check, local ST PDF mirror note, pin-function conflict resolution, expanded future Motor Profiler stop/rollback plan, dedicated no-power draft directory, proven CubeMX launch path, a saved NUCLEO-G474RE CubeMX `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, and a Workbench entry probe showing MotorControl package data exists. `.stmcx`, MCSDK MotorControl config screenshot, and board-routing proof are still missing | Add MCSDK/Workbench `.stmcx` or MotorControl config screenshot, confirm `PB12/TIM1_BKIN` nFAULT and `PB14/TIM1_CH2N` against CN8/EDA/netlist, and keep all hardware actions blocked. |
 
 ## Do Not Claim Yet
 

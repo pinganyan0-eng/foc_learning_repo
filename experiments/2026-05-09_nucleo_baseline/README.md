@@ -1,5 +1,17 @@
 # 2026-05-09 NUCLEO-G474RE baseline
 
+## 2026-05-14 Firmware Update
+
+- UART command reception moved from polling to LPUART1 RX DMA + IDLE.
+- The DMA/IDLE callback only moves bytes into a ring buffer; command parsing
+  and `printf()` stay in the main loop.
+- Debug build passed after the change:
+  `nucleo_g474re_baseline.elf`, RAM 2552 B, FLASH 23652 B.
+- Build log:
+  `logs/2026-05-14_uart_dma_idle_build.md`.
+- This remains a NUCLEO USB/ST-LINK VCP firmware step. It is not power-board,
+  motor, Gate PWM, Motor Profiler, Hall closed-loop, or SMO validation.
+
 ## 1. 实验目标
 
 - 日期：2026-05-09

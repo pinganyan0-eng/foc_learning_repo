@@ -515,3 +515,93 @@ Append one entry after teaching, Q&A, homework review, debugging help, or experi
 - Weak point observed: No new weak point. Keep reinforcing that configuration artifacts prove planning/build readiness only, not motor-control behavior.
 - Next review: When Workbench/CubeMX screenshot or `.stmcx` evidence arrives, ask the learner to identify which fields are configuration evidence and which still require board-routing or hardware-stage proof.
 - Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-14 P2 MCSDK no-power practice start
+
+- Topic: Moving from P2 concept checks into no-power MCSDK configuration practice.
+- Summary: User asked to stop extending concept-only evidence drills and start practical work. Codex kept the P2 safety boundary, created `apps/stm32_g474_foc/mcsdk_no_power_precheck/`, wrote `config_draft.md` and `tool_probe_2026-05-14.md`, confirmed CubeMX path `F:\STMCubeMX\STM32CubeMX.exe`, and launched CubeMX to a `javaw.exe` process. Repo search still found no `.stmcx`, and no standalone Workbench executable was found under `MCSDK_v6.4.2-Full`.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for local file/tool facts; medium for GUI readiness because no screenshot or saved config is present yet.
+- Weak point observed: No new learner weak point. The practical gap remains P2 artifact implementation.
+- Next review: Once a screenshot or `.stmcx` is captured, ask the learner to classify it as configuration/tool evidence and list which hardware-stage proofs remain blocked.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 NUCLEO UART DMA + IDLE implementation
+
+- Topic: Moving project firmware forward instead of adding more tool screenshots.
+- Summary: Codex updated `apps/stm32_g474_foc/nucleo_g474re_baseline/Core/Src/main.c` so COM1 receive now uses LPUART1 RX DMA + IDLE. The callback copies bytes into a ring buffer and restarts receive-to-idle DMA; the main loop drains the queue and calls the existing command parser. `stm32g4xx_it.c` and `stm32g4xx_it.h` now include `DMA1_Channel1_IRQHandler()` and `LPUART1_IRQHandler()`. Debug build passed with RAM 2552 B and FLASH 23652 B.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for compile-level firmware integration. Board-level serial behavior still needs a COM5 run if the user wants live confirmation.
+- Weak point observed: No new learner weak point.
+- Next review: If a live NUCLEO check is run later, verify that `PING`, `MODE?`, `ARM`, `SET_RPM`, and `STOP` keep the same semantics under DMA + IDLE.
+- Source: Codex execution and Debug build in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 UART protocol line framer model
+
+- Topic: Advancing the ESP32/STM32 UART protocol path with host-verifiable code.
+- Summary: Codex added `LineFramer` to `src/protocol_model.py` and expanded `tests/test_protocol_model.py` from 14 to 19 tests. The model accepts DMA/IDLE-like byte chunks, emits complete newline-terminated frames, ignores empty lines, drops oversize partial frames, discards overlong data until line end, and recovers for later frames. The full test suite now has 24 tests including workflow-gate checks.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for host protocol behavior because `python -m unittest discover -s tests` passed.
+- Weak point observed: No new learner weak point.
+- Next review: When embedded C builds can be rerun, move command parsing out of `main.c` toward the tested line-framing/protocol model.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 CubeMX Home screenshot capture
+
+- Topic: Turning the opened CubeMX GUI into repo-visible P2 evidence.
+- Summary: Codex cropped the visible CubeMX Home window from the desktop screenshot and saved it as `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_home.png`. Codex also added `gui_capture_checklist_2026-05-14.md` to define the next allowed GUI-only capture targets and forbidden hardware actions.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for the screenshot file and repo artifact. The screenshot is GUI launch evidence only; it is not an MCSDK draft configuration screenshot or `.stmcx`.
+- Weak point observed: No new learner weak point. The practical gap is still a saved Workbench/CubeMX draft or exact GUI block record.
+- Next review: After the draft screenshot or `.stmcx` exists, ask the learner to classify each field as configuration evidence, board-routing evidence, or later powered-hardware evidence.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 Codex dual-teacher gate hardening
+
+- Topic: Preventing Codex from drifting into silent engineering execution.
+- Summary: User corrected that Codex must not only do project work; each continuation must keep the teaching role visible. Codex added `workflow/codex_dual_teacher_execution_gate.md`, linked it from `AGENTS.md`, `workflow/teaching_contract.md`, `workflow/prompt_recipes.md`, `workflow/session_close_checklist.md`, and the project Skill source, then added `tests/test_workflow_contracts.py` to guard the rule.
+- Evidence level: L5 for repo/workflow implementation by Codex; no new learner mastery claim.
+- Confidence: high for repository rule hardening once tests pass.
+- Weak point observed: No learner weak point. The assistant workflow risk is now tracked as a repo rule rather than a chat-only reminder.
+- Next review: On the next `继续吧` turn, Codex must begin with `项目目标` / `学习目标` / `修改范围` / `禁止范围` before tool use or edits.
+- Source: User correction and Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 pin/config safety review start
+
+- Topic: Moving beyond toolchain navigation into the next P2 engineering review ring.
+- Summary: User clarified they are already familiar with the toolchain, so Codex should stop hand-holding CubeMX/CubeIDE navigation and begin the next stage directly. Codex added `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md`, which defines evidence classes, acceptance rules, fail conditions, and hard stops for `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3`, `PB3`, `DT/MODE`, and STDRIVE101 protection paths.
+- Evidence level: L5 for repo/workflow implementation by Codex; no new learner mastery claim.
+- Confidence: high for repo artifact creation and source linkage; hardware confidence remains P2-only because no `.stmcx`, CN8/EDA/netlist, continuity check, power-board connection, or powered log exists.
+- Weak point observed: No learner weak point. Teaching preference recorded separately: skip basic toolchain navigation unless explicitly requested.
+- Next review: Use the pin/config safety review as the next checkpoint. Collect `.stmcx` or config screenshot, CN8/EDA/netlist routing evidence, and STDRIVE101 `nFAULT` / `DT/MODE` / protection evidence before trusting generated MCSDK configuration.
+- Source: User correction and Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 NUCLEO CubeMX hands-on draft
+
+- Topic: Turning the P2 no-power lesson into a user-performed CubeMX Board Selector draft.
+- Summary: User corrected the workflow from bare MCU selection to the real `NUCLEO-G474RE` board path, then used CubeMX Pinout to inspect and save a no-power draft. User-provided GUI screenshots showed `PA13/PA14` as SWD, `PA2/PA3` as VCP, `PB3` as SWO, `PB12` as `TIM1_BKIN`, and `PB14` as `TIM1_CH2N`. Codex read back the saved `.ioc` at `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc` and confirmed the same assignments.
+- Evidence level: L4 for learner hands-on recognition of NUCLEO board-level pin ownership and CubeMX config evidence; L5 for repo/tool evidence because the `.ioc` is saved and readable.
+- Confidence: high for CubeMX config-layer evidence; hardware confidence remains P2-only because there is still no `.stmcx`, CN8/EDA/netlist, continuity check, power-board connection, or powered log.
+- Weak point observed: No new learner weak point. The useful next check is whether the learner can explain why the saved `.ioc` proves configuration intent but not STDRIVE101 wiring or safe motor behavior.
+- Next review: Ask the learner to classify `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO as configuration evidence, board-ownership evidence, or later hardware-stage proof.
+- Source: User hands-on CubeMX screenshots and Codex `.ioc` readback on 2026-05-14.
+
+## 2026-05-14 P2 CubeMX `.ioc` GUI capture
+
+- Topic: Converting the saved NUCLEO `.ioc` into repo-visible GUI fallback evidence.
+- Summary: Codex launched `F:\STMCubeMX\STM32CubeMX.exe` with the saved NUCLEO-G474RE `.ioc`, captured CubeMX `Pinout & Configuration` screenshots, and wrote `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md`. The screenshots show the `.ioc` open in CubeMX with `STM32G474RETx - NUCLEO-G474RE`; `.ioc` readback still confirms `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO. Repo search still found no `.stmcx`, and no MotorControl configuration page was captured.
+- Evidence level: L5 for repo/tool evidence that the `.ioc` can be reopened and captured in CubeMX; no new learner mastery claim.
+- Confidence: high for the screenshot files and `.ioc` readback. This remains fallback GUI evidence only, not MCSDK/Workbench MotorControl evidence.
+- Weak point observed: No new learner weak point. The practical gap remains collecting real `.stmcx` or MotorControl screenshot, CN8/EDA/netlist, and STDRIVE101 protection-path evidence.
+- Next review: Ask the learner to explain why a CubeMX pinout screenshot plus `.ioc` readback still cannot prove board wiring, Motor Profiler readiness, or safe motor-control behavior.
+- Source: Codex GUI screenshot capture and repo search in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 Workbench entry probe
+
+- Topic: Turning the missing Workbench / `.stmcx` entry into a concrete no-power blocker.
+- Summary: Codex added `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md`. Targeted checks covered the repo, `F:\STMCubeMX`, the MCSDK package, VS Code STM32 extension folders, `.stm32cubemx`, and common ST program roots. The probe confirmed MCSDK `MotorControl` package data exists, including `MotorControl_Configs.xml`, `MotorControl_Modes.xml`, `MCSDK/`, `templates/`, `libMP/`, and `libHSO/`, but still found no `.stmcx`, no standalone Workbench launcher, and no MotorControl configuration page evidence.
+- Evidence level: L5 for repo/tool evidence that MotorControl package data is installed; no new learner mastery claim.
+- Confidence: high for the checked local paths. This remains package-presence evidence only, not saved project configuration evidence.
+- Weak point observed: No new learner weak point. The next practical gap is to obtain either a real `.stmcx`, a MotorControl screenshot, or board-routing evidence.
+- Next review: Ask the learner to distinguish package data, saved configuration, generated firmware, and hardware validation.
+- Source: Codex targeted local path probe in `foc_learning_repo` on 2026-05-14.

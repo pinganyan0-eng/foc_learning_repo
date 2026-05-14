@@ -50,6 +50,38 @@ This card does not prove motor-control behavior. It only proves that the learner
 4. Motor Profiler plan listing required hardware, power limits, motor information, and stop conditions.
 5. Risk/no-go checklist.
 
+## 2026-05-14 No-Power Practice Result
+
+Codex executed the P2 no-power practice line without touching the existing NUCLEO baseline and without any hardware action.
+
+| Result | Evidence | P2 Meaning |
+| --- | --- | --- |
+| Independent draft directory created | `apps/stm32_g474_foc/mcsdk_no_power_precheck/` | There is now a safe place for MCSDK planning artifacts. This is not a generated MCSDK project. |
+| Config draft written | `apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md` | The current draft keeps `PB12/TIM1_BKIN`, rejects `PC5` for nFAULT, excludes `PA2/PA3` as default FOC UART, and keeps `PB3` Hall B tied to a SWO release/isolation decision. |
+| Pin/config safety review added | `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` | The next-ring review now defines evidence classes, acceptance rules, failure conditions, and hard stops for `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3`, `PB3`, `DT/MODE`, and STDRIVE101 protection paths. |
+| Tool probe written | `apps/stm32_g474_foc/mcsdk_no_power_precheck/tool_probe_2026-05-14.md` | The probe records local tool truth for this turn. |
+| CubeMX launch path proven | `F:\STMCubeMX\STM32CubeMX.exe`; launched process `F:\STMCubeMX\jre\bin\javaw.exe` | CubeMX can be opened for user-visible GUI work. A screenshot or saved config is still required. |
+| Workbench / `.stmcx` still missing | Repo search still found no `.stmcx`; no standalone Workbench executable was found under `MCSDK_v6.4.2-Full`. | Do not claim an MCSDK Workbench project or generated motor-control project exists. |
+| NUCLEO CubeMX draft saved | `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc` | User completed the hands-on Board Selector flow. The `.ioc` saves `PA13/PA14` as SWD, `PA2/PA3` as VCP, `PB3` as SWO, `PB12` as `TIM1_BKIN`, and `PB14` as `TIM1_CH2N`. This is CubeMX config evidence only, not MCSDK MotorControl or hardware validation. |
+| CubeMX `.ioc` GUI capture added | `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_launch_attempt.png`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_pinout_active_window.png` | CubeMX reopened the saved `.ioc` to `Pinout & Configuration` and the window title showed `STM32G474RETx - NUCLEO-G474RE`. This is fallback GUI evidence for the `.ioc`; repo search still found no `.stmcx`, and no MotorControl configuration page was captured. |
+| Workbench entry probe added | `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md` | Targeted checks found installed MotorControl package XML/templates/libraries, but no repo `.stmcx`, no standalone Workbench launcher under the checked paths, and no MotorControl configuration page evidence. |
+| CN8 / STDRIVE101 route review added | `apps/stm32_g474_foc/mcsdk_no_power_precheck/cn8_stdrive101_route_review_2026-05-14.md` | Current repo evidence is still only screenshot-level clue plus datasheet review requirements. No accepted current EDA, schematic PDF, netlist, or high-resolution route crop is in the repo; the excluded WeChat-side `netlist_PADS.net` candidate is not used as current board evidence. |
+
+No 24V, power-board connection, motor connection, PWM Gate output, Motor Profiler run, Hall closed-loop validation, or SMO validation was performed.
+
+## 2026-05-14 P2 证据包
+
+当前 P2 证据包是
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md`.
+它记录仓库里现在真正可见的证据，以及信任任何生成 MCSDK 配置前的硬阻塞。
+
+| 证据区域 | 当前结果 | 当前决定 |
+| --- | --- | --- |
+| Workbench/CubeMX 配置 | 仓库里没有 `.stmcx`；已有 NUCLEO-G474RE CubeMX `.ioc` 草案，保存了 `PB12/TIM1_BKIN`、`PB14/TIM1_CH2N`、`PA2/PA3` VCP 和 `PB3` SWO；CubeMX `Pinout & Configuration` 截图证明该 `.ioc` 可由 GUI 打开；Workbench entry probe 证明 MotorControl package 数据存在但没有发现 Workbench launcher 或 `.stmcx`。 | 可以信任“CubeMX 引脚草案已保存并可 GUI 查看、MCSDK MotorControl package 数据已安装”，继续阻塞“MCSDK MotorControl 项目配置可信”的结论。 |
+| CN8 / EDA / netlist 走线 | 仓库可见的只有功率板原理图截图和元数据；没有 EDA 源文件、原理图 PDF、PCB、Gerber 或 netlist。 | 暂时不能信任 STM32 引脚真的连到目标 STDRIVE101 网络。 |
+| STDRIVE101 保护路径 | 本地已有官方 PDF、提取文本和 digest，但缺少板级 `DT/MODE`、`nFAULT`、`REG12`、`CP`、`SCREF`、`VS/VM`、bootstrap、standby、VDS 监测证据。 | digest 只能当审查清单，不能当板级验证。 |
+| Hall/SWO 冲突 | `PB3` 只有在 SWO 已释放或隔离后才是 Hall B 候选；当前没有板子设置证据。 | 不声称 Hall 输入已经可用。 |
+
 ## 2026-05-13 Tool Version / Status Table
 
 Scope: this is a local no-power inspection. It records what the current Windows shell and repo can prove today; it does not prove that MCSDK Workbench can generate a motor-control project yet.
@@ -58,9 +90,9 @@ Scope: this is a local no-power inspection. It records what the current Windows 
 | --- | --- | --- | --- |
 | VS Code app / `code` CLI | `code` is not in PATH. Standard `Code.exe` / `code.cmd` locations under `AppData\\Local\\Programs\\Microsoft VS Code` and `C:\\Program Files\\Microsoft VS Code` were not found from this shell. | Editor launch path not verified in this turn. | Do not depend on `code` CLI for P2 evidence. If GUI is used later, capture the actual editor path or screenshot. |
 | STM32 VS Code extension set | Extension folders exist under `C:\\Users\\gregrg\\.vscode\\extensions`, including `stmicroelectronics.stm32-vscode-extension-3.9.0`, `stm32cube-ide-core-1.3.0-win32-x64`, `stm32cube-ide-build-cmake-1.45.0-win32-x64`, `stm32cube-ide-debug-stlink-gdbserver-1.3.0`, `ms-vscode.cmake-tools-1.23.52`, and `marus25.cortex-debug-1.12.1`. | Extension files are installed locally. | Treat as installed, but still capture a VS Code extension screenshot before using it as final P2 evidence. |
-| STM32CubeMX | `C:\\Users\\gregrg\\.stm32cubemx\\mxinstallversion.txt` reports `STM32CubeMX Without Administration rights 6.17.0-RC5`. `STM32CubeMX.log` shows the NUCLEO baseline was generated on 2026-05-09 with STM32Cube FW_G4 V1.6.2 and CMake/GCC output. `STM32CubeMX` is not in PATH. | Install metadata and generation log exist; executable launch path is not verified from shell. | Use the existing `.ioc` as readback evidence. Before final P2 closeout, add a CubeMX GUI screenshot or exact launch path. |
+| STM32CubeMX | `C:\\Users\\gregrg\\.stm32cubemx\\mxinstallversion.txt` reports `STM32CubeMX Without Administration rights 6.17.0-RC5`. `STM32CubeMX.log` shows the NUCLEO baseline was generated on 2026-05-09 with STM32Cube FW_G4 V1.6.2 and CMake/GCC output. `F:\\STMCubeMX\\STM32CubeMX.exe` exists and was launched on 2026-05-14, starting `F:\\STMCubeMX\\jre\\bin\\javaw.exe`. | Install metadata, generation log, executable path, and launch process are now verified. | Add a CubeMX GUI screenshot or saved configuration evidence before final P2 closeout. |
 | STM32Cube FW_G4 | `C:\\Users\\gregrg\\STM32Cube\\Repository\\STM32Cube_FW_G4_V1.6.2` exists. CubeMX log also records FW_G4 V1.6.2 during baseline generation. | Available locally. | OK as the current firmware package for no-power config review. |
-| MCSDK / MotorControl package | `C:\\Users\\gregrg\\STM32Cube\\Repository\\MCSDK_v6.4.2-Full\\MotorControl` exists and contains `MotorControl_Configs.xml`, `MotorControl_Modes.xml`, `MCSDK`, `templates`, `libMP`, and `libHSO`. A 2026-05-13 shell probe found no `.exe`, `.bat`, `.cmd`, or `.jar` under `MCSDK_v6.4.2-Full`, and no `.stmcx` in the repo or MCSDK package. | MCSDK package files are present, but Workbench GUI / `.stmcx` generation is still not verified. | Start with a config draft only. Next P2 evidence should be a Workbench screenshot or real `.stmcx` saved from the GUI. Do not claim GUI readiness from package files alone. |
+| MCSDK / MotorControl package | `C:\\Users\\gregrg\\STM32Cube\\Repository\\MCSDK_v6.4.2-Full\\MotorControl` exists and contains `MotorControl_Configs.xml`, `MotorControl_Modes.xml`, `MCSDK`, `templates`, `libMP`, and `libHSO`. 2026-05-13 and 2026-05-14 shell probes found no `.exe`, `.bat`, `.cmd`, `.jar`, or `.stmcx` under `MCSDK_v6.4.2-Full`, and no `.stmcx` in the repo. | MCSDK package files are present, but Workbench GUI / `.stmcx` generation is still not verified. | Use the repo draft only until a Workbench screenshot or real `.stmcx` is captured. Do not claim Workbench project readiness from package files alone. |
 | Motor Profiler | MCSDK package contains profiler-related files, but no live profiler run exists in this repo. UM3027 shows Workbench can launch Motor Profiler from the GUI home area, but that is a future hardware-stage action. | Planning only. | Do not run Profiler in P2. Keep it as a future P3 plan requiring motor, power chain, current limit, stop conditions, and rollback evidence. |
 | System CMake | `C:\\Program Files\\CMake\\bin\\cmake.exe`; `cmake --version` returned `4.3.2`. | Available in PATH. | OK for shell-side build orchestration when a generated no-power project exists. |
 | Ninja | `ninja` is not in PATH in this shell. Prior `workflow/windows_toolchain_status.md` records a VS Code bundle Ninja `1.13.2`, but this turn did not locate the executable. | Current shell cannot run it directly. | Re-verify the VS Code bundle path before claiming P2 build readiness. |
@@ -87,6 +119,43 @@ Decision: keep Workbench/CubeMX evidence open. The next valid evidence must be o
 - an exact, reproducible launch path plus captured version/config screen.
 
 This is a P2 blocker for claiming the MCSDK configuration is generated. It does not block continuing the written no-power risk plan.
+
+## 2026-05-14 Workbench / CubeMX Follow-up Probe
+
+| Probe | Result | P2 Meaning |
+| --- | --- | --- |
+| CubeMX executable path | `F:\STMCubeMX\STM32CubeMX.exe` exists. | CubeMX can be launched from a reproducible local path. |
+| CubeMX launch | `Start-Process -FilePath 'F:\STMCubeMX\STM32CubeMX.exe'` started `F:\STMCubeMX\jre\bin\javaw.exe`. | GUI opened to a visible Home page; a later NUCLEO-G474RE CubeMX `.ioc` draft was saved. |
+| CubeMX Home screenshot | `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_home.png` | Captures CubeMX Home and recent projects. This is GUI launch evidence only, not a saved MCSDK configuration. |
+| CubeMX `.ioc` Pinout screenshots | `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_launch_attempt.png`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_pinout_active_window.png` | Captures the saved NUCLEO `.ioc` opened at `Pinout & Configuration`. This confirms GUI visibility of the saved `.ioc`, not MotorControl/Workbench configuration. |
+| GUI capture result | `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md` | Records the fallback evidence and the remaining `.stmcx` / MotorControl blocker. |
+| Workbench entry probe | `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md` | Records targeted search for Workbench launcher and `.stmcx`. MotorControl package XML/templates/libraries exist, but no saved Workbench project or launcher was identified. |
+| MCSDK no-power directory | `apps/stm32_g474_foc/mcsdk_no_power_precheck/` created. | This is a planning directory, not generated firmware. |
+| Config draft | `apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md` created. | Draft decisions are now explicit and reviewable. |
+| Tool probe note | `apps/stm32_g474_foc/mcsdk_no_power_precheck/tool_probe_2026-05-14.md` created. | Local GUI/tool evidence for this turn is preserved. |
+| Repo `.stmcx` status | Still absent. | P2 cannot claim Workbench configuration generation. |
+
+## 2026-05-14 NUCLEO Board Selector Hands-on Draft
+
+The learner used the NUCLEO-G474RE Board Selector path and saved a no-power
+CubeMX draft at:
+
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`.
+
+Key readback:
+
+| Item | `.ioc` readback | P2 meaning |
+| --- | --- | --- |
+| Board entry | `Mcu.IP0=NUCLEO-G474RE` | This draft starts from the real development board, not a bare-MCU guess. |
+| MCU / package | `Mcu.UserName=STM32G474RETx`; `Mcu.CPN=STM32G474RET6`; `Mcu.Package=LQFP64` | Correct NUCLEO-G474RE MCU/package context. |
+| Debug pins | `PA13.Signal=SYS_JTMS-SWDIO`; `PA14.Signal=SYS_JTCK-SWCLK` | SWD must remain reserved. |
+| VCP pins | `PA2.Signal=LPUART1_TX`; `PA3.Signal=LPUART1_RX` | P1/Nucleo VCP path is visible and should not be blindly reused for FOC communication. |
+| SWO conflict | `PB3.Signal=SYS_JTDO-SWO` | `PB3` remains blocked for Hall B until SWO is released or isolated. |
+| nFAULT candidate | `PB12.Signal=TIM1_BKIN` | CubeMX accepts the preferred break-input candidate. Board routing to STDRIVE101 `nFAULT` is still unproven. |
+| V low-side candidate | `PB14.Signal=TIM1_CH2N` | CubeMX accepts the preferred V low-side PWM candidate. Board routing to the STDRIVE101 input is still unproven. |
+
+No `.stmcx`, Motor Profiler result, Hall run, power-board connection, motor
+connection, Gate PWM output, or SMO validation was produced.
 
 ## Baseline `.ioc` Readback
 
@@ -136,7 +205,7 @@ This draft is a planning artifact only. It is not a wiring instruction and must 
 | Config Area | Draft Choice | Evidence / Rationale | P2 Status |
 | --- | --- | --- | --- |
 | Project style | New MCSDK no-power project, kept separate from `nucleo_g474re_baseline` | P1 baseline has no motor-control peripherals and should remain stable. | Draft only. |
-| Suggested future path | `apps/stm32_g474_foc/mcsdk_no_power_precheck/` or final MCSDK-generated root under `apps/stm32_g474_foc/` | Keeps generated structure intact and avoids mixing P1 UART demo with MCSDK. | Do not create until Workbench/CubeMX generation is intentionally started. |
+| Suggested future path | `apps/stm32_g474_foc/mcsdk_no_power_precheck/` | Keeps generated structure intact and avoids mixing P1 UART demo with MCSDK. | Directory created for planning only. It is not a generated MCSDK project. |
 | Board mode | Start as NUCLEO-G474RE for learning, then custom-board pin review for STDRIVE101 power stage | Current repo has NUCLEO evidence and only a screenshot/line-item record for the power board. | Draft only. |
 | Current sensing | 3-shunt low-side, internal OPAMP/PGA candidate | Project facts and V9 route use G474 OPAMP/PGA and 20 mOhm shunts. | Values are placeholders until Datasheet/Workbench review. |
 | Speed feedback | Hall sensors as first closed-loop fallback; SMO/PLL only later | Project strategy is Hall first, sensorless later. | P2 may configure/plan; no Hall run. |
@@ -207,6 +276,8 @@ Passed on 2026-05-13:
 
 ## Next Step
 
-Continue P2 by capturing a Workbench/CubeMX screenshot or real `.stmcx` from the GUI. The GUI/config check must verify `PB12/TIM1_BKIN` for nFAULT, `PB14/TIM1_CH2N` versus any `PA12` alternate, `PA2/PA3` exclusion from the FOC UART plan, and any `PB3` Hall/SWO choice. Keep hardware actions blocked until the phase gate explicitly allows them.
+Continue P2 by adding the evidence that the saved NUCLEO `.ioc` and CubeMX pinout screenshots still cannot provide: a Workbench/MCSDK `.stmcx` or MotorControl configuration screenshot, plus CN8/EDA/netlist routing evidence. The next GUI/config check must verify `PB12/TIM1_BKIN` for nFAULT, `PB14/TIM1_CH2N` versus any `PA12` alternate, `PA2/PA3` exclusion from the FOC UART plan, and any `PB3` Hall/SWO choice. Keep hardware actions blocked until the phase gate explicitly allows them.
 
-If the GUI cannot be launched from shell, the next acceptable user-assisted evidence is a screenshot or saved `.stmcx` produced manually from Workbench/CubeMX. Do not mark P2 ready for generated MCSDK work until that evidence exists.
+CubeMX now has a proven launch path: `F:\STMCubeMX\STM32CubeMX.exe`, and the repository contains a saved NUCLEO `.ioc` draft at `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`. Do not mark P2 ready for generated MCSDK work until a real Workbench/MCSDK configuration artifact and board-routing evidence exist.
+
+The user has stated they are already familiar with toolchain navigation. Future teaching should skip CubeMX basics and use `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` as the next engineering checkpoint.

@@ -2,6 +2,24 @@
 
 本文件保存 ChatGPT + Codex 双师制工作流常用提示词。教学相关任务先读 `learning/NEXT_LESSON.md`、`learning/MASTERY_MAP.md` 和 `workflow/current_learning_sprint.md`；工程执行任务再读 `workflow/ACTIVE_TASK.md`、`workflow/risk_gate_matrix.md` 和 `workflow/definition_of_done.md`。
 
+## Codex：继续前硬门槛
+
+```text
+你是 Codex，不是静默工程执行器。
+
+在继续、实操、改文件、跑命令或处理硬件相关内容前，先输出四行：
+项目目标：这一步服务哪条项目主线。
+学习目标：用户这一步要看懂什么。
+修改范围：将要改哪些文件、函数、文档或命令。
+禁止范围：本轮不做哪些硬件、功率、烧录或越级动作。
+
+然后按这个形状推进：
+功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点
+
+本规则见 workflow/codex_dual_teacher_execution_gate.md。即使用户说“继续吧”
+或“直接做”，也先执行这个门槛。
+```
+
 ## ChatGPT：继续教学并写学习记录 PR
 
 ```text
@@ -151,7 +169,7 @@ https://github.com/pinganyan0-eng/foc_learning_repo
 - 修改文件列表
 - 每个文件作用
 - 运行命令和结果
-- 失败命令、报错摘要、可能原因和下一步建议
+- 失败命令、报错摘要、原因候选和下一步建议
 - 是否需要更新 workflow/evidence_register.md
 - git status 摘要
 - 建议 commit message

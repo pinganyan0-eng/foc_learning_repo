@@ -1,6 +1,6 @@
 # LEARNING_STATUS
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## Current Learning Mode
 
@@ -42,10 +42,11 @@ Current evidence includes L4 P1 concept checks for STOP side effects, DMA `Size`
 - Explaining why a generated or drafted config does not prove motor-control behavior.
 - Resolving `PA2/PA3` UART-vs-OPAMP, `PC5` nFAULT-vs-OPAMP, and `PB3` SWO-vs-Hall pin conflicts before any generated project.
 - Keeping Motor Profiler as a later hardware-stage plan with current limits, stop conditions, and abort criteria.
+- Skipping basic CubeMX/CubeIDE/VS Code navigation unless explicitly requested; the learner has stated they already know the toolchain.
 
 ## Current Execution Layer
 
 - Immediate lesson card: `learning/NEXT_LESSON.md`.
 - Mastery / not-yet-mastery map: `learning/MASTERY_MAP.md`.
 - Current sprint: `workflow/current_learning_sprint.md`.
-- Sprint status: P2 no-power precheck started; current artifact has tool/status and pin/config draft evidence, but still needs Workbench/CubeMX or `.stmcx` evidence and pin-conflict resolution.
+- Sprint status: P2 no-power precheck started; current artifact has tool/status, pin/config draft evidence, a dedicated no-power planning directory, a proven CubeMX launch path, a pin/config safety review, a saved NUCLEO-G474RE CubeMX `.ioc` draft that reads back `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO, fallback CubeMX `Pinout & Configuration` screenshots proving that `.ioc` can be reopened in the GUI, and a Workbench entry probe proving MotorControl package data exists but no `.stmcx` or launcher was found. It still needs MCSDK/Workbench `.stmcx` or MotorControl config screenshot plus board-routing confirmation.

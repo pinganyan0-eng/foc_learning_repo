@@ -71,6 +71,10 @@ Be conservative around power electronics. For PWM, dead time, overcurrent thresh
 
 For teaching, explanation, tutoring, homework review, or debugging that reveals understanding:
 
+- Before Codex edits files, runs command loops, creates artifacts, or answers hardware-adjacent questions, follow `workflow/codex_dual_teacher_execution_gate.md`.
+- For `继续吧`, `继续`, `直接做`, `开始实操`, `推进项目`, or similar requests, first output four lines: `项目目标`, `学习目标`, `修改范围`, and `禁止范围`.
+- After the four-line gate, keep implementation visible as `功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`.
+- Codex is the repo writer, verifier, and evidence recorder; do not redirect current Codex-side repo work to ChatGPT.
 - Read `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` before choosing the next lesson when they exist.
 - Read `workflow/algo_b_teaching_delivery_plan.md` and start with a concise progress checkpoint when teaching or choosing the next lesson.
 - Read `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` before choosing depth when practical.

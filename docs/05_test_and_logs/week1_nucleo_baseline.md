@@ -1,5 +1,19 @@
 # week1_nucleo_baseline
 
+## 2026-05-14 Update
+
+- NUCLEO baseline UART receive path now uses LPUART1 RX DMA + IDLE instead of
+  polling.
+- ISR path: `HAL_UARTEx_RxEventCallback()` copies received bytes into a ring
+  buffer and restarts receive-to-idle DMA.
+- Main-loop path: `AppDrainRxQueue()` feeds bytes into the existing command
+  parser, so `PING`, `MODE?`, `ARM`, `STOP`, and `SET_RPM` keep the same
+  behavior.
+- Debug build passed. Build log:
+  `experiments/2026-05-09_nucleo_baseline/logs/2026-05-14_uart_dma_idle_build.md`.
+- This update does not touch 24V, power board, motor, Gate PWM, Motor Profiler,
+  Hall closed-loop, or SMO.
+
 NUCLEO-G474RE 基础工程记录入口。
 
 ## 官方板卡事实

@@ -1,6 +1,6 @@
 # NEXT_LESSON
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 This is the short teaching entry point for the next ChatGPT/Codex learning turn. It does not replace `workflow/algo_b_teaching_delivery_plan.md`; it distills the next executable lesson from the current project stage, weak points, review queue, and delivery debt.
 
@@ -10,7 +10,7 @@ This is the short teaching entry point for the next ChatGPT/Codex learning turn.
 - Corresponding original plan: Week 1/2 transition, now reduced to safe P2 no-power precheck work.
 - Current pace: P1 concept layer is on-track; STOP side effects, DMA `Size` count/index, command side-effect reading, and DMA + IDLE callback flow have learner evidence. P2 artifact implementation has started.
 - Next lesson target: continue P2 MCSDK no-power precheck without touching power hardware.
-- Lesson deliverable: finish the MCSDK no-power precheck card by adding Workbench/CubeMX screenshot or `.stmcx` placeholder evidence, resolving pin/config conflicts, expanding the Motor Profiler plan, and keeping explicit no-go actions.
+- Lesson deliverable: skip basic toolchain navigation and continue from the pin/config safety review; current fallback GUI evidence proves the saved `.ioc` opens in CubeMX, and the Workbench entry probe proves MotorControl package data exists, but the next missing evidence is still Workbench/MCSDK MotorControl screenshot or `.stmcx`, CN8/EDA/netlist routing evidence, and STDRIVE101 protection-path evidence before any generated project is trusted.
 - Forbidden scope: no 24V, no power board, no motor, no PWM Gate, no real Motor Profiler run, no Hall closed-loop, no SMO, no claim that `SET_RPM` controls real speed.
 
 ## Review Priority Stack
@@ -44,8 +44,10 @@ Current status: current concept-layer checks passed. Reopen only when implementi
    - What is only planning versus what requires power hardware.
 2. P2 no-power artifact list:
    - Tool version table. Current status: started in `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`.
-   - `.stmcx` / Workbench configuration screenshot or placeholder. Current status: missing; 2026-05-13 shell probe did not find an existing `.stmcx` or Workbench executable path.
+   - `.stmcx` / Workbench configuration screenshot or placeholder. Current status: still missing; 2026-05-14 GUI capture added CubeMX `.ioc` Pinout screenshots only, Workbench entry probe found MotorControl package data but no launcher or `.stmcx`, and repo search still found no `.stmcx`.
    - NUCLEO pin/config draft. Current status: started, with `PA2/PA3`, `PC5`, `PB3`, and V low-side PWM conflicts called out.
+   - Pin/config safety review. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` exists and defines evidence classes, hard stops, and the minimum next evidence packet.
+   - 证据包。当前状态：`apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md` 已记录 `.stmcx`、MotorControl 配置页截图、CN8/EDA/netlist 走线证明、板级 STDRIVE101 保护路径证明和 SWO 释放证据仍是缺失阻塞项；新增的 CubeMX `.ioc` 截图只补了 GUI fallback 证据。
    - Motor Profiler plan only, not a real profiler run. Current status: future P3 stop conditions and rollback requirements are now expanded in the P2 card.
    - Risk/no-go checklist.
 3. Safety boundary:
@@ -69,7 +71,7 @@ Use this order. Do not skip to real MCSDK actions until the no-power boundary is
 5. Files/artifacts:
    - Use the P2 artifact list above; do not create hardware evidence that does not exist.
 6. Test:
-   - Verify only documentation, config files, screenshots, build outputs, or tool-version notes. Hardware validation remains out of scope.
+   - Verify only documentation, config files, screenshots, routing evidence, build outputs, or tool-version notes. Hardware validation remains out of scope.
 
 ## Acceptance Criteria
 
@@ -88,6 +90,7 @@ If the learner passes the P2 no-power precheck lesson, Codex should:
 - update `learning/session_notes.md`, `learning/MASTERY_MAP.md`, and `learning/review_queue.md`;
 - update `workflow/current_learning_sprint.md` or create the next sprint card if P2 becomes active;
 - update the P2 no-power precheck artifact and linked checklist/evidence files;
+- 持续更新 `apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md`，直到缺失的 `.stmcx` / 截图、CN8/EDA/netlist 和 STDRIVE101 保护路径证据补齐；
 - run `python tools/normalize_learning_loop.py` and `python -m unittest discover -s tests`.
 
 If the learner misses a safety boundary, do not advance. Update only the relevant learning files and keep the next lesson in P2 precheck.

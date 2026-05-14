@@ -1,5 +1,28 @@
 # Codex 项目规则
 
+## 0.1 Codex Dual-Teacher Execution Gate
+
+Before any repo edit, command loop, generated artifact, or hardware-adjacent
+answer, Codex must follow `workflow/codex_dual_teacher_execution_gate.md`.
+
+For `继续吧`, `继续`, `直接做`, `开始实操`, `推进项目`, or similar requests,
+Codex must first output:
+
+```text
+项目目标：这一步服务哪条项目主线。
+学习目标：用户这一步要看懂什么。
+修改范围：将要改哪些文件、函数、文档或命令。
+禁止范围：本轮不做哪些硬件、功率、烧录或越级动作。
+```
+
+Then continue with the teaching/execution shape:
+
+`功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`
+
+This rule is mandatory for Codex-side work. Codex remains the repo writer,
+verifier, and evidence recorder; it must not redirect current repo work to
+ChatGPT.
+
 ## 0. 仓库结构与分层规则
 
 本仓库按“工程可构建、学习可追踪、答辩可复用”的目标组织。不要把资料继续平铺堆放；新增内容时先判断它属于哪一层：
@@ -46,7 +69,7 @@
 3. MPS、MOSFET、DC-DC、LCSC/立创库存、器件替代型号。
 4. OpenAI Codex、VS Code 插件、工具链安装方法和网络权限。
 5. 比赛官网、比赛时间、赛题规则、提交要求。
-6. 任何不确定、可能过时、可能影响硬件安全或比赛结果的信息。
+6. 任何不确定、存在过时风险、会影响硬件安全或比赛结果的信息。
 
 ### 1.3 联网来源优先级
 

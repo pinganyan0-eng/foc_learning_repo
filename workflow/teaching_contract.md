@@ -13,6 +13,28 @@
 7. `learning/review_queue.md`
 8. 最近的 `learning/session_notes.md`
 
+## Codex Continuation Gate
+
+Codex-side continuation is not a silent execution mode. Before Codex edits files,
+runs a command loop, creates artifacts, or answers a hardware-adjacent request,
+it must follow `workflow/codex_dual_teacher_execution_gate.md`.
+
+Required opening lines:
+
+```text
+项目目标：这一步服务哪条项目主线。
+学习目标：用户这一步要看懂什么。
+修改范围：将要改哪些文件、函数、文档或命令。
+禁止范围：本轮不做哪些硬件、功率、烧录或越级动作。
+```
+
+After that, Codex keeps the work visible as:
+
+`功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`
+
+This also applies when the user says `继续吧`, `继续`, `直接做`, `开始实操`,
+or `推进项目`.
+
 ## Teaching Rules
 
 - 新名词、新概念、新缩写首次出现时，先用一句白话解释，再继续讲正式内容。例如：上位机、DMA、IDLE、ISR、HAL、FOC、buffer、timeout。

@@ -1,5 +1,17 @@
 # uart_dma_idle
 
+## 2026-05-14 Implementation Status
+
+- NUCLEO baseline C firmware now uses LPUART1 RX DMA + IDLE and drains a ring
+  buffer in the main loop.
+- Host protocol model now has `LineFramer` in `src/protocol_model.py`.
+- The host tests simulate DMA/IDLE chunking before JSON parsing:
+  `python -m unittest discover -s tests`.
+- Oversize host frames are dropped until the next line ending, so a long bad
+  frame cannot leak its tail into the next parsed command.
+- Next C-side protocol step is to move command semantics out of `main.c` only
+  when the embedded build runner is available again.
+
 UART DMA + IDLE 接收和断帧处理。
 
 ## 本阶段边界

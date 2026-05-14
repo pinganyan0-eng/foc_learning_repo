@@ -2,6 +2,14 @@
 
 每次学习、工程修改、实验记录或自动化巡检结束前，用本清单确认交接证据完整。它不替代 `workflow/phase_gate_checklist.md`；任何硬件、功率、电机、PWM、Gate、nFAULT、电流采样、Hall/SMO 相关动作仍必须先过阶段闸门。
 
+## Codex 双师门槛回查
+
+- [ ] 本轮开始前是否已经输出 `项目目标`、`学习目标`、`修改范围`、`禁止范围` 四行。
+- [ ] 是否按 `workflow/codex_dual_teacher_execution_gate.md` 保持 Codex 的 repo writer / verifier / evidence recorder 角色。
+- [ ] 是否把实操解释为 `功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`。
+- [ ] 如果用户说 `继续吧`、`继续`、`直接做` 或 `开始实操`，是否仍先执行四行门槛。
+- [ ] 是否没有把当前 Codex 侧仓库修改任务推给 ChatGPT。
+
 ## 学习收工
 
 - [ ] 是否更新 `CURRENT_STATUS.md`。

@@ -122,11 +122,22 @@ ChatGPT 或 Codex 每次开始教学前，必须用 3 到 6 行说明：
 
 截至 2026-05-12，仓库真实阶段是 P1：NUCLEO 基础与 UART 命令。
 
+### 当前执行层入口
+
+长计划负责方向，执行层负责下一课。继续教学或补进度时按这个顺序读：
+
+1. `learning/NEXT_LESSON.md`：下一课执行卡，包含进度检查点、P0/P1/P2 复习顺序、教学流程和验收标准。
+2. `learning/MASTERY_MAP.md`：掌握证据地图，避免重复问已经证明的低价值问题，同时明确哪些高阶内容不能声称完成。
+3. `workflow/current_learning_sprint.md`：当前 P1-S1 sprint，记录 catch-up 状态、交付物和退出条件。
+
+执行层的目标是防止两种偏差：一是每次都从长计划重新推理，二是把所有 open review item 一次问完。下一课只处理 `NEXT_LESSON.md` 里的 P0/P1/P2 优先级。
+
 ### 当前已经有的证据
 
 - NUCLEO baseline 工程已生成并构建通过。
 - COM5 串口已验证 `PING`、`MODE?`、`ARM`、`STOP`、`SET_RPM <rpm>` 的学习用命令行为。
 - 用户正在学习命令副作用、状态迁移、`target_rpm`、`mode_change_count`、DMA + IDLE 收包边界。
+- 2026-05-12 已把 P1 catch-up 交付物包装进仓库：命令副作用表、DMA + IDLE 接收流程和 dated 交付包均已有路径。
 
 ### 当前不能上交的东西
 
@@ -142,11 +153,11 @@ ChatGPT 或 Codex 每次开始教学前，必须用 3 到 6 行说明：
 
 | 上交物 | 负责人 | 文件建议 | 验收 |
 | --- | --- | --- | --- |
-| UART 命令分类和副作用表 | ChatGPT 教，用户答，Codex 入仓 | `docs/05_test_and_logs/week1_nucleo_baseline.md` 或 `interfaces/` | 能说明每条命令是否改 `app_mode`、`target_rpm`、`mode_change_count` |
+| UART 命令分类和副作用表 | ChatGPT 教，用户答，Codex 入仓 | `docs/05_test_and_logs/week1_nucleo_baseline.md` | 已包装；下一步让用户用表独立解释 STOP/SET_RPM 副作用 |
 | `STOP` 执行路径复习 | ChatGPT 教，Codex 记学习证据 | `learning/session_notes.md`、`weak_points.md` | 用户能算出 `IDLE + STOP` 与 `ARMED + STOP` 的最终变量 |
-| DMA + IDLE 接收流程图 | ChatGPT 主讲，Codex 可画/入仓 | `docs/05_test_and_logs/week1_nucleo_baseline.md` | 能解释 `Size` 是 count，循环 `i < Size`，逐字节喂 `AppFeedRxByte` |
+| DMA + IDLE 接收流程图 | ChatGPT 主讲，Codex 可画/入仓 | `docs/04_iot_gateway/uart_dma_idle.md` | 已包装；下一步让用户解释 `Size` 是 count，循环 `i < Size`，逐字节喂 `AppFeedRxByte` |
 | NUCLEO 串口命令证据同步 | Codex | `experiments/2026-05-09_nucleo_baseline/`、`workflow/evidence_register.md` | 日志已跟踪或在证据登记里明确本地未跟踪状态 |
-| 周交付复盘 | Codex 汇总，ChatGPT 复盘 | `deliverables/submission_checklist.md` 或 session close | 明确本周完成、缺口、下一步、禁止范围 |
+| 周交付复盘 | Codex 汇总，ChatGPT 复盘 | `deliverables/2026-05-12_p1_catchup_pack.md` | 已包装；仍明确 P2 MCSDK no-power precheck 暂不开始 |
 
 ## 每周上交流程
 
@@ -231,16 +242,18 @@ Codex 每轮必须：
 当前最合适的 ChatGPT 教学任务：
 
 ```text
-请先读取 CURRENT_STATUS.md、workflow/algo_b_teaching_delivery_plan.md、
+请先读取 CURRENT_STATUS.md、learning/NEXT_LESSON.md、learning/MASTERY_MAP.md、
+workflow/current_learning_sprint.md、workflow/algo_b_teaching_delivery_plan.md、
 workflow/teaching_contract.md、learning/weak_points.md 和 learning/review_queue.md。
 
 进度检查点必须说明：
 - 当前真实阶段是 P1 NUCLEO 基础与 UART 命令。
-- 本轮上交物是 UART 命令分类和副作用表。
+- 本轮上交物是 UART 命令分类和副作用表，或 DMA + IDLE 接收流程图。
 - 本轮禁止进入 24V、功率板、电机、PWM Gate、Motor Profiler、Hall/SMO。
 
 然后继续教我：
-PING / MODE? / ARM / SET_RPM / STOP 的命令分类、变量副作用和 STOP 执行路径。
+先按 learning/NEXT_LESSON.md 的 P0 优先级复查 STOP 副作用和 DMA Size/count；
+如果通过，再教 PING / MODE? / ARM / SET_RPM / STOP 的命令分类、变量副作用和 DMA + IDLE callback 结构。
 每轮最多问 1-2 个问题。
 
 讲完后输出 Codex 接力点：

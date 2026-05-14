@@ -21,8 +21,15 @@
 | `evidence_register` | `workflow/evidence_register.md` | 构建、测试、实验、截图、波形和复核证据登记表 |
 | `risk_gate_matrix` | `workflow/risk_gate_matrix.md` | L0-L4 风险等级、允许动作、证据要求和禁止动作 |
 | `algo_b_teaching_delivery_plan` | `workflow/algo_b_teaching_delivery_plan.md` | B 算法/主控 8 周和 56 天计划的消化版，定义教学节奏、补进度机制、每课/每周上交物和阶段安全边界 |
+| `current_learning_sprint` | `workflow/current_learning_sprint.md` | 当前学习 sprint 执行层，记录 P2 MCSDK 无功率预检交付物、复习优先级和退出条件 |
 | `teaching_contract` | `workflow/teaching_contract.md` | ChatGPT/Codex 双师制教学规则、代码讲解顺序、新名词解释和课后学习记录要求 |
 | `prompt_recipes` | `workflow/prompt_recipes.md` | ChatGPT/Codex 双师制常用提示词 |
+| `next_lesson` | `learning/NEXT_LESSON.md` | 下一课执行卡，给出当前阶段、P0/P1/P2 复习优先级、教学流程和 Codex 接力点 |
+| `mastery_map` | `learning/MASTERY_MAP.md` | 掌握证据地图，区分已掌握、待迁移验证和禁止声称完成的阶段 |
+| `week1_nucleo_baseline` | `docs/05_test_and_logs/week1_nucleo_baseline.md` | P1 NUCLEO baseline 事实、UART 命令分类和副作用表 |
+| `uart_dma_idle` | `docs/04_iot_gateway/uart_dma_idle.md` | DMA + IDLE 接收流程、`Size` count/index 规则和 callback 迁移边界 |
+| `p1_catchup_pack_2026_05_12` | `deliverables/2026-05-12_p1_catchup_pack.md` | P1 catch-up 周/阶段交付包，链接证据、掌握地图、复习队列和禁止范围 |
+| `p2_mcsdk_no_power_precheck_2026_05_13` | `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md` | P2 MCSDK 无功率预检卡，记录工具版本/status、baseline `.ioc` 读回、pin/config 草案和冲突清单 |
 
 ## 共享链接中已读 Google Docs
 

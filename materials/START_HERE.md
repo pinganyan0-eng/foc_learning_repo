@@ -20,6 +20,9 @@
 - `../tools/ask_local.py`：本地资料检索问答工具。
 - `../CURRENT_STATUS.md`：项目总控页，记录当前阶段、缺口和下一步。
 - `../workflow/algo_b_teaching_delivery_plan.md`：B 算法/主控计划的执行版，规定教学进度、补课机制、每课/每周上交物和禁止推进范围。
+- `../learning/NEXT_LESSON.md`：下一课执行卡，给出当前最该教什么、先复习什么、产出什么。
+- `../learning/MASTERY_MAP.md`：掌握证据地图，避免反复问已经证明的低价值问题。
+- `../workflow/current_learning_sprint.md`：当前学习 sprint，列出 P2 MCSDK 无功率预检交付物、冲突清单和退出条件。
 - `../workflow/phase_gate_checklist.md`：阶段闸门表，判断能不能进入下一阶段。
 - `../workflow/intake_checklist.md`：首次资料导入清单，判断新资料应该放哪里。
 
@@ -34,8 +37,8 @@ python tools/ask_local.py "HAL_UARTEx_ReceiveToIdle_DMA"
 
 ## 当前第一阶段建议
 1. 先确认 Windows 开发工具：VS Code、STM32CubeIDE 插件、STM32CubeMX、MCSDK、CubeMonitor、ST-LINK 驱动、Arduino IDE。
-2. B 同学先做 NUCLEO-G474RE 基础工程：点灯、串口 printf、UART DMA + IDLE。
-3. 再进入 MCSDK：Motor Profiler 扫电机参数，Hall 闭环跑通，PI 调参。
+2. B 同学已完成当前 P1 概念层检查，下一步先做 P2 MCSDK 无功率预检：工具版本/status、Workbench/CubeMX 配置证据、pin/config 冲突清单。
+3. Motor Profiler 仍只是计划项；真实扫电机参数、Hall 闭环和 PI 调参必须等后续阶段闸门。
 4. 硬件板未完全确认前，不做 24V 大电流实测；首次上电必须限流 0.2A。
 
 ## 你可以直接这样叫我

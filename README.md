@@ -11,6 +11,9 @@
 - `AGENTS.md`：Codex 在本仓库里的行为规则，包含事实源优先级、联网核查和硬件安全边界。
 - `workflow/phase_gate_checklist.md`：阶段闸门表，规定每个阶段的进入条件、证据和禁止动作。
 - `workflow/algo_b_teaching_delivery_plan.md`：B 算法/主控 8 周和 56 天计划的消化版，规定教学节奏、补进度机制、每课/每周上交物和安全边界。
+- `learning/NEXT_LESSON.md`：下一课执行卡，把当前阶段、复习优先级、教学流程、验收标准和 Codex 接力压缩成短入口。
+- `learning/MASTERY_MAP.md`：掌握证据地图，区分已经证明的能力、仍需迁移验证的弱点和不能声称完成的高阶阶段。
+- `workflow/current_learning_sprint.md`：当前学习 sprint，追踪 P2 MCSDK 无功率预检交付物、冲突清单和退出条件。
 - `workflow/intake_checklist.md`：首次资料导入清单，规定新工程、硬件资料和实验日志放哪里。
 - `workflow/macbook_codex_replica.md`：在 MacBook Codex 上再配置一份同源项目环境，并用 Git 做后续双机同步。
 - `workflow/teaching_contract.md`：ChatGPT/Codex 双师制教学规则，规定新名词解释、代码讲解顺序和课后学习记录。

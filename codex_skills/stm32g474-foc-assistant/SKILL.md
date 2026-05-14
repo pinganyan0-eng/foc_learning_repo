@@ -27,12 +27,13 @@ When working inside the project, read only the files needed for the task. Defaul
 1. `CURRENT_STATUS.md` for the current stage, gaps, and next action.
 2. `AGENTS.md` for repository behavior rules and safety boundaries.
 3. `docs/00_project_truth/project_context.md` for highest-priority project facts.
-4. `workflow/algo_b_teaching_delivery_plan.md` for B algorithm teaching cadence, catch-up rules, and weekly/per-lesson deliverables.
-5. `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` for teaching or learning tasks.
-6. `workflow/phase_gate_checklist.md` before moving to a new stage.
-7. `workflow/intake_checklist.md` when new code, hardware files, logs, or deliverables arrive.
-8. `workflow/learning_feedback_loop.md` after teaching, explanation, debugging-as-learning, or homework review.
-9. `materials/START_HERE.md` when the user asks what to learn or where to start.
+4. `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` for the immediate teaching target, demonstrated mastery, current sprint deliverables, and catch-up status.
+5. `workflow/algo_b_teaching_delivery_plan.md` for B algorithm teaching cadence, catch-up rules, and weekly/per-lesson deliverables.
+6. `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` for teaching or learning tasks.
+7. `workflow/phase_gate_checklist.md` before moving to a new stage.
+8. `workflow/intake_checklist.md` when new code, hardware files, logs, or deliverables arrive.
+9. `workflow/learning_feedback_loop.md` after teaching, explanation, debugging-as-learning, or homework review.
+10. `materials/START_HERE.md` when the user asks what to learn or where to start.
 
 ## Fact Priority
 
@@ -70,11 +71,13 @@ Be conservative around power electronics. For PWM, dead time, overcurrent thresh
 
 For teaching, explanation, tutoring, homework review, or debugging that reveals understanding:
 
+- Read `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` before choosing the next lesson when they exist.
 - Read `workflow/algo_b_teaching_delivery_plan.md` and start with a concise progress checkpoint when teaching or choosing the next lesson.
 - Read `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` before choosing depth when practical.
 - Teach in plain language first: use a concrete analogy, visible board behavior, code line, UART log, or measurement before naming formal terms.
 - Teach through one small executable step, one concrete project link, and one useful check for understanding.
 - Tie each lesson to one small deliverable or catch-up item; do not only chat through concepts while ignoring the planned weekly/per-lesson submissions.
+- Use the P0/P1/P2 priority stack in `learning/NEXT_LESSON.md`; do not ask every open review item in one teaching turn.
 - Avoid repeated low-value simple questions after the user has clearly answered the same pattern; summarize the mastered point and move to practice or the next meaningful concept.
 - Use evidence levels L0-L6 from `learning/README.md`; do not claim mastery without L4+ evidence.
 - At the end, update `learning/session_notes.md`, `learning/weak_points.md`, and `learning/review_queue.md` when new evidence appears.

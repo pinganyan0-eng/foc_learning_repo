@@ -6,6 +6,9 @@
 
 - [ ] 是否更新 `CURRENT_STATUS.md`。
 - [ ] 是否对照 `workflow/algo_b_teaching_delivery_plan.md` 确认本轮小产物或 catch-up 任务已经交代清楚。
+- [ ] 是否对照 `learning/NEXT_LESSON.md` 更新下一课执行卡。
+- [ ] 是否对照 `learning/MASTERY_MAP.md` 更新已掌握、待迁移验证和禁止声称完成的内容。
+- [ ] 是否对照 `workflow/current_learning_sprint.md` 更新当前 sprint 交付物状态。
 - [ ] 是否更新 `learning/weak_points.md` 或 `learning/review_queue.md`。
 - [ ] 是否把临时想法回写到 `docs/`、`experiments/` 或 `interfaces/`。
 - [ ] 是否运行 `python tools/normalize_learning_loop.py`。

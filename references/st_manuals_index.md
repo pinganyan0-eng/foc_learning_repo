@@ -1,8 +1,25 @@
 # ST Official Manuals Index
 
 Generated at: 2026-04-30T04:22:39
+Last updated: 2026-05-13
 
-These are local text extractions of official ST PDF manuals/application notes. Use the `.txt` files for fast local retrieval, but use the original PDFs for figures, tables, exact page citations, and safety-critical electrical values.
+These are local text extractions of official ST PDF manuals/application notes. Use the `.txt` files for fast local retrieval, but use the repo-local PDFs for figures, tables, exact page citations, and safety-critical electrical values.
+
+The 2026-05-13 update mirrors frequently used PDFs into `materials/raw/st_manuals/` and records hashes plus official URLs in `materials/raw/st_manuals/manifest.json`. Direct shell download from `st.com` failed in this session, so the current repo PDFs were copied from the user's existing local cache under `F:\嵌赛\1手册`; the official ST URLs were checked online and are preserved for the next refresh.
+
+## Repo-Local PDF Mirror
+
+| ID | Repo-local PDF | Extracted text | Official URL / Refresh Note |
+| --- | --- | --- | --- |
+| `st_rm0440_stm32g4_reference_manual` | `materials/raw/st_manuals/st_rm0440_stm32g4_reference_manual.pdf` | `materials/extracted/st_manuals/st_rm0440_stm32g4_reference_manual.txt` | <https://www.st.com/resource/en/reference_manual/rm0440-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf> |
+| `st_stm32g474re_datasheet` | `materials/raw/st_manuals/st_stm32g474re_datasheet.pdf` | `materials/extracted/st_manuals/st_stm32g474re_datasheet.txt` | <https://www.st.com/resource/en/datasheet/stm32g474rb.pdf> |
+| `st_um2505_nucleo64_mb1367` | `materials/raw/st_manuals/st_um2505_nucleo64_mb1367.pdf` | `materials/extracted/st_manuals/st_um2505_nucleo64_mb1367.txt` | <https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf> |
+| `st_an5306_opamp_stm32g4` | `materials/raw/st_manuals/st_an5306_opamp_stm32g4.pdf` | `materials/extracted/st_manuals/st_an5306_opamp_stm32g4.txt` | <https://www.st.com/resource/en/application_note/dm00605707-operational-amplifier-opamp-usage-in-stm32g4-series-stmicroelectronics.pdf> |
+| `st_um3027_motor_control_sdk` | `materials/raw/st_manuals/st_um3027_motor_control_sdk.pdf` | `materials/extracted/st_manuals/st_um3027_motor_control_sdk.txt` | <https://www.st.com/resource/en/user_manual/um3027-how-to-use-stm32-motor-control-sdk-v60-workbench-stmicroelectronics.pdf> |
+| `st_an5397_sensorless_pmsm_foc` | `materials/raw/st_manuals/st_an5397_sensorless_pmsm_foc.pdf` | `materials/extracted/st_manuals/st_an5397_sensorless_pmsm_foc.txt` | <https://www.st.com/resource/en/application_note/an5397-sensorless-pmsm-foc-controller-stmicroelectronics.pdf> |
+| `st_an4144_stm32f0_foc_mcsdk` | `materials/raw/st_manuals/st_an4144_stm32f0_foc_mcsdk.pdf` | `materials/extracted/st_manuals/st_an4144_stm32f0_foc_mcsdk.txt` | <https://www.st.com/resource/en/application_note/an4144-fieldoriented-control-using-the-stm32f0-and-the-stmicroelectronics-motor-control-sdk-stmicroelectronics.pdf> |
+| `st_nucleo_g474re_brief` | `materials/raw/st_manuals/st_nucleo_g474re_brief.pdf` | `materials/extracted/st_manuals/st_nucleo_g474re_brief.txt` | <https://www.st.com/resource/en/data_brief/nucleo-g474re.pdf> |
+| `st_stdrive101_datasheet` | `materials/raw/st_manuals/st_stdrive101_datasheet.pdf` | `materials/extracted/st_manuals/st_stdrive101_datasheet.txt`; digest: `materials/extracted/st_manuals/st_stdrive101_datasheet_digest.md` | <https://www.st.com/resource/en/datasheet/stdrive101.pdf>; DS13472 Rev 2, June 2022. |
 
 ## Added Sources
 
@@ -26,6 +43,7 @@ These are local text extractions of official ST PDF manuals/application notes. U
 - For STM32G4 OPAMP/PGA/current-sense analog front-end concepts, prefer `st_an5306_opamp_stm32g4`.
 - For sensorless FOC concepts, observer/startup flow, and algorithm background, prefer `st_an5397_sensorless_pmsm_foc`.
 - Treat `st_an4144_stm32f0_foc_mcsdk` as background only when it conflicts with STM32G4-specific documents.
+- For STDRIVE101 gate-driver protection, `nFAULT`, `DT/MODE`, `CP`, `SCREF`, `REG12`, and `VS`/`VM` checks, use `st_stdrive101_datasheet`; re-check exact PDF tables before hardware work.
 
 ## Safety Note
 

@@ -7,6 +7,8 @@ Use it to keep Codex honest about what the user actually understands, where the 
 ## Files
 
 - `LEARNING_STATUS.md`: current learning state and active focus.
+- `NEXT_LESSON.md`: short next-lesson execution card with progress checkpoint, P0/P1/P2 review priority, acceptance criteria, and Codex handoff.
+- `MASTERY_MAP.md`: evidence-based map of demonstrated strengths, active transfer gaps, and do-not-claim-yet areas.
 - `session_notes.md`: append-only lesson and Q&A summaries.
 - `weak_points.md`: active weak points, evidence level, and repair plan.
 - `review_queue.md`: spaced review queue and next checks.

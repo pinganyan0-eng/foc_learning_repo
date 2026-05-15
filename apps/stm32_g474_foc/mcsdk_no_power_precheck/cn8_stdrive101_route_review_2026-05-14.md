@@ -31,9 +31,15 @@ Current low-grade clue only:
 
 - `hardware/schematic/2026-05-09_power_board_schematic_screenshot.jpg`
 - `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md`
+- `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.png`
+- `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.md`
 
-The screenshot can guide what to ask for next, but it cannot prove CN8 routing,
-PCB routing, connector pinout, or final STDRIVE101 protection-path correctness.
+The 2026-05-15 screenshot is more readable and is preserved as `Partial clue`.
+The user confirmed on 2026-05-15 that it matches the current physical power
+board and was drawn by the hardware teammate, but it still lacks a formal source
+revision/date and STM32-side endpoint mapping. Screenshots can guide what to ask
+for next, but they cannot prove final board routing unless the intake
+requirements are met.
 
 Explicitly excluded source:
 
@@ -44,7 +50,7 @@ Explicitly excluded source:
 
 | Evidence area | Current state | P2 decision |
 | --- | --- | --- |
-| CN8 route proof | Missing. No accepted current EDA, schematic PDF, netlist, or high-resolution route crop is in the repo. | Do not trust that any STM32 pin reaches the intended STDRIVE101 or sensing net. |
+| CN8 route proof | Partial clue. The 2026-05-15 screenshot shows power-board-side CN8 net names, and user confirmed current-board match. No accepted EDA, schematic PDF, netlist, formal source revision/date, or STM32 endpoint mapping exists. | Do not trust that any STM32 pin reaches the intended STDRIVE101 or sensing net. |
 | `NFAULT` route | Screenshot-level clue only. The repo has no accepted route proof from STDRIVE101 `nFAULT` to the STM32 break input. | `PB12/TIM1_BKIN` remains a CubeMX draft candidate only. |
 | PWM inputs | Screenshot-level clue only. No accepted proof maps HIN/LIN or equivalent STDRIVE101 input nets to STM32 pins. | Do not trust generated TIM1 complementary PWM until board route and `DT/MODE` are proven. |
 | Current sense | Screenshot-level clue only. No accepted proof maps `ADC_U/V/W` or shunt/filter endpoints to STM32 ADC/OPAMP pins. | Do not trust current-sense configuration or software limit assumptions. |

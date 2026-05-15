@@ -10,7 +10,11 @@ This is the short teaching entry point for the next ChatGPT/Codex learning turn.
 - Corresponding original plan: Week 1/2 transition, now reduced to safe P2 no-power precheck work.
 - Current pace: P1 concept layer is on-track; STOP side effects, DMA `Size` count/index, command side-effect reading, and DMA + IDLE callback flow have learner evidence. P2 artifact implementation has started.
 - Next lesson target: continue P2 MCSDK no-power precheck without touching power hardware.
-- Lesson deliverable: skip basic toolchain navigation and continue from the pin/config safety review; current fallback GUI evidence proves the saved `.ioc` opens in CubeMX, and the Workbench entry probe proves MotorControl package data exists, but the next missing evidence is still Workbench/MCSDK MotorControl screenshot or `.stmcx`, CN8/EDA/netlist routing evidence, and STDRIVE101 protection-path evidence before any generated project is trusted.
+- Lesson deliverable: skip basic toolchain navigation and continue from the pin/config safety review; current fallback GUI evidence proves the saved `.ioc` opens in CubeMX, and the Workbench entry probe proves MotorControl package data exists. The user asked on 2026-05-15 to skip the hardware-source package branch for now, so the next safe parallel handoff is `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md`: keep Packet B/C blockers visible, then progress Packet A Workbench/MCSDK MotorControl screenshot or `.stmcx`, STM32-side signal contract, and future build-only gate.
+- 2026-05-15 Packet A follow-up: `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md` and `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md` now record a bounded local search and the next acceptable capture checklist. No real `.stmcx` or MotorControl / Workbench configuration screenshot was found, so Packet A remains `Blocked`.
+- 2026-05-15 non-hardware follow-up: `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md` and `apps/stm32_g474_foc/mcsdk_no_power_precheck/future_build_only_gate_2026-05-15.md` now split the STM32-side signal responsibilities and future generated-project build-only rules into standalone review artifacts. They do not upgrade Packet A/B/C or hardware evidence.
+- 2026-05-15 readiness follow-up: `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md` now consolidates Packet A/B/C, PB3/SWO, signal-contract, and build-only status into one gate decision. Current decision: P2 remains in progress, Packet A is blocked, generated-project trust is `Not allowed`, and powered or motor work remains forbidden.
+- 2026-05-15 phase-gate follow-up: `workflow/phase_gate_checklist.md` now contains a P2 no-power insert. It prevents direct NUCLEO-to-Motor-Profiler jumps, separates P2-S1 no-power precheck from P2-S2 build-only generated-project work, and keeps P2-to-P3 blockers explicit.
 - Forbidden scope: no 24V, no power board, no motor, no PWM Gate, no real Motor Profiler run, no Hall closed-loop, no SMO, no claim that `SET_RPM` controls real speed.
 
 ## Review Priority Stack
@@ -48,6 +52,10 @@ Current status: current concept-layer checks passed. Reopen only when implementi
    - NUCLEO pin/config draft. Current status: started, with `PA2/PA3`, `PC5`, `PB3`, and V low-side PWM conflicts called out.
    - Pin/config safety review. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` exists and defines evidence classes, hard stops, and the minimum next evidence packet.
    - 证据包。当前状态：`apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md` 已记录 `.stmcx`、MotorControl 配置页截图、CN8/EDA/netlist 走线证明、板级 STDRIVE101 保护路径证明和 SWO 释放证据仍是缺失阻塞项；新增的 CubeMX `.ioc` 截图只补了 GUI fallback 证据。
+   - Source packet request pack. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_request_pack_2026-05-14.md` exists and turns missing evidence into Packet A/B/C requests for the next handoff.
+   - User action queue. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/user_action_queue_2026-05-14.md` exists and says the most useful next user action is Packet B board-route / STDRIVE101 source evidence, followed by Packet A MCSDK/MotorControl evidence and PB3/SWO release evidence if needed.
+   - Source packet review template. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md` exists and makes incoming source review explicit: Accept, Partial clue, or Reject before updating the evidence packet.
+   - Non-hardware parallel track. Current status: `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md` exists and records that Packet B/C may be skipped for scheduling only, while Packet A, STM32-side signal contract, and future build-only gate can progress.
    - Motor Profiler plan only, not a real profiler run. Current status: future P3 stop conditions and rollback requirements are now expanded in the P2 card.
    - Risk/no-go checklist.
 3. Safety boundary:
@@ -91,6 +99,10 @@ If the learner passes the P2 no-power precheck lesson, Codex should:
 - update `workflow/current_learning_sprint.md` or create the next sprint card if P2 becomes active;
 - update the P2 no-power precheck artifact and linked checklist/evidence files;
 - 持续更新 `apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md`，直到缺失的 `.stmcx` / 截图、CN8/EDA/netlist 和 STDRIVE101 保护路径证据补齐；
+- use `apps/stm32_g474_foc/mcsdk_no_power_precheck/user_action_queue_2026-05-14.md` to tell the user exactly which packet to provide next;
+- use `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_request_pack_2026-05-14.md` as the next evidence handoff checklist;
+- use `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md` before upgrading any blocker after a source packet arrives;
+- use `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md` if the user chooses to defer hardware-source evidence temporarily;
 - run `python tools/normalize_learning_loop.py` and `python -m unittest discover -s tests`.
 
 If the learner misses a safety boundary, do not advance. Update only the relevant learning files and keep the next lesson in P2 precheck.

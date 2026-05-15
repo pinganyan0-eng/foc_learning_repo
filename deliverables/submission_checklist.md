@@ -39,7 +39,24 @@ This checklist confirms the P1 catch-up pack exists. It does not by itself prove
 Use this section before claiming P2 is ready to generate or build an MCSDK project.
 
 - Pack file: `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`
-- Status: in progress; tool/status table, pin/config draft, ST source cross-check, pin-function conflict resolution pass, shell GUI evidence probe, expanded future Motor Profiler stop plan, dedicated no-power planning directory, proven CubeMX launch path, CubeMX Home screenshot, next-ring pin/config safety review, current P2 evidence packet, a saved NUCLEO-G474RE CubeMX `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, a Workbench entry probe, and STDRIVE101 protection-path review now exist. The `.ioc` confirms `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO at configuration level; the Workbench probe confirms MotorControl package data exists; the protection-path review defines the missing evidence for `DT/MODE`, `nFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, standby, and VDS monitoring. Real `.stmcx`, MCSDK MotorControl config evidence, board-routing proof, and board-specific STDRIVE101 protection-path proof are still missing. 也就是说：P2 证据包已经把一部分配置草案落成文件并补到 GUI 可视证据，也把 STDRIVE101 保护路径审查规则落成文件，但硬件和 MCSDK MotorControl 配置缺口还没有补齐。
+- Packet A 2026-05-15 update: `packet_a_local_probe_2026-05-15.md` and
+  `packet_a_capture_checklist_2026-05-15.md` now exist. The local probe found
+  no real `.stmcx` or MotorControl / Workbench configuration screenshot in the
+  checked locations, so Packet A remains blocked.
+- Non-hardware 2026-05-15 update:
+  `stm32_side_signal_contract_2026-05-15.md` and
+  `future_build_only_gate_2026-05-15.md` now exist. They preserve STM32 signal
+  responsibilities and future build-only rules without upgrading Packet A/B/C
+  or any hardware evidence.
+- Readiness 2026-05-15 update:
+  `p2_readiness_snapshot_2026-05-15.md` now exists. It records that P2 remains
+  in progress, Packet A is blocked, generated-project trust is `Not allowed`,
+  and P3 powered or motor work is not allowed.
+- Phase-gate 2026-05-15 update:
+  `workflow/phase_gate_checklist.md` now contains a P2 no-power insert. It
+  blocks direct NUCLEO-to-Motor-Profiler jumps and requires Packet A before any
+  build-only generated-project work.
+- Status: in progress; tool/status table, pin/config draft, ST source cross-check, pin-function conflict resolution pass, shell GUI evidence probe, expanded future Motor Profiler stop plan, dedicated no-power planning directory, proven CubeMX launch path, CubeMX Home screenshot, next-ring pin/config safety review, current P2 evidence packet, a saved NUCLEO-G474RE CubeMX `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, a Workbench entry probe, STDRIVE101 protection-path review, source packet intake checklist, source packet request pack, user action queue, source packet review template, a 2026-05-15 schematic screenshot candidate review, and a non-hardware parallel track now exist. The `.ioc` confirms `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO at configuration level; the Workbench probe confirms MotorControl package data exists; the protection-path review defines the missing evidence for `DT/MODE`, `nFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, standby, and VDS monitoring; the intake checklist defines what future source packets can be accepted; the request pack defines what the next handoff must collect; the user action queue tells the user to provide Packet B board-route / STDRIVE101 source evidence first; the review template defines Accept / Partial clue / Reject before any blocker can be upgraded. The 2026-05-15 screenshot is useful `Partial clue`; user confirmed it matches the current physical power board and was drawn by the hardware teammate, but formal source revision/date, STM32 endpoint mapping, accepted `DT/MODE` proof, and `STBY` proof are still missing. The non-hardware parallel track records that skipping Packet B/C is a scheduling choice, not clearance. Real `.stmcx`, MCSDK MotorControl config evidence, accepted board-routing proof, and accepted board-specific STDRIVE101 protection-path proof are still missing.
 
 - [x] P2 no-power card exists in a repo file.
 - [x] Tool version/status table records current local evidence and missing PATH/GUI proof.
@@ -58,6 +75,18 @@ Use this section before claiming P2 is ready to generate or build an MCSDK proje
 - [x] Workbench entry probe captured MotorControl package data and the missing `.stmcx` / launcher blocker at `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md`.
 - [x] CN8 / STDRIVE101 route review exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/cn8_stdrive101_route_review_2026-05-14.md`.
 - [x] STDRIVE101 protection-path review exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`.
+- [x] Source packet intake checklist exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_intake_checklist_2026-05-14.md` and defines accepted / rejected sources before any missing evidence can be upgraded.
+- [x] Source packet request pack exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_request_pack_2026-05-14.md` and defines the next `.stmcx` / MotorControl screenshot, CN8 / EDA / netlist, and STDRIVE101 protection-path handoff.
+- [x] User action queue exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/user_action_queue_2026-05-14.md` and tells the user to provide Packet B board-route / STDRIVE101 source evidence first, without upgrading any blocker.
+- [x] Source packet review template exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md` and requires Accept / Partial clue / Reject before any blocker can be upgraded.
+- [x] 2026-05-15 CN8 / STDRIVE101 schematic screenshot candidate is preserved and reviewed as `Partial clue`, not accepted proof.
+- [x] Non-hardware parallel track exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md` and keeps Packet B/C skipped-but-blocked while Packet A / signal-contract / build-gate work can continue.
+- [x] Packet A local probe exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`; it found no real `.stmcx` or MotorControl / Workbench configuration screenshot in the checked locations.
+- [x] Packet A capture checklist exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md` and defines the next accepted no-power `.stmcx` / screenshot / launcher-path capture.
+- [x] STM32-side signal contract exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md` and keeps CN8-facing responsibilities blocked/candidate until source evidence exists.
+- [x] Future build-only gate exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/future_build_only_gate_2026-05-15.md` and records generated-project trust as currently `Not allowed` while Packet A is blocked.
+- [x] P2 readiness snapshot exists at `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md` and records that generated-project trust, build-only work, and hardware action are still not allowed in the current state.
+- [x] Phase gate checklist contains a 2026-05-15 P2 no-power insert that separates P2-S1 no-power precheck, P2-S2 build-only generated-project work, and P2-to-P3 blockers.
 - [x] The excluded WeChat-side `netlist_PADS.net` candidate was not imported and is not used as current board evidence.
 - [x] 当前证据包已记录缺失的 `.stmcx`、配置页截图、CN8/EDA/netlist、STDRIVE101 保护路径和 SWO 释放阻塞项。
 - [x] NUCLEO-G474RE CubeMX `.ioc` 草案已保存：`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`。

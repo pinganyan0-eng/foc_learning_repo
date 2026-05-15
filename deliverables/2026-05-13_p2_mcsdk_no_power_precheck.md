@@ -274,6 +274,36 @@ Passed on 2026-05-13:
 - P2 no-power artifacts include pin map, motor-parameter template, no-power configuration file or placeholder, risk/no-go checklist, and Motor Profiler plan.
 - Real measured motor parameters must wait for a later hardware stage with real motor and power chain.
 
+## 2026-05-15 Readiness Snapshot
+
+Current readiness control file:
+
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`
+
+The snapshot consolidates Packet A/B/C, PB3/SWO, STM32-side signal-contract,
+and build-only gate status into one gate decision. Current decision: P2
+remains in progress; Packet A remains `Blocked`; generated-project trust is
+`Not allowed`; Packet B/C and PB3/SWO remain blocked or partial clue only; P3
+powered or motor work is not allowed.
+
+This is readiness governance only. It does not prove MCSDK MotorControl
+configuration, generated-project trust, CN8 routing, STDRIVE101
+protection-path proof, Gate PWM, Motor Profiler, Hall, motor, power-stage, or
+sensorless behavior.
+
+## 2026-05-15 Phase Gate Insert
+
+The formal phase gate checklist now includes a P2 no-power insert:
+
+`workflow/phase_gate_checklist.md`
+
+It blocks direct NUCLEO-to-Motor-Profiler jumps, separates P2-S1 no-power
+precheck from P2-S2 build-only generated-project work, and lists the P2-to-P3
+blockers: accepted Packet A/B/C, PB3/SWO evidence where used, no-power
+continuity checks, current-limited bring-up settings, measurement points, stop
+conditions, rollback image, and a new dated decision that explicitly opens the
+powered action.
+
 ## Next Step
 
 Continue P2 by adding the evidence that the saved NUCLEO `.ioc` and CubeMX pinout screenshots still cannot provide: a Workbench/MCSDK `.stmcx` or MotorControl configuration screenshot, plus CN8/EDA/netlist routing evidence. The next GUI/config check must verify `PB12/TIM1_BKIN` for nFAULT, `PB14/TIM1_CH2N` versus any `PA12` alternate, `PA2/PA3` exclusion from the FOC UART plan, and any `PB3` Hall/SWO choice. Keep hardware actions blocked until the phase gate explicitly allows them.

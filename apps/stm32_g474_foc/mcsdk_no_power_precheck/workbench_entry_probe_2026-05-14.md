@@ -60,8 +60,8 @@ Current P2 evidence cannot claim:
 - a real Workbench `.stmcx` exists;
 - a MotorControl configuration page has been captured;
 - a generated MCSDK motor-control project exists;
-- Motor Profiler is ready to run;
-- any power-board, motor, Hall, Gate PWM, or sensorless behavior is validated.
+- Motor Profiler is not ready to run;
+- no power-board, motor, Hall, Gate PWM, or sensorless behavior is validated.
 
 ## Next Evidence Required
 
@@ -90,3 +90,18 @@ work ran in parallel.
 No MotorControl configuration page was captured in this follow-up. The next
 valid upgrade remains a real `.stmcx`, a MotorControl / Workbench configuration
 screenshot, or a reproducible launcher path plus captured configuration page.
+
+## 2026-05-15 Packet A Local Recheck
+
+Follow-up record:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`.
+
+The recheck searched the repo, current screenshots, the placeholder
+`apps/stm32_g474_foc/MotorControl` directory, `F:\STMCubeMX`,
+`C:\Users\gregrg\STM32Cube\Repository`, `C:\Users\gregrg\.stm32cubemx`, and
+common user locations (`Documents`, `Downloads`, `Desktop`). It still found no
+real `.stmcx` and no MotorControl / Workbench configuration screenshot.
+
+Direct search of `C:\Users\gregrg` returned access denied, so this recheck does
+not claim every private user directory was searched. Packet A remains
+`Blocked`.

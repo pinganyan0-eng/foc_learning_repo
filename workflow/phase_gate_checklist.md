@@ -28,3 +28,70 @@
 - `CURRENT_STATUS.md`：当前阶段、已通过闸门、下一步最小动作。
 - `experiments/YYYY-MM-DD_topic/`：真实实验条件、步骤、现象和结论。
 - `deliverables/submission_checklist.md`：如果阶段变化影响答辩材料。
+
+## 2026-05-15 P2 No-Power Gate Insert
+
+The phase table above is the long project ladder. The current project is not allowed to jump from NUCLEO basics directly to Motor Profiler. The following
+insert is mandatory before stage 3 or any generated motor-control project is
+trusted.
+
+### P2-S1 - MCSDK No-Power Precheck
+
+Entry condition:
+
+- P1 NUCLEO command/log evidence exists.
+- No power board, motor, 24V, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless action is part of the work.
+
+Required evidence:
+
+- `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`
+- `apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md`
+- `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`
+- `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_intake_checklist_2026-05-14.md`
+
+Pass condition:
+
+- The repo can state exactly which evidence is present, which Packet A/B/C
+  fields are blocked, and which hardware actions remain forbidden.
+- Passing this gate does not authorize generated-project trust, flashing,
+  power-board connection, motor connection, Gate PWM output, Motor Profiler,
+  Hall closed-loop, or sensorless / SMO claims.
+
+### P2-S2 - Build-Only Generated Project Gate
+
+Entry condition:
+
+- Packet A is accepted through
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md`.
+- `future_build_only_gate_2026-05-15.md` has been applied.
+- Packet B/C and PB3/SWO blockers are copied forward if still unresolved.
+
+Allowed evidence:
+
+- Generated project path.
+- No-power build command and output.
+- Compiler warnings, binary path, and size.
+- Evidence wording that says build-only configuration familiarity.
+
+Forbidden conclusions:
+
+- Do not claim CN8 routing proof.
+- Do not claim STDRIVE101 protection-path proof.
+- Do not claim current-sense, Hall, Gate PWM, Motor Profiler, motor,
+  power-stage, or sensorless behavior.
+- Do not flash or run the generated project.
+
+### P2 To P3 Blocker List
+
+P3 Motor Profiler or any powered stage stays closed until all of these exist:
+
+1. Accepted Packet A for MCSDK / MotorControl configuration.
+2. Accepted Packet B for STM32 endpoint mapping and board route evidence.
+3. Accepted Packet C for STDRIVE101 `DT/MODE`, `STBY`, `NFAULT`, `REG12`,
+   `CP`, `SCREF`, `VS/VM`, bootstrap, and VDS monitoring proof.
+4. PB3/SWO release or isolation evidence if Hall B remains on `PB3`.
+5. No-power continuity / short-check record for the actual wiring stage.
+6. current-limited bring-up settings, measurement points, stop conditions, and
+   rollback image.
+7. A new dated phase-gate decision that explicitly opens the powered action.

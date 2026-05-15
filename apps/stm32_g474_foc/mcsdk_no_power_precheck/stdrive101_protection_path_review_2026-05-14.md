@@ -34,14 +34,20 @@ Low-grade board clue only:
 
 - `hardware/schematic/2026-05-09_power_board_schematic_screenshot.jpg`
 - `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md`
+- `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.png`
+- `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.md`
 
 Accepted board evidence must be current-version EDA source, current-version
 schematic PDF, current-version netlist, or a high-resolution local schematic
 crop that clearly shows the target net and endpoint pins.
 
-The existing screenshot may guide what to ask for next, but it does not prove
-CN8 routing, PCB routing, connector pinout, protection-path correctness, or
-power-stage readiness.
+The 2026-05-15 screenshot improves readability for several STDRIVE101 clues,
+and the user confirmed it matches the current physical power board and was drawn
+by the hardware teammate. It is still `Partial clue` until formal source
+revision/date, endpoint proof, and missing nets such as `STBY` are resolved.
+Screenshots may guide what to ask for next, but they do not prove CN8 routing,
+PCB routing, connector pinout, protection-path correctness, or power-stage
+readiness unless the intake requirements are met.
 
 ## Official Requirements Summary
 

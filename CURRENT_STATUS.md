@@ -1,3 +1,177 @@
+## 2026-05-15 Phase Gate P2 Insert
+
+- Updated phase gate checklist:
+  `workflow/phase_gate_checklist.md`.
+- The phase gate now explicitly blocks jumping from NUCLEO basics directly to
+  Motor Profiler or generated-project trust. It adds `P2-S1 - MCSDK No-Power
+  Precheck`, `P2-S2 - Build-Only Generated Project Gate`, and a `P2 To P3
+  Blocker List`.
+- Current decision is unchanged: Packet A must be accepted before build-only
+  generated-project work; Packet B/C, PB3/SWO, no-power continuity checks,
+  current-limited bring-up settings, measurement points, stop conditions, and a
+  rollback image are required before P3 powered work can open.
+- This update is workflow gating only. It does not prove MCSDK MotorControl
+  configuration, generated-project trust, CN8 routing, STDRIVE101
+  protection-path proof, power-stage readiness, Hall readiness, Gate PWM, Motor
+  Profiler, motor behavior, or sensorless behavior, and it does not authorize
+  24V, power-board connection, motor connection, Gate PWM, Motor Profiler, Hall
+  closed-loop, or sensorless FOC claims.
+
+## 2026-05-15 P2 Readiness Snapshot
+
+- Added P2 readiness snapshot:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`.
+- Current gate decision is explicit: P2 no-power planning remains in progress;
+  Packet A is still `Blocked`; generated-project trust is still `Not allowed`;
+  Packet B/C and PB3/SWO remain blocked or partial clue only; P3 powered or
+  motor work is not allowed.
+- The snapshot does not prove MCSDK MotorControl configuration,
+  generated-project trust, CN8 routing, STDRIVE101 protection-path proof,
+  power-stage readiness, Hall readiness, Gate PWM, Motor Profiler, motor
+  behavior, or sensorless behavior, and it does not authorize 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless FOC claims.
+
+## 2026-05-15 STM32 Signal Contract And Build-Only Gate
+
+- Added STM32-side signal contract:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md`.
+- Added future build-only gate:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/future_build_only_gate_2026-05-15.md`.
+- The signal contract records future STM32 responsibilities for TIM1 PWM
+  commands, `NFAULT`, `STBY`, `DT/MODE`, current sensing, Hall fallback,
+  `PA2/PA3`, `PB3`, `3V3`, `GND_SIGNAL`, and ESP32 gateway boundaries. All
+  hardware-dependent items remain blocked or candidate-only until Packet A/B/C
+  or PB3/SWO evidence proves them.
+- The build-only gate records that generated-project trust is currently
+  `Not allowed` because Packet A is still blocked. Even after Packet A exists,
+  a generated MCSDK project may only be treated as no-power build evidence
+  until later hardware phase gates exist.
+- This update does not prove MCSDK MotorControl configuration,
+  generated-project trust, CN8 routing, STDRIVE101 protection-path proof,
+  power-stage readiness, Hall readiness, Gate PWM, Motor Profiler, motor
+  behavior, or sensorless behavior, and it does not authorize 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless FOC claims.
+
+## 2026-05-15 Packet A Local Probe
+
+- Added Packet A local probe:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`.
+- Added Packet A capture checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md`.
+- Current result: checked repo `.stmcx`, existing screenshots,
+  `apps/stm32_g474_foc/MotorControl`, `F:\STMCubeMX`,
+  `C:\Users\gregrg\STM32Cube\Repository`, `C:\Users\gregrg\.stm32cubemx`, and
+  common user locations (`Documents`, `Downloads`, `Desktop`). No real
+  `.stmcx` and no MotorControl / Workbench configuration screenshot were found.
+  Direct search of `C:\Users\gregrg` returned access denied, so this is a
+  bounded local probe, not an all-disk proof.
+- Packet A remains `Blocked`. This update does not prove MCSDK MotorControl
+  configuration, generated-project trust, CN8 routing, STDRIVE101
+  protection-path proof, power-stage readiness, Hall readiness, Gate PWM, Motor
+  Profiler, motor behavior, or sensorless behavior, and it does not authorize
+  24V, power-board connection, motor connection, Gate PWM, Motor Profiler, Hall
+  closed-loop, or sensorless FOC claims.
+
+## 2026-05-15 P2 Non-Hardware Parallel Track
+
+- Added non-hardware parallel track:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md`.
+- User asked to skip the hardware source package branch for now. The repo now
+  records this as "skipped for scheduling, not cleared": Packet B/C, `DT/MODE`,
+  `STBY`, STM32 endpoint mapping, and `PB3` / SWO release remain blocked.
+- Allowed parallel work is now explicit: Packet A MCSDK / MotorControl evidence,
+  STM32-side signal contract, future build-only gate, and submission/evidence
+  cleanup.
+- This update does not prove `.stmcx`, MotorControl configuration, CN8 routing,
+  STDRIVE101 protection paths, power-stage readiness, Hall readiness, Gate PWM,
+  Motor Profiler, motor behavior, or sensorless behavior, and it does not
+  authorize 24V, power-board connection, motor connection, Gate PWM, Motor
+  Profiler, Hall closed-loop, or sensorless FOC claims.
+
+## 2026-05-15 P2 Schematic Candidate Intake
+
+- Imported the user-provided schematic screenshot as a preserved P2 hardware
+  source candidate:
+  `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.png`.
+- Added source note:
+  `hardware/schematic/2026-05-15_power_board_cn8_stdrive101_schematic_candidate.md`.
+- Added review record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md`.
+- Current decision: `Partial clue`. The screenshot can guide Packet B/C review
+  because it shows CN8 labels, STDRIVE101, input resistors, `nFAULT`, `REG12`,
+  `CP`, `SCREF`, bootstrap clues, MOSFETs, shunts, and Hall interface clues.
+  User confirmed on 2026-05-15 that it is the current physical power board and
+  was drawn by the hardware teammate. It still lacks a formal title-block
+  source revision/date, STM32-side CN8-to-MCU pin mapping, accepted `DT/MODE`
+  endpoint proof, and `STBY` proof.
+- This update does not prove CN8 routing, STDRIVE101 protection paths, MCSDK
+  MotorControl configuration, power-stage readiness, Hall readiness, Gate PWM,
+  Motor Profiler, motor behavior, or sensorless behavior, and it does not
+  authorize 24V, power-board connection, motor connection, Gate PWM, Motor
+  Profiler, Hall closed-loop, or sensorless FOC claims.
+
+## 2026-05-14 P2 Source Packet Review Template
+
+- Added repeatable source packet review template:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md`.
+- The template defines the Codex-side review path after Packet A, Packet B,
+  Packet C, or `PB3` / SWO evidence arrives: Accept, Partial clue, or Reject;
+  then update only the exact proven fields.
+- This is a no-power review-control artifact only. It does not add `.stmcx`,
+  MotorControl screenshot, CN8 / EDA / netlist evidence, STDRIVE101
+  protection-path proof, or any hardware validation, and it does not authorize
+  24V, power-board connection, motor connection, Gate PWM, Motor Profiler, Hall
+  closed-loop, or sensorless FOC claims.
+
+## 2026-05-14 P2 User Action Queue
+
+- Added direct user action queue:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/user_action_queue_2026-05-14.md`.
+- The queue tells the user exactly what to provide next: first Packet B
+  current-version CN8 / board-route / STDRIVE101 source evidence, then Packet A
+  MCSDK / MotorControl `.stmcx` or screenshot evidence, plus `PB3` / SWO release
+  evidence if Hall B remains planned.
+- This is a handoff and intake artifact only. It does not prove MCSDK
+  MotorControl configuration, does not prove CN8 routing, does not prove
+  STDRIVE101 protection paths, and does not authorize 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless FOC claims.
+
+## 2026-05-14 P2 Source Packet Request Pack
+
+- Added concrete source packet request pack:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_request_pack_2026-05-14.md`.
+- The request pack turns the intake checklist into three handoff packets:
+  MCSDK / MotorControl configuration evidence, CN8 / board-route evidence, and
+  board-level STDRIVE101 protection-path evidence.
+- It records required fields, rejected sources, Codex review steps, and the
+  current blocked state for `.stmcx`, MotorControl screenshots, CN8 / EDA /
+  netlist evidence, STDRIVE101 protection paths, and `PB3` Hall/SWO ownership.
+- This is a handoff artifact only. It does not add board evidence, does not
+  prove MCSDK MotorControl configuration, does not prove CN8 routing or
+  STDRIVE101 protection paths, and does not authorize 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless FOC claims.
+
+## 2026-05-14 P2 Source Packet Intake 闭环
+
+- Added P2 source packet intake checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_intake_checklist_2026-05-14.md`.
+- The checklist defines accepted evidence packets for MCSDK `.stmcx` /
+  MotorControl screenshots, CN8 / EDA / netlist / high-resolution route
+  evidence, and board-level STDRIVE101 protection-path source evidence.
+- It also rejects low-resolution screenshots, oral descriptions, old or
+  unknown-version files, incomplete crops, generated source without matching
+  configuration evidence, and the excluded WeChat-side `netlist_PADS.net`
+  candidate.
+- This is an evidence-entry rule only. It does not prove MCSDK MotorControl
+  configuration completion, CN8 routing, STDRIVE101 protection paths,
+  power-stage readiness, Hall readiness, or sensorless readiness, and it still
+  does not authorize 24V, power-board connection, motor connection, Gate PWM,
+  Motor Profiler, Hall closed-loop, or sensorless FOC claims.
+
 ## 2026-05-14 P2 STDRIVE101 保护路径审查
 
 - Added STDRIVE101 protection-path review:

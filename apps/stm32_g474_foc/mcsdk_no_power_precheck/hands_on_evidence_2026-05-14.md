@@ -41,7 +41,7 @@ CubeMX 配置层证据，用来证明：
 - 已经存在 Workbench `.stmcx`；
 - `PB12` 真的接到了 STDRIVE101 `nFAULT`；
 - `PB14` 真的接到了 STDRIVE101 V 相低侧输入；
-- Hall、PWM Gate、Motor Profiler、功率板或电机行为已经验证。
+- 不能证明 Hall、PWM Gate、Motor Profiler、功率板或电机行为已经验证。
 
 ## 下一步证据
 

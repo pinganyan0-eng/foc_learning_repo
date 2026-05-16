@@ -33,7 +33,7 @@ Accepted / rejected source rules are defined in
 
 Request one of these:
 
-- a real Workbench `.stmcx`;
+- a real Workbench project file: `.stwb6` for MCSDK 6.x, or legacy `.stmcx`;
 - a MotorControl / Workbench configuration screenshot;
 - an exact launcher path plus captured version/config screen.
 
@@ -103,14 +103,15 @@ Do not submit these as proof:
 - oral descriptions;
 - old or unknown-version EDA/PDF/netlist files;
 - partial crops without endpoints or board revision;
-- generated MCSDK source without matching `.stmcx` or configuration screen;
+- generated MCSDK source without matching Workbench project file or
+  configuration screen;
 - the excluded WeChat-side `netlist_PADS.net` candidate.
 
 ## Current Blocking State
 
 | Evidence chain | Current state | Next accepted packet |
 | --- | --- | --- |
-| MCSDK / MotorControl | Blocked. No `.stmcx` or MotorControl configuration screenshot exists. | Packet A |
+| MCSDK / MotorControl | Partial clue / Preparation only. `My_First_FOC.stwb6` is preserved as a legacy learning leftover, and the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists, but no project-specific `.stwb6` or selected-field screenshots are accepted yet. | Packet A GUI screenshots or accepted final Workbench project |
 | CN8 / board route | Blocked. No current-version EDA/PDF/netlist/high-resolution route crop exists. | Packet B |
 | STDRIVE101 protection path | Blocked. Only official requirements and missing-evidence matrix exist. | Packet C |
 | `PB3` Hall/SWO | Blocked. Current `.ioc` still records `PB3.Signal=SYS_JTDO-SWO`. | Packet A plus Packet B or NUCLEO bridge evidence |

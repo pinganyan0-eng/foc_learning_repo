@@ -6,7 +6,8 @@ This snapshot answers one control question:
 build-only work, or hardware action?`
 
 Current answer: no. P2 remains in progress. Generated-project trust is
-`Not allowed` because Packet A is still blocked. Hardware action is not a P2 state.
+`Not allowed` because Packet A is only `Partial clue / Preparation only`.
+Hardware action is not a P2 state.
 
 ## Safety Boundary
 
@@ -30,8 +31,8 @@ blocked, or only a planning artifact.
 | Gate | Current decision | Why |
 | --- | --- | --- |
 | P2 no-power planning | In progress | P2 documents, reviews, and blocker governance exist. |
-| Packet A MCSDK / MotorControl evidence | Blocked | No real `.stmcx`, MotorControl configuration screenshot, or captured launcher/config screen exists. |
-| Generated-project trust | Not allowed | `future_build_only_gate_2026-05-15.md` requires Packet A first. |
+| Packet A MCSDK / MotorControl evidence | Partial clue / Preparation only | `My_First_FOC.stwb6` is preserved as a legacy learning leftover, and the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists. No new project-specific `.stwb6` or selected-field screenshots are accepted yet. |
+| Generated-project trust | Not allowed | `future_build_only_gate_2026-05-15.md` requires accepted Packet A selected fields first. |
 | No-power build-only generated project | Not allowed now | Build-only work is a future state after accepted Packet A evidence. |
 | Packet B CN8 / board-route proof | Blocked | The 2026-05-15 schematic screenshot is `Partial clue`, not accepted endpoint mapping. |
 | Packet C STDRIVE101 protection proof | Blocked | `DT/MODE`, `STBY`, protection-threshold, and board-specific route proof are unresolved. |
@@ -42,7 +43,7 @@ blocked, or only a planning artifact.
 
 | Track | Current evidence | Current status | Unlock condition |
 | --- | --- | --- | --- |
-| Packet A | `packet_a_local_probe_2026-05-15.md` and `packet_a_capture_checklist_2026-05-15.md` | Blocked | Real `.stmcx`, MotorControl screenshot, or exact GUI launcher path plus captured version/config screen. |
+| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, and `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md` | Partial clue / Preparation only | Create the new custom `.stwb6` and Workbench GUI screenshots proving selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3` choices. |
 | Packet B | `source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md` | Partial clue only | Current-version EDA, schematic PDF, netlist, or high-resolution route evidence with STM32 endpoint mapping. |
 | Packet C | `stdrive101_protection_path_review_2026-05-14.md` | Blocked | Board-level proof for `DT/MODE`, `STBY`, `NFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, and VDS monitoring. |
 | PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership | Blocked | SWO release/isolation evidence plus Packet A/B Hall assignment proof. |
@@ -58,10 +59,14 @@ Allowed current claims:
 - The repo has local STDRIVE101 official-source review material.
 - The repo has a `Partial clue` schematic candidate for Packet B/C review.
 - The repo has written signal-contract and future build-only rules.
+- The repo has a local MCSDK 6 `.stwb6` legacy learning file reviewed as
+  `Partial clue`.
+- The repo has a 2026-05-16 custom NUCLEO + STDRIVE101 Packet A capture
+  package reviewed as `Partial clue / Preparation only`.
 
 Forbidden current claims:
 
-- MCSDK MotorControl configuration is complete.
+- MCSDK MotorControl configuration is complete for the competition board.
 - A generated motor-control project is trusted or ready to build.
 - CN8 routing is proven.
 - STDRIVE101 protection paths are proven on this board.
@@ -89,8 +94,8 @@ Before moving from P2 to any powered or motor stage:
 
 ## Next Smallest Actions
 
-1. Capture Packet A when a real `.stmcx`, MotorControl screenshot, or exact GUI
-   launcher path is available.
+1. Use the 2026-05-16 custom NUCLEO + STDRIVE101 capture package to create the
+   new `.stwb6` and selected-field screenshots.
 2. Collect accepted Packet B/C source evidence when the hardware-source branch
    is available again.
 3. Use `future_build_only_gate_2026-05-15.md` only after Packet A is accepted.

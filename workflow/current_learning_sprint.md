@@ -16,11 +16,29 @@ This is the short execution layer for the current teaching plan. It turns the lo
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`
 and
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md`.
-The local probe found no real `.stmcx` and no MotorControl / Workbench
-configuration screenshot in the checked locations, and the capture checklist
-defines the next acceptable no-power Packet A source. Packet A remains
-`Blocked`; this does not upgrade generated-project trust or any hardware
-evidence.
+The first local probe found no `.stmcx` and no MotorControl / Workbench
+configuration screenshot in the checked locations. A follow-up resolved the
+Start Menu shortcut to
+`F:\STMCSDK\MC_SDK_6.4.2\Utilities\PC_Software\STMCWB\STMCWB.exe`, found
+`F:\STMCSDK\My_First_FOC.stwb6`, preserved it under
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-15_my_first_foc/My_First_FOC.stwb6`,
+and reviewed it in
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`.
+Packet A is now `Partial clue`; this does not upgrade generated-project trust
+or any hardware evidence.
+
+2026-05-16 Packet A correction: the user clarified that
+`My_First_FOC.stwb6` was only a previous toolchain-learning leftover and that
+its `EVALSTDRIVE101` power-board selection was arbitrary. Codex added the new
+project-specific capture package
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/`
+and review
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`.
+The target is `NUCLEO-G474RE` plus a Custom / Generic STDRIVE101 power stage,
+FOC, Hall fallback, 3-shunt current sensing, placeholder motor data, no-power
+motor measurement, and a pin assignment table. Status remains
+`Partial clue / Preparation only` until the real `.stwb6` and selected-field
+screenshots exist.
 
 2026-05-15 signal/build-gate follow-up: Codex added
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md`
@@ -29,13 +47,13 @@ and
 These standalone artifacts turn the inline non-hardware track draft into
 reviewable rules: STM32-side signal responsibilities stay candidate/blocked
 until Packet A/B/C or PB3/SWO evidence exists, and any future generated project
-is currently `Not allowed` for trust because Packet A remains blocked.
+is currently `Not allowed` for trust because Packet A is only `Partial clue`.
 
 2026-05-15 readiness follow-up: Codex added
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`.
 It consolidates Packet A/B/C, PB3/SWO, STM32-side signal-contract, and
 build-only gate status into one current gate decision. P2 remains in progress;
-Packet A is still blocked; generated-project trust is still `Not allowed`; P3
+Packet A is `Partial clue`; generated-project trust is still `Not allowed`; P3
 powered or motor work is not allowed.
 
 2026-05-15 phase-gate follow-up: Codex updated
@@ -65,7 +83,7 @@ The first P2 card now exists at `deliverables/2026-05-13_p2_mcsdk_no_power_prech
 | P2 no-power precheck card | `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md` | in progress | Card includes tool roles, allowed/forbidden scope, tool/status table, baseline `.ioc` readback, pin/config draft, official-source cross-check, conflict resolution pass, Motor Profiler plan, and risk/no-go checklist. |
 | Tool version/status evidence | same card plus `workflow/windows_toolchain_status.md` | partially filled | Local evidence states what is available, what is missing from PATH, and what still needs GUI screenshot or exact path proof. |
 | ST official local mirror | `materials/raw/st_manuals/`, `references/st_manuals_index.md` | filled, including STDRIVE101 | Frequently used ST PDFs are repo-local, indexed, hash-recorded, and paired with extracted text for retrieval. |
-| Workbench/CubeMX config evidence | future MotorControl screenshot or `.stmcx` placeholder | partially started | CubeMX Home screenshot, NUCLEO `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, and Workbench entry probe are captured. MotorControl package data exists, but a real MCSDK/Workbench MotorControl screenshot or `.stmcx` is still required without running Motor Profiler or touching power hardware. |
+| Workbench/CubeMX config evidence | future MotorControl screenshot or `.stwb6` / legacy `.stmcx` source | partial clue / preparation only | CubeMX Home screenshot, NUCLEO `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, Workbench entry probe, and `My_First_FOC.stwb6` legacy review are captured. The 2026-05-16 custom capture package now defines the intended `NUCLEO-G474RE` plus Custom / Generic STDRIVE101 path, but selected-field screenshots or an accepted final project source are still required without running Motor Profiler or touching power hardware. |
 | NUCLEO CubeMX `.ioc` draft | `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc` | saved | `.ioc` preserves the user hands-on Board Selector result and reads back NUCLEO, SWD, VCP, SWO, `PB12/TIM1_BKIN`, and `PB14/TIM1_CH2N` choices. |
 | Pin/config conflict resolution | same card plus `apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md` | partially resolved | `PA2/PA3`, `PC5`/nFAULT, `PB3`, and V low-side PWM conflicts are resolved at pin-function and CubeMX `.ioc` level; board-routing evidence still must confirm the choices. |
 | Pin/config safety review | `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` | filled | Review defines evidence classes, hard stops, and the minimum evidence packet before trusting generated MCSDK configuration. |
@@ -75,9 +93,10 @@ The first P2 card now exists at `deliverables/2026-05-13_p2_mcsdk_no_power_prech
 | Source packet review template | `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_template_2026-05-14.md` | filled | Template defines Accept / Partial clue / Reject review states before any Packet A/B/C or PB3/SWO source can upgrade the evidence packet. |
 | 2026-05-15 schematic candidate review | `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md` | partial clue | User-provided screenshot is preserved and reviewed. User confirmed it matches the current physical power board and was drawn by the hardware teammate. It can guide Packet B/C review, but formal source revision/date, STM32 endpoint mapping, accepted `DT/MODE`, and `STBY` proof are still missing. |
 | Non-hardware parallel track | `apps/stm32_g474_foc/mcsdk_no_power_precheck/non_hardware_parallel_track_2026-05-15.md` | filled | Records that hardware source work can be skipped for scheduling only while Packet A, STM32-side signal contract, future build-only gate, and delivery cleanup progress. |
-| Packet A local probe and capture checklist | `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md` | filled; Packet A still blocked | Probe records that no real `.stmcx` or MotorControl / Workbench configuration screenshot was found in the checked locations. Checklist defines the next accepted Packet A capture without authorizing generated-project trust or hardware action. |
+| Packet A local probe, source candidate, and capture checklist | `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_local_probe_2026-05-15.md`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-15_my_first_foc/My_First_FOC.stwb6`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_checklist_2026-05-15.md` | filled; Packet A partial clue | Probe records the Workbench launcher and `.stwb6` candidate. Review accepts the file as a source candidate, but selected fields and custom-board context remain incomplete. Checklist defines the next screenshots without authorizing generated-project trust or hardware action. |
+| Packet A custom capture package | `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md` | filled; preparation only | Package gives the exact Workbench no-power path, motor no-power measurement template, pin assignment table, and screenshot inbox for a new project-specific `.stwb6`; it does not yet accept Packet A or allow generation/build. |
 | STM32-side signal contract | `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md` | filled; all hardware-dependent fields still blocked/candidate | Defines intended STM32 responsibilities for future CN8-facing signals while preserving Packet A/B/C and PB3/SWO blockers. |
-| Future build-only gate | `apps/stm32_g474_foc/mcsdk_no_power_precheck/future_build_only_gate_2026-05-15.md` | filled; generated-project trust currently not allowed | Defines prerequisites and forbidden actions for any later MCSDK generated project. Compile success, if later achieved, can prove only no-power build evidence. |
+| Future build-only gate | `apps/stm32_g474_foc/mcsdk_no_power_precheck/future_build_only_gate_2026-05-15.md` | filled; generated-project trust currently not allowed | Defines prerequisites and forbidden actions for any later MCSDK generated project. The current `.stwb6` is only `Partial clue`; compile success, if later achieved, can prove only no-power build evidence. |
 | P2 readiness snapshot | `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md` | filled; P2 remains in progress and generated-project trust is not allowed | Consolidates Packet A/B/C, PB3/SWO, signal-contract, and build-only status into one gate decision before any later generated-project or hardware claim. |
 | Phase gate P2 insert | `workflow/phase_gate_checklist.md` | filled; formal gate now blocks direct NUCLEO-to-Profiler jumps | Adds P2-S1 no-power, P2-S2 build-only, and P2-to-P3 blocker rules tied to Packet A/B/C, PB3/SWO, continuity checks, current limits, stop conditions, and rollback evidence. |
 | Motor Profiler plan | same card or a later P3 plan file | expanded for future P3 | Plan lists required hardware, current limit, motor information, stop conditions, abort criteria, instrument/log needs, and rollback path; no live profiler run occurs in P2. |
@@ -96,7 +115,7 @@ Use `learning/NEXT_LESSON.md` for the exact teaching script, but treat this file
 The sprint can close when:
 
 - `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md` has all required P2 sections filled.
-- MCSDK/Workbench MotorControl screenshot or real `.stmcx` exists and is linked; CubeMX `.ioc` pinout screenshots alone are not enough to close this item.
+- MCSDK/Workbench MotorControl screenshot or accepted final `.stwb6` / legacy `.stmcx` exists and is linked; CubeMX `.ioc` pinout screenshots and the current partial-clue `.stwb6` alone are not enough to close this item.
 - P2 证据包已经记录所有缺失阻塞项，或已更新为真实新增证据链接。
 - Source packet request pack has been used for the next evidence handoff, or the missing source packets are explicitly still unavailable.
 - The nFAULT pin decision is no longer internally conflicted and is confirmed against CubeMX/Workbench plus CN8/EDA/netlist evidence.

@@ -281,10 +281,13 @@ Current readiness control file:
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`
 
 The snapshot consolidates Packet A/B/C, PB3/SWO, STM32-side signal-contract,
-and build-only gate status into one gate decision. Current decision: P2
-remains in progress; Packet A remains `Blocked`; generated-project trust is
-`Not allowed`; Packet B/C and PB3/SWO remain blocked or partial clue only; P3
-powered or motor work is not allowed.
+and build-only gate status into one gate decision. The 2026-05-15 decision was:
+P2 remained in progress; Packet A had no accepted selected-field source;
+generated-project trust was `Not allowed`; Packet B/C and PB3/SWO remained
+blocked or partial clue only; P3 powered or motor work was not allowed. Later
+Packet A work added only a legacy `.stwb6` `Partial clue` and a 2026-05-16
+custom capture package preparation, so generated-project trust remains
+`Not allowed`.
 
 This is readiness governance only. It does not prove MCSDK MotorControl
 configuration, generated-project trust, CN8 routing, STDRIVE101

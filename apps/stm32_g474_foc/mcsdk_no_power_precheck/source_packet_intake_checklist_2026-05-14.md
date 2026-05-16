@@ -22,8 +22,8 @@ and not hardware validation.
 
 Accepted source evidence:
 
-- a real Workbench `.stmcx` saved into the P2 no-power directory or another
-  clearly named repo path;
+- a real Workbench project file saved into the P2 no-power directory or another
+  clearly named repo path: `.stwb6` for MCSDK 6.x, or legacy `.stmcx`;
 - a MotorControl / Workbench configuration screenshot showing the MCU,
   key timer/PWM choices, current-sense mode, protection input, and any Hall or
   sensorless mode selection;
@@ -34,7 +34,7 @@ Minimum fields to record:
 
 | Required field | Why it is needed | Current status |
 | --- | --- | --- |
-| MCU and board context | Confirms the project targets `STM32G474RETx` / NUCLEO or the intended custom board context. | Blocked until `.stmcx` or MotorControl screen exists. |
+| MCU and board context | Confirms the project targets `STM32G474RETx` / NUCLEO or the intended custom board context. | Partial clue from `My_First_FOC.stwb6`; final custom-board context still needs GUI/source review. |
 | TIM1 PWM assignment | Prevents trusting a complementary-output plan that is not actually selected. | Blocked. |
 | `PB12/TIM1_BKIN` or final fault input | Prevents confusing a CubeMX draft pin with a trusted MCSDK protection path. | Blocked. |
 | `PA2/PA3` exclusion or documented reuse decision | Keeps the P1 VCP path from silently colliding with OPAMP/PGA planning. | Blocked. |
@@ -97,7 +97,8 @@ Do not upgrade evidence from these sources:
 - oral descriptions without a repo-stored source file or screenshot;
 - old, draft, or unknown-version EDA/PDF/netlist files;
 - partial crops that omit endpoints or board revision;
-- generated MCSDK source without the matching `.stmcx` or configuration screen;
+- generated MCSDK source without the matching Workbench project file or
+  configuration screen;
 - the excluded WeChat-side `netlist_PADS.net` candidate.
 
 Rejected sources may be recorded as clues, but they must remain `Blocked` or
@@ -121,9 +122,10 @@ If any required field is missing, the related item remains blocked.
 
 ## Current Decision
 
-As of this checklist, the repo still has no accepted `.stmcx` / MotorControl
-configuration packet, no accepted CN8 / board route packet, and no accepted
-board-level STDRIVE101 protection path packet.
+As of the 2026-05-15 follow-up, the repo has one MCSDK 6 `.stwb6` source
+candidate reviewed as `Partial clue`, but still has no accepted final
+MotorControl configuration packet, no accepted CN8 / board route packet, and no
+accepted board-level STDRIVE101 protection path packet.
 
 P2 may continue evidence intake and document review only. It may not claim
 MCSDK MotorControl configuration completion, CN8 routing proof, STDRIVE101

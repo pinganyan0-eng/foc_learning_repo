@@ -42,7 +42,7 @@
 
 | Required field | Evidence observed | Decision |
 | --- | --- | --- |
-| Real `.stmcx` or MotorControl / Workbench configuration screenshot | `TBD` | Blocked |
+| Real `.stwb6` / legacy `.stmcx` or MotorControl / Workbench configuration screenshot | `TBD` | Blocked |
 | MCU / board context: `STM32G474RETx`, NUCLEO, or intended custom-board context | `TBD` | Blocked |
 | TIM1 complementary PWM choices are visible | `TBD` | Blocked |
 | Fault input selection is visible, especially `PB12/TIM1_BKIN` if used | `TBD` | Blocked |

@@ -1,3 +1,4 @@
+import json
 import re
 import unittest
 from pathlib import Path
@@ -62,6 +63,41 @@ class P2EvidenceContractTests(unittest.TestCase):
     P2_READINESS_SNAPSHOT = (
         "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
         "p2_readiness_snapshot_2026-05-15.md"
+    )
+    PACKET_A_STWB6_SOURCE = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-15_my_first_foc/My_First_FOC.stwb6"
+    )
+    PACKET_A_STWB6_NOTE = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-15_my_first_foc/README.md"
+    )
+    PACKET_A_STWB6_REVIEW = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "source_packet_review_2026-05-15_002_my_first_foc_stwb6.md"
+    )
+    PACKET_A_CUSTOM_README = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-16_custom_nucleo_stdrive101/README.md"
+    )
+    PACKET_A_CUSTOM_GUIDE = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-16_custom_nucleo_stdrive101/"
+        "workbench_no_power_configuration_guide_2026-05-16.md"
+    )
+    PACKET_A_CUSTOM_MOTOR_LOG = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-16_custom_nucleo_stdrive101/"
+        "motor_no_power_measurement_log_2026-05-16.md"
+    )
+    PACKET_A_CUSTOM_PIN_TABLE = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "packet_a_sources/2026-05-16_custom_nucleo_stdrive101/"
+        "pin_assignment_table_2026-05-16.md"
+    )
+    PACKET_A_CUSTOM_REVIEW = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md"
     )
     PHASE_GATE = "workflow/phase_gate_checklist.md"
 
@@ -167,12 +203,87 @@ class P2EvidenceContractTests(unittest.TestCase):
             "CN8 / Board Route Packet",
             "STDRIVE101 Protection Path Packet",
             "Blocked",
-            "仍没有真实 `.stmcx`",
+            "My_First_FOC.stwb6",
+            "Partial clue",
             "仍没有 current-version EDA",
             "仍只有官方器件要求和缺证矩阵",
             "netlist_PADS.net",
         ):
             self.assertIn(phrase, text)
+
+    def test_packet_a_stwb6_candidate_is_preserved_as_partial_clue(self):
+        source_path = ROOT / self.PACKET_A_STWB6_SOURCE
+        self.assertTrue(source_path.exists())
+
+        data = json.loads(source_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["algorithm"], "FOC")
+        self.assertEqual(data["workBenchVersion"], "6.4.2")
+        self.assertEqual(data["hardwares"]["control"]["id"], "NUCLEO-G474RE")
+        self.assertEqual(data["hardwares"]["control"]["mcu"]["id"], "STM32G474RETx")
+        self.assertEqual(data["hardwares"]["power"][0]["id"], "EVALSTDRIVE101")
+
+        note = read_repo_text(self.PACKET_A_STWB6_NOTE)
+        review = read_repo_text(self.PACKET_A_STWB6_REVIEW)
+
+        for phrase in (
+            "Packet A Source Candidate",
+            "My_First_FOC.stwb6",
+            "STMCWB.exe",
+            "6.4.2",
+            "Partial clue",
+            "does not authorize generated-project trust",
+        ):
+            self.assertIn(phrase, note + review)
+
+        for phrase in (
+            "P2-SOURCE-REVIEW-2026-05-15-002",
+            "MCSDK 6 stores Workbench projects as `.stwb6`",
+            "Partial clue",
+            "NUCLEO-G474RE",
+            "STM32G474RETx",
+            "EVALSTDRIVE101",
+            "generated-project trust",
+            "Not allowed",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_packet_a_custom_capture_package_is_preparation_only(self):
+        texts = [
+            read_repo_text(self.PACKET_A_CUSTOM_README),
+            read_repo_text(self.PACKET_A_CUSTOM_GUIDE),
+            read_repo_text(self.PACKET_A_CUSTOM_MOTOR_LOG),
+            read_repo_text(self.PACKET_A_CUSTOM_PIN_TABLE),
+            read_repo_text(self.PACKET_A_CUSTOM_REVIEW),
+        ]
+        combined = "\n".join(texts)
+
+        for phrase in (
+            "Packet A Capture Package",
+            "NUCLEO-G474RE",
+            "STM32G474RETx",
+            "Custom / Generic STDRIVE101",
+            "Do not select `EVALSTDRIVE101`",
+            "PLACEHOLDER_not_profiled_2026-05-16",
+            "Hall as the main speed feedback",
+            "3-shunt",
+            "No generated source",
+            "No Motor Profiler",
+            "Pin Assignment Table",
+            "PB3 / TIM2_CH2",
+            "PB3.Signal=SYS_JTDO-SWO",
+            "Partial clue / Preparation only",
+            "Generated-project trust remains `Not allowed`",
+        ):
+            self.assertIn(phrase, combined)
+
+        for path in (
+            self.PACKET_A_CUSTOM_README,
+            self.PACKET_A_CUSTOM_GUIDE,
+            self.PACKET_A_CUSTOM_MOTOR_LOG,
+            self.PACKET_A_CUSTOM_PIN_TABLE,
+            self.PACKET_A_CUSTOM_REVIEW,
+        ):
+            self.assertTrue((ROOT / path).exists())
 
     def test_schematic_candidate_is_preserved_as_partial_clue_only(self):
         note = read_repo_text(self.SCHEMATIC_CANDIDATE_NOTE)
@@ -232,6 +343,14 @@ class P2EvidenceContractTests(unittest.TestCase):
         self.assertIn("p2_readiness_snapshot_2026-05-15.md", submission)
         self.assertIn("p2_readiness_snapshot_2026-05-15.md", register)
         self.assertIn("p2_readiness_snapshot_2026-05-15.md", sprint)
+        self.assertIn("2026-05-16_custom_nucleo_stdrive101", current_status)
+        self.assertIn("2026-05-16_custom_nucleo_stdrive101", submission)
+        self.assertIn("2026-05-16_custom_nucleo_stdrive101", register)
+        self.assertIn("2026-05-16_custom_nucleo_stdrive101", sprint)
+        self.assertIn(
+            "source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md",
+            current_status + submission + register + sprint,
+        )
 
     def test_non_hardware_parallel_track_skips_but_does_not_clear_hardware(self):
         text = read_repo_text(self.NON_HARDWARE_TRACK)
@@ -253,7 +372,7 @@ class P2EvidenceContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
-    def test_packet_a_local_probe_keeps_configuration_blocked(self):
+    def test_packet_a_local_probe_keeps_configuration_partial(self):
         probe = read_repo_text(self.PACKET_A_LOCAL_PROBE)
         checklist = read_repo_text(self.PACKET_A_CAPTURE_CHECKLIST)
 
@@ -264,22 +383,23 @@ class P2EvidenceContractTests(unittest.TestCase):
             "No Motor Profiler run",
             "apps/stm32_g474_foc/MotorControl",
             "contains only tracked `.gitkeep`",
-            "access denied",
-            "Packet A remains `Blocked`",
-            "no real `.stmcx`",
-            "no MotorControl / Workbench configuration screenshot",
+            "STMCWB.exe",
+            "My_First_FOC.stwb6",
+            "Partial clue",
+            "No MotorControl / Workbench configuration screenshot",
         ):
             self.assertIn(phrase, probe)
 
         for phrase in (
             "Packet A Capture Checklist",
-            "Real Workbench `.stmcx`",
+            "Real Workbench project file: `.stwb6`",
+            "legacy `.stmcx`",
             "MotorControl / Workbench configuration screenshot",
             "Exact reproducible GUI launcher path",
-            "Generated MCSDK source without the matching `.stmcx`",
+            "Generated MCSDK source without the matching Workbench project file",
             "`PB3` ownership",
             "No Motor Profiler run",
-            "Packet A remains blocked",
+            "Partial clue",
         ):
             self.assertIn(phrase, checklist)
 
@@ -308,7 +428,7 @@ class P2EvidenceContractTests(unittest.TestCase):
             "No Gate PWM output",
             "No flash or board run",
             "`Not allowed`",
-            "Current state because Packet A is still blocked",
+            "Current state because Packet A is only `Partial clue`",
             "Allowed Build-Only Actions",
             "Forbidden Actions In This Gate",
             "cannot claim Gate PWM behavior is safe",
@@ -322,8 +442,10 @@ class P2EvidenceContractTests(unittest.TestCase):
         for phrase in (
             "P2 Readiness Snapshot",
             "P2 remains in progress",
-            "Packet A is still blocked",
-            "`Not allowed` because Packet A is still blocked",
+            "Packet A MCSDK / MotorControl evidence",
+            "Partial clue",
+            "`Not allowed` because Packet A is only `Partial clue / Preparation only`",
+            "2026-05-16 custom NUCLEO + STDRIVE101",
             "Hardware action is not a P2 state",
             "No 24V",
             "No Gate PWM output",

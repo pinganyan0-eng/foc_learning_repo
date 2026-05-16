@@ -1,3 +1,54 @@
+## 2026-05-16 Packet A Custom Workbench Capture Package
+
+- Added the new project-specific Packet A capture package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/`.
+- Added hand-run Workbench guide:
+  `workbench_no_power_configuration_guide_2026-05-16.md`.
+- Added no-power motor measurement template:
+  `motor_no_power_measurement_log_2026-05-16.md`.
+- Added pin assignment table:
+  `pin_assignment_table_2026-05-16.md`.
+- Added preparation review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`.
+- User clarified that `My_First_FOC.stwb6` is a previous toolchain-learning
+  leftover and that its `EVALSTDRIVE101` power-board choice is arbitrary. It
+  remains preserved as a legacy `Partial clue` only and is not the source for
+  the new project-specific Packet A path.
+- New intended capture target: `NUCLEO-G474RE` / `STM32G474RETx`, Custom /
+  Generic STDRIVE101 power stage, FOC, Hall fallback, 3-shunt current sensing,
+  placeholder motor `PLACEHOLDER_not_profiled_2026-05-16`, and no generated
+  source.
+- Generated-project trust remains `Not allowed`. The 2026-05-16 package
+  prepares GUI capture and review, but no new `.stwb6` or selected-field
+  Workbench screenshot has been accepted yet.
+- Motor information collection is limited to no-power records: nameplate photo,
+  wire colors, and multimeter phase-to-phase resistance clues. These are not
+  Motor Profiler data and do not authorize motor connection, Hall powering, or
+  closed-loop use.
+
+## 2026-05-15 Packet A STWB6 Candidate Intake
+
+- Found the real ST MC Workbench 6.4.2 launcher:
+  `F:\STMCSDK\MC_SDK_6.4.2\Utilities\PC_Software\STMCWB\STMCWB.exe`.
+- Found and preserved a local MCSDK 6 Workbench project candidate:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-15_my_first_foc/My_First_FOC.stwb6`.
+- Added Packet A review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`.
+- Review decision: `Partial clue`. The file records Workbench 6.4.2, FOC,
+  `NUCLEO-G474RE`, `STM32G474RETx`, `EVALSTDRIVE101`, and `R57BLB50L2`, but it
+  is not accepted final evidence for the custom power board, selected TIM1 PWM,
+  final fault input, current-sense mode, Hall/sensorless mode, `PA2/PA3`
+  policy, or `PB3` ownership.
+- Updated Packet A wording to accept MCSDK 6 `.stwb6` project files as the
+  current Workbench format; legacy `.stmcx` remains valid only for older
+  Workbench sources.
+- Generated-project trust remains `Not allowed`. This update does not prove
+  CN8 routing, STDRIVE101 protection paths, power-stage readiness, Hall
+  readiness, Gate PWM, Motor Profiler, motor behavior, or sensorless behavior,
+  and it does not authorize 24V, power-board connection, motor connection,
+  flashing, Gate PWM, Motor Profiler, Hall closed-loop, or sensorless FOC
+  claims.
+
 ## 2026-05-15 Phase Gate P2 Insert
 
 - Updated phase gate checklist:
@@ -21,10 +72,13 @@
 
 - Added P2 readiness snapshot:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`.
-- Current gate decision is explicit: P2 no-power planning remains in progress;
-  Packet A is still `Blocked`; generated-project trust is still `Not allowed`;
-  Packet B/C and PB3/SWO remain blocked or partial clue only; P3 powered or
-  motor work is not allowed.
+- At that snapshot time, P2 no-power planning remained in progress, Packet A
+  had no accepted selected-field source, generated-project trust was
+  `Not allowed`, Packet B/C and PB3/SWO remained blocked or partial clue only,
+  and P3 powered or motor work was not allowed. This has since been refined by
+  the 2026-05-15 legacy `.stwb6` partial clue review and the 2026-05-16 custom
+  capture package preparation, while generated-project trust remains
+  `Not allowed`.
 - The snapshot does not prove MCSDK MotorControl configuration,
   generated-project trust, CN8 routing, STDRIVE101 protection-path proof,
   power-stage readiness, Hall readiness, Gate PWM, Motor Profiler, motor
@@ -44,7 +98,7 @@
   hardware-dependent items remain blocked or candidate-only until Packet A/B/C
   or PB3/SWO evidence proves them.
 - The build-only gate records that generated-project trust is currently
-  `Not allowed` because Packet A is still blocked. Even after Packet A exists,
+  `Not allowed` because Packet A is only `Partial clue`. Even after Packet A selected fields are accepted,
   a generated MCSDK project may only be treated as no-power build evidence
   until later hardware phase gates exist.
 - This update does not prove MCSDK MotorControl configuration,
@@ -67,12 +121,14 @@
   `.stmcx` and no MotorControl / Workbench configuration screenshot were found.
   Direct search of `C:\Users\gregrg` returned access denied, so this is a
   bounded local probe, not an all-disk proof.
-- Packet A remains `Blocked`. This update does not prove MCSDK MotorControl
-  configuration, generated-project trust, CN8 routing, STDRIVE101
-  protection-path proof, power-stage readiness, Hall readiness, Gate PWM, Motor
-  Profiler, motor behavior, or sensorless behavior, and it does not authorize
-  24V, power-board connection, motor connection, Gate PWM, Motor Profiler, Hall
-  closed-loop, or sensorless FOC claims.
+- Packet A was not accepted by this local probe alone. It later gained only a
+  legacy `.stwb6` `Partial clue` and a 2026-05-16 custom capture package
+  preparation. This still does not prove MCSDK MotorControl configuration,
+  generated-project trust, CN8 routing, STDRIVE101 protection-path proof,
+  power-stage readiness, Hall readiness, Gate PWM, Motor Profiler, motor
+  behavior, or sensorless behavior, and it does not authorize 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless FOC claims.
 
 ## 2026-05-15 P2 Non-Hardware Parallel Track
 

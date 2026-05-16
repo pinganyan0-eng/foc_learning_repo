@@ -26,8 +26,8 @@ configuration evidence exists.
 
 | State | Meaning | Current project decision |
 | --- | --- | --- |
-| `Not allowed` | Required config evidence is missing. | Current state because Packet A is still blocked. |
-| `Build-only allowed` | Packet A exists and the project is explicitly marked no-power. | Future state only. |
+| `Not allowed` | Required config evidence is missing or only partial. | Current state because Packet A is only `Partial clue`. |
+| `Build-only allowed` | Packet A selected fields are accepted and the project is explicitly marked no-power. | Future state only. |
 | `Hardware allowed` | Later phase gates provide no-power checks, current limits, measurement points, rollback path, and safety evidence. | Not a P2 state. |
 
 ## Prerequisites For Build-Only
@@ -35,8 +35,9 @@ configuration evidence exists.
 Do not generate, trust, or build an MCSDK motor-control project until all of
 these are true:
 
-1. Packet A exists: real `.stmcx`, MotorControl / Workbench configuration
-   screenshot, or exact GUI path plus captured version/config screen.
+1. Packet A exists: real `.stwb6` / legacy `.stmcx`, MotorControl / Workbench
+   configuration screenshot, or exact GUI path plus captured version/config
+   screen.
 2. Packet A records MCU / board context, TIM1/PWM mode, fault input,
    current-sense mode, Hall/sensorless selection or absence, `PA2/PA3` policy,
    and `PB3` ownership.
@@ -77,7 +78,7 @@ When the gate is used later, record:
 
 | Field | Required content |
 | --- | --- |
-| Source config | `.stmcx` / screenshot / GUI path that authorized build-only work. |
+| Source config | `.stwb6` / legacy `.stmcx` / screenshot / GUI path that authorized build-only work. |
 | Generated path | Repo path of the generated project. |
 | Build command | Exact command and working directory. |
 | Result | Pass/fail, warnings, binary path, and size if available. |
@@ -104,6 +105,6 @@ It cannot upgrade any of these statements:
 
 ## Current Decision
 
-Current state is `Not allowed` for generated-project trust because Packet A
-remains blocked. This file only creates the future gate so that a later
+Current state is `Not allowed` for generated-project trust because Packet A is
+only `Partial clue`. This file only creates the future gate so that a later
 generated project, if created, stays build-only until stronger evidence exists.

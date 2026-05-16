@@ -20,12 +20,12 @@ procedure, and not hardware validation.
 
 One of these is enough to create a Packet A review record:
 
-1. Real Workbench `.stmcx`.
+1. Real Workbench project file: `.stwb6` for MCSDK 6.x, or legacy `.stmcx`.
 2. MotorControl / Workbench configuration screenshot.
 3. Exact reproducible GUI launcher path plus captured version/config screen.
 
-Generated MCSDK source without the matching `.stmcx` or configuration screen is
-not accepted as Packet A proof.
+Generated MCSDK source without the matching Workbench project file or
+configuration screen is not accepted as Packet A proof.
 
 ## Required Fields
 
@@ -46,15 +46,20 @@ Store captures under:
 
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/`
 
+For the 2026-05-16 custom NUCLEO + STDRIVE101 capture, store the `.stwb6`,
+guide, pin table, motor no-power log, and screenshots under:
+
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/`
+
 Use clear names such as:
 
 - `2026-05-15_motorcontrol_project_context.png`
 - `2026-05-15_motorcontrol_pwm_fault_current_sense.png`
 - `2026-05-15_motorcontrol_hall_uart_pb3.png`
 
-If a `.stmcx` is saved, place it under a dated Packet A directory or the P2
-no-power directory, and keep the original filename if it contains project
-meaning.
+If a `.stwb6` or `.stmcx` is saved, place it under a dated Packet A directory
+or the P2 no-power directory, and keep the original filename if it contains
+project meaning.
 
 ## Review Procedure After Capture
 
@@ -73,13 +78,20 @@ meaning.
 - CubeMX `Pinout & Configuration` screenshot without MotorControl settings.
 - NUCLEO `.ioc` readback by itself.
 - Oral description of the GUI.
-- Generated source without matching `.stmcx` or configuration screen.
+- Generated source without matching Workbench project file or configuration
+  screen.
 - Any capture taken during powered hardware, Motor Profiler, Gate PWM, Hall
   closed-loop, or sensorless operation.
 
 ## Current Decision
 
-This checklist supplements Packet A, but it does not upgrade Packet A. As of
-2026-05-15, Packet A remains blocked until a real `.stmcx`, MotorControl
-configuration screenshot, or exact launcher path plus captured config screen is
-available.
+This checklist supplements Packet A. After the 2026-05-15 follow-up,
+`My_First_FOC.stwb6` remains preserved as a legacy source candidate, but only
+as `Partial clue`.
+
+After the 2026-05-16 follow-up, the new custom NUCLEO + STDRIVE101 capture
+package is prepared at
+`packet_a_sources/2026-05-16_custom_nucleo_stdrive101/`. It is also only
+`Partial clue / Preparation only` until a real `.stwb6` and Workbench GUI pages
+show the selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3`
+choices.

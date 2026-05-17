@@ -35,6 +35,7 @@ configuration screen is not accepted as Packet A proof.
 | PWM / timer | TIM1 complementary PWM choices or explicit Workbench output mode. | Planning only; no Gate PWM output. |
 | Fault input | Break/fault input selection. | Draft preference remains `PB12/TIM1_BKIN` unless a safer final source is proven. |
 | Current sensing | 3-shunt / OPAMP / ADC selection. | Planning only; no current measurement claim. |
+| Motor entry | Motor name and source if Workbench requires a motor selection. | Prefer `57BLF01_VENDOR_CANDIDATE` as a supplier-clue label; do not treat vendor values as measured Motor Profiler data. |
 | Hall / sensorless | Hall choice, sensorless choice, or explicit absence. | No Hall validation and no SMO validation. |
 | Debug / UART | Whether `PA2/PA3` are excluded or reused. | Default exclude from FOC UART until MCSDK/CubeMX proves reuse is safe. |
 | `PB3` ownership | SWO or Hall B decision. | Blocked until SWO release/isolation evidence exists. |
@@ -95,3 +96,11 @@ package is prepared at
 `Partial clue / Preparation only` until a real `.stwb6` and Workbench GUI pages
 show the selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3`
 choices.
+
+After the 2026-05-17 follow-up, supplier motor parameters and a hardware
+teammate `STM32G431RB` pin table are archived and reviewed as `Partial clue`.
+The hardware teammate states the relevant G431/G474 pins are the same, and the
+local MCSDK asset comparison supports the compared key rows. This reduces the
+MCU pin-function concern, but it still does not confirm CN8 routing, `J_HALL`
+numbering, `PB3` SWO release, OPAMP2 internal-output feasibility, or any
+measured motor parameter.

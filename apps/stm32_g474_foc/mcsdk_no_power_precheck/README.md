@@ -15,8 +15,9 @@ output.
   a CubeMX Home screenshot, a CubeMX `.ioc` pinout screenshot, pin/config safety
   review, GUI capture result, a current P2 证据包, source packet intake rules,
   a source packet request pack, a source packet review template, and a user
-  action queue, STM32-side signal/build gates, a P2 readiness snapshot, and a
-  2026-05-16 custom Workbench capture package.
+  action queue, STM32-side signal/build gates, a P2 readiness snapshot, a
+  2026-05-16 custom Workbench capture package, and 2026-05-17 vendor motor /
+  hardware teammate pin-table source clues.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   CN8 / EDA / netlist confirmation, no-power continuity checks, and all
   powered hardware behavior evidence.
@@ -66,6 +67,14 @@ Forbidden in this directory and this P2 stage:
   review of the 2026-05-16 capture package. Current decision is
   `Partial clue / Preparation only`; generated-project trust remains
   `Not allowed`.
+- `mcu_pin_compatibility_check_2026-05-17.md`: local MCSDK asset comparison for
+  `STM32G431RBTx` versus `STM32G474RETx`. It supports the hardware teammate's
+  statement that the compared key rows are pin-function compatible, but it does
+  not prove CN8 routing, `J_HALL` numbering, or `PB3` / SWO release.
+- `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`:
+  review of the vendor `57BLF01` motor source and hardware teammate
+  `STM32G431RB` pin table. Current decision is `Partial clue`; motor values are
+  supplier clues, and board-route / Hall connector blockers remain.
 - `non_hardware_parallel_track_2026-05-15.md`: no-power plan for temporarily
   skipping Packet B/C scheduling while keeping blockers visible and progressing
   Packet A, STM32-side signal contract, future build-only gate, and delivery

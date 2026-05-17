@@ -17,7 +17,7 @@ Packet A target.
 | Algorithm | FOC | To be captured in GUI. |
 | Control board | `NUCLEO-G474RE` / `STM32G474RETx` | To be captured in GUI. |
 | Power stage | Custom / Generic inverter for the self-made STDRIVE101 board | To be captured in GUI; do not use `EVALSTDRIVE101`. |
-| Motor | `PLACEHOLDER_not_profiled_2026-05-16` until no-power records are filled | Placeholder only. |
+| Motor | `57BLF01_VENDOR_CANDIDATE` if Workbench requires a motor entry | Supplier clue only; not measured project data. |
 | Speed feedback | Hall as the first bring-up fallback | Planning only; no Hall validation. |
 | Current sensing | 3-shunt low-side, internal OPAMP/PGA preference | Planning only; no current measurement claim. |
 | Generated project | None in this package | Not allowed in this step. |
@@ -40,6 +40,12 @@ These files should be added only after the GUI work is actually done:
 - `motor_no_power_measurement_log_2026-05-16.md`
 - `pin_assignment_table_2026-05-16.md`
 - `screenshots/README.md`
+
+Related new source clues from 2026-05-17:
+
+- `hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.md`
+- `hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md`
+- `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`
 
 ## Safety Boundary
 

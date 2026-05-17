@@ -35,10 +35,22 @@ project-specific capture package
 and review
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`.
 The target is `NUCLEO-G474RE` plus a Custom / Generic STDRIVE101 power stage,
-FOC, Hall fallback, 3-shunt current sensing, placeholder motor data, no-power
-motor measurement, and a pin assignment table. Status remains
+FOC, Hall fallback, 3-shunt current sensing, supplier-clue motor label,
+no-power motor measurement, and a pin assignment table. Status remains
 `Partial clue / Preparation only` until the real `.stwb6` and selected-field
 screenshots exist.
+
+2026-05-17 source intake: the repo now archives a supplier motor parameter
+image for `57BLF01`, a hardware teammate `STM32G431RB` pin-assignment PDF, an
+extracted note for each source, `mcu_pin_compatibility_check_2026-05-17.md`,
+and
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`.
+The hardware teammate states the relevant G431/G474 pins are the same, and the
+local MCSDK asset comparison supports the compared key rows. This only reduces
+MCU pin-function uncertainty. `57BLF01_VENDOR_CANDIDATE` may be used as a
+supplier-clue motor label in Workbench, but `J_HALL` numbering, CN8 endpoint
+proof, `PB3` SWO release, OPAMP2 feasibility, and measured motor parameters
+remain unresolved.
 
 2026-05-15 signal/build-gate follow-up: Codex added
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stm32_side_signal_contract_2026-05-15.md`
@@ -83,7 +95,7 @@ The first P2 card now exists at `deliverables/2026-05-13_p2_mcsdk_no_power_prech
 | P2 no-power precheck card | `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md` | in progress | Card includes tool roles, allowed/forbidden scope, tool/status table, baseline `.ioc` readback, pin/config draft, official-source cross-check, conflict resolution pass, Motor Profiler plan, and risk/no-go checklist. |
 | Tool version/status evidence | same card plus `workflow/windows_toolchain_status.md` | partially filled | Local evidence states what is available, what is missing from PATH, and what still needs GUI screenshot or exact path proof. |
 | ST official local mirror | `materials/raw/st_manuals/`, `references/st_manuals_index.md` | filled, including STDRIVE101 | Frequently used ST PDFs are repo-local, indexed, hash-recorded, and paired with extracted text for retrieval. |
-| Workbench/CubeMX config evidence | future MotorControl screenshot or `.stwb6` / legacy `.stmcx` source | partial clue / preparation only | CubeMX Home screenshot, NUCLEO `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, Workbench entry probe, and `My_First_FOC.stwb6` legacy review are captured. The 2026-05-16 custom capture package now defines the intended `NUCLEO-G474RE` plus Custom / Generic STDRIVE101 path, but selected-field screenshots or an accepted final project source are still required without running Motor Profiler or touching power hardware. |
+| Workbench/CubeMX config evidence | future MotorControl screenshot or `.stwb6` / legacy `.stmcx` source | partial clue / preparation only | CubeMX Home screenshot, NUCLEO `.ioc` draft, CubeMX `Pinout & Configuration` fallback screenshots, Workbench entry probe, and `My_First_FOC.stwb6` legacy review are captured. The 2026-05-16 custom capture package defines the intended `NUCLEO-G474RE` plus Custom / Generic STDRIVE101 path, and the 2026-05-17 source intake adds the `57BLF01_VENDOR_CANDIDATE` supplier-clue label plus a G431/G474 key-pin compatibility check. Selected-field screenshots or an accepted final project source are still required without running Motor Profiler or touching power hardware. |
 | NUCLEO CubeMX `.ioc` draft | `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc` | saved | `.ioc` preserves the user hands-on Board Selector result and reads back NUCLEO, SWD, VCP, SWO, `PB12/TIM1_BKIN`, and `PB14/TIM1_CH2N` choices. |
 | Pin/config conflict resolution | same card plus `apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md` | partially resolved | `PA2/PA3`, `PC5`/nFAULT, `PB3`, and V low-side PWM conflicts are resolved at pin-function and CubeMX `.ioc` level; board-routing evidence still must confirm the choices. |
 | Pin/config safety review | `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md` | filled | Review defines evidence classes, hard stops, and the minimum evidence packet before trusting generated MCSDK configuration. |

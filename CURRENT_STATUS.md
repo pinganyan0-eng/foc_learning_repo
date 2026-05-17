@@ -1,3 +1,33 @@
+## 2026-05-17 Vendor Motor And Hardware Pin Table Intake
+
+- Added supplier motor-parameter source:
+  `hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.jpg`.
+- Added extracted motor review note:
+  `hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.md`.
+- Added hardware teammate pin-assignment PDF:
+  `hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.pdf`.
+- Added extracted pin-table review note:
+  `hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md`.
+- Added source-packet review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`.
+- Added MCU pin compatibility cross-check:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcu_pin_compatibility_check_2026-05-17.md`.
+- Decision: `Partial clue` only. The motor values are supplier clues, not
+  project measurements or Motor Profiler results. The pin table is titled for
+  `STM32G431RB`, but the hardware teammate says the relevant G431/G474 pins are
+  the same; local MCSDK `STM32G431RBTx` / `STM32G474RETx` asset comparison
+  supports the compared key TIM1, TIM2, USART, and OPAMP-capable rows.
+- `J_HALL` pin numbering is explicitly uncertain. Hall A/B/C rows remain
+  candidate or blocked until board source or continuity evidence confirms the
+  connector. CN8 endpoint proof and `PB3` / SWO release remain separate
+  blockers.
+- If Workbench requires a motor entry, the preferred no-power label is now
+  `57BLF01_VENDOR_CANDIDATE`, replacing the generic placeholder name only as a
+  label. It does not upgrade motor parameters to accepted measurements.
+- Generated-project trust remains `Not allowed`; no 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+
 ## 2026-05-16 Packet A Custom Workbench Capture Package
 
 - Added the new project-specific Packet A capture package:
@@ -16,8 +46,10 @@
   the new project-specific Packet A path.
 - New intended capture target: `NUCLEO-G474RE` / `STM32G474RETx`, Custom /
   Generic STDRIVE101 power stage, FOC, Hall fallback, 3-shunt current sensing,
-  placeholder motor `PLACEHOLDER_not_profiled_2026-05-16`, and no generated
-  source.
+  motor label `57BLF01_VENDOR_CANDIDATE` if Workbench requires a motor entry,
+  and no generated source. The older `PLACEHOLDER_not_profiled_2026-05-16`
+  name is superseded as the preferred label, not upgraded into measured motor
+  proof.
 - Generated-project trust remains `Not allowed`. The 2026-05-16 package
   prepares GUI capture and review, but no new `.stwb6` or selected-field
   Workbench screenshot has been accepted yet.

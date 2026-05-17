@@ -27,8 +27,9 @@ Decision: `Partial clue / Preparation only`.
   capture.
 - The first speed-feedback path is Hall fallback.
 - Sensorless / SMO remains out of scope for the first configuration.
-- Motor data remains placeholder-only until no-power records or a later
-  hardware-stage Profiler result exists.
+- Motor data may use the `57BLF01_VENDOR_CANDIDATE` label after the
+  2026-05-17 supplier image intake, but the values remain supplier clues until
+  no-power records or a later hardware-stage Profiler result exists.
 - The package captures the required pin-assignment table shape.
 
 ## Still Not Accepted

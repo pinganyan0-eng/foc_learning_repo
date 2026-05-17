@@ -31,22 +31,22 @@ blocked, or only a planning artifact.
 | Gate | Current decision | Why |
 | --- | --- | --- |
 | P2 no-power planning | In progress | P2 documents, reviews, and blocker governance exist. |
-| Packet A MCSDK / MotorControl evidence | Partial clue / Preparation only | `My_First_FOC.stwb6` is preserved as a legacy learning leftover, and the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists. No new project-specific `.stwb6` or selected-field screenshots are accepted yet. |
+| Packet A MCSDK / MotorControl evidence | Partial clue / Preparation only | `My_First_FOC.stwb6` is preserved as a legacy learning leftover, the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists, and the 2026-05-17 vendor motor / G431 pin-table intake adds only candidate clues. No new project-specific `.stwb6` or selected-field screenshots are accepted yet. |
 | Generated-project trust | Not allowed | `future_build_only_gate_2026-05-15.md` requires accepted Packet A selected fields first. |
 | No-power build-only generated project | Not allowed now | Build-only work is a future state after accepted Packet A evidence. |
-| Packet B CN8 / board-route proof | Blocked | The 2026-05-15 schematic screenshot is `Partial clue`, not accepted endpoint mapping. |
+| Packet B CN8 / board-route proof | Blocked | The 2026-05-15 schematic screenshot and 2026-05-17 hardware teammate pin table are `Partial clue`, not accepted endpoint mapping. |
 | Packet C STDRIVE101 protection proof | Blocked | `DT/MODE`, `STBY`, protection-threshold, and board-specific route proof are unresolved. |
-| PB3 Hall B readiness | Blocked | Current `.ioc` still records `PB3.Signal=SYS_JTDO-SWO`. |
+| PB3 Hall B readiness | Blocked | Current `.ioc` still records `PB3.Signal=SYS_JTDO-SWO`; the 2026-05-17 pin table also marks Hall B through `PB3/TIM2_CH2`, but it does not release SWO or prove `J_HALL` numbering. |
 | P3 powered or motor work | Not allowed | P2 has no continuity checks, current-limited bring-up record, waveform checks, or rollback evidence. |
 
 ## Readiness Matrix
 
 | Track | Current evidence | Current status | Unlock condition |
 | --- | --- | --- | --- |
-| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, and `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md` | Partial clue / Preparation only | Create the new custom `.stwb6` and Workbench GUI screenshots proving selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3` choices. |
-| Packet B | `source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md` | Partial clue only | Current-version EDA, schematic PDF, netlist, or high-resolution route evidence with STM32 endpoint mapping. |
+| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`, and `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md` | Partial clue / Preparation only | Create the new custom `.stwb6` and Workbench GUI screenshots proving selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3` choices. Use `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label if a motor entry is required. |
+| Packet B | `source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, and `mcu_pin_compatibility_check_2026-05-17.md` | Partial clue only | Current-version EDA, schematic PDF, netlist, or high-resolution route evidence with STM32 endpoint mapping. The local G431/G474 comparison reduces MCU pin-function concern for compared key rows but does not prove CN8 routing. |
 | Packet C | `stdrive101_protection_path_review_2026-05-14.md` | Blocked | Board-level proof for `DT/MODE`, `STBY`, `NFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, and VDS monitoring. |
-| PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership | Blocked | SWO release/isolation evidence plus Packet A/B Hall assignment proof. |
+| PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership; the 2026-05-17 pin table repeats `PB3/TIM2_CH2` as Hall B candidate | Blocked | SWO release/isolation evidence plus Packet A/B Hall assignment proof and confirmed `J_HALL` numbering. |
 | STM32 signal contract | `stm32_side_signal_contract_2026-05-15.md` | Planning contract | Update only after Packet A/B/C or PB3/SWO evidence changes. |
 | Future build-only gate | `future_build_only_gate_2026-05-15.md` | Dormant | Use only after Packet A exists and the generated project is explicitly no-power. |
 
@@ -63,6 +63,9 @@ Allowed current claims:
   `Partial clue`.
 - The repo has a 2026-05-16 custom NUCLEO + STDRIVE101 Packet A capture
   package reviewed as `Partial clue / Preparation only`.
+- The repo has a 2026-05-17 supplier motor source and hardware teammate pin
+  table reviewed as `Partial clue`; local MCSDK assets confirm the compared
+  key G431/G474 MCU pin functions, but not board routing.
 
 Forbidden current claims:
 
@@ -71,6 +74,8 @@ Forbidden current claims:
 - CN8 routing is proven.
 - STDRIVE101 protection paths are proven on this board.
 - `PB3` is ready for Hall B.
+- `J_HALL` numbering is confirmed.
+- The vendor motor parameters are measured project data.
 - cannot claim Gate PWM, Motor Profiler, Hall, motor, power-stage, or sensorless behavior is validated.
 
 ## Promotion Rules
@@ -95,7 +100,8 @@ Before moving from P2 to any powered or motor stage:
 ## Next Smallest Actions
 
 1. Use the 2026-05-16 custom NUCLEO + STDRIVE101 capture package to create the
-   new `.stwb6` and selected-field screenshots.
+   new `.stwb6` and selected-field screenshots. If Workbench requires a motor
+   entry, use `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label.
 2. Collect accepted Packet B/C source evidence when the hardware-source branch
    is available again.
 3. Use `future_build_only_gate_2026-05-15.md` only after Packet A is accepted.

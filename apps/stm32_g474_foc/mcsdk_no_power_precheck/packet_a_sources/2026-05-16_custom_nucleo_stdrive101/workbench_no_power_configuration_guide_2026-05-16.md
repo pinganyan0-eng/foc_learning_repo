@@ -20,7 +20,7 @@ sensing, Hall, fault, UART, and pin ownership fields under no-power rules.
 | Do not select the wrong power board | Do not select `EVALSTDRIVE101` for this project-specific capture. |
 | Keep the control context stable | Use `NUCLEO-G474RE` / `STM32G474RETx`. |
 | Keep the first feedback conservative | Select Hall as the first bring-up fallback. |
-| Keep motor data honest | Use placeholder motor data until no-power records are filled. |
+| Keep motor data honest | Use the `57BLF01_VENDOR_CANDIDATE` label only as a supplier clue until no-power records are filled. |
 | Keep current sensing explicit | Select 3-shunt and prefer internal OPAMP/PGA where the GUI allows it. |
 | Keep generated code blocked | Save the Workbench project and screenshots only. |
 
@@ -42,7 +42,8 @@ sensing, Hall, fault, UART, and pin ownership fields under no-power rules.
 4. Select control board `NUCLEO-G474RE` and MCU `STM32G474RETx`.
 5. Select a Custom / Generic inverter or equivalent user power-stage path.
 6. Do not select `EVALSTDRIVE101`.
-7. Use a placeholder motor named `PLACEHOLDER_not_profiled_2026-05-16`.
+7. If Workbench requires a motor entry, use a vendor-candidate motor named
+   `57BLF01_VENDOR_CANDIDATE`.
 8. Select Hall as the main speed feedback path.
 9. Do not enable sensorless / SMO as the main path.
 10. Select 3-shunt current sensing.
@@ -55,7 +56,7 @@ sensing, Hall, fault, UART, and pin ownership fields under no-power rules.
 15. Keep `PB3` as blocked for Hall B until SWO release / isolation evidence is
     available.
 16. Save the Workbench project as
-    `custom_nucleo_stdrive101_2026-05-16.stwb6` in this directory.
+   `custom_nucleo_stdrive101_2026-05-16.stwb6` in this directory.
 17. Do not click any command that generates source code or launches CubeMX code
     generation.
 
@@ -82,6 +83,7 @@ Stop and record the reason if:
 - the GUI silently reuses `PA2/PA3` or `PB3` in a way that conflicts with the
   current blocker policy;
 - Workbench requires powered hardware, Motor Profiler, or Motor Pilot.
+- Workbench requires treating supplier motor values as measured Profiler data.
 
 ## Validation After Capture
 

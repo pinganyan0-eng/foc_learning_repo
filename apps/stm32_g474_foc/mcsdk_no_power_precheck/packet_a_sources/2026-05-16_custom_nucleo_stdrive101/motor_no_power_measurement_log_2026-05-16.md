@@ -21,14 +21,41 @@ and not permission to run the motor.
 
 | Field | Value |
 | --- | --- |
-| Motor model / marking | TBD |
-| Vendor / source | TBD |
-| Nameplate photo path | TBD |
+| Motor model / marking | Vendor candidate `57BLF01`; physical marking photo still TBD. |
+| Vendor / source | Supplier parameter image, candidate only |
+| Nameplate photo path | `hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.jpg` is vendor data, not a physical nameplate photo taken by the project. |
 | Harness photo path | TBD |
-| Measurement date | 2026-05-16 |
+| Measurement date | 2026-05-16 / 2026-05-17 source intake |
 | Instrument | Digital multimeter |
 | Instrument model | TBD |
 | Ambient note | TBD |
+
+## Vendor Parameter Clue
+
+The supplier image is archived at:
+
+`hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.jpg`
+
+Extracted review note:
+
+`hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.md`
+
+| Field | Supplier value | Status |
+| --- | --- | --- |
+| Model | `57BLF01` | Candidate |
+| Magnetic pole count | `4` | Candidate; pole-pair interpretation must be confirmed. |
+| Phase count | `3` | Candidate |
+| Rated voltage | `24 VDC` | Candidate |
+| Rated speed | `3000 rpm` | Candidate |
+| Output power | `63 W` | Candidate |
+| Peak current | `9.6 A` | Candidate; not a powered current-limit setting. |
+| Line resistance | `0.6 ohm` | Supplier clue only. |
+| Line inductance | `0.75 mH` | Supplier clue only. |
+| Back EMF | `6.23 V/kRPM` | Supplier clue only. |
+
+If Workbench requires a motor entry before saving, use
+`57BLF01_VENDOR_CANDIDATE` as the no-power vendor-candidate label. Do not treat
+that label as measured motor proof.
 
 ## Wire Color Record
 
@@ -69,5 +96,5 @@ residual lead resistance.
 ## Current Decision
 
 No measured motor-control parameter is accepted yet. Workbench may use a
-placeholder motor name only until a later accepted measurement or Profiler
-stage exists.
+vendor-candidate motor label only until a later accepted measurement or
+Profiler stage exists.

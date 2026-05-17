@@ -99,6 +99,22 @@ class P2EvidenceContractTests(unittest.TestCase):
         "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
         "source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md"
     )
+    VENDOR_MOTOR_IMAGE = "hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.jpg"
+    VENDOR_MOTOR_NOTE = "hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.md"
+    HW_PIN_TABLE_PDF = (
+        "hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.pdf"
+    )
+    HW_PIN_TABLE_NOTE = (
+        "hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md"
+    )
+    MCU_PIN_COMPATIBILITY_CHECK = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "mcu_pin_compatibility_check_2026-05-17.md"
+    )
+    VENDOR_MOTOR_PIN_REVIEW = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md"
+    )
     PHASE_GATE = "workflow/phase_gate_checklist.md"
 
     def test_source_packet_intake_defines_accepted_and_rejected_sources(self):
@@ -263,12 +279,15 @@ class P2EvidenceContractTests(unittest.TestCase):
             "STM32G474RETx",
             "Custom / Generic STDRIVE101",
             "Do not select `EVALSTDRIVE101`",
-            "PLACEHOLDER_not_profiled_2026-05-16",
+            "57BLF01_VENDOR_CANDIDATE",
+            "supplier clue",
             "Hall as the main speed feedback",
             "3-shunt",
             "No generated source",
             "No Motor Profiler",
             "Pin Assignment Table",
+            "source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md",
+            "mcu_pin_compatibility_check_2026-05-17.md",
             "PB3 / TIM2_CH2",
             "PB3.Signal=SYS_JTDO-SWO",
             "Partial clue / Preparation only",
@@ -284,6 +303,63 @@ class P2EvidenceContractTests(unittest.TestCase):
             self.PACKET_A_CUSTOM_REVIEW,
         ):
             self.assertTrue((ROOT / path).exists())
+
+    def test_vendor_motor_and_g431_pin_table_remain_partial_clues(self):
+        for path in (
+            self.VENDOR_MOTOR_IMAGE,
+            self.VENDOR_MOTOR_NOTE,
+            self.HW_PIN_TABLE_PDF,
+            self.HW_PIN_TABLE_NOTE,
+            self.MCU_PIN_COMPATIBILITY_CHECK,
+            self.VENDOR_MOTOR_PIN_REVIEW,
+        ):
+            self.assertTrue((ROOT / path).exists())
+
+        combined = "\n".join(
+            read_repo_text(path)
+            for path in (
+                self.VENDOR_MOTOR_NOTE,
+                self.HW_PIN_TABLE_NOTE,
+                self.MCU_PIN_COMPATIBILITY_CHECK,
+                self.VENDOR_MOTOR_PIN_REVIEW,
+                self.PACKET_A_CAPTURE_CHECKLIST,
+                self.P2_READINESS_SNAPSHOT,
+            )
+        )
+
+        for phrase in (
+            "P2-SOURCE-REVIEW-2026-05-17-001",
+            "57BLF01",
+            "57BLF01_VENDOR_CANDIDATE",
+            "supplier clue",
+            "Physical measurement by project | No",
+            "Motor Profiler result | No",
+            "STM32G431RB",
+            "STM32G431RBTx",
+            "STM32G474RETx",
+            "LQFP64",
+            "TIM1_CH1N",
+            "TIM2_CH2",
+            "SYS_JTDO-SWO",
+            "J_HALL",
+            "PB3",
+            "OPAMP2",
+            "Partial clue",
+            "Not allowed",
+            "does not prove CN8",
+            "does not confirm CN8 routing",
+            "does not release SWO",
+            "not measured",
+        ):
+            self.assertIn(phrase, combined)
+
+        for phrase in (
+            "Motor Profiler data exists",
+            "the motor has been tested or is ready to run",
+            "CN8 routing is accepted",
+            "build-only, flash, power, Gate PWM, or motor actions are allowed",
+        ):
+            self.assertIn(phrase, combined)
 
     def test_schematic_candidate_is_preserved_as_partial_clue_only(self):
         note = read_repo_text(self.SCHEMATIC_CANDIDATE_NOTE)
@@ -351,6 +427,17 @@ class P2EvidenceContractTests(unittest.TestCase):
             "source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md",
             current_status + submission + register + sprint,
         )
+        self.assertIn(
+            "source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md",
+            current_status + submission + register + sprint,
+        )
+        self.assertIn(
+            "mcu_pin_compatibility_check_2026-05-17.md",
+            current_status + submission + register + sprint,
+        )
+        self.assertIn("57BLF01_VENDOR_CANDIDATE", current_status + submission + register + sprint)
+        self.assertIn("G431/G474", current_status + submission + register + sprint)
+        self.assertIn("J_HALL", current_status + submission + register + sprint)
 
     def test_non_hardware_parallel_track_skips_but_does_not_clear_hardware(self):
         text = read_repo_text(self.NON_HARDWARE_TRACK)
@@ -397,6 +484,10 @@ class P2EvidenceContractTests(unittest.TestCase):
             "MotorControl / Workbench configuration screenshot",
             "Exact reproducible GUI launcher path",
             "Generated MCSDK source without the matching Workbench project file",
+            "57BLF01_VENDOR_CANDIDATE",
+            "supplier-clue label",
+            "G431/G474 pins are the same",
+            "does not confirm CN8 routing",
             "`PB3` ownership",
             "No Motor Profiler run",
             "Partial clue",
@@ -446,6 +537,9 @@ class P2EvidenceContractTests(unittest.TestCase):
             "Partial clue",
             "`Not allowed` because Packet A is only `Partial clue / Preparation only`",
             "2026-05-16 custom NUCLEO + STDRIVE101",
+            "2026-05-17 vendor motor / G431 pin-table",
+            "57BLF01_VENDOR_CANDIDATE",
+            "mcu_pin_compatibility_check_2026-05-17.md",
             "Hardware action is not a P2 state",
             "No 24V",
             "No Gate PWM output",
@@ -457,6 +551,8 @@ class P2EvidenceContractTests(unittest.TestCase):
             "Packet C STDRIVE101 protection proof",
             "PB3 Hall B readiness",
             "`PB3.Signal=SYS_JTDO-SWO`",
+            "J_HALL",
+            "vendor motor parameters are measured project data",
             "Allowed current claims",
             "Forbidden current claims",
             "Before moving from current P2 planning to build-only generated-project work",

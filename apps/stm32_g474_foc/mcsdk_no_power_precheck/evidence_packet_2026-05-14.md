@@ -1,3 +1,29 @@
+# 2026-05-17 Vendor Motor And G431 Pin Table Update
+
+New motor source:
+`hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.md`.
+
+New hardware teammate pin-table source:
+`hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md`.
+
+New MCU pin compatibility check:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcu_pin_compatibility_check_2026-05-17.md`.
+
+Review record:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`.
+
+Decision: `Partial clue`.
+
+The supplier motor table supports a better no-power Workbench label,
+`57BLF01_VENDOR_CANDIDATE`, but it does not provide project-measured motor
+parameters or Motor Profiler data. The hardware teammate pin table is titled
+for `STM32G431RB`; the teammate states the relevant G431/G474 pins are the
+same, and local MCSDK `STM32G431RBTx` / `STM32G474RETx` asset comparison
+supports the compared key rows. This still does not accept CN8 routing,
+`J_HALL` connector numbering, `PB3` / SWO release, or OPAMP/VCP policy.
+
+Generated-project trust remains `Not allowed`.
+
 # 2026-05-16 Packet A Custom Capture Package Update
 
 The old `My_First_FOC.stwb6` file is now explicitly treated as a legacy
@@ -15,7 +41,8 @@ Decision: `Partial clue / Preparation only`.
 
 The package defines the next no-power Workbench capture path for
 `NUCLEO-G474RE` / `STM32G474RETx`, a Custom / Generic STDRIVE101 power stage,
-FOC, Hall fallback, 3-shunt current sensing, placeholder motor data, a
+FOC, Hall fallback, 3-shunt current sensing, `57BLF01_VENDOR_CANDIDATE`
+supplier-clue motor label, a
 no-power motor measurement log, and a pin assignment table. It still does not
 contain a real new `.stwb6` or selected-field Workbench screenshot.
 

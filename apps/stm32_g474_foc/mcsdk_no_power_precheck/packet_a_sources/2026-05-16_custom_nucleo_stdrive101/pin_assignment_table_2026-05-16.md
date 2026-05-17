@@ -13,6 +13,36 @@ Status values:
 No row may be promoted to `Accepted` for board routing without Packet B/C
 source evidence.
 
+## 2026-05-17 Hardware Teammate Pin Table Clue
+
+New source clue:
+`hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.pdf`.
+
+Extracted note:
+`hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md`.
+
+Review:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`.
+
+MCU cross-check:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcu_pin_compatibility_check_2026-05-17.md`.
+
+This source improves the candidate map, especially for `PA8/PB13/PA9/PB14/PA10/PB15`,
+`PB12/TIM1_BKIN`, `PA1/PA7/PB0` current-sense candidates, `PA15/PB3/PB10`
+Hall candidates, `PA2/PA3` VCP policy, `PB3` SWO conflict, `3V3`, and
+`GND_SIGNAL`.
+
+The G431-to-G474 MCU pin-function concern is reduced because the local MCSDK
+assets for `STM32G431RBTx` and `STM32G474RETx` both expose the compared key
+TIM1, TIM2, USART, and OPAMP-capable rows on the same LQFP64 pin positions.
+
+It still does not promote any row to `Accepted` because:
+
+- the user warned that `J_HALL` pin numbering is uncertain;
+- CN8 endpoint claims still need current board EDA, schematic PDF, netlist, or
+  high-resolution route proof;
+- `PB3` remains blocked by SWO until release / isolation evidence exists.
+
 ## Assignment Table
 
 | Function | Workbench selection | STM32 AF / signal | NUCLEO header / connection | CN8 / power-board net | Evidence source | Status |

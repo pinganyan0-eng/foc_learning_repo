@@ -53,6 +53,19 @@ no-power configuration draft, but they do not authorize Motor Profiler, PI
 tuning, current-limit selection for powered work, Hall closed-loop, or any
 motor run.
 
+## Related Wiring Clue
+
+A later user-provided wiring-definition image was archived as:
+
+`hardware/motor/2026-05-18_57blf01_motor_wiring_definition.jpg`
+
+Extracted note:
+
+`hardware/motor/2026-05-18_57blf01_motor_wiring_definition.md`
+
+That source adds candidate U/V/W and Hall wire-color clues only. It does not
+turn these vendor parameters into measured project data.
+
 ## Required Follow-Up
 
 Before using these values beyond no-power configuration planning:

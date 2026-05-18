@@ -47,6 +47,11 @@ Related new source clues from 2026-05-17:
 - `hardware/schematic/2026-05-17_stm32g431rb_pin_assignment_hw_teammate.md`
 - `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`
 
+Related new source clues from 2026-05-18:
+
+- `hardware/motor/2026-05-18_57blf01_motor_wiring_definition.md`
+- `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-18_001_motor_wiring_definition.md`
+
 ## Safety Boundary
 
 - No 24V.

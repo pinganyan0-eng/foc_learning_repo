@@ -1,3 +1,46 @@
+## 2026-05-18 Motor Wiring Definition Intake
+
+- Added user-provided motor wiring definition source:
+  `hardware/motor/2026-05-18_57blf01_motor_wiring_definition.jpg`.
+- Added extracted wiring note:
+  `hardware/motor/2026-05-18_57blf01_motor_wiring_definition.md`.
+- Added P2 source-packet review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-18_001_motor_wiring_definition.md`.
+- Updated no-power motor log:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/motor_no_power_measurement_log_2026-05-16.md`.
+- Extracted candidate wire colors: phase `U` = yellow thick wire, `V` = red
+  thick wire, `W` = black thick wire; Hall `HU` = yellow thin wire, `HV` =
+  white thin wire, `HW` = blue thin wire, `H+` / `+5V` = red thin wire, and
+  `H-` / `GND` = black thin wire.
+- Decision: `Partial clue` only. This source helps future Workbench notes and
+  no-power wiring labels, but it does not prove physical harness inspection,
+  continuity, Hall powered behavior, phase/Hall alignment, `J_HALL` numbering,
+  Motor Profiler data, or motor readiness.
+- No 24V, power-board connection, motor connection, Gate PWM, Motor Profiler,
+  Hall closed-loop, or sensorless / SMO claim is authorized.
+
+## 2026-05-18 Packet A Capture Task Package Refresh
+
+- Added workflow-only Packet A capture task package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`.
+- Updated `workflow/ACTIVE_TASK.md` to point at the P2 Packet A capture
+  preparation task with `open/ready` status and a no-GUI, no-generation,
+  no-build, no-flash, no-hardware boundary.
+- Refreshed P2 entry points:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md`
+  and `apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md`.
+- Registered workflow-only evidence:
+  `EV-2026-05-18-P2-PACKET-A-TASK-PACKAGE-001`.
+- Verification passed: `python -m unittest discover -s tests` ran 41 tests OK;
+  `python tools\build_vector_store.py` rebuilt the local index successfully.
+- Decision unchanged: Packet A remains `Partial clue / Preparation only`;
+  generated-project trust remains `Not allowed`; Packet B/C, `PB3` / SWO,
+  `J_HALL`, CN8 routing, and STDRIVE101 protection-path blockers remain open.
+- This update does not create a new `.stwb6`, does not add Workbench
+  screenshots, does not launch Workbench, does not generate or build source,
+  and does not authorize 24V, power-board connection, motor connection, Gate
+  PWM, Motor Profiler, Hall closed-loop, or sensorless / SMO claims.
+
 ## 2026-05-17 Vendor Motor And Hardware Pin Table Intake
 
 - Added supplier motor-parameter source:
@@ -471,7 +514,7 @@
 - B 算法同学教学与交付总计划：`workflow/algo_b_teaching_delivery_plan.md`，把两份 8 周/56 天 HTML 学习计划转成当前真实阶段可执行的教学节奏、补进度机制、每课/每周上交物和安全闸门规则。
 - 当前学习执行层：`learning/NEXT_LESSON.md`、`learning/MASTERY_MAP.md`、`workflow/current_learning_sprint.md`，把 P1 下一课、掌握证据、复习优先级和 sprint 交付物从长计划里抽成短入口。
 - P1 catch-up 交付包：`deliverables/2026-05-12_p1_catchup_pack.md`，并已把 UART 命令副作用表写入 `docs/05_test_and_logs/week1_nucleo_baseline.md`、DMA + IDLE 接收流程写入 `docs/04_iot_gateway/uart_dma_idle.md`。
-- P2 MCSDK 无功率预检卡草案：`deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`，当前记录本机工具版本/status、baseline `.ioc` 读回、MCSDK pin/config 草案、ST 官方来源交叉核验、pin-function 冲突处理、shell GUI 证据探测和未来 Motor Profiler 停止/回退计划；2026-05-14 已追加独立无功率草案目录 `apps/stm32_g474_foc/mcsdk_no_power_precheck/`、CubeMX 启动路径、GUI 阻塞记录、NUCLEO-G474RE CubeMX `.ioc` 草案 `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`，以及 STDRIVE101 保护路径审查 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；这些只是无功率配置和审查证据，不是 `.stmcx`、MCSDK MotorControl 工程、Motor Profiler、Hall 或功率级验证。
+- P2 MCSDK 无功率预检卡草案：`deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`，当前记录本机工具版本/status、baseline `.ioc` 读回、MCSDK pin/config 草案、ST 官方来源交叉核验、pin-function 冲突处理、shell GUI 证据探测和未来 Motor Profiler 停止/回退计划；2026-05-14 已追加独立无功率草案目录 `apps/stm32_g474_foc/mcsdk_no_power_precheck/`、CubeMX 启动路径、GUI 阻塞记录、NUCLEO-G474RE CubeMX `.ioc` 草案 `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`，以及 STDRIVE101 保护路径审查 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；2026-05-18 已新增 Packet A 捕获任务包 `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`，只固定未来 `.stwb6`、截图、字段验收和停止条件。这些只是无功率配置、审查和任务治理证据，不是 `.stmcx`、MCSDK MotorControl 工程、Motor Profiler、Hall 或功率级验证。
 - Obsidian 笔记工作区：仓库根目录已配置 `.obsidian/`，个人笔记和看板放在 `notes/`，入口为 `notes/00_home/foc_dashboard.md`。
 
 ## 当前未开始
@@ -489,7 +532,7 @@
 1. 如果要开始学习/实操：进入 NUCLEO-G474RE 基础工程，先做点灯、串口打印、定时器和 UART DMA + IDLE；不接 24V、不接功率板、不接电机。
 2. 如果要推进阶段：先对照 `workflow/phase_gate_checklist.md`，确认进入条件、产出证据和禁止动作。
 3. 如果要导入新资料：先按 `workflow/intake_checklist.md` 分类命名，再更新对应索引。
-4. 如果要继续 P2 MCSDK 无功率预检：先读 `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/hands_on_evidence_2026-05-14.md` 和 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；当前已有 NUCLEO-G474RE CubeMX `.ioc` 草案和 STDRIVE101 保护路径缺证矩阵，但仍要补 MCSDK/Workbench `.stmcx` 或 MotorControl 配置截图、CN8/EDA/netlist 走线证据和当前版 STDRIVE101 保护路径源证据；仍不接 24V、不接功率板、不接电机、不运行 Motor Profiler。
+4. 如果要继续 P2 MCSDK 无功率预检：先读 `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/hands_on_evidence_2026-05-14.md` 和 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；当前已有 NUCLEO-G474RE CubeMX `.ioc` 草案、Packet A 捕获任务包和 STDRIVE101 保护路径缺证矩阵，但仍要补真实 MCSDK/Workbench `.stwb6` 或 MotorControl 配置截图、CN8/EDA/netlist 走线证据和当前版 STDRIVE101 保护路径源证据；仍不接 24V、不接功率板、不接电机、不运行 Motor Profiler。
 5. 如果要继续 STM32 baseline：在已验证 COM5 串口命令路径的基础上，补肉眼 LD2 闪烁证据，或由 Codex 进行真实 UART DMA + IDLE callback 的无功率实现/构建验证。
 6. 如果要开始硬件审查：以 `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` 为器件线索，继续补原理图 PDF、PCB 截图、正式 BOM、Datasheet 和关键保护阈值计算。
 

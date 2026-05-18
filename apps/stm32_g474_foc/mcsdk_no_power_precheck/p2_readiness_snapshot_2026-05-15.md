@@ -7,7 +7,8 @@ build-only work, or hardware action?`
 
 Current answer: no. P2 remains in progress. Generated-project trust is
 `Not allowed` because Packet A is only `Partial clue / Preparation only`.
-Hardware action is not a P2 state.
+The 2026-05-18 Packet A capture task package is workflow-only preparation, not
+accepted Packet A evidence. Hardware action is not a P2 state.
 
 ## Safety Boundary
 
@@ -31,7 +32,7 @@ blocked, or only a planning artifact.
 | Gate | Current decision | Why |
 | --- | --- | --- |
 | P2 no-power planning | In progress | P2 documents, reviews, and blocker governance exist. |
-| Packet A MCSDK / MotorControl evidence | Partial clue / Preparation only | `My_First_FOC.stwb6` is preserved as a legacy learning leftover, the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists, and the 2026-05-17 vendor motor / G431 pin-table intake adds only candidate clues. No new project-specific `.stwb6` or selected-field screenshots are accepted yet. |
+| Packet A MCSDK / MotorControl evidence | Partial clue / Preparation only | `My_First_FOC.stwb6` is preserved as a legacy learning leftover, the 2026-05-16 custom NUCLEO + STDRIVE101 capture package exists, the 2026-05-17 vendor motor / G431 pin-table intake and 2026-05-18 motor wiring image add only candidate clues, and the 2026-05-18 task package fixes the future capture path. No new project-specific `.stwb6` or selected-field screenshots are accepted yet. |
 | Generated-project trust | Not allowed | `future_build_only_gate_2026-05-15.md` requires accepted Packet A selected fields first. |
 | No-power build-only generated project | Not allowed now | Build-only work is a future state after accepted Packet A evidence. |
 | Packet B CN8 / board-route proof | Blocked | The 2026-05-15 schematic screenshot and 2026-05-17 hardware teammate pin table are `Partial clue`, not accepted endpoint mapping. |
@@ -43,7 +44,7 @@ blocked, or only a planning artifact.
 
 | Track | Current evidence | Current status | Unlock condition |
 | --- | --- | --- | --- |
-| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`, and `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md` | Partial clue / Preparation only | Create the new custom `.stwb6` and Workbench GUI screenshots proving selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3` choices. Use `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label if a motor entry is required. |
+| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, `source_packet_review_2026-05-18_001_motor_wiring_definition.md`, and `packet_a_capture_task_2026-05-18.md` | Partial clue / Preparation only | Use the 2026-05-18 task package to create the new custom `.stwb6` and Workbench GUI screenshots proving selected PWM, fault, current-sense, Hall/sensorless, UART, and `PB3` choices. Use `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label if a motor entry is required. |
 | Packet B | `source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, and `mcu_pin_compatibility_check_2026-05-17.md` | Partial clue only | Current-version EDA, schematic PDF, netlist, or high-resolution route evidence with STM32 endpoint mapping. The local G431/G474 comparison reduces MCU pin-function concern for compared key rows but does not prove CN8 routing. |
 | Packet C | `stdrive101_protection_path_review_2026-05-14.md` | Blocked | Board-level proof for `DT/MODE`, `STBY`, `NFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, and VDS monitoring. |
 | PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership; the 2026-05-17 pin table repeats `PB3/TIM2_CH2` as Hall B candidate | Blocked | SWO release/isolation evidence plus Packet A/B Hall assignment proof and confirmed `J_HALL` numbering. |
@@ -66,6 +67,13 @@ Allowed current claims:
 - The repo has a 2026-05-17 supplier motor source and hardware teammate pin
   table reviewed as `Partial clue`; local MCSDK assets confirm the compared
   key G431/G474 MCU pin functions, but not board routing.
+- The repo has a 2026-05-18 workflow-only Packet A capture task package that
+  fixes the future `.stwb6` path, screenshot names, stop conditions, and field
+  acceptance matrix.
+- The repo has a 2026-05-18 motor wiring definition image reviewed as
+  `Partial clue`; it records candidate U/V/W and Hall wire colors, but not
+  physical harness verification, Hall power behavior, phase/Hall alignment, or
+  `J_HALL` numbering.
 
 Forbidden current claims:
 
@@ -75,6 +83,7 @@ Forbidden current claims:
 - STDRIVE101 protection paths are proven on this board.
 - `PB3` is ready for Hall B.
 - `J_HALL` numbering is confirmed.
+- Phase/Hall wire-color mapping has been verified on the physical motor.
 - The vendor motor parameters are measured project data.
 - cannot claim Gate PWM, Motor Profiler, Hall, motor, power-stage, or sensorless behavior is validated.
 
@@ -99,9 +108,10 @@ Before moving from P2 to any powered or motor stage:
 
 ## Next Smallest Actions
 
-1. Use the 2026-05-16 custom NUCLEO + STDRIVE101 capture package to create the
-   new `.stwb6` and selected-field screenshots. If Workbench requires a motor
-   entry, use `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label.
+1. Use `packet_a_capture_task_2026-05-18.md` and the 2026-05-16 custom NUCLEO
+   + STDRIVE101 capture package to create the new `.stwb6` and selected-field
+   screenshots. If Workbench requires a motor entry, use
+   `57BLF01_VENDOR_CANDIDATE` only as a supplier-clue label.
 2. Collect accepted Packet B/C source evidence when the hardware-source branch
    is available again.
 3. Use `future_build_only_gate_2026-05-15.md` only after Packet A is accepted.

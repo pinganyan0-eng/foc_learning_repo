@@ -16,8 +16,9 @@ output.
   review, GUI capture result, a current P2 证据包, source packet intake rules,
   a source packet request pack, a source packet review template, and a user
   action queue, STM32-side signal/build gates, a P2 readiness snapshot, a
-  2026-05-16 custom Workbench capture package, and 2026-05-17 vendor motor /
-  hardware teammate pin-table source clues.
+  2026-05-16 custom Workbench capture package, 2026-05-17 vendor motor /
+  hardware teammate pin-table source clues, and a 2026-05-18 Packet A capture
+  task package.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   CN8 / EDA / netlist confirmation, no-power continuity checks, and all
   powered hardware behavior evidence.
@@ -75,6 +76,16 @@ Forbidden in this directory and this P2 stage:
   review of the vendor `57BLF01` motor source and hardware teammate
   `STM32G431RB` pin table. Current decision is `Partial clue`; motor values are
   supplier clues, and board-route / Hall connector blockers remain.
+- `source_packet_review_2026-05-18_001_motor_wiring_definition.md`: review of
+  the user-provided 57BLF01 phase/Hall wire-color definition image. Current
+  decision is `Partial clue`; wire colors are candidate clues only and do not
+  prove physical harness inspection, Hall powering, phase/Hall alignment, or
+  `J_HALL` numbering.
+- `packet_a_capture_task_2026-05-18.md`: workflow-only task package for the
+  future project-specific Workbench capture. It fixes the `.stwb6` path,
+  required screenshots, stop conditions, and field acceptance matrix. It does
+  not add a real `.stwb6`, screenshots, generated source, build evidence, or
+  hardware validation.
 - `non_hardware_parallel_track_2026-05-15.md`: no-power plan for temporarily
   skipping Packet B/C scheduling while keeping blockers visible and progressing
   Packet A, STM32-side signal contract, future build-only gate, and delivery
@@ -136,4 +147,5 @@ If the hardware-source branch is skipped for scheduling, use
 B/C blockers stay blocked.
 
 Before claiming readiness for generated-project trust or build-only work, read
-`p2_readiness_snapshot_2026-05-15.md`.
+`p2_readiness_snapshot_2026-05-15.md`. Before running the next Packet A GUI
+capture, read `packet_a_capture_task_2026-05-18.md`.

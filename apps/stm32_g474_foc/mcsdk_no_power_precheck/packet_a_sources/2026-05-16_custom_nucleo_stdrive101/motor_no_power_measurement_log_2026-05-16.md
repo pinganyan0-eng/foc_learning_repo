@@ -24,8 +24,8 @@ and not permission to run the motor.
 | Motor model / marking | Vendor candidate `57BLF01`; physical marking photo still TBD. |
 | Vendor / source | Supplier parameter image, candidate only |
 | Nameplate photo path | `hardware/motor/2026-05-17_vendor_57blf01_motor_parameters.jpg` is vendor data, not a physical nameplate photo taken by the project. |
-| Harness photo path | TBD |
-| Measurement date | 2026-05-16 / 2026-05-17 source intake |
+| Harness photo path | `hardware/motor/2026-05-18_57blf01_motor_wiring_definition.jpg` is a wiring-definition image, not a project physical harness photo. |
+| Measurement date | 2026-05-16 / 2026-05-18 source intake |
 | Instrument | Digital multimeter |
 | Instrument model | TBD |
 | Ambient note | TBD |
@@ -57,18 +57,41 @@ If Workbench requires a motor entry before saving, use
 `57BLF01_VENDOR_CANDIDATE` as the no-power vendor-candidate label. Do not treat
 that label as measured motor proof.
 
+## Vendor Wiring Definition Clue
+
+The user-provided wiring image is archived at:
+
+`hardware/motor/2026-05-18_57blf01_motor_wiring_definition.jpg`
+
+Extracted review note:
+
+`hardware/motor/2026-05-18_57blf01_motor_wiring_definition.md`
+
+This is still source-clue data, not project measurement.
+
+| Wire group | Image label | Color | Status |
+| --- | --- | --- | --- |
+| Phase | U | Yellow | Candidate image clue |
+| Phase | V | Red | Candidate image clue |
+| Phase | W | Black | Candidate image clue |
+| Hall | `HU` | Yellow | Candidate image clue |
+| Hall | `HV` | White | Candidate image clue |
+| Hall | `HW` | Blue | Candidate image clue |
+| Hall supply | `H+` / `+5V` | Red | Candidate image clue; do not power in P2 |
+| Hall return | `H-` / `GND` | Black | Candidate image clue; do not power in P2 |
+
 ## Wire Color Record
 
 | Wire group | Color / label | No-power observation |
 | --- | --- | --- |
-| Phase U candidate | TBD | Visual only. |
-| Phase V candidate | TBD | Visual only. |
-| Phase W candidate | TBD | Visual only. |
-| Hall VCC candidate | TBD | Visual only; do not power. |
-| Hall GND candidate | TBD | Visual only; do not power. |
-| Hall A candidate | TBD | Visual only; do not power. |
-| Hall B candidate | TBD | Visual only; do not power. |
-| Hall C candidate | TBD | Visual only; do not power. |
+| Phase U candidate | Yellow thick wire | Vendor wiring image clue only; verify on actual harness. |
+| Phase V candidate | Red thick wire | Vendor wiring image clue only; verify on actual harness. |
+| Phase W candidate | Black thick wire | Vendor wiring image clue only; verify on actual harness. |
+| Hall VCC candidate | Red thin wire, `H+` / `+5V` | Vendor wiring image clue only; do not power in P2. |
+| Hall GND candidate | Black thin wire, `H-` / `GND` | Vendor wiring image clue only; do not power in P2. |
+| Hall A / `HU` candidate | Yellow thin wire | Vendor wiring image clue only; project `HA/HU` mapping still needs later confirmation. |
+| Hall B / `HV` candidate | White thin wire | Vendor wiring image clue only; project `HB/HV` mapping still needs later confirmation. |
+| Hall C / `HW` candidate | Blue thin wire | Vendor wiring image clue only; project `HC/HW` mapping still needs later confirmation. |
 
 ## Phase Resistance Record
 
@@ -97,4 +120,6 @@ residual lead resistance.
 
 No measured motor-control parameter is accepted yet. Workbench may use a
 vendor-candidate motor label only until a later accepted measurement or
-Profiler stage exists.
+Profiler stage exists. The 2026-05-18 wiring definition image adds candidate
+wire-color clues only; it does not prove physical harness inspection,
+continuity, Hall power behavior, phase/Hall alignment, or `J_HALL` numbering.

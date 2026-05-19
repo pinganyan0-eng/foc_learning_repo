@@ -1,132 +1,65 @@
-# P2 User Action Queue - 2026-05-14
+# 2026-05-19 你现在直接做什么
 
-这个文件只回答一个问题：现在需要用户提供什么，Codex 收到后怎么验收。
+## 先处理刚才的报错
 
-它不是接线指导，不是固件生成记录，不是连续性检查，也不是硬件验证。
+你刚才看到 Workbench 报：
 
-2026-05-19 最新入口：硬件同学已经补了当前 PCB2 版本确认、映射表、pin-1
-图片、Hall 对应、PB3/SWO 说明和 STDRIVE101 保护链说明；后续澄清图又说明
-`PC7/PB3/PB10` 是替代建议，不是当前 PCB2 实际连接。当前 PCB2 实际 Hall
-路径是 `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`，其中 `IA/IB/IC` 是 Hall 信号网，
-`ADC_U/ADC_V/ADC_W` 才是电流采样。
+`一般错误 / 无法加载文件: C:/Users/gregrg/.st_workbench/projects/MY_FOC.stwb6`
 
-当前不要再追问映射表或 `IA/IB/IC` 含义。下一步要做的是无功率软件方案选择：
+我已经把这个文件恢复回备份了：
 
-1. 不改 PCB：评估 `PA0/PA1/PB4` 软件 Hall 处理方案。
-2. 改线/飞线：把 Hall 改到同一定时器三路输入，例如合适的 TIM3 CH1/CH2/CH3
-   引脚组。
-3. 无论选哪条，都先做 Workbench/CubeMX / firmware 设计审查，不上电。
+`C:\Users\gregrg\.st_workbench\projects\MY_FOC.stwb6`
 
-完整来源审查见
-`source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`。
+现在它又是原来的六步工程，顶层字段是：
 
-## Safety Boundary
+`"algorithm": "sixStep"`
 
-- No 24V.
-- No power-board connection.
-- No motor connection.
-- No Gate PWM output.
-- No Motor Profiler run.
-- No Hall closed-loop claim.
-- No sensorless / SMO claim.
+这说明：不能只靠手改 `.stwb6` 里一个 `algorithm` 字段把六步工程变成 FOC。这个方法已经被 Workbench 报错证明不可用。
 
-## 你现在要做的事
+你现在只需要重新打开 `MY_FOC`。如果能打开，就停在工程首页，不要点 `Generate`。如果还报错，继续截图给我。
 
-### Task 1 - 先交 Packet B：当前版板级走线源包
+## 接下来真正要做的事
 
-这是当前最卡进度、也最需要你提供的证据。
+1. 在 Workbench 里用正常 GUI 流程新建或转换成 FOC 工程，不要手改 `.stwb6`。
+2. 功率板仍然按自研 STDRIVE101 板处理，不要用内置 `EVALSTDRIVE101`、`STEVAL-LVLP01`、`EVLDRIVE101-HPD` 冒充项目板。
+3. 既然你说引脚可以改，优先把 Hall/PWM 改到 Workbench/MCSDK 能正常表达的定时器兼容引脚组合；后面硬件或飞线去匹配它。
+4. 确认 current sensing 不再是 disabled，fault/break 也不要是 disabled。
+5. 每看到一个关键配置页就截图给我审，不要直接生成工程。
 
-请提供当前功率板对应的任一来源：
+## 必须停止的地方
 
-- EDA source；
-- schematic PDF；
-- netlist；
-- high-resolution schematic or PCB crop。
-
-必须同时说明：
-
-| Field | 你需要给的信息 |
-| --- | --- |
-| Source path | 文件放在仓库里的路径，优先放到 `hardware/schematic/` 或清楚命名的 board-source 路径。 |
-| Source date/version | 文件日期、版本号或导出时间。 |
-| Board revision match | 这个文件是否对应你手上的当前功率板。 |
-| CN8 mapping | `NFAULT`、PWM inputs、current-sense nets、Hall nets、`3V3`、ground。 |
-| STDRIVE101 endpoints | `nFAULT`、`DT/MODE`、`REG12`、`CP`、`SCREF`、`VS/VM`、bootstrap、`STBY`、VDS monitoring。 |
-| Readability | net names、pin names、reference designators、values 必须能看清。 |
-
-Codex 收到后只做无功率审查：把能证明的 CN8 / board-route 项写入
-`evidence_packet_2026-05-14.md`，不能证明的仍保持 `Blocked`。
-
-### Task 2 - 交 Packet A：MCSDK / MotorControl 配置源包
-
-如果你能在 GUI 里拿到配置证据，请提供以下任一项：
-
-- real Workbench `.stmcx`；
-- MotorControl / Workbench configuration screenshot；
-- exact launcher path plus captured version/config screen。
-
-必须能看到或记录：
-
-- MCU / board context：`STM32G474RETx`、NUCLEO 或明确的 custom-board context；
-- TIM1 complementary PWM choices；
-- fault input selection，当前草案优先看 `PB12/TIM1_BKIN`；
-- current-sense mode；
-- Hall / sensorless selection or explicit absence；
-- `PA2/PA3` 是否排除出 FOC 通信；
-- `PB3` 当前由 SWO 还是 Hall B 占用。
-
-不要运行 Motor Profiler，也不要输出 Gate PWM。这个包只能证明配置意图，
-不能证明电机、功率级、Hall 闭环或 SMO 行为。
-
-### Task 3 - 补 PB3 / SWO 释放证据
-
-如果后续还计划把 `PB3` 用作 Hall B，请提供以下之一：
-
-- NUCLEO 焊桥、手册页或板级设置截图，证明 SWO 已释放或隔离；
-- Workbench / CubeMX 配置截图，证明 `PB3` 已从 `SYS_JTDO-SWO` 变成明确的 Hall B 输入；
-- 与当前板子匹配的 CN8 / EDA / netlist 证据，说明 Hall B 实际到哪里。
-
-没有这项证据时，`PB3` 只能继续作为候选，不能登记为 Hall 可用。
-
-## 不接受的来源
-
-这些只能当线索，不能升级证据：
-
-- low-resolution screenshots；
-- oral descriptions；
-- old or unknown-version EDA/PDF/netlist files；
-- partial crops without endpoints or board revision；
-- generated MCSDK source without matching `.stmcx` or configuration screen；
-- excluded WeChat-side `netlist_PADS.net` candidate。
-
-## 你发给 Codex 的最短模板
-
-```text
-我提供 Packet B。
-文件路径：
-来源日期/版本：
-是否匹配当前功率板：
-需要你审查的网络：
-我没有接 24V、没有接功率板、没有接电机、没有运行 Motor Profiler。
-```
-
-如果提供 Packet A，把第一行改成 `我提供 Packet A`，并写清 `.stmcx` 或
-截图路径。
-
-## Codex 收到后做什么
-
-1. 按 `source_packet_intake_checklist_2026-05-14.md` 判断来源是否可接受。
-2. 填 `source_packet_review_template_2026-05-14.md` 或它的日期副本，做
-   Accept / Partial clue / Reject 判断。
-3. 只升级源包直接证明的字段。
-4. 更新 `evidence_packet_2026-05-14.md` 和 `workflow/evidence_register.md`。
-5. 保持未证明项为 `Blocked`。
-6. 运行 `python -m unittest discover -s tests`。
-7. 重建 `vector_store/`。
+- 不点 `Generate`。
+- 不 `Build`。
+- 不 `Flash`。
+- 不接 24V。
+- 不接功率板。
+- 不接电机。
+- 不输出 Gate PWM。
+- 不运行 Motor Profiler。
+- 不运行 Motor Pilot。
 
 ## 当前结论
 
-下一步最有价值的是 Packet B：当前版 CN8 / board-route / STDRIVE101
-保护路径源包。没有这个源包前，P2 仍不能声明 CN8 routing proof、
-STDRIVE101 protection-path proof、power-stage readiness、Hall readiness、
-sensorless readiness，且仍不授权任何上电或电机动作。
+`MY_FOC` 现在仍然只能作为线索，不能作为 Packet A 通过证据。
+
+Packet A still blocked.
+
+no generated-project trust.
+
+## 仍然保留的旧证据任务
+
+你现在要做的事不是上电，而是继续补无功率证据。
+
+Task 1 - 先交 Packet B：当前版板级走线源包，例如 `netlist_PADS.net`、CN3/CN8 到 STM32 引脚表、J_HALL 引脚方向。
+
+Task 2 - 交 Packet A：MCSDK / MotorControl 配置源包，也就是能审查的 Workbench `.stwb6`、配置截图或等价源文件。
+
+Task 3 - 补 PB3 / SWO 释放证据：如果任何方案要用 PB3 做非调试用途，必须先证明 SWO 已释放或隔离。
+
+你发给 Codex 的最短模板：把源文件、截图、板子版本、你点到哪一步、有没有报错一起发来。
+
+源包审查规则仍按 `source_packet_intake_checklist_2026-05-14.md` 执行。
+
+仍不授权任何上电或电机动作。
+
+No 24V. No Gate PWM output. No Motor Profiler run.

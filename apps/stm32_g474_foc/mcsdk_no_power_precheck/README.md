@@ -23,10 +23,18 @@ output.
   Gerber PCB2 board-side source clues, a 2026-05-19 hardware supplement
   handoff, a minimal hardware-teammate request, and a local Workbench
   Board Designer / Board Manager asset probe, plus a 2026-05-19 current PCB2
-  mapping / pin-1 / protection source review.
+  mapping / pin-1 / protection source review, a current PCB2 Hall/PWM
+  no-power strategy review, a current PCB2 Packet A / firmware feasibility
+  review, a software Hall adapter design review, and a Packet A Board
+  Designer / Board Manager path review, plus a Packet A Board Designer /
+  Manager GUI-only checklist, a `MY_FOC` generated-project source review, and
+  a `MY_FOC` manual FOC edit rollback record.
 - Missing evidence: accepted final Workbench selected-field screenshots,
-  software Hall / CubeMX strategy for the current `PA0/PA1/PB4` Hall route,
-  no-power continuity checks, and all powered hardware evidence.
+  Packet A / firmware feasibility proof for the current PCB2
+  `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
+  Hall route beyond no-power design review, a corrected FOC Workbench
+  configuration for `MY_FOC` or a replacement project, no-power continuity
+  checks, and all powered hardware evidence.
 
 ## Safety Boundary
 
@@ -113,6 +121,63 @@ Forbidden in this directory and this P2 stage:
   Current decision is `Partial clue / accepted current PCB2 mapping source;
   Hall/PWM conflicts clarified`; `PC7/PB3/PB10` is an alternate suggestion,
   while current PCB2 Hall routing is `IA/IB/IC -> PA0/PA1/PB4`.
+- `current_pcb2_hall_pwm_strategy_2026-05-19.md`: no-power strategy review
+  for the current PCB2 PWM/Hall mismatch. Current decision is
+  `No-power strategy review opened / no PCB change first`; old standard
+  `TIM1` PWM and `PA15/PB3/PB10` Hall drafts are historical or alternate
+  candidates only, and software Hall on `PA0/PA1/PB4` remains feasibility
+  review only.
+- `current_pcb2_packet_a_firmware_feasibility_2026-05-19.md`: no-power Packet
+  A / firmware feasibility review for the current no-PCB-change route. Current
+  decision is `No-PCB-change route remains feasibility only / Packet A not
+  accepted`; current PWM is not cleared as standard MCSDK `TIM1`
+  complementary PWM selected-field evidence, and `PA0/PA1/PB4` is not cleared
+  as same-timer hardware Hall.
+- `software_hall_adapter_design_review_2026-05-19.md`: no-power design review
+  for the current PCB2 software Hall path on `PA0/PA1/PB4`. Current decision is
+  `Software Hall adapter remains no-power design review / Packet A not
+  accepted`; it defines future GPIO/EXTI sampling, edge timestamping,
+  valid-state filtering, minimal ISR responsibility, MCSDK integration
+  boundaries, and `hardware-rework planning` fallback conditions without
+  adding firmware, runtime APIs, generated source, build-only clearance, or
+  Hall readiness.
+- `packet_a_board_designer_manager_path_review_2026-05-19.md`: no-power Packet
+  A path review for the Workbench Board Designer / Board Manager path. Current
+  decision is `Board Designer / Board Manager path exists as local
+  documentation and tool clue / Packet A still blocked`; it records the local
+  Workbench external-tool entries, local Board Designer / Board Manager
+  executables, Board Designer manual custom-board workflow clues, and the
+  boundary that built-in `EVALSTDRIVE101`, `STEVAL-LVLP01`, and
+  `EVLDRIVE101-HPD` cannot replace evidence for the self-developed STDRIVE101
+  board. It adds no generated-project trust, no build-only clearance, no
+  custom board source, no `.stwb6`, and no powered readiness.
+- `packet_a_board_designer_manager_gui_checklist_2026-05-19.md`: GUI-only
+  checklist for the later user screenshot capture around Board Designer /
+  Board Manager. Current decision is `GUI-only checklist prepared / Packet A
+  still blocked`; it defines the screenshot save directory, required screenshots
+  for custom/import/create board paths, Power/Control/Inverter board flows,
+  Board Aggregation, Finalize/save prompt, Board Manager import/list path, and
+  blocked states. It adds no generated-project trust, no custom board source,
+  no `.stwb6`, and no powered readiness.
+- `source_packet_review_2026-05-19_005_my_foc_generated_project.md`: review of
+  the user-created `MY_FOC` Workbench generated project. Current decision is
+  `Partial clue / generated project quarantined / Packet A not accepted`; it
+  proves a real generated project exists, but the project is `SIX_STEP`, not
+  FOC, and current sensing, fault/break, Hall/PWM route, and motor evidence are
+  not accepted. User clarification that pins can be changed is recorded as a
+  future editable route, not Packet A acceptance.
+- `packet_a_sources/2026-05-19_my_foc_generated_project/`: selected no-power
+  source/config/log files copied from the user-created `MY_FOC` Workbench
+  project. The generated `Src/`, `Inc/`, `Drivers/`, and
+  `MCSDK_v6.4.2-Full/` trees are intentionally not copied or trusted.
+- `my_foc_foc_candidate_edit_2026-05-19.md`: records the Codex manual FOC edit
+  attempt and rollback for
+  `C:\Users\gregrg\.st_workbench\projects\MY_FOC.stwb6`. Current decision is
+  `Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted`;
+  the one-field edit from `"algorithm": "sixStep"` to `"algorithm": "FOC"`
+  made Workbench unable to load the file, so Codex restored the external source
+  from backup. The current external source is again six-step; the failed FOC
+  candidate is negative evidence only.
 - `hardware_supplement_handoff_2026-05-19.md`: current hardware-teammate
   handoff for the next accepted evidence. It asks for exact board revision,
   `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, `CN3` / `J_HALL` pin-1
@@ -174,9 +239,17 @@ evidence. For the current hardware-teammate follow-up after the 2026-05-19
 `hardware_teammate_min_request_2026-05-19.md`, then use
 `hardware_supplement_handoff_2026-05-19.md` for the full matrix. Use
 `source_packet_review_template_2026-05-14.md` to review any new material before
-upgrading any blocker. After the 2026-05-19 clarification image, the next
-question is no longer generic hardware mapping; it is a no-power software Hall
-or hardware-rework strategy for `PA0/PA1/PB4`. The next valid packet must be one of:
+upgrading any blocker. After the 2026-05-19 clarification image, current PCB2
+Hall/PWM strategy review, and Packet A / firmware feasibility review, the next
+question is no longer generic hardware mapping and is no longer whether the
+current route is immediately clearable. The current no-PCB-change route remains
+feasibility only. After the software Hall adapter design review, Packet A Board
+Designer / Board Manager path review, and GUI-only checklist, the next valid
+Packet A packet is a GUI-only custom/user board capture for the self-developed
+STDRIVE101 board if Workbench can create a reviewable artifact; otherwise
+Packet A remains blocked and the fallback is surrogate build-only planning
+without generated-project trust or separate hardware-rework planning. The next
+valid packet must be one of:
 
 - a real `.stwb6` saved by MCSDK 6 Workbench, or legacy `.stmcx`;
 - a screenshot showing the Workbench/CubeMX draft configuration;
@@ -204,4 +277,7 @@ teammate for the next board-side packet, read
 `hardware_teammate_min_request_2026-05-19.md` and
 `hardware_supplement_handoff_2026-05-19.md`. Before treating any Workbench
 Board Designer / Board Manager result as Packet A evidence, read
-`packet_a_workbench_asset_probe_2026-05-19.md`.
+`packet_a_workbench_asset_probe_2026-05-19.md` and
+`packet_a_board_designer_manager_path_review_2026-05-19.md`. Before capturing
+later Board Designer / Board Manager screenshots, read
+`packet_a_board_designer_manager_gui_checklist_2026-05-19.md`.

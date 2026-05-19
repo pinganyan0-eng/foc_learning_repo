@@ -1,3 +1,223 @@
+## 2026-05-19 MY_FOC Manual FOC Edit Rollback
+
+- Backed up the Workbench source project:
+  `C:\Users\gregrg\.st_workbench\projects\MY_FOC.stwb6`.
+- Backup:
+  `C:\Users\gregrg\.st_workbench\projects\MY_FOC.stwb6.pre_codex_foc_edit_2026-05-19.bak`.
+- Attempted one minimal source-file edit: changed top-level
+  `"algorithm": "sixStep"` to `"algorithm": "FOC"`.
+- User opened Workbench and reported `一般错误 / 无法加载文件:
+  C:/Users/gregrg/.st_workbench/projects/MY_FOC.stwb6`.
+- Decision:
+  `Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted`.
+- Rollback completed: external `MY_FOC.stwb6` was restored from the backup and
+  now again reads `"algorithm": "sixStep"`.
+- Current external `.stwb6` SHA256 matches the backup:
+  `062B78AD8E07B5A29A68A007797200FCD4833FE9D3371D2821F3A54D5B9429FD`.
+- Archived original/restored and failed FOC-candidate `.stwb6` copies under
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-19_my_foc_generated_project/`.
+- Engineering result: do not hand-edit only the top-level `.stwb6` `algorithm`
+  field to convert six-step to FOC. Use Workbench GUI flow or create a full
+  reviewable FOC `.stwb6` instead.
+- Packet A still blocked. No generated-project trust, no build-only clearance,
+  no trusted generated source, no powered readiness, no Hall readiness, no
+  Motor Profiler readiness, no motor readiness, no power-stage readiness, and
+  no sensorless readiness is upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 61 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8276 chunks. Read-back confirmed
+  external `MY_FOC.stwb6` has `"algorithm": "sixStep"` and matches the backup
+  SHA256.
+
+## 2026-05-19 MY_FOC Generated Project Source Review
+
+- Archived selected no-power source files from
+  `C:\Users\gregrg\.st_workbench\projects\MY_FOC` under
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-19_my_foc_generated_project/`.
+- Added source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_005_my_foc_generated_project.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-my-foc-generated-project-source-review`.
+- Evidence ID:
+  `EV-2026-05-19-P2-MY-FOC-GENERATED-PROJECT-001`.
+- Decision: `Partial clue / generated project quarantined / Packet A not
+  accepted`. `MY_FOC` proves Workbench 6.4.2 generated a real project on this
+  machine, but it is configured as `SIX_STEP`, not FOC.
+- Key blockers remain: `M1_CUR_READING=false`,
+  `TIM1.BreakState=TIM_BREAK_DISABLE`, generated Hall on `PA15/PB3/PB10`,
+  generated PWM on `PA8/PB13/PA9/PB14/PA10/PB15`, and motor placeholder
+  `R57BLB50L2` / `MOONS motor for Zest Demo`.
+- User clarification recorded: pins can be changed. The Hall/PWM mismatch is
+  now treated as a future editable hardware/adapter or Workbench route, not a
+  permanent rejection. It still needs a new reviewable FOC configuration and a
+  matching physical route before Packet A can be accepted.
+- Packet A still blocked. No generated-project trust, no build-only clearance,
+  no FOC configuration completion, no firmware trust, no continuity evidence,
+  no powered readiness, no Hall readiness, no Motor Profiler readiness, no
+  motor readiness, no power-stage readiness, and no sensorless readiness is
+  upgraded.
+- No build, flash, 24V, power-board connection, motor connection, Gate PWM
+  output, Motor Profiler, Motor Pilot, Hall closed-loop, or sensorless / SMO
+  claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 59 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8265 chunks.
+
+## 2026-05-19 Packet A Board Designer / Manager GUI-Only Checklist
+
+- Added no-power GUI-only checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_board_designer_manager_gui_checklist_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-packet-a-board-designer-manager-gui-checklist`.
+- Evidence ID:
+  `EV-2026-05-19-P2-PACKET-A-BOARD-DESIGNER-MANAGER-GUI-CHECKLIST-001`.
+- Decision: `GUI-only checklist prepared / Packet A still blocked`. The
+  checklist tells the user how to capture Board Designer / Board Manager entry,
+  custom/import/create board screens, Power/Control/Inverter board flows,
+  Board Aggregation, Finalize/save prompt, Board Manager import/list path, and
+  blocked states.
+- Later screenshots should go under
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-19_board_designer_manager_path/screenshots/`.
+- Built-in `EVALSTDRIVE101`, `STEVAL-LVLP01`, and `EVLDRIVE101-HPD` remain
+  non-substitutes for the project self-developed STDRIVE101 board. If the GUI
+  only exposes those built-in boards or requires source generation / hardware
+  actions, the user should capture the blocked screen and stop.
+- Packet A still blocked. No generated-project trust, no build-only clearance,
+  no custom board source, no `.stwb6`, no firmware, no runtime API, no
+  continuity evidence, no powered readiness, no Hall readiness, no Motor
+  Profiler readiness, no motor readiness, no power-stage readiness, or no
+  sensorless readiness is upgraded.
+- No GUI launch occurred in this task. No Generate click, source generation,
+  build, flash, 24V, power-board connection, motor connection, Gate PWM output,
+  Motor Profiler, Motor Pilot, Hall closed-loop, or sensorless / SMO claim is
+  authorized.
+- Verification: `python -m unittest discover -s tests` passed with 56 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8243 chunks.
+
+## 2026-05-19 Packet A Board Designer / Board Manager Path Review
+
+- Added no-power Packet A path review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_board_designer_manager_path_review_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-packet-a-board-designer-manager-path-review`.
+- Evidence ID:
+  `EV-2026-05-19-P2-PACKET-A-BOARD-DESIGNER-MANAGER-PATH-001`.
+- Decision: `Board Designer / Board Manager path exists as local documentation
+  and tool clue / Packet A still blocked`. Workbench config references Board
+  Designer and Board Manager, the executables exist locally, and the local
+  Board Designer manual describes custom board creation/import and board
+  aggregation workflows.
+- Built-in `EVALSTDRIVE101`, `STEVAL-LVLP01`, and `EVLDRIVE101-HPD` remain
+  examples only. They cannot replace evidence for the project self-developed
+  STDRIVE101 board.
+- Packet A is not accepted. Generated-project trust and build-only
+  generated-project clearance remain `Not allowed`. No self-developed board
+  definition, `.stwb6`, selected-field screenshot, generated project, build,
+  flash, continuity, powered readiness, Hall readiness, Motor Profiler
+  readiness, motor readiness, or sensorless readiness is upgraded.
+- Next valid Packet A task, if used later, is GUI-only path confirmation and
+  screenshot/source capture for a custom/user board; if that cannot be made
+  reviewable, the fallback is surrogate build-only planning without
+  generated-project trust or separate hardware-rework planning.
+- No GUI launch occurred in this review. No source generation, build, flash,
+  24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, Motor Pilot, Hall closed-loop, or sensorless / SMO claim is
+  authorized.
+- Verification: `python -m unittest discover -s tests` passed with 53 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8231 chunks.
+
+## 2026-05-19 Software Hall Adapter Design Review
+
+- Added no-power software Hall adapter design review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_design_review_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-software-hall-adapter-design-review`.
+- Evidence ID:
+  `EV-2026-05-19-P2-SOFTWARE-HALL-ADAPTER-DESIGN-001`.
+- Decision: `Software Hall adapter remains no-power design review / Packet A
+  not accepted`. Current PCB2 Hall route remains
+  `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`; the review defines only future GPIO/EXTI
+  sampling, edge timestamping, valid-state filtering, minimal ISR responsibility,
+  and MCSDK integration boundaries.
+- Hard stops are explicit: if Workbench / MCSDK requires same-timer hardware
+  Hall, if the adapter would invade the high-frequency FOC / JEOC path, or if
+  no build-only verification boundary can be defined after accepted Packet A,
+  the next step becomes a separate hardware-rework planning task.
+- Packet A selected fields remain not accepted. Generated-project trust and
+  build-only generated-project clearance remain `Not allowed`. No software Hall
+  adapter, runtime API, firmware implementation, generated project, build, flash,
+  continuity, powered readiness, Hall readiness, Motor Profiler readiness, motor
+  readiness, or sensorless readiness is upgraded.
+- No GUI launch, source generation, build, flash, 24V, power-board connection,
+  motor connection, Gate PWM output, Motor Profiler, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 50 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8209 chunks.
+
+## 2026-05-19 Current PCB2 Packet A / Firmware Feasibility Review
+
+- Added no-power feasibility review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/current_pcb2_packet_a_firmware_feasibility_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-current-pcb2-packet-a-firmware-feasibility`.
+- Evidence ID:
+  `EV-2026-05-19-P2-CURRENT-PCB2-PACKET-A-FIRMWARE-FEASIBILITY-001`.
+- Decision: `No-PCB-change route remains feasibility only / Packet A not
+  accepted`. Current PCB2 `HIN/LIN` route is not cleared as a standard MCSDK
+  `TIM1` complementary PWM selected-field claim, and `PA0/PA1/PB4` is not
+  cleared as a same-timer hardware Hall interface.
+- The no-PCB-change path remains open only as a later no-power firmware design
+  review for software Hall sampling, edge timestamping, valid-state filtering,
+  and MCSDK integration boundaries.
+- Packet A remains not accepted. Generated-project trust and build-only
+  generated-project clearance remain `Not allowed`.
+- Hardware rework is not executed or decided in this task; it remains a
+  fallback if Workbench/firmware feasibility fails.
+- No GUI launch, source generation, build, flash, 24V, power-board connection,
+  motor connection, Gate PWM output, Motor Profiler, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 47 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed.
+
+## 2026-05-19 Current PCB2 Hall/PWM No-Power Strategy Review
+
+- Added no-power strategy review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/current_pcb2_hall_pwm_strategy_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-current-pcb2-hall-pwm-strategy`.
+- Evidence ID:
+  `EV-2026-05-19-P2-CURRENT-PCB2-HALL-PWM-STRATEGY-001`.
+- Decision: `No-power strategy review opened / no PCB change first`. The
+  current PCB2 PWM / driver-input route under review is
+  `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 -> PA15/PB3/PB10/PA8/PA9/PA10`, and the
+  current PCB2 Hall route remains `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`.
+- The old standard `TIM1` complementary PWM draft and the old
+  `PA15/PB3/PB10` hardware Hall draft are now historical or alternate
+  candidates only. They are not accepted current PCB2 configuration evidence.
+- `PA0/PA1/PB4` is not accepted as a same-timer hardware Hall set. This task
+  records only software Hall feasibility review as a future no-power Packet A /
+  firmware design topic; it does not upgrade Hall readiness.
+- `PB3` is current PCB2 `LIN1`, not current PCB2 `HALL_B`. Any alternate use
+  of `PB3` as Hall still needs SWO release/isolation and a new accepted route.
+- Packet A remains `Partial clue / Preparation only / stopped`;
+  generated-project trust remains `Not allowed`; build-only generated-project
+  work remains closed.
+- No GUI launch, source generation, build, flash, 24V, power-board connection,
+  motor connection, Gate PWM output, Motor Profiler, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 44 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` built 8175 chunks. The project dry-run no-power
+  safety scan was not completed because the tool platform rejected the call
+  with a usage-limit message; it was not bypassed.
+
 ## 2026-05-19 PCB2 Mapping / Pin-1 / Protection Intake
 
 - Archived user-provided current PCB2 mapping and pin-1 source packet under:

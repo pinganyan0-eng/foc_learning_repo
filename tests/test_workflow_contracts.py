@@ -72,5 +72,360 @@ class CodexDualTeacherGateTests(unittest.TestCase):
         self.assertIn("do not redirect current Codex-side repo work to ChatGPT", skill)
 
 
+class CurrentPcb2HallPwmStrategyTests(unittest.TestCase):
+    def test_strategy_review_exists_and_keeps_no_power_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "current_pcb2_hall_pwm_strategy_2026-05-19.md"
+        )
+
+        for phrase in (
+            "No-power strategy review opened / no PCB change first",
+            "No 24V",
+            "No power-board connection",
+            "No motor connection",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "No Hall closed-loop validation",
+            "No generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_strategy_review_locks_current_pcb2_hall_and_pb3_roles(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "current_pcb2_hall_pwm_strategy_2026-05-19.md"
+        )
+
+        for phrase in (
+            "HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 -> PA15/PB3/PB10/PA8/PA9/PA10",
+            "J_HALL -> IA/IB/IC -> PA0/PA1/PB4",
+            "PB3` is current PCB2 `LIN1`, not current PCB2 Hall B",
+            "not a same-timer hardware Hall set",
+            "software Hall is only a feasibility-review topic",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_p2_readiness_keeps_packet_a_and_build_only_blocked(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "Current PCB2 Hall/PWM strategy",
+            "Packet A / firmware feasibility review",
+            "Generated-project trust",
+            "Not allowed",
+            "No-power build-only generated project",
+            "Not allowed now",
+            "software Hall is not hardware validation",
+        ):
+            self.assertIn(phrase, text)
+
+
+class CurrentPcb2PacketAFirmwareFeasibilityTests(unittest.TestCase):
+    def test_feasibility_review_exists_and_blocks_packet_a(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "current_pcb2_packet_a_firmware_feasibility_2026-05-19.md"
+        )
+
+        for phrase in (
+            "No-PCB-change route remains feasibility only / Packet A not accepted",
+            "No generated-project trust",
+            "No build-only generated-project clearance",
+            "not cleared as a standard MCSDK TIM1 complementary PWM",
+            "not cleared as a same-timer hardware Hall",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_feasibility_review_keeps_no_power_scope(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "current_pcb2_packet_a_firmware_feasibility_2026-05-19.md"
+        )
+
+        for phrase in (
+            "No 24V",
+            "No power-board connection",
+            "No motor connection",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "No Hall closed-loop validation",
+            "no source generation",
+            "no build-only generated project",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_points_to_next_feasibility_decision(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "Current PCB2 Packet A / firmware feasibility",
+            "Feasibility only / Packet A not accepted",
+            "does not open generated-project trust or build-only clearance",
+            "deeper software Hall adapter design review",
+            "hardware-rework planning task",
+        ):
+            self.assertIn(phrase, text)
+
+
+class SoftwareHallAdapterDesignReviewTests(unittest.TestCase):
+    def test_software_hall_review_exists_and_keeps_no_power_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "software_hall_adapter_design_review_2026-05-19.md"
+        )
+
+        for phrase in (
+            "software Hall adapter design review",
+            "PA0/PA1/PB4",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "Packet A not accepted",
+            "no generated-project trust",
+            "hardware-rework planning",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_software_hall_review_defines_adapter_boundaries(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "software_hall_adapter_design_review_2026-05-19.md"
+        )
+
+        for phrase in (
+            "GPIO/EXTI",
+            "timestamp Hall edges",
+            "valid-state filtering",
+            "repeated states",
+            "minimal ISR responsibility",
+            "MCSDK Integration Boundary",
+            "does not define function names",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_points_to_software_hall_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "Software Hall adapter design review",
+            "Software Hall adapter remains no-power design review / Packet A not accepted",
+            "does not add firmware, runtime APIs, generated source, Hall readiness",
+            "software Hall adapter design review or hardware-rework planning task",
+        ):
+            self.assertIn(phrase, text)
+
+
+class PacketABoardDesignerManagerPathReviewTests(unittest.TestCase):
+    def test_board_designer_manager_review_exists_and_blocks_packet_a(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_board_designer_manager_path_review_2026-05-19.md"
+        )
+
+        for phrase in (
+            "Board Designer / Board Manager path",
+            "self-developed STDRIVE101 board",
+            "Packet A still blocked",
+            "no generated-project trust",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_board_designer_manager_review_separates_built_in_boards(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_board_designer_manager_path_review_2026-05-19.md"
+        )
+
+        for phrase in (
+            "EVALSTDRIVE101",
+            "STEVAL-LVLP01",
+            "EVLDRIVE101-HPD",
+            "custom/user board",
+            "project-specific `.stwb6`",
+            "selected-field screenshots",
+            "hardware-rework planning",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_points_to_board_designer_manager_path(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "Packet A Board Designer / Board Manager path review",
+            "Board Designer / Board Manager path exists as local documentation and tool clue / Packet A still blocked",
+            "self-developed STDRIVE101 board",
+            "does not open generated-project trust or build-only clearance",
+            "surrogate build-only planning without generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+
+class PacketABoardDesignerManagerGuiChecklistTests(unittest.TestCase):
+    def test_gui_checklist_exists_and_keeps_packet_a_blocked(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_board_designer_manager_gui_checklist_2026-05-19.md"
+        )
+
+        for phrase in (
+            "Board Designer / Board Manager",
+            "self-developed STDRIVE101 board",
+            "GUI-only",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "Packet A still blocked",
+            "no generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_gui_checklist_defines_screenshots_and_hard_stops(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_board_designer_manager_gui_checklist_2026-05-19.md"
+        )
+
+        for phrase in (
+            "packet_a_sources/2026-05-19_board_designer_manager_path/screenshots/",
+            "custom/import/create board",
+            "Power Board",
+            "Control Board",
+            "Inverter Board",
+            "Board Aggregation",
+            "Finalize/save prompt",
+            "Board Manager import/list path",
+            "Do not save a placeholder or fake project board",
+            "No Generate click",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_points_to_gui_checklist(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "Packet A Board Designer / Manager GUI-only checklist",
+            "GUI-only checklist prepared / Packet A still blocked",
+            "packet_a_board_designer_manager_gui_checklist_2026-05-19.md",
+            "does not launch GUI or add generated-project trust",
+            "stop before Generate, Motor Profiler, Motor Pilot, Flash",
+        ):
+            self.assertIn(phrase, text)
+
+
+class MyFocGeneratedProjectReviewTests(unittest.TestCase):
+    def test_my_foc_review_exists_and_keeps_packet_a_blocked(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "source_packet_review_2026-05-19_005_my_foc_generated_project.md"
+        )
+
+        for phrase in (
+            "MY_FOC",
+            "SIX_STEP",
+            "Packet A not accepted",
+            "no generated-project trust",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "self-developed STDRIVE101 board",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_my_foc_review_records_editable_pin_mismatch_and_blockers(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "source_packet_review_2026-05-19_005_my_foc_generated_project.md"
+        )
+
+        for phrase in (
+            "M1_POWERBOARD_NAME=~MY-STDRIVE101_POWER_BOARD",
+            "M1_PWM_DRIVER_PN=STDRIVE101",
+            "PA15/PB3/PB10",
+            "PA0/PA1/PB4",
+            "PA8/PB13/PA9/PB14/PA10/PB15",
+            "M1_CUR_READING=false",
+            "TIM1.BreakState=TIM_BREAK_DISABLE",
+            "R57BLB50L2",
+            "pins can be changed",
+            "not a permanent rejection",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_points_to_my_foc_quarantine(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+
+        for phrase in (
+            "MY_FOC generated project source review",
+            "generated project quarantined / Packet A not accepted",
+            "SIX_STEP",
+            "pins can be changed",
+            "No generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+
+class MyFocFocCandidateEditTests(unittest.TestCase):
+    def test_my_foc_manual_foc_edit_rollback_is_recorded(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "my_foc_foc_candidate_edit_2026-05-19.md"
+        )
+
+        for phrase in (
+            "Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted",
+            "MY_FOC.stwb6",
+            "一般错误",
+            "无法加载文件",
+            "rolled back",
+            "\"algorithm\": \"sixStep\"",
+            "\"algorithm\": \"FOC\"",
+            "pre_codex_foc_edit_2026-05-19.bak",
+            "MY_FOC.codex_foc_candidate_2026-05-19.stwb6",
+            "no generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_my_foc_foc_candidate_edit_keeps_no_power_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "my_foc_foc_candidate_edit_2026-05-19.md"
+        )
+
+        for phrase in (
+            "No Generate",
+            "No build",
+            "No flash",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "R57BLB50L2",
+            "Number.NaN",
+            "generated six-step outputs",
+        ):
+            self.assertIn(phrase, text)
+
+
 if __name__ == "__main__":
     unittest.main()

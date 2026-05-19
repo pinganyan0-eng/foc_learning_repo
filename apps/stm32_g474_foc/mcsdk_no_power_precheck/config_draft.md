@@ -1,6 +1,6 @@
 # MCSDK No-Power Configuration Draft
 
-Last updated: 2026-05-14
+Last updated: 2026-05-19
 
 This is a planning artifact only. It is not a wiring instruction, not generated
 firmware, and not hardware validation.
@@ -25,14 +25,13 @@ defines what evidence must exist before those choices can be trusted.
 
 | Function | Draft Choice | Policy |
 | --- | --- | --- |
-| PWM timer | `TIM1` center-aligned complementary PWM | Planning only. No PWM output in P2. |
-| U high / low | `PA8 / PB13` as `TIM1_CH1 / TIM1_CH1N` | Candidate only; requires Workbench/CubeMX and board-route confirmation. |
-| V high / low | `PA9 / PB14` as `TIM1_CH2 / TIM1_CH2N` | Candidate only. `PA12` remains only a board-routing alternate. |
-| W high / low | `PA10 / PB15` as `TIM1_CH3 / TIM1_CH3N` | Candidate only; no Gate output in P2. |
-| Current sensing | 3-shunt low-side, internal OPAMP/PGA route | Template only; no ADC/current behavior is validated. |
-| U/V/W current inputs | `PA1`, `PA7`, `PB0` as OPAMP/PGA candidates | Candidate only; OPAMP feedback/output pins must remain reserved. |
+| PWM / driver-input route | Current PCB2 mapping under review: `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 -> PA15/PB3/PB10/PA8/PA9/PA10` | Source clue only. Needs Packet A / Workbench / firmware feasibility review before any generated-project trust. |
+| Historical TIM1 complementary PWM draft | `PA8 / PB13`, `PA9 / PB14`, `PA10 / PB15` as `TIM1_CH1/1N/2/2N/3/3N` | Downgraded to historical candidate only; it does not match current PCB2 P1-P6 mapping. |
+| Current sensing | Current PCB2 source clue: `ADC_U/ADC_V/ADC_W -> PA4/PB0/PA5`; mode still TBD | Template only; no ADC/current behavior is validated. |
+| Historical U/V/W current inputs | `PA1`, `PA7`, `PB0` as OPAMP/PGA candidates | Downgraded to historical candidate only because current PCB2 uses `PA1` as filtered Hall `IB`. |
 | nFAULT / break input | `PB12 / TIM1_BKIN` | Preferred draft candidate. `PC5` is rejected for nFAULT in this draft. |
-| Hall A/B/C | `PA15 / PB3 / PB10` as `TIM2_CH1/2/3` candidates | Candidate only. If Hall B stays on `PB3`, SWO must be released or isolated. |
+| Current PCB2 Hall A/B/C | `PA0 / PA1 / PB4` from `IA/IB/IC` | Software Hall feasibility review only. This is not a normal same-timer hardware Hall set and does not upgrade Hall readiness. |
+| Historical / alternate Hall A/B/C | `PA15 / PB3 / PB10` as `TIM2_CH1/2/3` candidates | Downgraded to alternate route only. It is not current PCB2 physical Hall routing. |
 | FOC debug / gateway UART | Do not reuse P1 `PA2/PA3` by default | Prefer a later separate UART candidate such as `PC10/PC11` if needed. |
 | Motor parameters | Template only | Do not enter measured `Rs`, `Ls`, `Ke`, or profiler-derived values in P2. |
 
@@ -43,8 +42,24 @@ defines what evidence must exist before those choices can be trusted.
 | `PC5` as nFAULT | Rejected. It is not the draft break-input pin. | Workbench/CubeMX must keep nFAULT away from `PC5`. |
 | `PB12/TIM1_BKIN` as nFAULT | Preferred draft candidate. | Workbench/CubeMX acceptance plus CN8/EDA/netlist proof. |
 | `PA2/PA3` as FOC UART | Excluded from default FOC communication draft. | Only revisit if CubeMX/MCSDK proves no OPAMP/PGA conflict. |
-| `PB3` Hall B versus SWO | Hall B candidate conflicts with baseline SWO ownership. | Record SWO release/isolation before any Hall-stage use. |
-| `PB14` versus `PA12` V low-side PWM | Prefer `PB14/TIM1_CH2N`; keep `PA12` as board-route alternate only. | Workbench/CubeMX plus board-route confirmation. |
+| Current PCB2 `PB3` role | `PB3` is current PCB2 `LIN1`, not current PCB2 Hall B. | Packet A must prove whether this route can be represented safely; no Gate PWM output in P2. |
+| Alternate `PB3` Hall B versus SWO | Alternate Hall B candidate still conflicts with baseline SWO ownership. | Record SWO release/isolation before any alternate Hall-stage use. |
+| Historical `PB14` versus `PA12` V low-side PWM | Previous draft preferred `PB14/TIM1_CH2N`; current PCB2 route review supersedes this as the active route. | Keep as historical context unless a future hardware-rework task reopens standard TIM1 complementary PWM. |
+
+## 2026-05-19 Current PCB2 Strategy Update
+
+`current_pcb2_hall_pwm_strategy_2026-05-19.md` is now the controlling
+no-power strategy note for the current PCB2 PWM/Hall mismatch. It sets the
+default route to "no PCB change first" and records these constraints:
+
+- current PCB2 PWM / driver inputs are
+  `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 -> PA15/PB3/PB10/PA8/PA9/PA10`;
+- current PCB2 Hall inputs are `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`;
+- `PA0/PA1/PB4` must not be treated as a same-timer hardware Hall set;
+- software Hall is only a feasibility-review topic, not Hall readiness or
+  hardware validation;
+- generated-project trust remains `Not allowed` until Packet A selected fields
+  are accepted.
 
 ## 2026-05-14 Saved Draft Readback
 

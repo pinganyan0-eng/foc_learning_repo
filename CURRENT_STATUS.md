@@ -1,3 +1,97 @@
+## 2026-05-19 PCB2 Mapping / Pin-1 / Protection Intake
+
+- Archived user-provided current PCB2 mapping and pin-1 source packet under:
+  `hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/`.
+- Added no-power Packet B/C plus PB3/SWO/Hall source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-pcb2-mapping-pin1-protection-intake`.
+- Evidence ID:
+  `EV-2026-05-19-P2-PCB2-MAPPING-PIN1-PROTECTION-001`.
+- Decision: `Partial clue / accepted current PCB2 mapping source; Hall/PWM
+  conflicts clarified`. The user states the answer corresponds to current
+  PCB2. The packet provides P1-P15 mapping, connector-orientation images, Hall
+  relationship, PB3/SWO handling, and STDRIVE101 `DT/MODE` / `CP` / `SCREF` /
+  `nFAULT` / `STBY` statements.
+- Latest clarification: `PC7/PB3/PB10` was an alternate suggestion, not current
+  PCB2 physical routing. Current PCB2 Hall routing is
+  `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`; `IA/IB/IC` are Hall signal nets after
+  pull-up/filtering, and `ADC_U/ADC_V/ADC_W` are current-sense nets.
+- `PB3` is `LIN1`, not current PCB2 `HALL_B`; `PB10` is `HIN2`, not current
+  PCB2 `HALL_C`. The remaining blocker is now software/Workbench strategy:
+  current Hall inputs `PA0/PA1/PB4` are not a normal three-channel hardware
+  Hall timer set and need a no-power Packet A / firmware design decision.
+- Generated-project trust remains `Not allowed`. Packet A selected fields,
+  no-power continuity, powered readiness, motor readiness, Hall readiness,
+  Motor Profiler readiness, and sensorless readiness remain unchanged.
+- No 24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, source generation, build, flash, Hall closed-loop, or sensorless /
+  SMO claim is authorized.
+- Verification passed: `python -m unittest discover -s tests` ran 41 tests OK
+  after restoring the required `does not release SWO` boundary phrase;
+  `git diff --check` passed with line-ending warnings only; the project dry-run
+  no-power safety scan reported no unsafe added claims; `python
+  tools/build_vector_store.py` rebuilt the local index with 8160 chunks.
+
+## 2026-05-19 P2 Minimal Hardware Request And Workbench Asset Probe
+
+- Added the short hardware-teammate request:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/hardware_teammate_min_request_2026-05-19.md`.
+- Added the read-only Packet A Workbench asset probe:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_workbench_asset_probe_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-min-hw-request-workbench-asset-probe`.
+- Evidence ID:
+  `EV-2026-05-19-P2-MIN-HW-REQ-WB-ASSET-PROBE-001`.
+- Decision: workflow/evidence-governance only. The minimal request narrows the
+  next hardware-teammate packet to three P0 items first: exact Gerber PCB2
+  revision confirmation, complete `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping,
+  and marked `CN3` / `J_HALL` pin-1 evidence.
+- Packet A local asset probe found installed Board Designer and Board Manager
+  executables referenced by Workbench config, plus built-in STDRIVE101 board
+  JSON definitions. This is only a local path clue; no accepted custom
+  self-developed STDRIVE101 board definition, project-specific `.stwb6`, or
+  selected-field screenshot exists.
+- Generated-project trust remains `Not allowed`. Packet A/B/C, PB3/SWO,
+  `J_HALL`, continuity, powered readiness, motor readiness, Hall readiness,
+  Motor Profiler readiness, and sensorless readiness remain unchanged.
+- No 24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, source generation, build, flash, Hall closed-loop, or sensorless /
+  SMO claim is authorized.
+- Verification passed: `python -m unittest discover -s tests` ran 41 tests OK;
+  `git diff --check` passed with line-ending warnings only; the project dry-run
+  no-power safety scan reported no unsafe added claims; `python
+  tools/build_vector_store.py` rebuilt the local index with 8133 chunks.
+
+## 2026-05-19 P2 Hardware Supplement Handoff
+
+- Added hardware-teammate handoff:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/hardware_supplement_handoff_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-hardware-supplement-handoff`.
+- Evidence ID:
+  `EV-2026-05-19-P2-HARDWARE-SUPPLEMENT-HANDOFF-001`.
+- Decision: workflow/evidence-governance only. The handoff converts the
+  latest `.epro` and Gerber follow-up blockers into exact hardware teammate
+  requests: Gerber exact revision confirmation,
+  `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, `CN3` / `J_HALL` pin-1
+  orientation, Hall A/B/C mapping, PB3/SWO release or alternate Hall B route,
+  STDRIVE101 `DT/MODE` / `STBY` / `CP` / `SCREF` / `NFAULT` protection-chain
+  details, optional EasyEDA Pro PCB source, and later no-power continuity /
+  short-check records.
+- Packet A remains `Partial clue / Preparation only / stopped`;
+  generated-project trust remains `Not allowed`.
+- Packet B/C still has accepted board-side schematic + Gerber/flying-probe
+  clues only; NUCLEO `CN8`, STM32 endpoint mapping, connector orientation,
+  continuity, powered readiness, motor readiness, Hall readiness, and
+  sensorless readiness remain not allowed.
+- No 24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, source generation, build, flash, Hall closed-loop, or sensorless /
+  SMO claim is authorized.
+- Verification passed: `python -m unittest discover -s tests` ran 41 tests OK;
+  `python tools/build_vector_store.py` rebuilt the local index with 8110
+  chunks.
+
 ## 2026-05-19 Gerber PCB2 Manufacturing Package Intake
 
 - Archived hardware-teammate supplied Gerber package:

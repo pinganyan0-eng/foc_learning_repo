@@ -4,6 +4,22 @@
 
 它不是接线指导，不是固件生成记录，不是连续性检查，也不是硬件验证。
 
+2026-05-19 最新入口：硬件同学已经补了当前 PCB2 版本确认、映射表、pin-1
+图片、Hall 对应、PB3/SWO 说明和 STDRIVE101 保护链说明；后续澄清图又说明
+`PC7/PB3/PB10` 是替代建议，不是当前 PCB2 实际连接。当前 PCB2 实际 Hall
+路径是 `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`，其中 `IA/IB/IC` 是 Hall 信号网，
+`ADC_U/ADC_V/ADC_W` 才是电流采样。
+
+当前不要再追问映射表或 `IA/IB/IC` 含义。下一步要做的是无功率软件方案选择：
+
+1. 不改 PCB：评估 `PA0/PA1/PB4` 软件 Hall 处理方案。
+2. 改线/飞线：把 Hall 改到同一定时器三路输入，例如合适的 TIM3 CH1/CH2/CH3
+   引脚组。
+3. 无论选哪条，都先做 Workbench/CubeMX / firmware 设计审查，不上电。
+
+完整来源审查见
+`source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`。
+
 ## Safety Boundary
 
 - No 24V.

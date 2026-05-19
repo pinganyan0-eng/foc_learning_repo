@@ -1,3 +1,83 @@
+# 2026-05-19 PCB2 Mapping / Pin-1 / Protection Intake
+
+New current PCB2 mapping source packet:
+`hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/`.
+
+New Packet B/C plus PB3/SWO/Hall no-power review:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`.
+
+Decision: `Partial clue / accepted current PCB2 mapping source; Hall/PWM
+conflicts clarified`.
+
+Accepted exact clues:
+
+- The user states the answer corresponds to current PCB2.
+- The source provides a P1-P15 mapping from board-side functions to NUCLEO
+  positions and STM32 pins, including `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3`,
+  `ADC_U/ADC_V/ADC_W`, `IA/IB/IC`, `nFAULT`, `3V3`, and `GND`.
+- Two pin-1 / connector-orientation images are archived.
+- Hall relationship is stated as `HALL_A -> U/IA`, `HALL_B -> V/IB`,
+  `HALL_C -> W/IC`.
+- A later clarification image states `PC7/PB3/PB10` was an alternate suggestion,
+  not current PCB2 physical routing. Current PCB2 physical Hall route is
+  `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`.
+- `IA/IB/IC` are Hall signal nets after pull-up/filtering; `ADC_U/ADC_V/ADC_W`
+  are current-sense nets.
+- STDRIVE101 protection-chain intent is stated as `DT/MODE -> GND`,
+  `CP -> 100 nF -> GND`, `SCREF` divider `33 k / 20 k`, `nFAULT` 10 k pull-up
+  to 3.3 V, and no separate `STBY` pin.
+
+Blocked exact fields:
+
+- `PB3` / `PB10` apparent conflicts are clarified: `PB3` is current PCB2
+  `LIN1`, `PB10` is current PCB2 `HIN2`, and the Hall rows using
+  `PC7/PB3/PB10` are alternate suggestions.
+- Current PCB2 Hall route `PA0/PA1/PB4` still needs a software Hall or firmware
+  design decision because it is not a normal same-timer three-channel Hall
+  input set.
+- SWO release is described but not captured as an accepted final CubeMX /
+  Workbench project state. The older 2026-05-17 pin table still does not
+  release SWO by itself.
+- Packet A selected fields, timer alternate-function compatibility,
+  generated-project trust, no-power continuity, powered readiness, Motor
+  Profiler readiness, Hall readiness, motor readiness, and sensorless readiness
+  remain unchanged and not allowed.
+
+# 2026-05-19 Minimal Hardware Request And Workbench Asset Probe
+
+New minimal hardware-teammate request:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/hardware_teammate_min_request_2026-05-19.md`.
+
+New Packet A local asset probe:
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_workbench_asset_probe_2026-05-19.md`.
+
+Decision: `Workflow/evidence governance only`.
+
+Accepted exact governance updates:
+
+- Hardware teammate should first provide three P0 items: exact Gerber PCB2
+  revision confirmation, complete `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping,
+  and marked `CN3` / `J_HALL` pin-1 orientation evidence.
+- The full handoff remains in
+  `hardware_supplement_handoff_2026-05-19.md` for Hall A/B/C mapping, PB3/SWO,
+  STDRIVE101 protection details, optional PCB source, and later no-power DMM
+  continuity / short-check records.
+- Workbench local config references installed Board Designer and Board Manager
+  tools, and the installed hardware assets contain built-in STDRIVE101 board
+  definitions such as `EVALSTDRIVE101`, `STEVAL-LVLP01`, and
+  `EVLDRIVE101-HPD`.
+
+Blocked exact fields:
+
+- No custom self-developed STDRIVE101 board definition is accepted.
+- No project-specific `.stwb6`, legacy `.stmcx`, selected-field screenshot,
+  generated source, build, flash, or hardware action exists.
+- Built-in ST board definitions remain non-substitutes for the project driver
+  board.
+- Packet A/B/C, PB3/SWO, `J_HALL`, generated-project trust, continuity,
+  powered readiness, motor readiness, Hall readiness, Motor Profiler readiness,
+  and sensorless readiness remain unchanged.
+
 # 2026-05-19 Gerber PCB2 Manufacturing Package Intake
 
 New Gerber package:

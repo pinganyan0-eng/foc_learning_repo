@@ -18,11 +18,15 @@ output.
   action queue, STM32-side signal/build gates, a P2 readiness snapshot, a
   2026-05-16 custom Workbench capture package, 2026-05-17 vendor motor /
   hardware teammate pin-table source clues, a 2026-05-18 Packet A capture
-  task package, and a 2026-05-19 Workbench capture attempt stopped on the
-  self-made STDRIVE101 power-stage context blocker.
+  task package, a 2026-05-19 Workbench capture attempt stopped on the
+  self-made STDRIVE101 power-stage context blocker, 2026-05-19 `.epro` and
+  Gerber PCB2 board-side source clues, a 2026-05-19 hardware supplement
+  handoff, a minimal hardware-teammate request, and a local Workbench
+  Board Designer / Board Manager asset probe, plus a 2026-05-19 current PCB2
+  mapping / pin-1 / protection source review.
 - Missing evidence: accepted final Workbench selected-field screenshots,
-  CN8 / EDA / netlist confirmation, no-power continuity checks, and all
-  powered hardware behavior evidence.
+  software Hall / CubeMX strategy for the current `PA0/PA1/PB4` Hall route,
+  no-power continuity checks, and all powered hardware evidence.
 
 ## Safety Boundary
 
@@ -93,6 +97,36 @@ Forbidden in this directory and this P2 stage:
   `NUCLEO-G474RE` / `STM32G474RETx` control-board context is visible, but no
   accepted self-made STDRIVE101 power-stage context or selected-field
   screenshots were captured.
+- `source_packet_review_2026-05-19_002_prodoc_p1_epro.md`: review of the
+  user-confirmed EasyEDA Pro schematic source for the self-developed
+  STDRIVE101 driver board. Current decision is `Partial clue / accepted
+  schematic-source clue`; it improves board-side source visibility but does
+  not prove PCB layout, NUCLEO `CN8`, STM32 endpoints, or readiness.
+- `source_packet_review_2026-05-19_003_gerber_pcb2.md`: review of the
+  hardware-teammate supplied Gerber PCB2 package. Current decision is
+  `Partial clue / accepted board-side Gerber + flying-probe net clue`; it
+  supports board-side pad/net clues but not NUCLEO endpoint mapping,
+  continuity, or readiness.
+- `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`:
+  review of the user-provided current PCB2 mapping, pin-1 images, Hall
+  relationship, PB3/SWO guidance, and STDRIVE101 protection-chain statement.
+  Current decision is `Partial clue / accepted current PCB2 mapping source;
+  Hall/PWM conflicts clarified`; `PC7/PB3/PB10` is an alternate suggestion,
+  while current PCB2 Hall routing is `IA/IB/IC -> PA0/PA1/PB4`.
+- `hardware_supplement_handoff_2026-05-19.md`: current hardware-teammate
+  handoff for the next accepted evidence. It asks for exact board revision,
+  `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, `CN3` / `J_HALL` pin-1
+  orientation, Hall A/B/C mapping, PB3/SWO evidence, STDRIVE101 protection
+  chain details, optional PCB source, and later no-power continuity records.
+- `hardware_teammate_min_request_2026-05-19.md`: short first packet to send to
+  the hardware teammate. It asks first for Gerber PCB2 revision confirmation,
+  complete `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, and marked `CN3` /
+  `J_HALL` pin-1 evidence.
+- `packet_a_workbench_asset_probe_2026-05-19.md`: read-only local Workbench
+  asset probe. It records built-in STDRIVE101 board JSONs and the installed
+  Board Designer / Board Manager executables as path clues only; Packet A
+  remains blocked until a project-specific custom board definition, `.stwb6`,
+  and selected-field screenshots are accepted.
 - `non_hardware_parallel_track_2026-05-15.md`: no-power plan for temporarily
   skipping Packet B/C scheduling while keeping blockers visible and progressing
   Packet A, STM32-side signal contract, future build-only gate, and delivery
@@ -135,8 +169,14 @@ Forbidden in this directory and this P2 stage:
 
 Use `user_action_queue_2026-05-14.md` and
 `source_packet_request_pack_2026-05-14.md` to collect the next valid P2
-evidence. Use `source_packet_review_template_2026-05-14.md` to review it before
-upgrading any blocker. The next valid packet must be one of:
+evidence. For the current hardware-teammate follow-up after the 2026-05-19
+`.epro` and Gerber intakes, start with
+`hardware_teammate_min_request_2026-05-19.md`, then use
+`hardware_supplement_handoff_2026-05-19.md` for the full matrix. Use
+`source_packet_review_template_2026-05-14.md` to review any new material before
+upgrading any blocker. After the 2026-05-19 clarification image, the next
+question is no longer generic hardware mapping; it is a no-power software Hall
+or hardware-rework strategy for `PA0/PA1/PB4`. The next valid packet must be one of:
 
 - a real `.stwb6` saved by MCSDK 6 Workbench, or legacy `.stmcx`;
 - a screenshot showing the Workbench/CubeMX draft configuration;
@@ -146,6 +186,9 @@ upgrading any blocker. The next valid packet must be one of:
   are added and reviewed;
 - current-version CN8 / EDA / netlist / high-resolution route evidence;
 - board-level STDRIVE101 protection-path source evidence.
+- exact board-revision confirmation, connector orientation proof, PB3/SWO
+  release evidence, or later no-power continuity records as defined in
+  `hardware_supplement_handoff_2026-05-19.md`.
 
 Even after that evidence exists, P2 still does not authorize powered hardware
 actions.
@@ -156,4 +199,9 @@ B/C blockers stay blocked.
 
 Before claiming readiness for generated-project trust or build-only work, read
 `p2_readiness_snapshot_2026-05-15.md`. Before running the next Packet A GUI
-capture, read `packet_a_capture_task_2026-05-18.md`.
+capture, read `packet_a_capture_task_2026-05-18.md`. Before asking the hardware
+teammate for the next board-side packet, read
+`hardware_teammate_min_request_2026-05-19.md` and
+`hardware_supplement_handoff_2026-05-19.md`. Before treating any Workbench
+Board Designer / Board Manager result as Packet A evidence, read
+`packet_a_workbench_asset_probe_2026-05-19.md`.

@@ -4,6 +4,29 @@
 
 ## Task ID
 
+### 2026-05-19 Update
+
+- ID: `TASK-2026-05-19-p2-packet-a-workbench-capture-attempt`
+- Status: `blocked/stopped`.
+- Evidence ID: `EV-2026-05-19-P2-PACKET-A-WORKBENCH-BLOCKED-001`.
+- Result: Workbench 6.4.2 launched and `NUCLEO-G474RE` /
+  `STM32G474RETx` control-board context was visible, but no accepted
+  Custom / Generic self-made STDRIVE101 power-stage context was captured.
+- Board constraint: user clarified on 2026-05-19 that the project uses a
+  self-developed motor driver board based on the STDRIVE101 chip, so built-in
+  ST boards such as `EVALSTDRIVE101` or `STEVAL-LVLP01` cannot be treated as
+  board-match substitutes.
+- Next valid action: find a Workbench-supported custom/user board entry or
+  import path for the self-made STDRIVE101 driver board, or open a separate
+  build-only surrogate gate that explicitly bars the surrogate from proving
+  the self-made board.
+- Still forbidden: no 24V, no power-board connection, no motor connection, no
+  Gate PWM, no Motor Profiler, no source generation, no build, no flash, and
+  no upgrade to Packet A/B/C, PB3/SWO, `J_HALL`, Hall readiness, power-stage
+  readiness, motor readiness, or sensorless readiness.
+
+### Previous 2026-05-18 Prep Package
+
 - ID：TASK-2026-05-18-p2-packet-a-capture-prep
 - 主题：P2 Packet A Workbench 捕获任务包整理
 - Status：open/ready

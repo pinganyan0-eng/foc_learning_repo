@@ -1,3 +1,95 @@
+## 2026-05-19 Gerber PCB2 Manufacturing Package Intake
+
+- Archived hardware-teammate supplied Gerber package:
+  `hardware/schematic/2026-05-19_gerber_pcb2_stdrive101/Gerber_PCB2_2026-05-19.zip`.
+- Added no-power Packet B/C Gerber review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_003_gerber_pcb2.md`.
+- Decision: `Partial clue / accepted board-side Gerber + flying-probe net
+  clue`. The ZIP contains a four-layer EasyEDA Pro Gerber manufacturing
+  package plus drill files and `FlyingProbeTesting.json`; Gerber headers record
+  `EasyEDA Pro v3.2.91`, generated `2026-05-19 11:16:57`, and the archived
+  ZIP hash is
+  `F61C073C5A9E71CD608460976430D3F927E7AD48EC05A42661E77662AF04CE56`.
+- Accepted exact board-side clues: `CN3` 15-pin pad/net mapping, `U1`
+  STDRIVE101 pad nets, PWM input paths through `R4-R9`, `R12/R14/R17`
+  shunt/current-sense pad nets, `U2=J_HALL` pad-net clue, `CN2=J_MOTOR`,
+  `NFAULT -> R3 -> 3V3 / CN3_13`, `SCREF` divider, `REG12`, bootstrap, and
+  `OUT1/2/3` motor output pad nets.
+- Still blocked: exact fabrication/revision match confirmation, NUCLEO `CN8`
+  endpoint mapping, STM32 pin mapping, PB3/SWO release, `J_HALL` physical
+  pin-1 / Hall A/B/C numbering, Packet A/Workbench selected fields,
+  generated-project trust, continuity checks, power-stage readiness, Motor
+  Profiler readiness, motor readiness, and sensorless readiness.
+
+## 2026-05-19 ProDoc P1 EDA Pro Source Intake
+
+- Archived user-confirmed self-developed STDRIVE101 driver-board source:
+  `hardware/schematic/2026-05-19_prodoc_p1_stdrive101_epro/ProDoc_P1_2026-05-19.epro`.
+- Added no-power Packet B/C source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_002_prodoc_p1_epro.md`.
+- Decision: `Partial clue / accepted schematic-source clue`. The `.epro`
+  is a readable EDA Pro schematic source with one sheet, project/title-block
+  metadata `STDRIVE101_3Phase_Inverter`, create/update time
+  `2026-05-19 10:26:36`, and source hash
+  `B9D67B9E5D6DD08D5229928636DFA8048C081DED7EE230ADDB79F20D83D718A1`.
+- Accepted exact clues: `U1=STDRIVE101`, `Q1-Q6=NCEP40T11G`, three
+  `20mOhm` shunts, `CN3` 15-pin board-side control connector, `U2=J_HALL`,
+  `CN2=J_MOTOR`, `CN3` pinout, and visible `NFAULT`, `REG12`, `SCREF`,
+  `BOOTx`, `OUTx`, `GHSx`, and `GLSx` schematic nets.
+- The archive has no PCB layout evidence: `project.json` has `pcbs: {}`, the
+  board entry has an empty `pcb` field, and `PCB/` is only an empty directory
+  entry. PCB routing, NUCLEO `CN8` endpoint mapping, STM32 pin mapping,
+  PB3/SWO release, `J_HALL` numbering, Hall readiness, power-stage readiness,
+  Packet A/Workbench selected fields, generated-project trust, Motor Profiler
+  readiness, motor readiness, and sensorless readiness remain unchanged and
+  not allowed.
+
+## 2026-05-19 Packet A Workbench Capture Attempt
+
+- Added no-power Packet A Workbench capture-attempt review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-19_001_packet_a_workbench_capture_attempt.md`.
+- Captured Workbench 6.4.2 launch and board-selection screenshots under:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/screenshots/`.
+- Decision: `Partial clue / stopped`. Workbench launches and the component path
+  can show `NUCLEO-G474RE` / `STM32G474RETx` as the control-board context, but
+  no accepted Custom / Generic self-made STDRIVE101 power-stage context was
+  captured.
+- User clarified on 2026-05-19 that the project uses a self-developed motor
+  driver board based on the STDRIVE101 chip. Therefore built-in ST power-board
+  entries such as `EVALSTDRIVE101` or `STEVAL-LVLP01` cannot be treated as
+  board-match substitutes for Packet A.
+- No project-specific `.stwb6`, no selected-field PWM/current-sense/Hall/driver
+  protection/pin-usage screenshots, and no generated motor-control project were
+  created. Generated-project trust remains `Not allowed`.
+- Packet A remains `Partial clue / Preparation only`; Packet B/C, CN8 routing,
+  STDRIVE101 protection-path proof, PB3/SWO release, `J_HALL`, Hall readiness,
+  power-stage readiness, Motor Profiler readiness, motor readiness, and
+  sensorless readiness remain unchanged. No 24V, power-board connection, motor
+  connection, Gate PWM, Motor Profiler, build, flash, or generated
+  motor-control project is authorized.
+
+## 2026-05-18 PB3 / SWO CubeMX Probe
+
+- Added no-power PB3/SWO source-packet review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-18_002_pb3_swo_probe.md`.
+- Captured current CubeMX state screenshot:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-18_cubemx_pb3_current_swo_fullscreen.png`.
+- Added dated configuration-layer probe:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/pb3_tim2_ch2_probe_2026-05-18.ioc`.
+- Captured probe screenshot:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-18_cubemx_pb3_tim2_ch2_probe_fullscreen.png`.
+- Decision: `Partial clue` only. The accepted NUCLEO draft still records
+  `PB3.GPIO_Label=T_SWO` and `PB3.Signal=SYS_JTDO-SWO`; the probe copy can show
+  `PB3` as `TIM2_CH2` / `HALL_B_PROBE` in CubeMX, but it does not prove SWO
+  release / isolation, Workbench Hall B selection, CN8 / `J_HALL` endpoint
+  mapping, or Hall readiness.
+- Packet A/B/C, generated-project trust, CN8 routing, STDRIVE101
+  protection-path proof, Hall closed-loop, power-stage readiness, Motor
+  Profiler readiness, motor readiness, and sensorless readiness remain
+  unchanged. No 24V, power-board connection, motor connection, Gate PWM,
+  Motor Profiler, build, flash, or generated motor-control project is
+  authorized.
+
 ## 2026-05-18 Motor Wiring Definition Intake
 
 - Added user-provided motor wiring definition source:

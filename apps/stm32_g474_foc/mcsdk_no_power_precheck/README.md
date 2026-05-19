@@ -17,8 +17,9 @@ output.
   a source packet request pack, a source packet review template, and a user
   action queue, STM32-side signal/build gates, a P2 readiness snapshot, a
   2026-05-16 custom Workbench capture package, 2026-05-17 vendor motor /
-  hardware teammate pin-table source clues, and a 2026-05-18 Packet A capture
-  task package.
+  hardware teammate pin-table source clues, a 2026-05-18 Packet A capture
+  task package, and a 2026-05-19 Workbench capture attempt stopped on the
+  self-made STDRIVE101 power-stage context blocker.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   CN8 / EDA / netlist confirmation, no-power continuity checks, and all
   powered hardware behavior evidence.
@@ -86,6 +87,12 @@ Forbidden in this directory and this P2 stage:
   required screenshots, stop conditions, and field acceptance matrix. It does
   not add a real `.stwb6`, screenshots, generated source, build evidence, or
   hardware validation.
+- `source_packet_review_2026-05-19_001_packet_a_workbench_capture_attempt.md`:
+  review of the no-power Workbench capture attempt. Current decision is
+  `Partial clue / stopped`; Workbench 6.4.2 launches and
+  `NUCLEO-G474RE` / `STM32G474RETx` control-board context is visible, but no
+  accepted self-made STDRIVE101 power-stage context or selected-field
+  screenshots were captured.
 - `non_hardware_parallel_track_2026-05-15.md`: no-power plan for temporarily
   skipping Packet B/C scheduling while keeping blockers visible and progressing
   Packet A, STM32-side signal contract, future build-only gate, and delivery
@@ -134,7 +141,8 @@ upgrading any blocker. The next valid packet must be one of:
 - a real `.stwb6` saved by MCSDK 6 Workbench, or legacy `.stmcx`;
 - a screenshot showing the Workbench/CubeMX draft configuration;
 - an exact reproducible GUI path plus a captured version/config screen;
-- the 2026-05-16 custom capture package after its real `.stwb6` and screenshots
+- the 2026-05-16 custom capture package after a Workbench-supported
+  custom/user board entry path is found and its real `.stwb6` plus screenshots
   are added and reviewed;
 - current-version CN8 / EDA / netlist / high-resolution route evidence;
 - board-level STDRIVE101 protection-path source evidence.

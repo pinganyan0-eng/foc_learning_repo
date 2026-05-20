@@ -67,6 +67,12 @@ Workbench then failed to load the file with `一般错误 / 无法加载文件`.
 rolled the external source back to the backup, so the current external
 `MY_FOC.stwb6` again reads `"algorithm": "sixStep"`. This proves the one-field
 manual edit is not a valid FOC conversion path. Packet A is still not accepted.
+The 2026-05-19 Packet A FOC route decision narrows the next valid path:
+Workbench GUI must create or convert a complete FOC source, or another complete
+reviewable FOC `.stwb6` must be supplied. Do not retry partial text edits. The
+next source must show FOC, `NUCLEO-G474RE`, the self-developed/custom
+STDRIVE101 board path, enabled current sensing, enabled fault/break handling,
+and a reviewable Hall/PWM route before any generated-project trust can change.
 Hardware action is not a P2 state.
 
 ## Safety Boundary
@@ -106,6 +112,7 @@ blocked, or only a planning artifact.
 | Packet A Board Designer / Manager GUI-only checklist | GUI-only checklist prepared / Packet A still blocked | `packet_a_board_designer_manager_gui_checklist_2026-05-19.md` defines later screenshot names, save directory, custom/import/create board screens, Power/Control/Inverter board flows, Board Aggregation, Finalize/save prompt, Board Manager import/list path, and hard stops. It does not launch GUI or add generated-project trust. |
 | MY_FOC generated project source review | Partial clue / generated project quarantined / Packet A not accepted | `source_packet_review_2026-05-19_005_my_foc_generated_project.md` archives selected files from the user-created `MY_FOC` project and records that it is `SIX_STEP`, not FOC. Pins can be changed later, but that requires a new reviewable FOC configuration and matching physical route. No generated-project trust, build-only clearance, or powered readiness is added. |
 | MY_FOC manual FOC edit rollback | Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted | `my_foc_foc_candidate_edit_2026-05-19.md` records the external `.stwb6` source edit attempt, Workbench load failure, and rollback to the backup. The current external `MY_FOC.stwb6` again reads `"algorithm": "sixStep"`; the failed FOC candidate is negative evidence only. |
+| Packet A FOC route decision after MY_FOC rollback | Route narrowed / GUI-created FOC source required / Packet A still blocked | `packet_a_foc_route_decision_2026-05-19.md` compares the legacy FOC source, restored `MY_FOC` six-step source, and failed manual FOC candidate. The next valid source must be created through Workbench GUI or supplied as a complete reviewable FOC `.stwb6`; partial text edits are rejected. |
 | PB3 Hall B readiness | Not the current PCB2 Hall path / still blocked for any alternate use | Current `.ioc` still records `PB3.Signal=SYS_JTDO-SWO`. The 2026-05-17 pin table does not release SWO by itself. The 2026-05-19 clarification says current PCB2 uses `PB3` for `LIN1`, while `PC7/PB3/PB10` Hall was only an alternate suggestion. |
 | P3 powered or motor work | Not allowed | P2 has no continuity checks, current-limited bring-up record, waveform checks, or rollback evidence. |
 
@@ -124,6 +131,7 @@ blocked, or only a planning artifact.
 | Packet A Board Designer / Manager GUI-only checklist | `packet_a_board_designer_manager_gui_checklist_2026-05-19.md`, `packet_a_board_designer_manager_path_review_2026-05-19.md` | Checklist ready / Packet A still blocked | The user can later capture GUI-only screenshots under `packet_a_sources/2026-05-19_board_designer_manager_path/screenshots/`. The capture must stop before Generate, Motor Profiler, Motor Pilot, Flash, source generation, fake board saving, or any hardware action. |
 | MY_FOC generated project | `source_packet_review_2026-05-19_005_my_foc_generated_project.md`, `packet_a_sources/2026-05-19_my_foc_generated_project/` | Generated project quarantined / Packet A not accepted | Useful clue only. The next acceptable update is not to build this source tree; it is to correct the Workbench project to FOC, restore required current-sense and fault choices, and make Hall/PWM match either changed pins or a documented software Hall route. |
 | MY_FOC manual FOC edit rollback | `my_foc_foc_candidate_edit_2026-05-19.md`, `MY_FOC.codex_foc_candidate_2026-05-19.stwb6` | Failed manual edit / rolled back / Packet A still not accepted | Do not use the failed FOC candidate as a source. Reopen the restored `MY_FOC.stwb6` only to confirm the original project loads, then use Workbench GUI flow or a new complete FOC project for the next Packet A attempt. Stop before Generate, build, flash, Motor Profiler, Motor Pilot, or hardware action. |
+| Packet A FOC route decision after MY_FOC rollback | `packet_a_foc_route_decision_2026-05-19.md`, `My_First_FOC.stwb6`, `MY_FOC.original_2026-05-19.stwb6`, and `MY_FOC.codex_foc_candidate_2026-05-19.stwb6` | Route narrowed / GUI-created FOC source required / Packet A still blocked | The next acceptable capture is a Workbench GUI-created or complete reviewable FOC source with self-developed/custom STDRIVE101 board path, current sensing, fault/break, Hall/PWM, and motor-entry fields visible. No generated-project trust changes until a dated Packet A source review accepts those fields. |
 | PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership; 2026-05-19 clarification says current PCB2 uses `PB3` as `LIN1`, not Hall | Blocked only for alternate Hall use | Do not use `PB3` as current PCB2 Hall. Any alternate Hall use of `PB3` would still need SWO release/isolation and a new accepted route. |
 | STM32 signal contract | `stm32_side_signal_contract_2026-05-15.md` | Planning contract | Update only after Packet A/B/C or PB3/SWO evidence changes. |
 | Future build-only gate | `future_build_only_gate_2026-05-15.md` | Dormant | Use only after Packet A exists and the generated project is explicitly no-power. |
@@ -210,6 +218,10 @@ Allowed current claims:
   a one-field `.stwb6` algorithm edit made Workbench unable to load the file,
   and that Codex restored the external source from backup. It does not prove
   generated source, build readiness, or hardware readiness.
+- The repo has a 2026-05-19 Packet A FOC route decision after the `MY_FOC`
+  rollback. It compares legacy FOC, restored six-step, and failed manual-edit
+  sources, and narrows the next valid Packet A path to a Workbench GUI-created
+  or complete reviewable FOC source.
 
 Forbidden current claims:
 

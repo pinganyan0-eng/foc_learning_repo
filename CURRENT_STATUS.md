@@ -1,3 +1,36 @@
+## 2026-05-19 Packet A FOC Route Decision After MY_FOC Rollback
+
+- Added no-power Packet A route decision:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_foc_route_decision_2026-05-19.md`.
+- Updated current task to
+  `TASK-2026-05-19-p2-packet-a-foc-route-decision-after-my-foc-rollback`.
+- Evidence ID:
+  `EV-2026-05-19-P2-PACKET-A-FOC-ROUTE-DECISION-001`.
+- Decision: `Route narrowed / GUI-created FOC source required / Packet A still
+  blocked`. The failed `MY_FOC` manual edit now becomes negative evidence:
+  do not retry partial `.stwb6` text edits. A valid next Packet A attempt must
+  come from Workbench GUI creation/conversion or another complete reviewable
+  FOC source.
+- Route comparison recorded: legacy `My_First_FOC.stwb6` proves local FOC
+  source structure exists but uses built-in `EVALSTDRIVE101`; restored
+  `MY_FOC.original_2026-05-19.stwb6` has custom STDRIVE101 board clues but is
+  still `"algorithm": "sixStep"`; failed
+  `MY_FOC.codex_foc_candidate_2026-05-19.stwb6` must not be reused.
+- Next acceptable Packet A capture must show FOC, `NUCLEO-G474RE`, a
+  self-developed/custom STDRIVE101 board path, enabled current sensing,
+  enabled fault/break handling, and reviewable Hall/PWM choices before any
+  generation or build.
+- Packet A still blocked. No generated-project trust, no build-only clearance,
+  no trusted generated source, no powered readiness, no Hall readiness, no
+  Motor Profiler readiness, no motor readiness, no power-stage readiness, and
+  no sensorless readiness is upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+- Verification: `python -m unittest discover -s tests` passed with 64 tests;
+  `git diff --check` passed with LF/CRLF warnings only; `python
+  tools/build_vector_store.py` completed with 8291 chunks.
+
 ## 2026-05-19 MY_FOC Manual FOC Edit Rollback
 
 - Backed up the Workbench source project:

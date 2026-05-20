@@ -427,5 +427,63 @@ class MyFocFocCandidateEditTests(unittest.TestCase):
             self.assertIn(phrase, text)
 
 
+class PacketAFocRouteDecisionTests(unittest.TestCase):
+    def test_route_decision_exists_and_blocks_packet_a(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_foc_route_decision_2026-05-19.md"
+        )
+
+        for phrase in (
+            "Route narrowed / GUI-created FOC source required / Packet A still blocked",
+            "My_First_FOC.stwb6",
+            "MY_FOC.original_2026-05-19.stwb6",
+            "MY_FOC.codex_foc_candidate_2026-05-19.stwb6",
+            "Do not attempt another partial text edit",
+            "self-developed STDRIVE101 board",
+            "No Generate",
+            "No 24V",
+            "no generated-project trust",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_route_decision_defines_next_capture_fields(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_foc_route_decision_2026-05-19.md"
+        )
+
+        for phrase in (
+            "FOC or field-oriented control",
+            "NUCLEO-G474RE",
+            "custom/user STDRIVE101 board",
+            "Current sensing selected",
+            "Fault / break path selected",
+            "Hall or speed-sensor route",
+            "PWM route selected",
+            "Motor entry labeled as a source-level candidate",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_readiness_and_active_task_point_to_route_decision(self):
+        readiness = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+
+        for phrase in (
+            "Packet A FOC route decision after MY_FOC rollback",
+            "Route narrowed / GUI-created FOC source required / Packet A still blocked",
+            "complete reviewable FOC source",
+        ):
+            self.assertIn(phrase, readiness)
+
+        self.assertIn(
+            "TASK-2026-05-19-p2-packet-a-foc-route-decision-after-my-foc-rollback",
+            active_task,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

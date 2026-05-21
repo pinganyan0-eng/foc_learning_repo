@@ -1,0 +1,18 @@
+{
+  "type": "kit",
+  "name": "QIANSAI_G474_STDRIVE101_FOC_P2_KIT",
+  "descVersion": 2,
+  "contentVersion": "1.0",
+  "PN": "QIANSAI-G474-STDRIVE101-FOC-P2-KIT",
+  "longDescription": "No-power Workbench aggregation candidate for Packet A capture. It links NUCLEO-G474RE, the QS_TIM1_OPAMP_PWR STDRIVE101 no-power adapter candidate, and the temporary R57BLB50L2 motor placeholder. It is not current PCB2 as-built proof and does not authorize Generate, build, flash, 24V, motor connection, or Gate PWM output.",
+  "shortDescription": "Qiansai G474 STDRIVE101 no-power FOC P2 kit",
+  "controlBoard": "NUCLEO-G474RE",
+  "powerBoards": [
+    {
+      "name": "QS_TIM1_OPAMP_PWR",
+      "motors": [
+        "R57BLB50L2"
+      ]
+    }
+  ]
+}

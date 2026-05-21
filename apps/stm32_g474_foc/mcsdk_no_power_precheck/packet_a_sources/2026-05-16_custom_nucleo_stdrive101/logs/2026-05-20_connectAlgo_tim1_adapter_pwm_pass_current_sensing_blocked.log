@@ -1,0 +1,16 @@
+ INFO - --root assets --control NUCLEO-G474RE --power '~QIANSAI_STDRIVE101_TIM1_ADAPTER_POWER'
+ DEBUG - General: --- Processing start  NUCLEO-G474RE   ~QIANSAI_STDRIVE101_TIM1_ADAPTER_POWER
+ DEBUG - PVConnect: DrivingHighAndLowSides Global processing start
+ DEBUG - PVConnect: DrivingHighAndLowSides Timer Candidate  TIM1
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost 0 PWM_CHU_H MR23_1 PA8 TIM1_CH1
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHU_H TIM1_CH2
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHU_H TIM1_CH3
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHV_H TIM1_CH1
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost 0 PWM_CHV_H MR21_1 PA9 TIM1_CH2
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHV_H TIM1_CH3
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHW_H TIM1_CH1
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost inf PWM_CHW_H TIM1_CH2
+ DEBUG - PVConnect: DrivingHighAndLowSides  Signal connectivity High  cost 0 PWM_CHW_H MR33_1 PA10 TIM1_CH3
+ DEBUG - PVConnect: DrivingHighAndLowSides Global processing completed
+ DEBUG - SWConnect: SingleErrorTrigger_FixedReference Global processing start
+ DEBUG - SWConnect: SingleErrorTrigger_FixedReference Global processing completed

@@ -1,3 +1,167 @@
+## 2026-05-21 Workbench FOC Source Captured For Packet A
+
+- User completed a no-power ST Motor Control Workbench 6.4.2 GUI route for
+  `QIANSAI_G474_STDRIVE101_FOC_P2`.
+- Archived primary Workbench source:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/QIANSAI_G474_STDRIVE101_FOC_P2_2026-05-21.stwb6`.
+- SHA256:
+  `05CD6F0DF86276DE10C96CCCFE5AA32E04C9EDE7D8B27E4242D3532D2A126643`.
+- Archived user power-board source:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/MY-STDRIVE101_POWER_BOARD.foc_no_power_2026-05-21.json`.
+- SHA256:
+  `80B655D52D082F89E6CE73804E9A15511D24A9FF3C965494F6A0D98527311B7A`.
+- Added source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/workbench_foc_capture_success_2026-05-21.md`.
+- Read-only verification confirms `algorithm: FOC`, `NUCLEO-G474RE`,
+  `STM32G474RETx`, `MY-STDRIVE101_POWER_BOARD`, `HallEffectSensor`,
+  `speedSensorMode: hall`, `CURRENT_AMPL_U/V/W`, and `DP_TRIGGER` on
+  `PB12/TIM1_BKIN`.
+- Key GUI unblock: `CURRENT_AMPL_V` had to move from `MR15` to `MR24`; the
+  earlier `MR15` route made hardware checks green but kept FOC disabled.
+- Driver protection warning was cleared by adding active-low `DP_TRIGGER ->
+  MR16`, which Workbench resolves to `PB12/TIM1_BKIN`.
+- Workbench also created a local generated-project directory as a GUI side
+  effect. Selected source clues were archived under
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-21_qiansai_g474_stdrive101_foc_p2_generated_project/`.
+- Decision: `Workbench FOC source captured / no-power Packet A source evidence
+  upgraded / hardware and build trust still blocked`.
+- No build-only clearance, trusted generated source, powered readiness, Hall
+  readiness, Motor Profiler readiness, motor readiness, power-stage readiness,
+  or sensorless readiness is upgraded.
+- No build, flash, 24V, power-board connection, motor connection, Gate PWM
+  output, Motor Profiler, Motor Pilot, Hall closed-loop, or sensorless / SMO
+  claim is authorized.
+
+## 2026-05-20 Workbench Short-Name Power Board Alias Added
+
+- User reported that searching `OPAMP` in the Workbench GUI still did not show
+  `QIANSAI_STDRIVE101_TIM1_OPAMP_ADAPTER_POWER`.
+- Read-only Workbench API check confirmed the long-name candidate was already
+  present in `http://localhost:8009/api/hardware/usr/power`; the problem is
+  therefore treated as a Workbench GUI search/filter visibility issue, not a
+  missing JSON install.
+- Added and installed a short-name no-power alias:
+  `QS_TIM1_OPAMP_PWR`.
+- Repo source:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/QS_TIM1_OPAMP_PWR.no_power_candidate_2026-05-20.json`.
+- Workbench user-board install:
+  `C:\Users\gregrg\.st_workbench\hardware\board\power\QS_TIM1_OPAMP_PWR.json`.
+- SHA256:
+  `79BABB221D6F488FB63B79E73B62B9500CEC19BDE96D9FCCB7308A2882B00141`.
+- Workbench log confirms:
+  `loading Json User Hardware: QS_TIM1_OPAMP_PWR.json` and
+  `successfully parsed User Hardware: QS_TIM1_OPAMP_PWR.json`.
+- Because the GUI still did not surface the user-library board, the same
+  no-power alias was also installed as a local Workbench app asset:
+  `F:\STMCSDK\MC_SDK_6.4.2\Utilities\PC_Software\STMCWB\assets\hardware\board\power\QS_TIM1_OPAMP_PWR.json`.
+- Workbench was restarted. Read-only verification now shows
+  `QS_TIM1_OPAMP_PWR` in `http://localhost:8009/api/hardware/app/power`, and
+  the log confirms `successfully parsed assets Hardware:
+  QS_TIM1_OPAMP_PWR.json`.
+- Next GUI action: from a fresh Workbench `New Project` path, search `QS` in
+  the Power Board selector, select `QS_TIM1_OPAMP_PWR`, and stop at the
+  summary before `Create`.
+- Packet A remains blocked. No `.stwb6`, generated-project trust, build-only
+  clearance, trusted generated source, powered readiness, Hall readiness, Motor
+  Profiler readiness, motor readiness, power-stage readiness, or sensorless
+  readiness is upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+
+## 2026-05-20 Workbench TIM1 Adapter Follow-up Still Blocked
+
+- Added no-power TIM1 adapter follow-up:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/workbench_tim1_adapter_followup_2026-05-20.md`.
+- Added no-power candidate board sources:
+  `QIANSAI_STDRIVE101_TIM1_ADAPTER_POWER.no_power_candidate_2026-05-20.json`
+  and
+  `QIANSAI_STDRIVE101_TIM1_OPAMP_ADAPTER_POWER.no_power_candidate_2026-05-20.json`.
+- Installed local Workbench user-board candidate:
+  `C:\Users\gregrg\.st_workbench\hardware\board\power\QIANSAI_STDRIVE101_TIM1_OPAMP_ADAPTER_POWER.json`.
+- GUI evidence shows the `TIM1_ADAPTER` candidate resolves the previous
+  `PWM Generation` red X: `PWM Generation`, `Driver Protection`, and UART are
+  green in Workbench, while `Current Sensing` remains red and `Create` remains
+  disabled.
+- Archived follow-up log:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/logs/2026-05-20_connectAlgo_tim1_adapter_pwm_pass_current_sensing_blocked.log`.
+- Follow-up log SHA256:
+  `3A6109B82EAB2FDF21C97C989640EC8A7F2B99B7B00B312EA6E33A287A583D3C`.
+- Current-sense blocker narrowed: current PCB2 clue
+  `ADC_U/ADC_V/ADC_W -> PA4/PB0/PA5` is still not accepted by Workbench as the
+  G4 internal OPAMP/PGA FOC current-sense route.
+- The OPAMP adapter candidate maps current sense to `PA1/PA7/PB0` and PWM to
+  `PA8/PA9/PA10 + PB13/PB14/PB15`, but it is only an adapter/rework candidate.
+  Its power-board-side current-sense type was corrected to
+  `ThreeShunt_RawCurrents_SingleEnded`; Workbench should perform the G474
+  OPAMP/PGA mapping during connection. It is not current PCB2 proof and it
+  conflicts with the current PCB2 `PA0/PA1/PB4` software-Hall clue.
+- GUI reselection of `QIANSAI_STDRIVE101_TIM1_OPAMP_ADAPTER_POWER` remains
+  pending. Next no-power GUI action: restart Workbench, select the OPAMP
+  adapter candidate, and stop at the summary before `Create`.
+- Packet A remains blocked. No `.stwb6`, generated-project trust, build-only
+  clearance, trusted generated source, powered readiness, Hall readiness, Motor
+  Profiler readiness, motor readiness, power-stage readiness, or sensorless
+  readiness is upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+
+## 2026-05-20 Workbench FOC Custom Board Capture Blocked
+
+- Added no-power Workbench FOC capture blocker:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/workbench_foc_capture_blocker_2026-05-20.md`.
+- Archived Workbench connection log:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/logs/2026-05-20_connectAlgo_qiansai_pwm_blocker.log`.
+- Captured GUI evidence under:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-16_custom_nucleo_stdrive101/screenshots/`.
+- Decision: `Partial clue / Workbench FOC GUI path reached / Packet A still
+  blocked`. Workbench accepted the custom
+  `QIANSAI_STDRIVE101_PCB2_POWER` board into the summary and did not use
+  `EVALSTDRIVE101`, but `PWM Generation` remained blocked.
+- Primary Workbench log error:
+  `DrivingHighAndLowSides No timer matches all signals requirement`.
+- The saved custom board maps STDRIVE101 PWM to
+  `PA15/PB10/PA9/PB3/PA8/PA10`, which cannot form one consistent `TIM1`
+  complementary `CH1/CH2/CH3 + CH1N/CH2N/CH3N` set. `PB3` also remains tied to
+  the existing SWO/Hall blocker context.
+- `R57BLB50L2` was selected only as a user-approved temporary Workbench motor
+  placeholder. It is not accepted as measured project motor data.
+- No `.stwb6` was saved from this attempt because Workbench left `Create`
+  disabled and no valid pre-generate save path was exposed.
+- Packet A remains blocked. No generated-project trust, build-only clearance,
+  trusted generated source, powered readiness, Hall readiness, Motor Profiler
+  readiness, motor readiness, power-stage readiness, or sensorless readiness is
+  upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+
+## 2026-05-20 Packet C STDRIVE101 Protection Detail Review
+
+- Added no-power Packet C detail review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_c_stdrive101_protection_detail_review_2026-05-20.md`.
+- Updated current task to
+  `TASK-2026-05-20-p2-packet-c-stdrive101-protection-detail-review`.
+- Evidence ID:
+  `EV-2026-05-20-P2-PACKET-C-STDRIVE101-PROTECTION-DETAIL-001`.
+- Decision: `Packet C detail narrowed / protection proof still partial clue /
+  P3 still blocked`.
+- The review narrows `DT/MODE`, `nFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`,
+  bootstrap, `STBY`, and VDS monitoring using the current `.epro`, Gerber,
+  current PCB2 mapping note, and repo-local STDRIVE101 extracted text.
+- The old `V_DSth = 0.249V` / `I_trip ~= 55A` note is now explicitly not
+  accepted as a project threshold. The current local official extraction
+  supports `VDSth = VSCREF`; the `33k / 20k` divider gives about `1.245V`, so
+  this remains a VDS-monitoring source clue, not a safe current-limit value.
+- Packet C remains partial clue. No Packet A acceptance, generated-project
+  trust, build-only clearance, continuity proof, powered readiness, Hall
+  readiness, Motor Profiler readiness, motor readiness, or sensorless readiness
+  is upgraded.
+- No Generate, build, flash, 24V, power-board connection, motor connection,
+  Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop, or
+  sensorless / SMO claim is authorized.
+
 ## 2026-05-19 Packet A FOC Route Decision After MY_FOC Rollback
 
 - Added no-power Packet A route decision:

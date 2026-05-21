@@ -1,0 +1,169 @@
+{
+  "type": "power",
+  "contentVersion": "1.0",
+  "descVersion": 4,
+  "name": "QIANSAI_STDRIVE101_TIM1_OPAMP_ADAPTER_POWER",
+  "PN": "QIANSAI-STDRIVE101-TIM1-OPAMP-ADAPTER-PWR",
+  "longDescription": "No-power Workbench compatibility candidate for a self-developed STDRIVE101 three-phase power board using TIM1 complementary PWM and STM32G474 internal OPAMP/PGA current-sense candidate pins. This is not the current PCB2 as-built route; it requires adapter, flying-wire, or PCB rework and conflicts with the current PCB2 PA1 Hall clue.",
+  "shortDescription": "STDRIVE101 TIM1 OPAMP adapter candidate",
+  "motorDrives": [
+    {
+      "name": "M1",
+      "connectorType": "morpho",
+      "minRatedVoltage": 12,
+      "maxRatedVoltage": 24,
+      "maxRatedCurrent": 5,
+      "maxRatedPower": 120,
+      "resistorOffset": 0,
+      "features": [
+        {
+          "type": "CurrentSensing",
+          "name": "CurrentSensing",
+          "tRise": 1000,
+          "hwVariants": [
+            {
+              "type": "ThreeShunt_RawCurrents_SingleEnded",
+              "help": {
+                "en": "No-power internal OPAMP/PGA candidate only. Routes current U/V/W to PA1/PA7/PB0 through NUCLEO morpho pins; requires adapter, flying-wire, or PCB rework before any hardware use."
+              },
+              "signals": {
+                "CURRENT_SHUNT_UP": [
+                  {
+                    "name": "ML30",
+                    "help": {
+                      "en": "Internal OPAMP candidate: PA1 / OPAMP1 VINP on CN7.30. Conflicts with current PCB2 PA1 Hall clue."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_SHUNT_VP": [
+                  {
+                    "name": "MR15",
+                    "help": {
+                      "en": "Internal OPAMP candidate: PA7 / OPAMP1-OPAMP2 VINP on CN10.15."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_SHUNT_WP": [
+                  {
+                    "name": "ML34",
+                    "help": {
+                      "en": "Internal OPAMP candidate: PB0 / OPAMP2-OPAMP3 VINP on CN7.34."
+                    },
+                    "cost": 0
+                  }
+                ]
+              },
+              "shuntResistor": 0.02,
+              "offsetNetworkAttenuation": 1,
+              "opAmpGain": 8,
+              "polarizationOffset": 1.65,
+              "amplifyingNetworkImax": 10.3,
+              "amplifyingNetworkVm": 3.3,
+              "amplifyingNetworkPrating": 2,
+              "cost": 0
+            }
+          ]
+        },
+        {
+          "type": "PhaseVoltageGeneration",
+          "name": "PhaseVoltageGeneration",
+          "driverName": "STDRIVE101",
+          "driverPN": "STDRIVE101",
+          "tNoise": 1000,
+          "minDeadTime": 1000,
+          "maxSwitchingFreq": 30,
+          "hwVariants": [
+            {
+              "signals": {
+                "PWM_CHU_H": [
+                  {
+                    "name": "MR23",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PA8 / TIM1_CH1. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_H": [
+                  {
+                    "name": "MR21",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PA9 / TIM1_CH2. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_H": [
+                  {
+                    "name": "MR33",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PA10 / TIM1_CH3. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHU_L": [
+                  {
+                    "name": "MR30",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PB13 / TIM1_CH1N. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_L": [
+                  {
+                    "name": "MR28",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PB14 / TIM1_CH2N. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_L": [
+                  {
+                    "name": "MR26",
+                    "help": {
+                      "en": "TIM1 adapter candidate: PB15 / TIM1_CH3N. Requires adapter, flying wire, or PCB rework."
+                    },
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "DrivingHighAndLowSides",
+              "cost": 0,
+              "deadTime": 1000,
+              "highSideSwitchesDrivingPolarity": "Active high",
+              "lowSideSwitchesDrivingPolarity": "Active high"
+            }
+          ]
+        },
+        {
+          "type": "DriverProtection",
+          "name": "DriverProtection",
+          "hwVariants": [
+            {
+              "signals": {
+                "DP_TRIGGER": [
+                  {
+                    "name": "MR16",
+                    "help": {
+                      "en": "nFAULT candidate: PB12 / TIM1_BKIN. Source clue only; no powered validation."
+                    },
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "SingleErrorTrigger_FixedReference",
+              "cost": 0,
+              "DPSignalPolarity": "Active low",
+              "DPTriggerFilterDuration": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

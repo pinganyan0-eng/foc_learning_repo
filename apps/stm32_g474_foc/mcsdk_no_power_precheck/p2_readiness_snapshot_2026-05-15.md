@@ -73,6 +73,11 @@ reviewable FOC `.stwb6` must be supplied. Do not retry partial text edits. The
 next source must show FOC, `NUCLEO-G474RE`, the self-developed/custom
 STDRIVE101 board path, enabled current sensing, enabled fault/break handling,
 and a reviewable Hall/PWM route before any generated-project trust can change.
+The 2026-05-20 Packet C STDRIVE101 protection detail review narrows
+`DT/MODE`, `CP`, `SCREF`, `nFAULT`, `REG12`, bootstrap, `STBY`, and VDS
+monitoring. It marks the old `V_DSth = 0.249V` / `I_trip ~= 55A` note as not
+accepted because the current repo-local official extraction supports
+`VDSth = VSCREF`. Packet C remains only `Partial clue`; P3 remains blocked.
 Hardware action is not a P2 state.
 
 ## Safety Boundary
@@ -102,6 +107,7 @@ blocked, or only a planning artifact.
 | No-power build-only generated project | Not allowed now | Build-only work is a future state after accepted Packet A evidence. |
 | Packet B CN8 / board-route proof | Partial clue / current PCB2 mapping source, Hall/PWM conflicts clarified | The 2026-05-19 `.epro` and Gerber PCB2 package show board-side `CN3`, `U1`, `J_HALL`, `J_MOTOR`, shunt, protection, and output pad/net clues. The 2026-05-19 mapping packet adds P1-P15 endpoint rows and clarifies current PCB2 Hall route as `IA/IB/IC -> PA0/PA1/PB4`; Packet A selected fields and continuity remain missing. |
 | Packet C STDRIVE101 protection proof | Partial clue / current board-intent statement, still blocked for final proof | The `.epro`, Gerber, and 2026-05-19 mapping packet now show `DT/MODE -> GND`, `CP -> 100 nF -> GND`, `SCREF` divider, `nFAULT` pull-up, no separate `STBY`, `REG12`, bootstrap, output, and MOSFET bridge clues. Threshold math, STM32 endpoint handling, continuity, and powered validation remain unresolved. |
+| Packet C STDRIVE101 protection detail review | Packet C detail narrowed / protection proof still partial clue / P3 still blocked | `packet_c_stdrive101_protection_detail_review_2026-05-20.md` separates `DT/MODE`, `CP`, `SCREF`, `nFAULT`, `REG12`, bootstrap, `STBY`, and VDS monitoring into sub-items. The old `55A` VDS claim is not accepted; no powered readiness is added. |
 | Hardware supplement handoff | Open / ready | `hardware_supplement_handoff_2026-05-19.md` converts the remaining board-side blockers into exact hardware teammate requests. It is workflow/evidence governance only and does not upgrade Packet B/C, PB3/SWO, `J_HALL`, continuity, or readiness. |
 | Minimal hardware request | Open / ready | `hardware_teammate_min_request_2026-05-19.md` is the short first packet to send to the hardware teammate: exact Gerber PCB2 revision confirmation, complete `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, and marked `CN3` / `J_HALL` pin-1 evidence. |
 | Packet A Workbench asset probe | Partial clue / local tool path found / blocked | `packet_a_workbench_asset_probe_2026-05-19.md` found Workbench references to Board Designer / Board Manager and local executables, but no accepted self-developed STDRIVE101 board definition, `.stwb6`, or selected-field screenshots. |
@@ -113,6 +119,7 @@ blocked, or only a planning artifact.
 | MY_FOC generated project source review | Partial clue / generated project quarantined / Packet A not accepted | `source_packet_review_2026-05-19_005_my_foc_generated_project.md` archives selected files from the user-created `MY_FOC` project and records that it is `SIX_STEP`, not FOC. Pins can be changed later, but that requires a new reviewable FOC configuration and matching physical route. No generated-project trust, build-only clearance, or powered readiness is added. |
 | MY_FOC manual FOC edit rollback | Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted | `my_foc_foc_candidate_edit_2026-05-19.md` records the external `.stwb6` source edit attempt, Workbench load failure, and rollback to the backup. The current external `MY_FOC.stwb6` again reads `"algorithm": "sixStep"`; the failed FOC candidate is negative evidence only. |
 | Packet A FOC route decision after MY_FOC rollback | Route narrowed / GUI-created FOC source required / Packet A still blocked | `packet_a_foc_route_decision_2026-05-19.md` compares the legacy FOC source, restored `MY_FOC` six-step source, and failed manual FOC candidate. The next valid source must be created through Workbench GUI or supplied as a complete reviewable FOC `.stwb6`; partial text edits are rejected. |
+| Packet A Workbench FOC source capture | Workbench FOC source captured / no-power source evidence upgraded / generated-source and hardware trust blocked | `workbench_foc_capture_success_2026-05-21.md` archives `QIANSAI_G474_STDRIVE101_FOC_P2_2026-05-21.stwb6` and `MY-STDRIVE101_POWER_BOARD.foc_no_power_2026-05-21.json`. Read-only checks confirm `FOC`, `NUCLEO-G474RE`, `STM32G474RETx`, `MY-STDRIVE101_POWER_BOARD`, Hall selection, three-shunt current sensing, and `PB12/TIM1_BKIN`. This is source evidence only; it does not authorize build, flash, 24V, Gate PWM, Hall closed-loop, motor, power-stage, or sensorless claims. |
 | PB3 Hall B readiness | Not the current PCB2 Hall path / still blocked for any alternate use | Current `.ioc` still records `PB3.Signal=SYS_JTDO-SWO`. The 2026-05-17 pin table does not release SWO by itself. The 2026-05-19 clarification says current PCB2 uses `PB3` for `LIN1`, while `PC7/PB3/PB10` Hall was only an alternate suggestion. |
 | P3 powered or motor work | Not allowed | P2 has no continuity checks, current-limited bring-up record, waveform checks, or rollback evidence. |
 
@@ -120,9 +127,10 @@ blocked, or only a planning artifact.
 
 | Track | Current evidence | Current status | Unlock condition |
 | --- | --- | --- | --- |
-| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, `source_packet_review_2026-05-18_001_motor_wiring_definition.md`, `packet_a_capture_task_2026-05-18.md`, `source_packet_review_2026-05-19_001_packet_a_workbench_capture_attempt.md`, `packet_a_workbench_asset_probe_2026-05-19.md`, and `source_packet_review_2026-05-19_005_my_foc_generated_project.md` | Partial clue / Preparation only / generated project quarantined | Find or create a reviewable FOC Workbench configuration for the self-developed STDRIVE101 board. If pins will be changed, the new route must be timer-compatible and physically matched; if pins will not be changed, the software Hall path remains design review only. Built-in ST boards may not be treated as board-match substitutes. |
+| Packet A | `packet_a_local_probe_2026-05-15.md`, `packet_a_capture_checklist_2026-05-15.md`, `source_packet_review_2026-05-15_002_my_first_foc_stwb6.md`, `source_packet_review_2026-05-16_001_custom_nucleo_stdrive101_capture_package.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, `source_packet_review_2026-05-18_001_motor_wiring_definition.md`, `packet_a_capture_task_2026-05-18.md`, `source_packet_review_2026-05-19_001_packet_a_workbench_capture_attempt.md`, `packet_a_workbench_asset_probe_2026-05-19.md`, `source_packet_review_2026-05-19_005_my_foc_generated_project.md`, and `workbench_foc_capture_success_2026-05-21.md` | Workbench FOC source captured / generated source and hardware trust still blocked | Review the generated-source side effect, reconcile the Workbench Hall route with the current PCB2 `PA0/PA1/PB4` clue, and complete no-power continuity/short checks before any build-only or hardware-stage claim. Built-in ST boards still may not be treated as board-match substitutes. |
 | Packet B | `source_packet_review_2026-05-15_001_cn8_stdrive101_schematic_candidate.md`, `source_packet_review_2026-05-17_001_vendor_motor_g431_pin_table.md`, `mcu_pin_compatibility_check_2026-05-17.md`, `source_packet_review_2026-05-19_002_prodoc_p1_epro.md`, `source_packet_review_2026-05-19_003_gerber_pcb2.md`, and `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md` | Partial clue / current PCB2 mapping source, Hall/PWM conflicts clarified | Current PCB2 endpoint mapping is now clear at source level: `PB3=LIN1`, `PB10=HIN2`, and Hall is `IA/IB/IC -> PA0/PA1/PB4`. Still need Packet A/CubeMX/Workbench selected fields and later continuity before trusting generated pins or readiness. |
 | Packet C | `stdrive101_protection_path_review_2026-05-14.md`, `source_packet_review_2026-05-19_002_prodoc_p1_epro.md`, `source_packet_review_2026-05-19_003_gerber_pcb2.md`, and `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md` | Partial clue / current board-intent statement, still blocked for final proof | Finish protection review for `DT/MODE`, `STBY`, `NFAULT`, `REG12`, `CP`, `SCREF`, `VS/VM`, bootstrap, and VDS monitoring, including threshold math, STM32 endpoint handling, continuity, and later powered validation. |
+| Packet C detail | `packet_c_stdrive101_protection_detail_review_2026-05-20.md`, `docs/03_hardware_notes/protection_thresholds.md`, repo-local STDRIVE101 extracted text | Detail narrowed / old `55A` VDS claim not accepted / P3 blocked | Human-check the PDF table, correct the threshold note, prove the named `CP` route, prove `VS/VM`, and add later no-power continuity before any P3 action. |
 | Hardware supplement handoff | `hardware_supplement_handoff_2026-05-19.md`, `hardware_teammate_min_request_2026-05-19.md`, `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md` | Mostly answered / Packet A strategy needed | Current PCB2 version, mapping, pin-1, Hall relationship, PB3/SWO guidance, and protection-chain statements were provided. The next request is not more hardware mapping; it is a no-power Packet A / firmware decision for software Hall on `PA0/PA1/PB4` or future hardware rework. |
 | Current PCB2 Hall/PWM strategy | `current_pcb2_hall_pwm_strategy_2026-05-19.md`, `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md`, local MCSDK `STM32G474RETx.json` pin-function clue | No-power strategy review opened / no PCB change first | Packet A / firmware review must decide whether current PCB2 can proceed without PCB changes. `PA0/PA1/PB4` is not a same-timer hardware Hall set, and the current `HIN/LIN` route is not accepted as a standard MCSDK TIM1 complementary PWM set. |
 | Current PCB2 Packet A / firmware feasibility | `current_pcb2_packet_a_firmware_feasibility_2026-05-19.md`, local MCSDK `STM32G474RETx.json` pin-function clue, `future_build_only_gate_2026-05-15.md` | Feasibility only / Packet A not accepted | The current no-PCB-change route can proceed only as later firmware design review. It does not open generated-project trust or build-only clearance. |
@@ -132,6 +140,7 @@ blocked, or only a planning artifact.
 | MY_FOC generated project | `source_packet_review_2026-05-19_005_my_foc_generated_project.md`, `packet_a_sources/2026-05-19_my_foc_generated_project/` | Generated project quarantined / Packet A not accepted | Useful clue only. The next acceptable update is not to build this source tree; it is to correct the Workbench project to FOC, restore required current-sense and fault choices, and make Hall/PWM match either changed pins or a documented software Hall route. |
 | MY_FOC manual FOC edit rollback | `my_foc_foc_candidate_edit_2026-05-19.md`, `MY_FOC.codex_foc_candidate_2026-05-19.stwb6` | Failed manual edit / rolled back / Packet A still not accepted | Do not use the failed FOC candidate as a source. Reopen the restored `MY_FOC.stwb6` only to confirm the original project loads, then use Workbench GUI flow or a new complete FOC project for the next Packet A attempt. Stop before Generate, build, flash, Motor Profiler, Motor Pilot, or hardware action. |
 | Packet A FOC route decision after MY_FOC rollback | `packet_a_foc_route_decision_2026-05-19.md`, `My_First_FOC.stwb6`, `MY_FOC.original_2026-05-19.stwb6`, and `MY_FOC.codex_foc_candidate_2026-05-19.stwb6` | Route narrowed / GUI-created FOC source required / Packet A still blocked | The next acceptable capture is a Workbench GUI-created or complete reviewable FOC source with self-developed/custom STDRIVE101 board path, current sensing, fault/break, Hall/PWM, and motor-entry fields visible. No generated-project trust changes until a dated Packet A source review accepts those fields. |
+| Packet A Workbench FOC source capture | `workbench_foc_capture_success_2026-05-21.md`, `QIANSAI_G474_STDRIVE101_FOC_P2_2026-05-21.stwb6`, `MY-STDRIVE101_POWER_BOARD.foc_no_power_2026-05-21.json`, and `packet_a_sources/2026-05-21_qiansai_g474_stdrive101_foc_p2_generated_project/` | Workbench FOC source captured / source evidence upgraded / no generated-source or hardware trust yet | Use this as the next Packet A source-review input. The archived generated project is quarantined as a clue until reviewed; the Workbench route uses `PA15/PB3/PB10` Hall while current PCB2 clues still record `PA0/PA1/PB4`, so Hall readiness and powered work remain blocked. |
 | PB3 / SWO | Saved NUCLEO `.ioc` shows SWO ownership; 2026-05-19 clarification says current PCB2 uses `PB3` as `LIN1`, not Hall | Blocked only for alternate Hall use | Do not use `PB3` as current PCB2 Hall. Any alternate Hall use of `PB3` would still need SWO release/isolation and a new accepted route. |
 | STM32 signal contract | `stm32_side_signal_contract_2026-05-15.md` | Planning contract | Update only after Packet A/B/C or PB3/SWO evidence changes. |
 | Future build-only gate | `future_build_only_gate_2026-05-15.md` | Dormant | Use only after Packet A exists and the generated project is explicitly no-power. |
@@ -222,6 +231,9 @@ Allowed current claims:
   rollback. It compares legacy FOC, restored six-step, and failed manual-edit
   sources, and narrows the next valid Packet A path to a Workbench GUI-created
   or complete reviewable FOC source.
+- The repo has a 2026-05-20 Packet C STDRIVE101 protection detail review. It
+  narrows the protection sub-items and explicitly marks the old `55A` VDS
+  threshold claim as not accepted.
 
 Forbidden current claims:
 
@@ -245,6 +257,8 @@ Forbidden current claims:
   regenerated source, or built/flashed without another Packet A review.
 - Built-in ST power-board entries such as `EVALSTDRIVE101` or `STEVAL-LVLP01`
   are board-match evidence for the self-developed driver board.
+- The old `V_DSth = 0.249V` / `I_trip ~= 55A` note is an accepted board
+  threshold or current limit.
 - cannot claim Gate PWM, Motor Profiler, Hall, motor, power-stage, or sensorless behavior is validated.
 
 ## Promotion Rules
@@ -296,6 +310,9 @@ Before moving from P2 to any powered or motor stage:
    Stable phrasing: software Hall adapter design review or hardware-rework planning task.
 4. Finish Packet C protection review for `CP`, `STBY`, `SCREF` threshold,
    `NFAULT` break-input handling, and later no-power continuity checks.
+   Current Packet C detail status: `Packet C detail narrowed / protection
+   proof still partial clue / P3 still blocked`; the old `55A` VDS claim is not
+   accepted.
 5. Use `future_build_only_gate_2026-05-15.md` only after Packet A is accepted.
 6. Keep this snapshot current after any evidence upgrade.
 

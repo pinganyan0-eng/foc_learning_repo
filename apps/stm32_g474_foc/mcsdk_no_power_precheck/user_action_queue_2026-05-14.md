@@ -85,3 +85,22 @@ Minimum next screenshots/source packet:
    Hall design topic.
 7. Stop before Generate, Build, Flash, Motor Profiler, Motor Pilot, 24V,
    power-board connection, motor connection, or Gate PWM output.
+
+## 2026-05-20 Packet C protection detail
+
+Latest protection route: `Packet C detail narrowed / protection proof still
+partial clue / P3 still blocked`.
+
+Do not use the old `V_DSth = 0.249V` / `I_trip ~= 55A` note as a board
+threshold. The next useful Packet C evidence is:
+
+1. PDF/table-backed confirmation of the STDRIVE101 `SCREF` / `VDSth` formula.
+2. A corrected threshold note for the current `33k / 20k` divider.
+3. Named `CP` route proof and component interpretation, not only
+   `CP -> 100nF -> GND`.
+4. `VS/VM` relationship proof for the exact board.
+5. A later no-power DMM continuity / short-check table before any P3 action.
+
+This does not replace Packet A. It does not allow Generate, Build, Flash, 24V,
+power-board connection, motor connection, Gate PWM, Motor Profiler, Motor
+Pilot, Hall closed-loop, or sensorless / SMO work.

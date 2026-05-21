@@ -27,8 +27,9 @@ output.
   no-power strategy review, a current PCB2 Packet A / firmware feasibility
   review, a software Hall adapter design review, and a Packet A Board
   Designer / Board Manager path review, plus a Packet A Board Designer /
-  Manager GUI-only checklist, a `MY_FOC` generated-project source review, and
-  a `MY_FOC` manual FOC edit rollback record.
+  Manager GUI-only checklist, a `MY_FOC` generated-project source review, a
+  `MY_FOC` manual FOC edit rollback record, and a 2026-05-20 Packet C
+  STDRIVE101 protection detail review.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   Packet A / firmware feasibility proof for the current PCB2
   `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
@@ -178,6 +179,13 @@ Forbidden in this directory and this P2 stage:
   made Workbench unable to load the file, so Codex restored the external source
   from backup. The current external source is again six-step; the failed FOC
   candidate is negative evidence only.
+- `packet_c_stdrive101_protection_detail_review_2026-05-20.md`: no-power
+  Packet C detail review for `DT/MODE`, `nFAULT`, `REG12`, `CP`, `SCREF`,
+  `VS/VM`, bootstrap, `STBY`, and VDS monitoring. Current decision is
+  `Packet C detail narrowed / protection proof still partial clue / P3 still blocked`;
+  it marks the old `V_DSth = 0.249V` / `I_trip ~= 55A` note as not accepted and
+  keeps Packet C, generated-project trust, continuity, and powered readiness
+  blocked.
 - `hardware_supplement_handoff_2026-05-19.md`: current hardware-teammate
   handoff for the next accepted evidence. It asks for exact board revision,
   `CN3 -> NUCLEO/CN8 -> STM32 pin` mapping, `CN3` / `J_HALL` pin-1
@@ -281,3 +289,7 @@ Board Designer / Board Manager result as Packet A evidence, read
 `packet_a_board_designer_manager_path_review_2026-05-19.md`. Before capturing
 later Board Designer / Board Manager screenshots, read
 `packet_a_board_designer_manager_gui_checklist_2026-05-19.md`.
+Before using any STDRIVE101 protection threshold or `nFAULT` behavior in a
+phase decision, read
+`packet_c_stdrive101_protection_detail_review_2026-05-20.md` and treat the old
+`55A` VDS claim as not accepted.

@@ -465,12 +465,18 @@ class PacketAFocRouteDecisionTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
-    def test_readiness_and_active_task_point_to_route_decision(self):
+    def test_readiness_keeps_route_decision_and_active_task_points_to_foc_capture(self):
         readiness = read_repo_text(
             "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
             "p2_readiness_snapshot_2026-05-15.md"
         )
         active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        capture = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_a_sources/2026-05-16_custom_nucleo_stdrive101/"
+            "workbench_foc_capture_success_2026-05-21.md"
+        )
 
         for phrase in (
             "Packet A FOC route decision after MY_FOC rollback",
@@ -479,10 +485,75 @@ class PacketAFocRouteDecisionTests(unittest.TestCase):
         ):
             self.assertIn(phrase, readiness)
 
-        self.assertIn(
-            "TASK-2026-05-19-p2-packet-a-foc-route-decision-after-my-foc-rollback",
-            active_task,
+        for phrase in (
+            "TASK-2026-05-21-packet-a-workbench-foc-source-capture",
+            "EV-2026-05-21-P2-WORKBENCH-FOC-SOURCE-CAPTURE-001",
+            "Workbench FOC source captured / no-power Packet A source evidence upgraded / hardware and build trust still blocked",
+            "`algorithm`: `FOC`",
+            "`MY-STDRIVE101_POWER_BOARD`",
+            "`PB12/TIM1_BKIN`",
+            "No Gate PWM output",
+            "No Motor Profiler",
+        ):
+            self.assertIn(phrase, active_task + register + capture)
+
+
+class PacketCStdrive101ProtectionDetailReviewTests(unittest.TestCase):
+    def test_packet_c_detail_review_exists_and_keeps_p3_blocked(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_c_stdrive101_protection_detail_review_2026-05-20.md"
         )
+
+        for phrase in (
+            "Packet C detail narrowed / protection proof still partial clue / P3 still blocked",
+            "no powered readiness",
+            "No 24V",
+            "No Gate PWM output",
+            "No Motor Profiler run",
+            "No source generation, build, flash",
+            "Packet C is more precise but still not accepted",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_packet_c_detail_review_downgrades_old_threshold_claim(self):
+        detail = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "packet_c_stdrive101_protection_detail_review_2026-05-20.md"
+        )
+        thresholds = read_repo_text("docs/03_hardware_notes/protection_thresholds.md")
+        combined = " ".join((detail + thresholds).split())
+
+        for phrase in (
+            "VDSth = VSCREF",
+            "VSCREF,en = 2.54 V",
+            "VSCREF,dis = 2.9 V",
+            "33k / 20k",
+            "1.245 V",
+            "55A",
+            "Not accepted",
+            "must not be used",
+            "CP -> 100nF -> GND",
+            "does not prove the CP overcurrent comparator input network",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_packet_c_detail_is_linked_from_readiness_and_active_task(self):
+        readiness = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "p2_readiness_snapshot_2026-05-15.md"
+        )
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+
+        for phrase in (
+            "Packet C STDRIVE101 protection detail review",
+            "Packet C detail narrowed / protection proof still partial clue / P3 still blocked",
+            "old `55A` VDS claim is not accepted",
+            "EV-2026-05-20-P2-PACKET-C-STDRIVE101-PROTECTION-DETAIL-001",
+            "TASK-2026-05-20-p2-packet-c-stdrive101-protection-detail-review",
+        ):
+            self.assertIn(phrase, readiness + active_task + register)
 
 
 if __name__ == "__main__":

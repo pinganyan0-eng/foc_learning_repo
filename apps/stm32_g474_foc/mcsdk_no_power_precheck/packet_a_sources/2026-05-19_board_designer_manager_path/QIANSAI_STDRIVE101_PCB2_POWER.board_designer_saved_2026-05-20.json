@@ -1,0 +1,140 @@
+{
+  "type": "power",
+  "contentVersion": "1.0",
+  "descVersion": 4,
+  "name": "QIANSAI_STDRIVE101_PCB2_POWER",
+  "PN": "QIANSAI-STDRIVE101-PCB2-PWR",
+  "longDescription": "Self-developed STDRIVE101 three-phase power board for NUCLEO-G474RE. No powered validation claimed.",
+  "shortDescription": "Self-developed STDRIVE101 three-phase power board",
+  "motorDrives": [
+    {
+      "name": "M1",
+      "connectorType": "morpho",
+      "minRatedVoltage": 12,
+      "maxRatedVoltage": 24,
+      "maxRatedCurrent": 5,
+      "maxRatedPower": 120,
+      "resistorOffset": 0,
+      "features": [
+        {
+          "type": "CurrentSensing",
+          "name": "CurrentSensing",
+          "tRise": 1000,
+          "hwVariants": [
+            {
+              "signals": {
+                "CURRENT_SHUNT_UP": [
+                  {
+                    "name": "ML32",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_SHUNT_VP": [
+                  {
+                    "name": "ML34",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_SHUNT_WP": [
+                  {
+                    "name": "MR11",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "ThreeShunt_RawCurrents_SingleEnded",
+              "cost": 0,
+              "shuntResistor": 0.02
+            }
+          ]
+        },
+        {
+          "type": "PhaseVoltageGeneration",
+          "name": "PhaseVoltageGeneration",
+          "driverName": "STDRIVE101",
+          "driverPN": "STDRIVE101",
+          "tNoise": 1000,
+          "minDeadTime": 1000,
+          "maxSwitchingFreq": 30,
+          "hwVariants": [
+            {
+              "signals": {
+                "PWM_CHU_H": [
+                  {
+                    "name": "ML17",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_H": [
+                  {
+                    "name": "MR25",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_H": [
+                  {
+                    "name": "MR21",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHU_L": [
+                  {
+                    "name": "MR31",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_L": [
+                  {
+                    "name": "MR23",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_L": [
+                  {
+                    "name": "MR33",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "DrivingHighAndLowSides",
+              "cost": 0,
+              "deadTime": 1000,
+              "highSideSwitchesDrivingPolarity": "Active high",
+              "lowSideSwitchesDrivingPolarity": "Active high"
+            }
+          ]
+        },
+        {
+          "type": "DriverProtection",
+          "name": "DriverProtection",
+          "hwVariants": [
+            {
+              "signals": {
+                "DP_TRIGGER": [
+                  {
+                    "name": "MR16",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "SingleErrorTrigger_FixedReference",
+              "cost": 0,
+              "DPSignalPolarity": "Active low",
+              "DPTriggerFilterDuration": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

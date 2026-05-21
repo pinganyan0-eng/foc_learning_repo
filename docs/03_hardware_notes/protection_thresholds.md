@@ -1,5 +1,23 @@
 # protection_thresholds
 
+## 2026-05-20 Packet C Review Status
+
+Current decision: `Packet C detail narrowed / protection proof still partial clue / P3 still blocked`.
+
+The earlier `V_DSth = 0.249V` and `I_trip ~= 55A` record is not accepted as a
+project threshold. The repo-local STDRIVE101 extracted text currently says
+`VDSth = VSCREF`, with `VSCREF,en = 2.54V` and `VSCREF,dis = 2.9V`. With the
+current source clue `R1=33k` to `3V3` and `R2=20k` to ground, the divider gives
+about `VSCREF = 1.245V`, which is below the extracted enable threshold. Treat
+this only as a no-power source-level clue that VDS monitoring is intended
+enabled; it is not powered validation and not a safe current-limit value.
+
+`CP -> 100nF -> GND` is also only a source clue. It does not prove the CP
+overcurrent comparator input network or threshold. Before any P3 action, the
+project still needs a PDF/table-backed threshold review, named `CP` route proof,
+`VS/VM` proof, no-power continuity checks, current-limited bring-up settings,
+measurement points, and a rollback path.
+
 SCREF/VDS、过流、欠压、TVS、保险丝/PTC 等保护阈值记录。当前内容来自用户按原理图确认和 2026-05-09 原理图截图初审，但用户说明不能保证全部正确；它是硬件审查输入，不是已验证结论。
 
 ## 当前已知电压/器件线索

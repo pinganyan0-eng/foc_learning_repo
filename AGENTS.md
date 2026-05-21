@@ -1,5 +1,15 @@
 # Codex 项目规则
 
+## 0.0 Low-Token Handoff Rule
+
+Default handoff starts with `AI_CONTEXT.md`, then `workflow/ACTIVE_TASK.md`,
+then `docs/00_project_truth/project_context.md`, then only the latest top
+section of `CURRENT_STATUS.md` when needed.
+
+Do not read full history files, extracted manuals, `vector_store/`, Obsidian
+plugin code, or old Packet records by default. Open them only for a concrete
+evidence, hardware-safety, phase-gate, teaching, or implementation task.
+
 ## 0.1 Codex Dual-Teacher Execution Gate
 
 Before any repo edit, command loop, generated artifact, or hardware-adjacent

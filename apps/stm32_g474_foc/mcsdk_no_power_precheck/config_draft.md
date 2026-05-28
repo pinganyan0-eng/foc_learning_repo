@@ -5,6 +5,16 @@ Last updated: 2026-05-19
 This is a planning artifact only. It is not a wiring instruction, not generated
 firmware, and not hardware validation.
 
+## 2026-05-21 Current PCB2 Route Lock
+
+- Current software Hall route for no-PCB-change planning:
+  `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`.
+- `PB3` is current PCB2 `LIN1` / low-side PWM driver input, not current Hall.
+- `P14/P15` are confirmed `3V3/GND`; they are no longer a route-selection
+  blocker, but continuity and short checks are still required before P3.
+- MCSDK standard TIM2 Hall `PA15/PB3/PB10` remains an alternate/generated
+  configuration route only; it is not current PCB2 Hall proof.
+
 Detailed acceptance rules and hard stops now live in
 `pin_config_review_2026-05-14.md`. This draft records choices; the review file
 defines what evidence must exist before those choices can be trusted.

@@ -39,9 +39,9 @@ MCSDK project is trusted.
 | `STBY` | Define whether STM32 controls driver wake/standby or whether the board fixes it. | Unknown. Do not infer wake behavior from future `nFAULT` alone. | Packet B/C source showing `STBY` net, pull state, MCU route if any, and wake assumptions. | Blocked. |
 | `DT/MODE` | Determine whether firmware should use ENx/INx style or complementary INHx/INLx style. | Unknown; must be proven before trusting TIM1 output semantics. | Packet C endpoint plus resistor/strap value or ground state. | Blocked. |
 | Current-sense ADC / OPAMP inputs | Provide current feedback to MCSDK current-control code. | Must match 3-shunt / OPAMP / ADC mode and avoid silent `PA2/PA3` reuse. | Packet A current-sense selection plus Packet B endpoint mapping for current-sense nets. | Blocked. |
-| Hall fallback inputs | Provide future Hall state timing if Hall closed-loop is used later. | `PB3` cannot be claimed for Hall B while SWO owns it. | Packet A Hall assignment plus Packet B endpoint mapping plus NUCLEO/SWO release evidence. | Blocked. |
+| Hall fallback inputs | Provide future Hall state timing if Hall closed-loop is used later. | Current PCB2 Hall is software Hall on `PA0/PA1/PB4`; `PB3` is current PCB2 `LIN1`, not Hall. | Software Hall adapter design, explicit MCSDK integration boundary, and later continuity / powered Hall evidence before any closed-loop claim. | No-power route confirmed / firmware not implemented. |
 | `PA2/PA3` debug UART | P1 learning/debug path through NUCLEO VCP only. | Excluded from default FOC communication draft. | Packet A must explicitly prove safe reuse before this policy changes. | Candidate for debug only. |
-| `3V3` and `GND_SIGNAL` | Shared logic reference and signal return for later interface checks. | Planning only. Must not be treated as continuity proof. | Packet B source plus later no-power continuity checks in a hardware stage. | Partial clue only. |
+| `3V3` and `GND_SIGNAL` | Shared logic reference and signal return for later interface checks. | `P14/P15` confirmed as `3V3/GND` for route planning only. Must not be treated as continuity proof. | Later no-power continuity and short checks in a hardware stage. | Confirmed source clue / no powered validation. |
 | ESP32 gateway interface | Monitoring, forwarding, and alert display outside the real-time control loop. | ESP32 does not own FOC timing, PWM, current-loop, Hall decoding, or protection ISR decisions. | Interface contract and later UART/ESP32 implementation evidence. | Planning policy. |
 
 ## Rules Before Any Generated Project Uses This Contract
@@ -53,7 +53,9 @@ MCSDK project is trusted.
    supply-support paths that affect firmware interpretation.
 4. If Packet B/C are still skipped for scheduling, generated-project trust stays
    blocked even if the project can compile.
-5. `PB3` remains SWO-owned until release or isolation evidence exists.
+5. Current PCB2 `PB3` is fixed as `LIN1`; do not claim it as current Hall.
+   `PB3/SWO` release evidence is only relevant to a future alternate Hall or
+   hardware-rework route.
 6. `PA2/PA3` remain P1 VCP/debug evidence only unless Packet A proves a safe
    FOC communication decision.
 
@@ -80,5 +82,5 @@ Update this contract only when one of these changes:
 - Packet A adds real `.stmcx` or MotorControl configuration evidence.
 - Packet B adds accepted STM32 endpoint mapping.
 - Packet C adds accepted `DT/MODE`, `STBY`, `nFAULT`, or protection-path proof.
-- PB3/SWO release evidence arrives.
+- A future alternate route reopens `PB3/SWO` release evidence.
 - A future build-only generated project needs a precise signal list.

@@ -75,6 +75,8 @@ For teaching, explanation, tutoring, homework review, or debugging that reveals 
 - For `继续吧`, `继续`, `直接做`, `开始实操`, `推进项目`, or similar requests, first output four lines: `项目目标`, `学习目标`, `修改范围`, and `禁止范围`.
 - After the four-line gate, keep implementation visible as `功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`.
 - Codex is the repo writer, verifier, and evidence recorder; do not redirect current Codex-side repo work to ChatGPT.
+- Concept-only role guard: if the user asks theory, concepts, "I do not understand", "teach me", "what should I learn", `我不懂`, `教我`, or `还要学什么` without needing repo files, commands, builds, tests, logs, screenshots, learning-record writes, GitHub, or hardware-safety state, treat it as a ChatGPT teaching turn. Codex should provide a concrete ChatGPT prompt/task packet, say what the user should bring back, then review, record, and choose the next engineering step after the user returns.
+- ChatGPT may create a GitHub learning-evidence PR for a ChatGPT-taught concept lesson if it has GitHub write access. Treat that PR as a teaching artifact: Codex later syncs, reviews, verifies, records, and only then accepts or requests changes.
 - Read `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` before choosing the next lesson when they exist.
 - Read `workflow/algo_b_teaching_delivery_plan.md` and start with a concise progress checkpoint when teaching or choosing the next lesson.
 - Read `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` before choosing depth when practical.

@@ -2,6 +2,33 @@
 
 Append one entry after teaching, Q&A, homework review, debugging help, or experiment review when the turn reveals learning progress or weak points.
 
+## 2026-05-27 Software Hall adapter processing-order repair
+
+- Summary: User could correctly classify individual Hall transition rows, but
+  answered `我不知道啊` when asked to restate the adapter processing order.
+  Codex added a Chinese-first processing-order card that explains raw read,
+  illegal-state check, first-valid handling, repeat handling, bounce/timing
+  check, adjacent direction check, and abnormal-jump count.
+- Evidence level: L1 repair artifact for processing-order understanding; not
+  a new mastery upgrade.
+- Confidence: medium for identifying the weak point; low for mastery until the
+  user gives a one-sentence teach-back.
+- Weak point observed: software Hall adapter processing order is not yet
+  independently explainable.
+- Next review: Ask the user to say the one-sentence rule from
+  `software_hall_adapter_processing_order_card_2026-05-27.md`.
+- Source:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_processing_order_card_2026-05-27.md`
+
+## 2026-05-27 Hall state-machine follow-up review
+
+- Summary: User correctly classified `100 -> 110` as forward adjacent, `100 -> 101` as reverse adjacent, `100 -> 011` as abnormal jump, and `000` / `111` as illegal Hall states.
+- Evidence level: L4 for table-level no-power Hall state-machine classification.
+- Confidence: medium-high for concept transfer.
+- Weak point observed: None in the table. Still must separate table mastery from firmware/hardware readiness.
+- Next review: Ask user to restate the adapter processing order and why DMM plus GPIO/EXTI boundary review still block firmware work.
+- Source: `learning/session_notes/2026-05-27_hall_state_machine_review_followup.md`
+
 ## 2026-05-09 Learning Loop Initialized
 
 - Topic: Project learning workflow.

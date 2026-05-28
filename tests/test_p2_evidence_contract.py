@@ -64,6 +64,22 @@ class P2EvidenceContractTests(unittest.TestCase):
         "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
         "p2_readiness_snapshot_2026-05-15.md"
     )
+    DMM_CONTINUITY_REQUEST = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "dmm_continuity_short_check_request_2026-05-22.md"
+    )
+    SOFTWARE_HALL_ALGORITHM_PREP = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "software_hall_no_power_algorithm_prep_2026-05-22.md"
+    )
+    SOFTWARE_HALL_EXERCISE_CARD = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "software_hall_state_machine_exercise_card_2026-05-22.md"
+    )
+    SOFTWARE_HALL_PSEUDOCODE_DRAFT = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "software_hall_adapter_pseudocode_draft_2026-05-27.md"
+    )
     PACKET_A_STWB6_SOURCE = (
         "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
         "packet_a_sources/2026-05-15_my_first_foc/My_First_FOC.stwb6"
@@ -506,7 +522,8 @@ class P2EvidenceContractTests(unittest.TestCase):
             "`NFAULT`",
             "`STBY`",
             "`DT/MODE`",
-            "`PB3` cannot be claimed for Hall B while SWO owns it",
+            "Current PCB2 Hall is software Hall on `PA0/PA1/PB4`",
+            "`PB3` is current PCB2 `LIN1`, not Hall",
             "ESP32 does not own FOC timing",
             "It does not prove CN8 routing",
             "It does not prove STDRIVE101 protection-path implementation",
@@ -519,13 +536,184 @@ class P2EvidenceContractTests(unittest.TestCase):
             "No Gate PWM output",
             "No flash or board run",
             "`Not allowed`",
-            "Current state because Packet A is only `Partial clue`",
+            "Build-only source prerequisite satisfied / no-power Debug build-only pass recorded",
+            "local Debug build-only pass recorded on 2026-05-27",
+            "ninja: no work to do",
             "Allowed Build-Only Actions",
             "Forbidden Actions In This Gate",
             "cannot claim Gate PWM behavior is safe",
                 "Build success",
         ):
             self.assertIn(phrase, gate)
+
+    def test_dmm_continuity_request_defines_next_real_world_action(self):
+        text = read_repo_text(self.DMM_CONTINUITY_REQUEST)
+        status = read_repo_text("CURRENT_STATUS.md")
+        readiness = read_repo_text(self.P2_READINESS_SNAPSHOT)
+        checklist = read_repo_text("deliverables/submission_checklist.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+
+        for phrase in (
+            "DMM Continuity / Short-Check Request",
+            "measurement template, not a measurement result",
+            "`HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`",
+            "`PB3` role",
+            "`P14/P15` role",
+            "Continuity Table To Fill",
+            "`IA` / `HALL_A`",
+            "`IB` / `HALL_B`",
+            "`IC` / `HALL_C`",
+            "`LIN1`",
+            "`nFAULT`",
+            "Short-Check Table To Fill",
+            "`3V3` to `GND`",
+            "`IA` to `IB`",
+            "`IA` to `IC`",
+            "`IB` to `IC`",
+            "This request is complete only after the user returns the filled DMM table",
+        ):
+            self.assertIn(phrase, text)
+
+        for phrase in (
+            "No-Power DMM Evidence Request Opened",
+            "DMM continuity / short-check request",
+            "not the main real-world progress blocker",
+            "Filled DMM continuity / short-check table returned by the user",
+            "TASK-2026-05-22-p2-dmm-continuity-short-check-request",
+        ):
+            self.assertIn(phrase, status + readiness + checklist + active)
+
+    def test_software_hall_algorithm_prep_defines_no_power_contract(self):
+        text = read_repo_text(self.SOFTWARE_HALL_ALGORITHM_PREP)
+        status = read_repo_text("CURRENT_STATUS.md")
+        readiness = read_repo_text(self.P2_READINESS_SNAPSHOT)
+        evidence = read_repo_text(self.EVIDENCE_PACKET)
+        register = read_repo_text("workflow/evidence_register.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+
+        for phrase in (
+            "Software Hall No-Power Algorithm Prep",
+            "Algorithm-side no-power preparation / no firmware implementation / no Hall readiness",
+            "HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4",
+            "PB3 = LIN1",
+            "DMM gate is hardware-side deferred",
+            "Deferred does not mean passed",
+            "Valid states",
+            "`001`, `010`, `011`, `100`, `101`, and `110`",
+            "Reject `000` and `111`",
+            "Repeated state",
+            "Cross-state jump",
+            "Forward candidate A",
+            "001 -> 101 -> 100 -> 110 -> 010 -> 011 -> 001",
+            "Reverse candidate A",
+            "001 -> 011 -> 010 -> 110 -> 100 -> 101 -> 001",
+            "Debug Observables",
+            "illegal_state_count",
+            "abnormal_jump_count",
+            "direction_candidate",
+            "speed_candidate",
+            "Forbidden in ISR",
+            "MCSDK Boundary",
+            "This document cannot be used to claim firmware implementation",
+        ):
+            self.assertIn(phrase, text)
+
+        for phrase in (
+            "Software Hall No-Power Algorithm Prep Added",
+            "software_hall_no_power_algorithm_prep_2026-05-22.md",
+            "TASK-2026-05-22-p2-software-hall-no-power-algorithm-prep",
+            "EV-2026-05-22-P2-SOFTWARE-HALL-ALGORITHM-PREP-001",
+            "unpopulated PCB2 DMM gate is hardware-side deferred, not passed",
+            "not firmware implementation or hardware validation",
+        ):
+            self.assertIn(phrase, status + readiness + evidence + register + active)
+
+    def test_software_hall_exercise_card_requests_user_answer_only(self):
+        text = read_repo_text(self.SOFTWARE_HALL_EXERCISE_CARD)
+        status = read_repo_text("CURRENT_STATUS.md")
+        readiness = read_repo_text(self.P2_READINESS_SNAPSHOT)
+        evidence = read_repo_text(self.EVIDENCE_PACKET)
+        register = read_repo_text("workflow/evidence_register.md")
+        checklist = read_repo_text("deliverables/submission_checklist.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+
+        for phrase in (
+            "软件 Hall 状态机练习卡",
+            "P2 no-power",
+            "HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4",
+            "PB3 = LIN1，不参与 Hall",
+            "暂缓不是通过",
+            "三路 Hall 为什么正常只有 6 个有效状态",
+            "`000/111` 为什么要判非法",
+            "`PA0/PA1/PB4` 为什么只能先按软件 GPIO/EXTI Hall 处理",
+            "`PB3=LIN1` 后为什么不能再拿来当 Hall",
+            "输入序列 | 你的判断 | 是否计边沿 | 是否异常 | 备注",
+            "`001 -> 101`",
+            "`001 -> 001`",
+            "`001 -> 010`",
+            "`000`",
+            "如果通过，下一步才生成中文伪代码草案",
+            "本练习卡不能用于声明",
+        ):
+            self.assertIn(phrase, text)
+
+        for phrase in (
+            "Software Hall State-Machine Exercise Card Added",
+            "software_hall_state_machine_exercise_card_2026-05-22.md",
+            "User Hall state-machine exercise requested / no firmware implementation / no Hall readiness",
+            "TASK-2026-05-22-p2-software-hall-state-machine-exercise",
+            "EV-2026-05-22-P2-SOFTWARE-HALL-STATE-MACHINE-EXERCISE-001",
+            "User-filled Hall state-machine exercise table returned and reviewed",
+            "Waiting for user answer",
+            "no user answer has been reviewed yet",
+        ):
+            self.assertIn(
+                phrase,
+                status + readiness + evidence + register + checklist + active,
+            )
+
+    def test_software_hall_pseudocode_draft_keeps_no_power_boundary(self):
+        text = read_repo_text(self.SOFTWARE_HALL_PSEUDOCODE_DRAFT)
+        status = read_repo_text("CURRENT_STATUS.md")
+        readiness = read_repo_text(self.P2_READINESS_SNAPSHOT)
+        evidence = read_repo_text(self.EVIDENCE_PACKET)
+        register = read_repo_text("workflow/evidence_register.md")
+        checklist = read_repo_text("deliverables/submission_checklist.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+
+        for phrase in (
+            "软件 Hall Adapter 伪代码草案",
+            "Software Hall adapter pseudocode draft / no firmware implementation / no MCSDK Hall integration / no Hall readiness",
+            "HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4",
+            "PB3 = LIN1",
+            "Hall_ReadRaw3()",
+            "Hall_IsValidState(raw)",
+            "Hall_IsForwardAdjacent(prev, cur)",
+            "Hall_IsReverseAdjacent(prev, cur)",
+            "Hall_CaptureEdge_ISR()",
+            "Hall_ProcessEvent()",
+            "Hall_GetDebugSnapshot()",
+            "illegal `000/111` -> repeated state -> forward/reverse adjacent transition",
+            "ISR 只允许做最小工作",
+            "MCSDK 接入硬停止",
+            "本文不允许立即写固件",
+            "本文不能用于声明",
+        ):
+            self.assertIn(phrase, text)
+
+        for phrase in (
+            "Software Hall Adapter Pseudocode Draft Added",
+            "software_hall_adapter_pseudocode_draft_2026-05-27.md",
+            "TASK-2026-05-27-p2-software-hall-adapter-pseudocode-draft",
+            "EV-2026-05-27-P2-SOFTWARE-HALL-PSEUDOCODE-DRAFT-001",
+            "Pseudocode draft added / no firmware implementation / no MCSDK Hall integration / no Hall readiness",
+            "DMM remains hardware-side deferred, not passed",
+            "no-power pseudocode only, not firmware implementation",
+        ):
+            self.assertIn(
+                phrase,
+                status + readiness + evidence + register + checklist + active,
+            )
 
     def test_p2_readiness_snapshot_keeps_generated_project_blocked(self):
         text = read_repo_text(self.P2_READINESS_SNAPSHOT)
@@ -535,9 +723,12 @@ class P2EvidenceContractTests(unittest.TestCase):
             "P2 remains in progress",
             "Packet A MCSDK / MotorControl evidence",
             "Partial clue",
-            "`Not allowed` because Packet A is only `Partial clue / Preparation only`",
+            "Accepted for no-power selected-field configuration",
+            "source_packet_review_2026-05-21_001_qiansai_g474_stdrive101_foc_p2_generated_project.md",
+            "Passed on local STM32Cube bundled toolchain",
+            "build_only_result_2026-05-27_qiansai_g474_stdrive101_foc_p2_debug.md",
             "2026-05-16 custom NUCLEO + STDRIVE101",
-            "2026-05-17 vendor motor / G431 pin-table",
+            "2026-05-17 supplier motor source",
             "57BLF01_VENDOR_CANDIDATE",
             "mcu_pin_compatibility_check_2026-05-17.md",
             "Hardware action is not a P2 state",
@@ -555,9 +746,9 @@ class P2EvidenceContractTests(unittest.TestCase):
             "vendor motor parameters are measured project data",
             "Allowed current claims",
             "Forbidden current claims",
-            "Before moving from current P2 planning to build-only generated-project work",
+            "Build-only generated-project work status",
             "Before moving from P2 to any powered or motor stage",
-            "P2 cannot currently",
+            "P2 still cannot flash",
         ):
             self.assertIn(phrase, text)
 

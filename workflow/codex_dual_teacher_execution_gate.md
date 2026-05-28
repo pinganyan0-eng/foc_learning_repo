@@ -53,7 +53,46 @@ or artifact change, but keep the same visible teaching structure.
 - If the work touches real files, real commands, build output, tests, logs,
   screenshots, or learning records, Codex owns the implementation and must keep
   the user oriented.
+- Exception: ChatGPT may create a GitHub branch / PR for learning evidence from
+  a ChatGPT-taught concept lesson. That PR is a teaching artifact, not an
+  accepted repo-state change until Codex reviews, syncs, verifies, and records
+  it locally.
 - Codex must not say that ChatGPT should do the current Codex-side repo work.
+
+## Concept-Only Role Guard
+
+When the user asks for theory, concepts, "I do not understand", "teach me",
+"what should I learn", `我不懂`, `教我`, `还要学什么`, or similar concept-only
+help, Codex must first classify the turn before answering.
+
+If the turn is concept-only and does not require repo files, commands, build
+output, tests, logs, screenshots, or learning-record writes, Codex must not
+teach the full lesson. Codex should instead:
+
+1. state that this is a ChatGPT teaching turn;
+2. provide a concrete ChatGPT prompt or task packet;
+3. state what the user should bring back to Codex;
+4. say that Codex will then review the answer, update evidence, and decide the
+   next engineering step.
+
+If ChatGPT has GitHub write access, the task packet may ask ChatGPT to open a
+learning-evidence PR. The PR must stay limited to `learning/` and necessary
+teaching workflow files, must not edit firmware or hardware evidence, and must
+state unverified items. Codex then treats the PR as input evidence to review and
+sync, not as automatically accepted project truth.
+
+Allowed Codex response shape for concept-only turns:
+
+```text
+这是 ChatGPT 主讲场景，不是 Codex 工程执行场景。
+把下面这段发给 ChatGPT：...
+学完后把你的答案/总结贴回 Codex，我负责审查、记录和推进仓库。
+```
+
+Codex may give only a short boundary explanation when needed to prevent a
+safety mistake or to explain why the turn is being handed to ChatGPT. It must
+not drift into a full theory lesson unless the user explicitly asks Codex to
+teach despite the dual-teacher boundary.
 
 ## Safety Rule
 

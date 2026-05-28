@@ -1,3 +1,558 @@
+## 2026-05-28 Dual-Teacher Concept-Only Guard Added
+
+- Added an explicit dual-teacher concept-only role guard after the user reported
+  repeated drift in the teaching boundary.
+- Decision:
+  `Dual-teacher concept-only role guard / ChatGPT teaches theory / Codex reviews records and executes repo work`.
+- Rule now recorded in `workflow/codex_dual_teacher_execution_gate.md`,
+  `workflow/teaching_contract.md`, `AI_CONTEXT.md`,
+  `docs/00_project_truth/ai_architecture.md`, and the project Skill source
+  `codex_skills/stm32g474-foc-assistant/SKILL.md`.
+- New behavior: for theory, concept, "I do not understand", "teach me", or
+  "what should I learn" turns that do not require repo files, commands, build
+  output, tests, logs, screenshots, learning-record writes, GitHub, or
+  hardware-safety state, Codex must hand the user a concrete ChatGPT prompt/task
+  packet instead of teaching the full lesson.
+- Added GitHub learning-evidence handoff: if ChatGPT has GitHub write access,
+  it may open a branch / PR for its own concept-lesson evidence. Codex then
+  syncs, reviews, verifies, records, and either accepts or asks for changes.
+  The PR is not accepted project truth until Codex review.
+- Codex remains responsible for reviewing returned answers, updating learning
+  evidence, running checks, recording project status, and executing any
+  repo-side engineering work.
+- Safety boundary unchanged: this is workflow-control only. It does not
+  authorize firmware edits, Workbench regeneration, flash, 24V, power-board
+  connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+  powered readiness.
+
+## 2026-05-28 Software Hall Firmware-Entry Plan Added
+
+- Added the Chinese-first no-power firmware-entry plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_firmware_entry_plan_2026-05-28.md`.
+- Decision:
+  `Software Hall firmware-entry plan / debug-only no-power boundary / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- The plan locks the current route as `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`
+  and keeps `PB3=LIN1` out of Hall. MCSDK standard TIM2 Hall
+  `PA15/PB3/PB10` remains generated-source evidence only, not current PCB2
+  Hall.
+- The first future adapter shape is debug-only: GPIO/EXTI capture on
+  `PA0/PA1/PB4`, ISR stores only `raw_state + timestamp + event counter`,
+  low-priority state machine rejects `000/111`, repeat, bounce candidates, and
+  abnormal jumps, and low-frequency debug snapshot exposes counters plus
+  `direction_candidate` / `speed_candidate`.
+- Hard stops remain: no writes to `HALL_M1`, no `hall_speed_pos_fdbk.c/.h`
+  modification, no speed loop / PID injection, no `mc_tasks_foc.c` / JEOC /
+  FOC ISR edits, no TIM1 PWM edits, no generated-code edits, no Motor
+  Profiler / Motor Pilot, and no Hall closed-loop claim.
+- PCB2 is still unpopulated. DMM continuity / short-check evidence is hardware-side deferred, not passed. The 2026-05-27 build-only pass remains
+  local compile evidence only and does not replace hardware or runtime proof.
+- User checkpoint: no measurement, no power, and no toolchain work is needed
+  now. Keep
+  `C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2`
+  stable and report any hardware route change or PCB2 solder-complete signal.
+
+## 2026-05-27 No-Power Build-Only Debug Pass Recorded
+
+- Ran no-power build-only command for the external Workbench project:
+  `cmake --build "C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2\build\Debug" --config Debug`.
+- Result: exit code `0`; Ninja reported `ninja: no work to do`, meaning the
+  Debug target was already up to date.
+- Confirmed build artifacts:
+  `QIANSAI_G474_STDRIVE101_FOC_P2.elf` (`2161388` bytes,
+  SHA256 `8EF20B93DC069F085AEBD670A77C5C4C4266FE59532A91DF784241CCB062BB23`)
+  and `QIANSAI_G474_STDRIVE101_FOC_P2.map` (`1484465` bytes,
+  SHA256 `B571B7C9CF5F262BF49E35BE63B05C128CC59480E546FA36929BD8704CBD132D`).
+- Added build-only result record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/build_only_result_2026-05-27_qiansai_g474_stdrive101_foc_p2_debug.md`.
+- Decision:
+  `No-power build-only Debug pass / local toolchain compiles generated project / no firmware runtime or hardware readiness`.
+- This upgrades only the local no-power compile evidence for the generated
+  Workbench project. It does not upgrade firmware runtime behavior, current
+  PCB2 routing, DMM continuity, STDRIVE101 protection, current sensing, GPIO /
+  EXTI runtime behavior, MCSDK Hall integration, Gate PWM safety, Hall
+  closed-loop, Motor Profiler readiness, motor readiness, power-stage
+  readiness, or sensorless readiness.
+- Safety boundary unchanged: no flash, no Run / Debug, no 24V, no power-board
+  connection, no motor connection, no Gate PWM output, no Motor Profiler, no
+  Motor Pilot.
+
+## 2026-05-27 Software Hall MCSDK Speed/Position Feedback Interface Review Added
+
+- Added the no-power MCSDK speed / position feedback interface review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_speed_position_feedback_interface_review_2026-05-27.md`.
+- Decision:
+  `Software Hall MCSDK speed/position feedback interface review / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- The archived generated `Src/Inc` snapshot shows MCSDK standard Hall is a full feedback chain, not only a three-bit Hall state reader: TIM2 Hall IRQ updates `HALL_M1`, medium-frequency tasks calculate speed/reliability, the speed loop reads `SPD_GetAvrgMecSpeedUnit(...)`, and the FOC current loop consumes electrical angle through `SPD_GetElAngle(...)`.
+- Current PCB2 remains `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`, with `PB3=LIN1`; this still does not match Workbench TIM2 Hall `PA15/PB3/PB10`.
+- `speed_pos_fdbk.h` is not present in the archived project `Src/Inc` snapshot, so the base MCSDK feedback interface remains only partially visible and no custom `SpeednPosFdbk` component is accepted.
+- Current decision: future software Hall remains debug-only unless a separate reviewed `SpeednPosFdbk`-compatible component proposal is created with full interface evidence, DMM evidence, no-power build record, exact hook list, and rollback plan.
+- Verification passed: `python -m unittest discover -s tests` (`126` tests OK), `python -m compileall src tests`, `git diff --check` with CRLF warnings only, `python tools\build_vector_store.py` (`8678` chunks), `python tools\search_local_v2.py --eval`, and `python tools\check_ai_contracts.py` with warning only that `ACTIVE_TASK.md` is done and still requires review.
+- No STM32 firmware, generated-code edit, MCSDK hook, no-power build record, DMM proof, flash, 24V, power-board connection, motor connection, Gate PWM output, Hall closed-loop, motor readiness, power-stage readiness, or sensorless readiness is upgraded.
+## 2026-05-27 Full Workbench Src/Inc Snapshot Archived
+
+- Confirmed the external generated Workbench project exists at
+  `C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2`.
+- Archived a no-power read-only snapshot at
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-27_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot/`.
+- Added source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-27_001_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot.md`.
+- Decision:
+  `Full generated Src/Inc snapshot archived / source interface evidence available for read-only review / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- The snapshot includes generated `Src/`, `Inc/`, `cmake/`, top-level project/build metadata, `SOURCE_MANIFEST_2026-05-27.md`, and `SHA256SUMS.txt`.
+- Key requested files are now present for read-only review: `hall_speed_pos_fdbk.c/.h`, `speed_torq_ctrl.c/.h`, `mc_tasks.c/.h`, `mc_tasks_foc.c`, `mc_interface.c/.h`, `mc_api.c/.h`, `mc_app_hooks.c/.h`, `mc_parameters.c/.h`, `motorcontrol.c/.h`, `mc_type.h`, interrupt sources, current-feedback backend files, register-interface files, `usart_aspep_driver.c`, and `aspep.c/.h`.
+- `Inc/usart_aspep_driver.h` is not present in the generated `Inc/` folder and must not be silently treated as an accepted interface header.
+- Static review confirms generated MCSDK Hall still uses standard TIM2 Hall `PA15/PB3/PB10`, while current PCB2 remains `PA0/PA1/PB4` software Hall with `PB3=LIN1`; therefore this snapshot does not prove current PCB2 Hall integration.
+- No STM32 firmware, generated-code edit, MCSDK hook, no-power build record, DMM proof, flash, 24V, power-board connection, motor connection, Gate PWM output, Hall closed-loop, motor readiness, power-stage readiness, or sensorless readiness is upgraded.
+
+## 2026-05-27 Software Hall MCSDK Hook Evidence Request Checklist Added
+
+- Added the no-power MCSDK hook evidence request checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_hook_evidence_request_checklist_2026-05-27.md`.
+- Decision:
+  `Software Hall MCSDK hook evidence request checklist / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- The checklist turns log-only MCSDK generated file names into a concrete source-evidence request before any future software Hall hook.
+- Required evidence now includes exact generated or MCSDK interface sources such as `hall_speed_pos_fdbk.c/.h`, speed / position feedback interface evidence, `speed_torq_ctrl.c/.h`, `mc_tasks.c/.h`, `mc_tasks_foc.c`, `mc_interface.c/.h`, `mc_api.c/.h`, `mc_app_hooks.c/.h`, `mc_parameters.c/.h`, `motorcontrol.c/.h`, `mc_type.h`, interrupt sources, current-feedback backend files, and ASPEP / register-interface files.
+- Rejected evidence types include log-only file names, screenshots, files from a different project/version, AI summaries, host tests, build-only success by itself, and memory-based claims.
+- No STM32 firmware, MCSDK hook, generated-code edit, build record, DMM proof, flash, 24V, power-board connection, motor connection, Gate PWM output, Hall closed-loop, motor readiness, power-stage readiness, or sensorless readiness is upgraded.
+## 2026-05-27 Software Hall MCSDK Firmware-Integration Boundary Review Draft Added
+
+- Added the no-power MCSDK firmware-integration boundary review draft:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_firmware_integration_boundary_review_2026-05-27.md`.
+- Decision:
+  `Software Hall MCSDK firmware-integration boundary review draft / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- The draft records that future software Hall output is only
+  `direction_candidate` and `speed_candidate` until accepted MCSDK interface
+  evidence exists.
+- Generated clues such as `HALL_M1`, `SpeednTorqCtrlM1`, `PIDSpeedHandle_M1`,
+  `pSTC`, `MCI_Handle_t`, `FOCVars`, `SPD_HALL_TIM_M1_IRQHandler`,
+  `M1_SPEED_SENSOR=HALL_SENSOR`, and `M1_HALL_TIMER_SELECTION=HALL_TIM2` are
+  treated as read-only clues, not MCSDK hooks.
+- Generated log file names `hall_speed_pos_fdbk.c/.h`, `speed_torq_ctrl.c/.h`,
+  and `mc_app_hooks.c/.h` remain file-name clues only until archived source and
+  interface contracts are reviewed.
+- Hard stops remain: no write to `HALL_M1`, no speed-loop / PID injection, no
+  JEOC / FOC ISR edits, no TIM1 PWM edits, no generated-code edits, no Motor
+  Profiler / Motor Pilot, and no Hall closed-loop claim.
+- No STM32 firmware, MCSDK hook, build record, DMM proof, flash, 24V,
+  power-board connection, motor connection, Gate PWM output, Hall closed-loop,
+  motor readiness, power-stage readiness, or sensorless readiness is upgraded.
+## 2026-05-27 Software Hall Debug-Output Route Review Draft Added
+
+- Added the no-power low-frequency debug-output route review draft:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_debug_output_route_review_2026-05-27.md`.
+- Decision:
+  `Software Hall low-frequency debug-output route review draft / no firmware implementation / no UART implementation / no Hall readiness`.
+- The draft defines future debug snapshot fields:
+  `current_raw_state`, `last_accepted_state`, `last_decision`, `edge_count`,
+  `illegal_state_count`, `repeat_count`, `bounce_candidate_count`,
+  `abnormal_jump_count`, `lost_event_count`, `last_edge_dt_ticks`,
+  `timestamp_source_id`, `direction_candidate`, and `speed_candidate`.
+- Output boundary:
+  first firmware shape, if later authorized, must be a low-frequency snapshot
+  path. It is not every-edge streaming, not ISR printing, not JEOC / FOC ISR
+  work, and not MCSDK speed feedback.
+- Route constraints:
+  UART text / CSV / JSON, ESP32 / WebSocket display, MCSDK USART2 / ASPEP /
+  MCP reuse, `PA2/PA3` reuse, and SWO / ITM are not authorized by this draft.
+- No STM32 firmware, UART implementation, JSON protocol, ESP32 gateway,
+  MCSDK hook, build record, DMM proof, flash, 24V, power-board connection,
+  motor connection, Gate PWM output, Motor Profiler, Hall closed-loop, motor
+  readiness, power-stage readiness, or sensorless readiness is upgraded.
+
+## 2026-05-27 Software Hall Timestamp Source Review Draft Added
+
+- Added the no-power timestamp-source review draft:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_timestamp_source_review_2026-05-27.md`.
+- Decision:
+  `Software Hall timestamp-source review draft / no firmware implementation / no timer configuration / no Hall readiness`.
+- The draft records why `TIM1` is a hard no for software Hall timestamping:
+  generated clues tie it to PWM, ADC injected triggering, and FOC timing through
+  `MX_TIM1_Init()`, `TIM1_UP_TIM16_IRQn`, and `ADC_EXTERNALTRIGINJEC_T1_TRGO`.
+- The draft records why `TIM2` is not current `PA0/PA1/PB4` software Hall
+  timestamp clearance: generated clues use `HAL_TIMEx_HallSensor_Init` and
+  `M1_HALL_TIMER_SELECTION=HALL_TIM2` for the standard MCSDK Hall route.
+- `HAL_GetTick()` / SysTick is limited to coarse logs or timeouts because the
+  local HAL clue is `uwTickFreq = HAL_TICK_FREQ_DEFAULT; /* 1KHz */`.
+- Future preferred class is an isolated `dedicated free-running timer`, with
+  `1 us tick` only as a review target and `unsigned delta` required for
+  overflow handling.
+- No exact timer instance, prescaler, CubeMX setting, firmware source,
+  MCSDK hook, build record, DMM proof, flash, 24V, power-board connection,
+  motor connection, Gate PWM output, Motor Profiler, Hall closed-loop, motor
+  readiness, power-stage readiness, or sensorless readiness is upgraded.
+
+## 2026-05-27 Local Retrieval V2 Added
+
+- Added the second AI architecture foundation batch:
+  `tools/search_local_v2.py`,
+  `retrieval_eval/queries.json`, and `tests/test_search_local_v2.py`.
+- Decision:
+  `Local retrieval v2 / source-priority search / retrieval regression checks /
+  no RAG hardware claims / no powered readiness`.
+- Evidence ID:
+  `EV-2026-05-27-AI-RETRIEVAL-V2-001`.
+- The new search tool reads the existing `vector_store/` index but adds:
+  query expansion, source-priority weighting, phrase bonuses, a minimum
+  reliable-score threshold, and a built-in retrieval evaluation mode.
+- The first retrieval evaluation cases cover:
+  `JEOC 娑擃厽鏌囬柌宀冨厴娑撳秷鍏?printf`,
+  `ESP32 閼虫垝绗夐懗鍊熺箻閸?FOC 鐎圭偞妞傞幒褍鍩楅悳鐥? and
+  `瑜版挸澧?PCB2 Hall 鐠侯垳鍤?PA0 PA1 PB4 PB3 閺勵垯绮堟稊鍧?
+- Verification:
+  `python tools/search_local_v2.py "JEOC 娑擃厽鏌囬柌宀冨厴娑撳秷鍏?printf"` now ranks
+  `docs/protocol.md` first and also returns the JEOC review template and
+  STM32 app rules. `python tools/search_local_v2.py --eval` passed.
+  `python -m unittest discover -s tests` passed with 115 tests.
+  `python tools/build_vector_store.py` rebuilt the local retrieval index with
+  8548 chunks.
+- This remains local evidence retrieval only. It does not generate hardware
+  conclusions, does not replace phase gates or evidence records, and does not
+  upgrade firmware implementation, generated-code trust, build trust,
+  GPIO/EXTI runtime proof, MCSDK Hall integration, DMM continuity, flash, 24V,
+  power-board connection, motor connection, Gate PWM output, Motor Profiler,
+  Hall closed-loop, motor readiness, power-stage readiness, or sensorless
+  readiness.
+
+## 2026-05-27 AI Architecture Foundation Added
+
+- Added the first AI architecture foundation batch:
+  `docs/00_project_truth/ai_architecture.md`,
+  `workflow/CURRENT_SNAPSHOT.md`,
+  `tools/build_context_pack.py`, and `tools/check_ai_contracts.py`.
+- Decision:
+  `AI architecture foundation / low-token handoff / read-only workflow checks /
+  no firmware, no hardware, no powered readiness`.
+- Evidence ID:
+  `EV-2026-05-27-AI-ARCHITECTURE-FOUNDATION-001`.
+- The architecture contract keeps the current evidence-first model:
+  short context -> grounded retrieval -> task packet -> safe execution ->
+  evidence record -> learning update -> verification.
+- `CURRENT_SNAPSHOT.md` is now the default low-token current-state page. It
+  summarizes P2 no-power state, current PCB2 Hall route, software Hall planning
+  status, AI architecture work, and the active safety boundary.
+- `build_context_pack.py` can generate mode-specific context packs for
+  `codex_task`, `teaching`, `hardware_review`, `mcsdk_packet`,
+  `experiment_analysis`, and `report_defense`.
+- `check_ai_contracts.py` performs a read-only static check of required AI
+  architecture files, `ACTIVE_TASK` status and evidence ID, safety phrases,
+  indexes, review-queue size, and dangerous positive readiness claims.
+- Verification:
+  `python tools/check_ai_contracts.py` passed with no errors,
+  `python tools/build_context_pack.py --mode codex_task --max-chars 400`
+  emitted a context pack, `python tools/build_context_pack.py --list-modes`
+  listed the supported modes, and `python -m unittest discover -s tests`
+  passed with 111 tests. `python tools/build_vector_store.py` rebuilt the
+  local retrieval index with 8529 chunks.
+- This is repository workflow infrastructure only. It does not upgrade
+  firmware implementation, generated-code trust, build trust, GPIO/EXTI
+  runtime proof, MCSDK Hall integration, DMM continuity, flash, 24V,
+  power-board connection, motor connection, Gate PWM output, Motor Profiler,
+  Hall closed-loop, motor readiness, power-stage readiness, or sensorless
+  readiness.
+
+## 2026-05-27 Software Hall GPIO/EXTI Boundary Review Draft Added
+
+- Added the no-power GPIO/EXTI boundary draft:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_gpio_exti_boundary_review_2026-05-27.md`.
+- Decision:
+  `Software Hall GPIO/EXTI boundary review draft / no firmware implementation / no GPIO runtime proof / no Hall readiness`.
+- The draft records the current static boundary for the future software Hall
+  route: `PA0=GPIO_EXTI0`, `PA1=GPIO_EXTI1`, `PB4=GPIO_EXTI4`, with
+  `PB3=LIN1` kept out of Hall.
+- Local CMSIS/HAL clues identify `EXTI0_IRQn`, `EXTI1_IRQn`, `EXTI4_IRQn`,
+  `GPIO_MODE_IT_RISING_FALLING`, and pull-mode options, but this is only a
+  no-power review draft.
+- Open blockers remain: populated PCB2, DMM continuity / short-check table,
+  pull-up / pull-down decision, timestamp-source decision, debug-output route,
+  and separate MCSDK firmware-integration review. The build-only record now
+  exists but does not open firmware implementation or hardware readiness.
+- No STM32 firmware, CubeMX/Workbench setting, generated code, build, flash,
+  Gate PWM, Motor Profiler, Motor Pilot, motor, power-stage, Hall closed-loop,
+  or sensorless readiness is upgraded.
+
+## 2026-05-27 Software Hall Firmware-Entry Checklist Added
+
+- Added the no-power firmware-entry checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_firmware_entry_checklist_2026-05-27.md`.
+- Decision:
+  `Software Hall firmware-entry checklist / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- The checklist converts the existing software Hall prep, pseudocode, host
+  model, golden vectors, and MCSDK probe into explicit entry conditions before
+  any future STM32 adapter code.
+- Current required but missing entry evidence remains: populated PCB2,
+  DMM continuity / short-check table, GPIO/EXTI boundary review, timestamp
+  source decision, low-frequency debug-output route, no-power build-only
+  record, and a separate MCSDK firmware-integration review before any hook.
+- First future code, if later authorized, must stay as an independent adapter.
+  It must not modify TIM1 PWM, JEOC / FOC ISR, `HALL_M1`, MCSDK speed loop,
+  Gate PWM, flash, Motor Profiler, Motor Pilot, or powered hardware.
+- No user hardware action is needed while PCB2 is unpopulated. The next
+  learner checkpoint remains the one-sentence processing-order teach-back.
+
+## 2026-05-27 Software Hall MCSDK Integration Probe Added
+
+- Added a read-only MCSDK integration clue review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_integration_probe_2026-05-27.md`.
+- Decision:
+  `MCSDK Hall integration points identified as read-only clues / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- Read-only checks in the 2026-05-21 generated-project clue folder found the
+  standard MCSDK Hall path: `MX_TIM2_Init()`, `HAL_TIMEx_HallSensor_Init`,
+  `HALL_Handle_t HALL_M1`, `SpeednTorqCtrlM1`, `PIDSpeedHandle_M1`,
+  `M1_SPEED_SENSOR=HALL_SENSOR`, `SPEED_SENSOR_SELECTION=HALL_SENSORS`,
+  `M1_HALL_TIMER_SELECTION=HALL_TIM2`, and generated log references to
+  `hall_speed_pos_fdbk.c/.h` and `speed_torq_ctrl.c/.h`.
+- Conclusion: those are only read-only clues for the standard TIM2 hardware
+  Hall route. They do not match current PCB2 `PA0/PA1/PB4` software Hall and
+  do not create MCSDK Hall integration.
+- Any future MCSDK hook requires a separate firmware-integration review. Hard
+  stops remain: do not edit JEOC / FOC ISR, TIM1 PWM timing, generated speed
+  loop, or `HALL_M1` path without a new review.
+
+## 2026-05-27 Software Hall Golden Vectors Added
+
+- Added host-side no-power golden vectors for the future software Hall adapter:
+  `tests/fixtures/software_hall_golden_vectors.json`.
+- Added replay test:
+  `tests/test_software_hall_vectors.py`.
+- Added no-power review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_golden_vectors_review_2026-05-27.md`.
+- Decision:
+  `Host-side software Hall golden vectors / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- The vectors turn the state-machine rules into replayable input/output
+  examples for later firmware-adapter review: forward candidate cycle,
+  illegal-state rejection, repeated-state rejection, configurable
+  bounce-candidate rejection, abnormal non-adjacent jump, and reverse adjacent
+  step.
+- This is host-side no-power algorithm-contract evidence only. It does not read
+  GPIO, configure EXTI, edit MCSDK generated code, build firmware, flash
+  hardware, pass DMM, output Gate PWM, connect a motor, or prove Hall
+  readiness.
+
+## 2026-05-27 Software Hall Host Model Added
+
+- Added a host-side executable reference model for the future software Hall
+  adapter:
+  `src/software_hall_model.py`.
+- Added tests:
+  `tests/test_software_hall_model.py`.
+- Added no-power review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_host_model_review_2026-05-27.md`.
+- Decision:
+  `Host-side software Hall reference model / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- The model implements the no-power algorithm sequence:
+  illegal-state check -> first-valid baseline -> repeated-state rejection ->
+  configurable bounce/timing check -> forward/reverse adjacent step ->
+  abnormal-jump count.
+- Test coverage includes valid states, `000/111`, `100 -> 110`,
+  `100 -> 101`, `100 -> 011`, repeated state, configurable bounce candidate,
+  and a full candidate forward cycle.
+- This is executable host-side algorithm evidence only. It does not read GPIO,
+  configure EXTI, edit MCSDK generated code, build firmware, flash hardware,
+  pass DMM, output Gate PWM, connect a motor, or prove Hall readiness.
+
+## 2026-05-27 Software Hall Processing-Order Teaching Card Added
+
+- User could correctly classify individual Hall transition rows, but then
+  answered `閹存垳绗夐惌銉╀壕閸熷グ when asked to restate the adapter processing order.
+- Added a Chinese-first no-power repair artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_processing_order_card_2026-05-27.md`.
+- Decision:
+  `Software Hall adapter processing-order teaching card / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- Evidence level:
+  L1 repair artifact for the processing-order weak point. This is not a new
+  mastery upgrade.
+- Evidence limit: not a new mastery upgrade.
+- The card explains:
+  raw read -> illegal-state check -> first-valid check -> repeated-state check
+  -> bounce/timing check -> forward/reverse adjacent check -> abnormal-jump
+  count.
+- Current route remains `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`;
+  `PB3=LIN1` and is not Hall.
+- This does not upgrade firmware implementation, GPIO/EXTI runtime behavior,
+  MCSDK Hall integration, DMM continuity proof, build record, flash, 24V,
+  power-board connection, motor connection, Gate PWM output, Motor Profiler,
+  Hall closed-loop, motor readiness, power-stage readiness, or sensorless
+  readiness.
+- Next user checkpoint:
+  say the one-sentence Chinese rule from the card, without filling another
+  table.
+
+## 2026-05-27 Hall State-Machine Follow-Up Review Passed
+
+- User completed the follow-up Hall transition table:
+  `100 -> 110`, `100 -> 101`, `100 -> 011`, `000`, and `111`.
+- Codex review result:
+  all five rows are correct.
+- Evidence level:
+  `L4 for table-level no-power Hall state-machine classification`.
+- Recorded learning evidence:
+  `learning/session_notes/2026-05-27_hall_state_machine_review_followup.md`
+  and
+  `learning/review_items/2026-05-27_hall_state_machine_review_completed.md`.
+- This upgrades only algorithm-table mastery. It does not upgrade firmware
+  implementation, GPIO/EXTI runtime behavior, MCSDK Hall integration, DMM
+  continuity proof, build record, flash, 24V, power-board connection, motor
+  connection, Gate PWM output, Motor Profiler, Hall closed-loop, motor
+  readiness, power-stage readiness, or sensorless readiness.
+- Next algorithm-side review before code:
+  restate the adapter processing order:
+  raw read -> illegal-state check -> first-valid check -> repeated-state check
+  -> bounce/timing check -> forward/reverse adjacent check -> abnormal-jump
+  count.
+
+## 2026-05-27 Software Hall Adapter Pseudocode Draft Added
+
+- Added the next no-power software Hall design artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_pseudocode_draft_2026-05-27.md`.
+- Decision:
+  `Software Hall adapter pseudocode draft / no firmware implementation / no MCSDK Hall integration / no Hall readiness`.
+- This uses the 2026-05-27 Hall state-machine L2 learning evidence only as
+  algorithm understanding, not as hardware or firmware evidence.
+- The draft defines future responsibilities for `Hall_ReadRaw3()`,
+  `Hall_IsValidState()`, `Hall_IsForwardAdjacent()`,
+  `Hall_IsReverseAdjacent()`, `Hall_CaptureEdge_ISR()`,
+  `Hall_ProcessEvent()`, and `Hall_GetDebugSnapshot()` as pseudocode only.
+- Current route remains `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`;
+  `PB3=LIN1` and is not Hall.
+- The draft locks the decision order:
+  illegal `000/111` -> repeated state -> forward/reverse adjacent transition
+  -> abnormal jump.
+- ISR boundary remains minimal: timestamp, raw Hall state, pending/event flag
+  or small counter only. No `printf`, JSON, `HAL_Delay`, blocking wait,
+  dynamic allocation, complex MCSDK call, speed-loop decision, or FOC-loop
+  edit is allowed in ISR.
+- PCB2 is still unpopulated, so DMM remains hardware-side deferred, not
+  passed. No firmware file, runtime API, generated-code hook, MCSDK Hall
+  integration, build record, flash, 24V, power-board connection, motor
+  connection, Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop,
+  motor readiness, power-stage readiness, or sensorless readiness is
+  authorized.
+
+## 2026-05-22 Software Hall State-Machine Exercise Card Added
+
+- Added the next algorithm-side no-power exercise card:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_state_machine_exercise_card_2026-05-22.md`.
+- Decision:
+  `User Hall state-machine exercise requested / no firmware implementation / no Hall readiness`.
+- The card is Chinese-first and asks the algorithm role to answer five checks:
+  why three Hall lines have six valid states, why `000/111` are illegal, why
+  the candidate sequence `001 -> 101 -> 100 -> 110 -> 010 -> 011 -> 001`
+  can define one direction candidate, why `PA0/PA1/PB4` must be treated as
+  software GPIO/EXTI Hall, and why `PB3=LIN1` cannot be Hall.
+- The required user response table is:
+  `Input sequence | User judgment | Count edge? | Abnormal? | Note` for
+  `001 -> 101`, `001 -> 001`, `001 -> 010`, and `000`.
+- PCB2 is still unpopulated, so the DMM gate remains hardware-side deferred,
+  not passed. This exercise does not need DMM, board power, Workbench, CubeMX,
+  Motor Profiler, oscilloscope, or hardware measurement.
+- No firmware logic, runtime API, generated-code hook, MCSDK Hall integration,
+  build record, flash, 24V, power-board connection, motor connection, Gate PWM
+  output, Motor Profiler, Hall closed-loop, motor readiness, power-stage
+  readiness, or sensorless readiness is authorized.
+
+## 2026-05-22 Software Hall No-Power Algorithm Prep Added
+
+- Added the algorithm-side no-power preparation artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_no_power_algorithm_prep_2026-05-22.md`.
+- Decision:
+  `Algorithm-side no-power preparation / no firmware implementation / no Hall readiness`.
+- This lets the algorithm role progress while the unpopulated PCB2 DMM gate is
+  hardware-side deferred. Deferred does not mean passed.
+- The artifact locks the no-power state-machine contract for
+  `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`, while keeping `PB3=LIN1` outside
+  the current Hall path.
+- Valid Hall candidates are `001`, `010`, `011`, `100`, `101`, and `110`;
+  `000` and `111` are illegal. Repeated states do not count as new edges,
+  non-adjacent jumps are abnormal, and bounce filtering remains a future
+  measured-threshold topic.
+- Future debug observables are only low-frequency candidates:
+  raw/accepted Hall state, edge count, illegal-state count, abnormal-jump
+  count, repeat count, bounce-candidate count, edge delta, direction candidate,
+  and speed candidate.
+- ISR boundary remains minimal: capture timestamp/state and defer decoding,
+  logging, JSON, UART formatting, WebSocket work, dynamic allocation, blocking
+  delays, and control decisions to lower-priority context.
+- No firmware logic, runtime API, generated-code hook, MCSDK Hall integration,
+  build record, flash, 24V, power-board connection, motor connection, Gate PWM
+  output, Motor Profiler, Hall closed-loop, motor readiness, power-stage
+  readiness, or sensorless readiness is authorized.
+
+## 2026-05-22 No-Power DMM Evidence Request Opened
+
+- Added the next real-world no-power evidence request:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/dmm_continuity_short_check_request_2026-05-22.md`.
+- Current route remains locked as `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`,
+  `PB3=LIN1`, and `P14/P15=3V3/GND`.
+- Next user action is a filled DMM continuity / short-check table for
+  `IA->PA0`, `IB->PA1`, `IC->PB4`, `PB3->LIN1`, `P14->3V3`, `P15->GND`,
+  `nFAULT->PB12`, `3V3-GND`, STM32 signal pins to `3V3/GND`, and Hall-line
+  pair shorts.
+- CLI toolchain setup is not the main real-world progress blocker in this
+  step. A later 2026-05-27 no-power build-only record now exists, but it does
+  not replace the hardware-side DMM gate.
+- No software Hall adapter implementation starts until the DMM table is
+  returned and reviewed.
+- No firmware logic, runtime API, generated-code hook, flash,
+  24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, Hall closed-loop, motor readiness, power-stage readiness, or
+  sensorless readiness is authorized.
+
+## 2026-05-21 Current PCB2 Software Hall Route Confirmed
+
+- User confirmed the current PCB2 `CN3/CN8 -> STM32` mapping has no known
+  error for this route decision.
+- Existing archived PCB2 mapping already records `P14=3V3` and `P15=GND`;
+  they are no longer a missing-evidence blocker for software Hall route
+  selection. They still do not replace no-power continuity or short checks.
+- Current PCB2 Hall route is locked for no-PCB-change planning as
+  `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`.
+- Current PCB2 `PB3` is locked as `LIN1` / low-side PWM driver input. It is no
+  longer a current Hall candidate in Packet A or firmware-design discussion.
+- The active route is now `software Hall adapter first`; hardware rework is a
+  fallback only if later MCSDK integration proves the software route unsafe or
+  unrepresentable.
+- The future software Hall adapter boundary is GPIO/EXTI input sampling on
+  `PA0/PA1/PB4`, three-bit Hall state readout, illegal-state filtering for
+  `000/111`, edge timestamp capture, and minimal ISR work only.
+- The Workbench generated TIM2 Hall route `PA15/PB3/PB10` remains accepted only
+  as no-power generated configuration evidence. It does not match the current
+  PCB2 Hall route and cannot be used directly as current-board Hall proof.
+- No firmware logic, runtime API, generated-code hook, build record, flash,
+  24V, power-board connection, motor connection, Gate PWM output, Motor
+  Profiler, Hall closed-loop, motor readiness, power-stage readiness, or
+  sensorless readiness is authorized.
+
+## 2026-05-21 Packet A Generated-Source Review And Build-Only Gate
+
+- Added generated-source side-effect review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-21_001_qiansai_g474_stdrive101_foc_p2_generated_project.md`.
+- Decision:
+  `Packet A selected fields accepted for no-power configuration evidence /
+  build-only source prerequisite satisfied / build execution deferred at the
+  time / hardware trust still blocked`.
+- Accepted Packet A configuration fields from the 2026-05-21 Workbench
+  generated-project clues: `FOC`, `NUCLEO-G474RE`, `STM32G474RETx`,
+  `MY-STDRIVE101_POWER_BOARD`, `STDRIVE101`, TIM1 complementary PWM
+  `PA8/PA9/PA10 + PB13/PB14/PB15`, `PB12/TIM1_BKIN`, three-shunt current
+  sensing, TIM2 Hall `PA15/PB3/PB10`, and USART2 `PA2/PA3` ASPEP/MCP.
+- Read-only static checks found no `SIX_STEP`, `sixstep`,
+  `mc_tasks_sixstep`, `pwmc_sixstep`, or `speed_duty_ctrl` matches in the
+  archived generated-project clue folder.
+- At the time of this 2026-05-21 review, the build-only gate source
+  prerequisite was satisfied but no no-power build record existed yet. This
+  older CLI path blocker is superseded by the 2026-05-27 no-power Debug
+  build-only pass recorded at
+  `build_only_result_2026-05-27_qiansai_g474_stdrive101_foc_p2_debug.md`.
+- The generated Workbench Hall route `PA15/PB3/PB10` still does not match the
+  current PCB2 Hall clue `PA0/PA1/PB4`; current PCB2 also records `PB3=LIN1`.
+  Hall readiness and current-board route trust remain blocked.
+- `R57BLB50L2` remains a temporary Workbench motor placeholder, not measured
+  motor evidence.
+- No trusted build output, flash, 24V, power-board connection, motor
+  connection, Gate PWM output, Motor Profiler, Motor Pilot, Hall closed-loop,
+  sensorless / SMO, powered readiness, motor readiness, or power-stage
+  readiness is authorized.
+
 ## 2026-05-21 Workbench FOC Source Captured For Packet A
 
 - User completed a no-power ST Motor Control Workbench 6.4.2 GUI route for
@@ -203,7 +758,7 @@
   `C:\Users\gregrg\.st_workbench\projects\MY_FOC.stwb6.pre_codex_foc_edit_2026-05-19.bak`.
 - Attempted one minimal source-file edit: changed top-level
   `"algorithm": "sixStep"` to `"algorithm": "FOC"`.
-- User opened Workbench and reported `一般错误 / 无法加载文件:
+- User opened Workbench and reported `娑撯偓閼割剟鏁婄拠?/ 閺冪姵纭堕崝鐘烘祰閺傚洣娆?
   C:/Users/gregrg/.st_workbench/projects/MY_FOC.stwb6`.
 - Decision:
   `Manual FOC source edit failed Workbench reload / rolled back / Packet A still not accepted`.
@@ -889,8 +1444,7 @@
   connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
   sensorless FOC claims.
 
-## 2026-05-14 P2 Source Packet Intake 闭环
-
+## 2026-05-14 P2 Source Packet Intake 闂傤厾骞?
 - Added P2 source packet intake checklist:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_intake_checklist_2026-05-14.md`.
 - The checklist defines accepted evidence packets for MCSDK `.stmcx` /
@@ -906,8 +1460,7 @@
   does not authorize 24V, power-board connection, motor connection, Gate PWM,
   Motor Profiler, Hall closed-loop, or sensorless FOC claims.
 
-## 2026-05-14 P2 STDRIVE101 保护路径审查
-
+## 2026-05-14 P2 STDRIVE101 娣囨繃濮㈢捄顖氱窞鐎光剝鐓?
 - Added STDRIVE101 protection-path review:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`.
 - The review fixes the required P2 checklist for `DT/MODE`, `nFAULT`,
@@ -946,61 +1499,30 @@
   connection, Gate PWM, Motor Profiler, Hall closed-loop, or sensorless FOC
   claims.
 
-## 2026-05-14 P2 GUI 配置证据推进
+## 2026-05-14 P2 GUI 闁板秶鐤嗙拠浣瑰祦閹恒劏绻?
+- Codex 娴ｈ法鏁?`F:\STMCubeMX\STM32CubeMX.exe` 閹垫挸绱戝韫箽鐎涙娈?NUCLEO-G474RE
+  `.ioc` 閼藉顢嶉敍灞借嫙閺傛澘顤?GUI 閹规洝骞忕拋鏉跨秿閿?  `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md`.
+- 閺傛澘顤冮幋顏勬禈閿?  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_launch_attempt.png`
+  閸?  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_pinout_active_window.png`.
+- 閹搭亜娴樼拠浣规 CubeMX 閸欘垯浜掗幎濠佺箽鐎涙娈?`.ioc` 閹垫挸绱戦崚?`Pinout & Configuration`
+  妞ょ敻娼伴敍宀€鐛ラ崣锝嗙垼妫版ɑ妯夌粈?`STM32G474RETx - NUCLEO-G474RE`閿涙矖.ioc` 鐠囪娲栨禒宥団€樼拋?  `PB12/TIM1_BKIN`閵嗕梗PB14/TIM1_CH2N`閵嗕梗PA2/PA3` VCP 閸?`PB3` SWO閵?- `rg --files -g "*.stmcx"` 閸?GUI 鐏忔繆鐦崥搴濈矝濞屸剝婀侀幍鎯у煂 `.stmcx`閿涙稒婀版潪顔荤瘍濞屸剝婀?  閹规洝骞?MCSDK MotorControl 闁板秶鐤嗘い鐐光偓鍌氱秼閸撳秵鏌婃晶鐐垫畱閺?CubeMX `.ioc` GUI fallback
+  鐠囦焦宓侀敍灞肩瑝閺?Workbench / MotorControl 闁板秶鐤嗙拠浣瑰祦閵?- 鏉╂瑤绮涢悞鏈电瑝閹哄牊娼?24V閵嗕礁濮涢悳鍥ㄦ緲閵嗕胶鏁搁張鎭掆偓涓焌te PWM閵嗕府otor Profiler閵嗕胶鍎宠ぐ?鐠嬪啳鐦妴?  Hall 闂傤厾骞嗛幋鏍ㄦ￥閹?FOC 缂佹捁顔戦妴?
+## 2026-05-14 P2 Workbench 閸忋儱褰涢幒銏＄ゴ
 
-- Codex 使用 `F:\STMCubeMX\STM32CubeMX.exe` 打开已保存的 NUCLEO-G474RE
-  `.ioc` 草案，并新增 GUI 捕获记录：
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md`.
-- 新增截图：
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_launch_attempt.png`
-  和
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_ioc_pinout_active_window.png`.
-- 截图证明 CubeMX 可以把保存的 `.ioc` 打开到 `Pinout & Configuration`
-  页面，窗口标题显示 `STM32G474RETx - NUCLEO-G474RE`；`.ioc` 读回仍确认
-  `PB12/TIM1_BKIN`、`PB14/TIM1_CH2N`、`PA2/PA3` VCP 和 `PB3` SWO。
-- `rg --files -g "*.stmcx"` 在 GUI 尝试后仍没有找到 `.stmcx`；本轮也没有
-  捕获 MCSDK MotorControl 配置页。当前新增的是 CubeMX `.ioc` GUI fallback
-  证据，不是 Workbench / MotorControl 配置证据。
-- 这仍然不授权 24V、功率板、电机、Gate PWM、Motor Profiler、烧录/调试、
-  Hall 闭环或无感 FOC 结论。
-
-## 2026-05-14 P2 Workbench 入口探测
-
-- Codex 新增 Workbench 入口探测记录：
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md`.
-- 目标检查覆盖 repo、`F:\STMCubeMX`、`C:\Users\gregrg\STM32Cube\Repository\MCSDK_v6.4.2-Full`、
-  VS Code STM32 extension、`.stm32cubemx` 和常见 ST 程序目录。
-- 结论：本机已安装 MCSDK `MotorControl` package 数据，能看到
-  `MotorControl_Configs.xml`、`MotorControl_Modes.xml`、`MCSDK/`、`templates/`、
-  `libMP/` 和 `libHSO/`；但仍没有 repo `.stmcx`、独立 Workbench launcher 或
-  MotorControl 配置页截图。
-- 因此 P2 当前能证明“MCSDK MotorControl package 数据存在”，不能证明
-  “Workbench 项目配置已保存”。
-
-## 2026-05-14 P2 证据包更新
-
-- 已新增当前 P2 证据包：
+- Codex 閺傛澘顤?Workbench 閸忋儱褰涢幒銏＄ゴ鐠佹澘缍嶉敍?  `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md`.
+- 閻╊喗鐖ｅΛ鈧弻銉洬閻?repo閵嗕梗F:\STMCubeMX`閵嗕梗C:\Users\gregrg\STM32Cube\Repository\MCSDK_v6.4.2-Full`閵?  VS Code STM32 extension閵嗕梗.stm32cubemx` 閸滃苯鐖剁憴?ST 缁嬪绨惄顔肩秿閵?- 缂佹捁顔戦敍姘拱閺堝搫鍑＄€瑰顥?MCSDK `MotorControl` package 閺佺増宓侀敍宀冨厴閻鍩?  `MotorControl_Configs.xml`閵嗕梗MotorControl_Modes.xml`閵嗕梗MCSDK/`閵嗕梗templates/`閵?  `libMP/` 閸?`libHSO/`閿涙稐绲炬禒宥嗙梾閺?repo `.stmcx`閵嗕胶瀚粩?Workbench launcher 閹?  MotorControl 闁板秶鐤嗘い鍨焻閸ヤ勘鈧?- 閸ョ姵顒?P2 瑜版挸澧犻懗鍊熺槈閺勫簶鈧发CSDK MotorControl package 閺佺増宓佺€涙ê婀垾婵撶礉娑撳秷鍏樼拠浣规
+  閳ユ凡orkbench 妞ゅ湱娲伴柊宥囩枂瀹歌弓绻氱€涙ǚ鈧縿鈧?
+## 2026-05-14 P2 鐠囦焦宓侀崠鍛纯閺?
+- 瀹稿弶鏌婃晶鐐茬秼閸?P2 鐠囦焦宓侀崠鍜冪窗
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/evidence_packet_2026-05-14.md`.
-- 证据包记录当前仓库真实库存：没有 `.stmcx`，已有 CubeMX 首页截图和
-  NUCLEO-G474RE CubeMX `.ioc` 草案；仍没有 Workbench/CubeMX MotorControl
-  配置页截图、CN8/EDA/netlist 走线证明，也没有板级 STDRIVE101 保护路径证明。
-- 证据包把 `PB12/TIM1_BKIN`、`PB14/TIM1_CH2N`、`PA2/PA3`、`PB3`、
-  `DT/MODE` 和 STDRIVE101 保护项放进阻塞表，避免把草案引脚当成
-  可信接线。
-- 这仍然只是 P2 无功率证据治理，不授权信任生成的 MCSDK 工程，也不授权
-  24V、功率板、电机、Gate PWM、Motor Profiler、Hall 闭环或无感 FOC 结论。
+- 鐠囦焦宓侀崠鍛邦唶瑜版洖缍嬮崜宥勭波鎼存挾婀＄€圭偛绨辩€涙﹫绱板▽鈩冩箒 `.stmcx`閿涘苯鍑￠張?CubeMX 妫ｆ牠銆夐幋顏勬禈閸?  NUCLEO-G474RE CubeMX `.ioc` 閼藉顢嶉敍娑楃矝濞屸剝婀?Workbench/CubeMX MotorControl
+  闁板秶鐤嗘い鍨焻閸ヤ勘鈧竼N8/EDA/netlist 鐠ф壆鍤庣拠浣规閿涘奔绡冨▽鈩冩箒閺夎法楠?STDRIVE101 娣囨繃濮㈢捄顖氱窞鐠囦焦妲戦妴?- 鐠囦焦宓侀崠鍛Ω `PB12/TIM1_BKIN`閵嗕梗PB14/TIM1_CH2N`閵嗕梗PA2/PA3`閵嗕梗PB3`閵?  `DT/MODE` 閸?STDRIVE101 娣囨繃濮㈡い瑙勬杹鏉╂盯妯嗘繅鐐躲€冮敍宀勪缉閸忓秵濡搁懡澶嬵攳瀵洝鍓艰ぐ鎾村灇
+  閸欘垯淇婇幒銉у殠閵?- 鏉╂瑤绮涢悞璺哄涧閺?P2 閺冪姴濮涢悳鍥槈閹诡喗涓嶉悶鍡礉娑撳秵宸块弶鍐т繆娴犺崵鏁撻幋鎰畱 MCSDK 瀹搞儳鈻奸敍灞肩瘍娑撳秵宸块弶?  24V閵嗕礁濮涢悳鍥ㄦ緲閵嗕胶鏁搁張鎭掆偓涓焌te PWM閵嗕府otor Profiler閵嗕笭all 闂傤厾骞嗛幋鏍ㄦ￥閹?FOC 缂佹捁顔戦妴?
+## 2026-05-14 P2 NUCLEO CubeMX 鐎圭偞鎼烽懡澶嬵攳
 
-## 2026-05-14 P2 NUCLEO CubeMX 实操草案
-
-- 用户按 NUCLEO-G474RE Board Selector 路径完成手把手无功率实操，并保存
-  CubeMX `.ioc` 草案：
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`.
-- `.ioc` 读回确认：`PA13/PA14` 为 SWD，`PA2/PA3` 为 NUCLEO VCP，
-  `PB3` 为 SWO，`PB12` 为 `TIM1_BKIN`，`PB14` 为 `TIM1_CH2N`。
-- 这证明 CubeMX 配置层接受当前 NUCLEO 草案和两个关键候选脚；仍不证明
-  `.stmcx`、MCSDK MotorControl 工程、CN8/EDA/netlist 走线、STDRIVE101
-  保护路径、Gate PWM、Motor Profiler、Hall 闭环或无感 FOC。
-
+- 閻劍鍩涢幐?NUCLEO-G474RE Board Selector 鐠侯垰绶炵€瑰本鍨氶幍瀣Ω閹靛妫ら崝鐔哄芳鐎圭偞鎼烽敍灞借嫙娣囨繂鐡?  CubeMX `.ioc` 閼藉顢嶉敍?  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`.
+- `.ioc` 鐠囪娲栫涵顔款吇閿涙瓪PA13/PA14` 娑?SWD閿涘畭PA2/PA3` 娑?NUCLEO VCP閿?  `PB3` 娑?SWO閿涘畭PB12` 娑?`TIM1_BKIN`閿涘畭PB14` 娑?`TIM1_CH2N`閵?- 鏉╂瑨鐦夐弰?CubeMX 闁板秶鐤嗙仦鍌涘复閸欐缍嬮崜?NUCLEO 閼藉顢嶉崪灞艰⒈娑擃亜鍙ч柨顔尖偓娆撯偓澶庡壖閿涙稐绮涙稉宥堢槈閺?  `.stmcx`閵嗕府CSDK MotorControl 瀹搞儳鈻奸妴涓哊8/EDA/netlist 鐠ф壆鍤庨妴涓糡DRIVE101
+  娣囨繃濮㈢捄顖氱窞閵嗕笩ate PWM閵嗕府otor Profiler閵嗕笭all 闂傤厾骞嗛幋鏍ㄦ￥閹?FOC閵?
 ## 2026-05-14 Codex Dual-Teacher Gate Update
 
 - Codex continuation is now hardened in
@@ -1008,7 +1530,7 @@
 - `AGENTS.md`, `workflow/teaching_contract.md`, `workflow/prompt_recipes.md`,
   `workflow/session_close_checklist.md`, and the project Skill source now point
   to the same four-line gate:
-  `项目目标` / `学习目标` / `修改范围` / `禁止范围`.
+  `妞ゅ湱娲伴惄顔界垼` / `鐎涳缚绡勯惄顔界垼` / `娣囶喗鏁奸懠鍐ㄦ纯` / `缁備焦顒涢懠鍐ㄦ纯`.
 - New regression tests in `tests/test_workflow_contracts.py` check that the gate
   stays linked from the main entry points and keeps the no-power boundary.
 - This is a workflow-control update only. It does not authorize 24V, power
@@ -1068,109 +1590,105 @@
 
 # CURRENT_STATUS
 
-最后更新：2026-05-14
+閺堚偓閸氬孩娲块弬甯窗2026-05-14
 
-这个文件是项目总控页。每次继续 FOC 项目时，先读这里，再读 `AGENTS.md`、`materials/START_HERE.md` 和 `docs/00_project_truth/project_context.md`。
+鏉╂瑤閲滈弬鍥︽閺勵垶銆嶉惄顔解偓缁樺付妞ょ偣鈧倹鐦″▎锛勬埛缂?FOC 妞ゅ湱娲伴弮璁圭礉閸忓牐顕版潻娆撳櫡閿涘苯鍟€鐠?`AGENTS.md`閵嗕梗materials/START_HERE.md` 閸?`docs/00_project_truth/project_context.md`閵?
 
-## 当前阶段
+## 瑜版挸澧犻梼鑸殿唽
 
-项目处于 NUCLEO 基础工程阶段，并已完成当前 P1 概念层验收。2026-05-09 已生成并编译通过 NUCLEO-G474RE baseline CubeMX/CMake 工程；2026-05-11 用户提供 VOFA+ 截图，证明当前固件已下载运行并通过 COM5 / ST-LINK VCP 输出状态机日志，`mode` 与 `mode_name` 能同步显示 `IDLE`、`ARMED`、`RUN_SIM`。2026-05-12 Codex 通过 COM5 验证了 `PING`、`MODE?`、`ARM`、`STOP` 和学习用 `SET_RPM <rpm>` 命令：解析错误、范围错误、状态拒绝、ARM 后目标值更新、STOP 清零均符合规则表。同日，P1 catch-up 交付包已补齐：UART 命令副作用表、DMA + IDLE 接收流程和阶段复盘均已入仓。2026-05-13 学习者独立通过 STOP/DMA P0 迁移检查、命令副作用阅读和 DMA + IDLE 回调五步流程，`normalize_learning_loop.py` 与单元测试通过；同日 P2 MCSDK 无功率预检卡已开始填写，当前已有本机工具版本/status 表、baseline `.ioc` 读回、pin/config 草案、常用 ST PDF 本地镜像、ST 官网交叉核验和 pin-function 冲突处理：`PC5` 被排除为 nFAULT 草案脚，`PB12/TIM1_BKIN` 成为当前 nFAULT 候选，`PA2/PA3` 不再作为 FOC UART 默认选择，`PB3` Hall B 需要释放/隔离 SWO。2026-05-14 Codex 创建了独立的 P2 无功率配置草案目录 `apps/stm32_g474_foc/mcsdk_no_power_precheck/`，记录了 MCSDK draft、冲突决策和工具探测；本机 CubeMX 可执行路径确认为 `F:\STMCubeMX\STM32CubeMX.exe` 并已启动到 `javaw.exe` 进程。随后用户完成 NUCLEO-G474RE Board Selector 手把手实操并保存 CubeMX `.ioc` 草案 `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`，读回确认 `PA13/PA14` 为 SWD、`PA2/PA3` 为 VCP、`PB3` 为 SWO、`PB12` 为 `TIM1_BKIN`、`PB14` 为 `TIM1_CH2N`。仓库内仍没有真实 `.stmcx`，也没有独立 Motor Control Workbench 可执行路径。这些仍不代表 MCSDK MotorControl 工程已生成或任何硬件/电机行为已验证。用户确认版功率板关键器件、电源轨、保护外围和阈值线索已记录；ESP32 工程、PCB/Gerber、正式 BOM 文件和功率/电机实测日志还没有开始沉淀。
+妞ゅ湱娲版径鍕艾 NUCLEO 閸╄櫣顢呭銉р柤闂冭埖顔岄敍灞借嫙瀹告彃鐣幋鎰秼閸?P1 濮掑倸搴风仦鍌炵崣閺€韬测偓?026-05-09 瀹歌尙鏁撻幋鎰嫙缂傛牞鐦ч柅姘崇箖 NUCLEO-G474RE baseline CubeMX/CMake 瀹搞儳鈻奸敍?026-05-11 閻劍鍩涢幓鎰返 VOFA+ 閹搭亜娴橀敍宀冪槈閺勫骸缍嬮崜宥呮祼娴犺泛鍑℃稉瀣祰鏉╂劘顢戦獮鍫曗偓姘崇箖 COM5 / ST-LINK VCP 鏉堟挸鍤悩鑸碘偓浣规簚閺冦儱绻旈敍瀹峬ode` 娑?`mode_name` 閼宠棄鎮撳銉︽▔缁€?`IDLE`閵嗕梗ARMED`閵嗕梗RUN_SIM`閵?026-05-12 Codex 闁俺绻?COM5 妤犲矁鐦夋禍?`PING`閵嗕梗MODE?`閵嗕梗ARM`閵嗕梗STOP` 閸滃苯顒熸稊鐘垫暏 `SET_RPM <rpm>` 閸涙垝鎶ら敍姘承掗弸鎰版晩鐠囶垬鈧浇瀵栭崶鎾晩鐠囶垬鈧胶濮搁幀浣瑰珕缂佹縿鈧竸RM 閸氬海娲伴弽鍥р偓鍏兼纯閺傝埇鈧讣TOP 濞撳懘娴傞崸鍥╊儊閸氬牐顫夐崚娆掋€冮妴鍌氭倱閺冦儻绱漃1 catch-up 娴溿倓绮崠鍛嚒鐞涖儵缍堥敍姝嶢RT 閸涙垝鎶ら崜顖欑稊閻劏銆冮妴涓廙A + IDLE 閹恒儲鏁瑰ù浣衡柤閸滃矂妯佸▓闈涱槻閻╂ê娼庡鎻掑弳娴犳挶鈧?026-05-13 鐎涳缚绡勯懓鍛缁斿鈧俺绻?STOP/DMA P0 鏉╀胶些濡偓閺屻儯鈧礁鎳℃禒銈呭娴ｆ粎鏁ら梼鍛邦嚢閸?DMA + IDLE 閸ョ偠鐨熸禍鏃€顒炲ù浣衡柤閿涘畭normalize_learning_loop.py` 娑撳骸宕熼崗鍐╃ゴ鐠囨洟鈧俺绻冮敍娑樻倱閺?P2 MCSDK 閺冪姴濮涢悳鍥暕濡偓閸椻€冲嚒瀵偓婵锝為崘娆欑礉瑜版挸澧犲鍙夋箒閺堫剚婧€瀹搞儱鍙块悧鍫熸拱/status 鐞涖劊鈧攻aseline `.ioc` 鐠囪娲栭妴涔竔n/config 閼藉顢嶉妴浣哥埗閻?ST PDF 閺堫剙婀撮梹婊冨剼閵嗕讣T 鐎规缍夋禍銈呭级閺嶆悂鐛欓崪?pin-function 閸愯尙鐛婃径鍕倞閿涙瓪PC5` 鐞氼偅甯撻梽銈勮礋 nFAULT 閼藉顢嶉懘姘剧礉`PB12/TIM1_BKIN` 閹存劒璐熻ぐ鎾冲 nFAULT 閸婃瑩鈧绱漙PA2/PA3` 娑撳秴鍟€娴ｆ粈璐?FOC UART 姒涙顓婚柅澶嬪閿涘畭PB3` Hall B 闂団偓鐟曚線鍣撮弨?闂呮梻顬?SWO閵?026-05-14 Codex 閸掓稑缂撴禍鍡欏缁斿娈?P2 閺冪姴濮涢悳鍥帳缂冾喛宕忓鍫㈡窗瑜?`apps/stm32_g474_foc/mcsdk_no_power_precheck/`閿涘矁顔囪ぐ鏇氱啊 MCSDK draft閵嗕礁鍟跨粣浣稿枀缁涙牕鎷板銉ュ徔閹恒垺绁撮敍娑欐拱閺?CubeMX 閸欘垱澧界悰宀冪熅瀵板嫮鈥樼拋銈勮礋 `F:\STMCubeMX\STM32CubeMX.exe` 楠炶泛鍑￠崥顖氬З閸?`javaw.exe` 鏉╂稓鈻奸妴鍌炴閸氬海鏁ら幋宄扮暚閹?NUCLEO-G474RE Board Selector 閹靛濡搁幍瀣杽閹垮秴鑻熸穱婵嗙摠 CubeMX `.ioc` 閼藉顢?`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`閿涘矁顕伴崶鐐碘€樼拋?`PA13/PA14` 娑?SWD閵嗕梗PA2/PA3` 娑?VCP閵嗕梗PB3` 娑?SWO閵嗕梗PB12` 娑?`TIM1_BKIN`閵嗕梗PB14` 娑?`TIM1_CH2N`閵嗗倷绮ㄦ惔鎾冲敶娴犲秵鐥呴張澶屾埂鐎?`.stmcx`閿涘奔绡冨▽鈩冩箒閻欘剛鐝?Motor Control Workbench 閸欘垱澧界悰宀冪熅瀵板嫨鈧倽绻栨禍娑楃矝娑撳秳鍞悰?MCSDK MotorControl 瀹搞儳鈻煎鑼晸閹存劖鍨ㄦ禒璁崇秿绾兛娆?閻㈠灚婧€鐞涘奔璐熷鏌ョ崣鐠囦降鈧倻鏁ら幋椋庘€樼拋銈囧閸旂喓宸奸弶鍨彠闁款喖娅掓禒韬测偓浣烘暩濠ф劘寤洪妴浣风箽閹躲倕顦婚崶鏉戞嫲闂冨牆鈧偐鍤庣槐銏犲嚒鐠佹澘缍嶉敍姹P32 瀹搞儳鈻奸妴涓矯B/Gerber閵嗕焦顒滃?BOM 閺傚洣娆㈤崪灞藉閻?閻㈠灚婧€鐎圭偞绁撮弮銉ョ箶鏉╂ɑ鐥呴張澶婄磻婵鐭囧ǎ鈧妴?
+瑜版挸澧犳禒鎾崇氨閻ㄥ嫪瀵岀憰浣风稊閻劍妲搁敍姘祼鐎规岸銆嶉惄顔荤皑鐎圭偞绨妴浣割劅娑旂姾鐭剧痪瑁も偓浣哥暔閸忋劎瀛╃痪瑁も偓浣界カ閺傛瑧鍌ㄥ鏇樷偓浣瑰复閸欙絽顨栫痪锕€鎷伴崥搴ｇ敾娴溿倓绮悧鈺冩窗瑜版洏鈧?
 
-当前仓库的主要作用是：固定项目事实源、学习路线、安全红线、资料索引、接口契约和后续交付物目录。
+## 瑜版挸澧犳い鍦窗鐎规矮缍?
 
-## 当前项目定位
+- 妞ゅ湱娲伴崥宥囆為敍姘唨娴?STM32G474 閻ㄥ嫯绔熺紓妯肩秹閸忓啿鐎烽弮鐘冲妳 FOC 妞瑰崬濮╃化鑽ょ埠閵?
+- 娑撹崵鍤庨弸鑸电€敍姝婽M32G474 + STDRIVE101 + 娑撳娴?BLDC + Hall 娣囨繂绨?+ SMO 閺冪姵鍔呴崘鎻掑煛 + ESP32-C3 鏉堝湱绱純鎴濆彠閵?
+- 瑜版挸澧犲銉ュ徔闁炬儳褰涘鍕剁窗VS Code + STM32CubeIDE 閹绘帊娆?+ STM32CubeMX + MCSDK閿涙稐绗夋担璺ㄦ暏閻欘剛鐝?STM32CubeIDE 娴ｆ粈璐熸稉?IDE閵?
+- 姒涙顓婚張宥呭鐎电钖勯敍娆?閸氬苯顒熼敍宀€鐣诲▔?娑撶粯甯堕弬鐟版倻閵?
+- 瀹搞儳鈻奸崢鐔峰灟閿涙艾鍘涚€瑰鍙忔潪顒冩崳閺夈儻绱濋崘宥呬粵閺冪姵鍔呴妴浣风喘閸栨牕鎷扮粵鏃囦含娴滎喚鍋ｉ妴?
+- ChatGPT + Codex 閸欏苯绗€閸掕泛浼愭担婊勭ウ瀹告彃娴愰崠鏍电窗ChatGPT 鐠愮喕鐭楅弫娆忣劅閵嗕椒鎹㈤崝鈥冲瘶閸滃苯顦查惄姗堢幢Codex 鐠愮喕鐭楀銉р柤閹笛嗩攽閵嗕浇鐦夐幑顔款唶瑜版洖鎷版禒鎾崇氨閺囧瓨鏌婇妴?
 
-- 项目名称：基于 STM32G474 的边缘网关型无感 FOC 驱动系统。
-- 主线架构：STM32G474 + STDRIVE101 + 三相 BLDC + Hall 保底 + SMO 无感冲刺 + ESP32-C3 边缘网关。
-- 当前工具链口径：VS Code + STM32CubeIDE 插件 + STM32CubeMX + MCSDK；不使用独立 STM32CubeIDE 作为主 IDE。
-- 默认服务对象：B 同学，算法/主控方向。
-- 工程原则：先安全转起来，再做无感、优化和答辩亮点。
-- ChatGPT + Codex 双师制工作流已固化：ChatGPT 负责教学、任务包和复盘；Codex 负责工程执行、证据记录和仓库更新。
+## 瀹告彃鐣幋鎰板帳缂?
 
-## 已完成配置
+- 閸斺晜澧滈煬顐″敜娑撳酣銆嶉惄顔款潐閸掓瑱绱癭AGENTS.md`閵嗕梗materials/assistant_profile.md`閵?
+- Codex 娑撴挸鐫?Skill閿涙瓪stm32g474-foc-assistant`閿涘苯鍑＄€瑰顥婇崚鐗堟拱閺?Codex skills 閻╊喖缍嶉敍灞借嫙闁俺绻?`quick_validate.py` 鐎规ɑ鏌熼弽锟犵崣閵?
+- 鏉堝懎濮?Skills閿涙瓪jupyter-notebook`閵嗕梗screenshot`閿涘苯鍑＄€瑰顥婇崚鐗堟拱閺?Codex skills 閻╊喖缍嶉敍灞借嫙闁俺绻?`quick_validate.py` 鐎规ɑ鏌熼弽锟犵崣閵?
+- 閺堚偓妤傛ü绱崗鍫㈤獓娴滃鐤勫┃鎰剁窗`docs/00_project_truth/project_context.md`閵?
+- 閼辨梻缍夐弽鍛婄叀娑撳孩娼靛┃鎰喘閸忓牏楠囬敍姝歞ocs/00_project_truth/internet_verification_rules.md`閵?
+- 閺堫剙婀寸挧鍕灐缁便垹绱╅敍姝歮aterials/source_manifest.json`閵嗕梗docs/file_map.md`閵?
+- ST 鐎规ɑ鏌熺挧鍕灐缁便垹绱╅敍姝歳eferences/st_manuals_index.md`閿涙稑鐖堕悽?ST PDF 瀹告煡鏆呴崓蹇撳煂 `materials/raw/st_manuals/`閿涘苯瀵橀幏?STDRIVE101 datasheet閿涙波ash 娑撳骸鐣奸弬?URL 鐠佹澘缍嶉崷?`materials/raw/st_manuals/manifest.json`閵?
+- 閺堫剙婀村Λ鈧槐銏㈠偍瀵洩绱癭vector_store/`閵?
+- Windows 瀹搞儱鍙块柧鎾呯窗CubeMX 閻㈢喐鍨氬銉р柤瀹告彃鐣幋鎰剁幢STM32CubeIDE for VS Code 閹碘晛鐫嶉張顑跨秼瀹告彃鐣ㄧ憗鍜冪幢閹碘晛鐫嶉幍妯碱吀閻?CMake/Ninja/GNU Arm GCC bundle 瀹告彃褰查悽銊ょ艾閺嬪嫬缂撻妴鍌氱秼閸撳秴鍑℃宀冪槈缁崵绮?PATH 娑?`cmake` 閸欘垳鏁ら敍瀹峮inja`閵嗕梗arm-none-eabi-gcc` 閺堫亜濮為崗?PATH閿涙稖绻栭弰?bundle 閹垫顓稿銉ュ徔闁惧彞绗呴惃鍕劀鐢摜濮搁幀浣碘偓鍌滃Ц閹浇顔囪ぐ鏇☆潌 `workflow/windows_toolchain_status.md`閵?
+- 閻劍鍩涚涵顔款吇閻楀牏鈥栨禒璺烘珤娴犳湹绗岄梼鍫濃偓鑲╁殠缁鳖澁绱癭hardware/bom/2026-05-09_user_provided_power_stage_parts.md`閿涘牏鏁ら幋鐤嚛閺勫簼绗夐懗鎴掔箽鐠囦礁鍙忛柈銊︻劀绾噯绱濈亸姘弓閸?Datasheet/鎼存挸鐡?PCB/鐎圭偞绁存径宥嗙壋閿涘鈧?
+- 閸樼喓鎮婇崶鐐焻閸ユ拝绱癭hardware/schematic/2026-05-09_power_board_schematic_screenshot.jpg`閿涘本鍩呴崶鎯у帗閺佺増宓侀敍姝歨ardware/schematic/2026-05-09_power_board_schematic_screenshot.md`閵?
+- 闂冭埖顔岄幒銊ㄧ箻闂傛悂妫敍姝歸orkflow/phase_gate_checklist.md`閵?
+- 妫ｆ牗顐肩挧鍕灐鐎电厧鍙嗙憴鍕灟閿涙瓪workflow/intake_checklist.md`閵?
+- MacBook Codex 閸欏本婧€闁板秶鐤嗛崗銉ュ經閿涙瓪workflow/macbook_codex_replica.md`閵嗕梗tools/create_mac_codex_setup_bundle.ps1`閵嗕梗tools/bootstrap_mac_codex.sh`閵?
+- GitHub 閸欏本婧€閸氬本顒炴潻婊咁伂閿涙瓪origin` -> `https://github.com/pinganyan0-eng/foc_learning_repo`閿涘牏顫嗛張澶夌波鎼存搫绱氶妴?
+- STM32 baseline 瀹搞儳鈻奸敍姝歛pps/stm32_g474_foc/nucleo_g474re_baseline/`閿涘瓔ubeMX/CMake 閻㈢喐鍨氶幋鎰閿涘瓕ebug 閺嬪嫬缂撻柅姘崇箖楠炲墎鏁撻幋?`build/Debug/nucleo_g474re_baseline.elf`閵嗗倸缍嬮崜宥呮祼娴犺泛鍑￠崷?NUCLEO-G474RE 娑撳﹪鈧俺绻?COM5 / ST-LINK VCP 鏉堟挸鍤悩鑸碘偓浣规簚閺冦儱绻旈敍娑滅槈閹诡喛顫?`experiments/2026-05-09_nucleo_baseline/logs/2026-05-11_vofa_mode_name_log.md`閵?026-05-12 瀹歌尪鎷烽崝鐘辫閸欙絽鎳℃禒銈夌崣鐠囦礁鎷扮€涳缚绡勯悽?`SET_RPM` 妤犲矁鐦夐敍娑滅槈閹诡喛顫?`experiments/2026-05-09_nucleo_baseline/logs/2026-05-12_com5_set_rpm_validation.md`閵?
+- ESP32 瀹搞儳鈻奸崡鐘辩秴閻╊喖缍嶉敍姝歛pps/esp32_c3_gateway/`閵?
+- STM32 娑?ESP32 閸楀繗顔呮總鎴犲閿涙瓪interfaces/`閵?
+- 鐎圭偤鐛欑拋鏉跨秿娑撳海鐡熸潏鈺€姘︽禒妯煎⒖閻╊喖缍嶉敍姝歟xperiments/`閵嗕梗deliverables/`閵?
+- NUCLEO 閸╄櫣顢呭銉р柤鐎圭偤鐛欑拋鏉跨秿閿涙瓪experiments/2026-05-09_nucleo_baseline/`閵?
+- 鐎涳缚绡勯梻顓犲箚缂佸瓨濮㈤懘姘拱閿涙瓪tools/normalize_learning_loop.py`閵嗕梗tools/start_learning_session.*`閵嗕梗tools/end_learning_session.*`閵?
+- 妞ゅ湱娲伴懛顏勫З閸栨牕顨栫痪锔肩窗`workflow/automation_playbook.md`閿涙稑缍嬮崜?Codex 閼奉亜濮╅崠鏍у瘶閹奉剚鐦￠弮銉ヮ劅娑旂姾顫嬫０鎴﹀仏娴犺翰鈧焦鐦￠弮銉┿€嶉惄顔跨箻閸栨牕璐板Λ鈧柇顔绘閸滃本鐦￠崨銊┿€嶉惄顔碱槻閻╂﹢鍋栨禒璁圭礉閸у洨绮︾€规岸銆嶉惄顔界壌閻╊喖缍嶆潻鎰攽閵?
+- 閸欏苯绗€閸掓湹鎹㈤崝鈥冲弳閸欙綇绱癭workflow/ACTIVE_TASK.md`閵嗕梗workflow/task_packet_template.md`閵嗕梗workflow/session_close_checklist.md`閵?
+- 閸欏苯绗€閸掕泛顓哥拋鈥茬瑢閹垹顦查弬鍥︽閿涙瓪workflow/task_state_machine.md`閵嗕梗workflow/definition_of_done.md`閵嗕梗workflow/evidence_register.md`閵嗕梗workflow/risk_gate_matrix.md`閵嗕梗workflow/prompt_recipes.md`閵?
+- 閸欏苯绗€閸掕埖鏆€鐎涳箑顨栫痪锔肩窗`workflow/teaching_contract.md`閿涘矁顫夌€?ChatGPT/Codex 閺佹瑥顒熼弮鍓佹畱閺傛澘鎮曠拠宥埿掗柌濞库偓浣峰敩閻浇顔夌憴锝夈€庢惔蹇嬧偓浣筋嚦閸氬骸顒熸稊鐘侯唶瑜版洖鎷?GitHub PR 閸愭瑥鍙嗙憴鍕灟閵?
+- B 缁犳纭堕崥灞筋劅閺佹瑥顒熸稉搴濇唉娴犳ɑ鈧槒顓搁崚鎺炵窗`workflow/algo_b_teaching_delivery_plan.md`閿涘本濡告稉銈勫敜 8 閸?56 婢?HTML 鐎涳缚绡勭拋鈥冲灊鏉烆剚鍨氳ぐ鎾冲閻喎鐤勯梼鑸殿唽閸欘垱澧界悰宀€娈戦弫娆忣劅閼哄倸顨旈妴浣剿夋潻娑樺閺堝搫鍩楅妴浣圭槨鐠?濮ｅ繐鎳嗘稉濠佹唉閻椻晛鎷扮€瑰鍙忛梻鎼佹，鐟欏嫬鍨妴?
+- 瑜版挸澧犵€涳缚绡勯幍褑顢戠仦鍌︾窗`learning/NEXT_LESSON.md`閵嗕梗learning/MASTERY_MAP.md`閵嗕梗workflow/current_learning_sprint.md`閿涘本濡?P1 娑撳绔寸拠淇扁偓浣瑰笁閹宦ょ槈閹诡喓鈧礁顦叉稊鐘辩喘閸忓牏楠囬崪?sprint 娴溿倓绮悧鈺€绮犻梹鑳吀閸掓帡鍣烽幎鑺ュ灇閻厼鍙嗛崣锝冣偓?
+- P1 catch-up 娴溿倓绮崠鍜冪窗`deliverables/2026-05-12_p1_catchup_pack.md`閿涘苯鑻熷鍙夊Ω UART 閸涙垝鎶ら崜顖欑稊閻劏銆冮崘娆忓弳 `docs/05_test_and_logs/week1_nucleo_baseline.md`閵嗕笍MA + IDLE 閹恒儲鏁瑰ù浣衡柤閸愭瑥鍙?`docs/04_iot_gateway/uart_dma_idle.md`閵?
+- P2 MCSDK 閺冪姴濮涢悳鍥暕濡偓閸椔ゅ磸濡楀牞绱癭deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`閿涘苯缍嬮崜宥堫唶瑜版洘婀伴張鍝勪紣閸忛澧楅張?status閵嗕攻aseline `.ioc` 鐠囪娲栭妴涓瓹SDK pin/config 閼藉顢嶉妴涓糡 鐎规ɑ鏌熼弶銉︾爱娴溿倕寮堕弽鎼佺崣閵嗕垢in-function 閸愯尙鐛婃径鍕倞閵嗕够hell GUI 鐠囦焦宓侀幒銏＄ゴ閸滃本婀弶?Motor Profiler 閸嬫粍顒?閸ョ偤鈧偓鐠佲€冲灊閿?026-05-14 瀹歌尪鎷烽崝鐘靛缁斿妫ら崝鐔哄芳閼藉顢嶉惄顔肩秿 `apps/stm32_g474_foc/mcsdk_no_power_precheck/`閵嗕竼ubeMX 閸氼垰濮╃捄顖氱窞閵嗕笩UI 闂冭顢ｇ拋鏉跨秿閵嗕腐UCLEO-G474RE CubeMX `.ioc` 閼藉顢?`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`閿涘奔浜掗崣?STDRIVE101 娣囨繃濮㈢捄顖氱窞鐎光剝鐓?`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`閿?026-05-18 瀹稿弶鏌婃晶?Packet A 閹规洝骞忔禒璇插閸?`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`閿涘苯褰ч崶鍝勭暰閺堫亝娼?`.stwb6`閵嗕焦鍩呴崶淇扁偓浣哥摟濞堢敻鐛欓弨璺烘嫲閸嬫粍顒涢弶鈥叉閵嗗倽绻栨禍娑樺涧閺勵垱妫ら崝鐔哄芳闁板秶鐤嗛妴浣割吀閺屻儱鎷版禒璇插濞岃崵鎮婄拠浣瑰祦閿涘奔绗夐弰?`.stmcx`閵嗕府CSDK MotorControl 瀹搞儳鈻奸妴涓畂tor Profiler閵嗕笭all 閹存牕濮涢悳鍥╅獓妤犲矁鐦夐妴?- Obsidian 缁楁棁顔囧銉ょ稊閸栫尨绱版禒鎾崇氨閺嶅湱娲拌ぐ鏇炲嚒闁板秶鐤?`.obsidian/`閿涘奔閲滄禍铏圭應鐠佹澘鎷伴惇瀣緲閺€鎯ф躬 `notes/`閿涘苯鍙嗛崣锝勮礋 `notes/00_home/foc_dashboard.md`閵?
 
-- 助手身份与项目规则：`AGENTS.md`、`materials/assistant_profile.md`。
-- Codex 专属 Skill：`stm32g474-foc-assistant`，已安装到本机 Codex skills 目录，并通过 `quick_validate.py` 官方校验。
-- 辅助 Skills：`jupyter-notebook`、`screenshot`，已安装到本机 Codex skills 目录，并通过 `quick_validate.py` 官方校验。
-- 最高优先级事实源：`docs/00_project_truth/project_context.md`。
-- 联网核查与来源优先级：`docs/00_project_truth/internet_verification_rules.md`。
-- 本地资料索引：`materials/source_manifest.json`、`docs/file_map.md`。
-- ST 官方资料索引：`references/st_manuals_index.md`；常用 ST PDF 已镜像到 `materials/raw/st_manuals/`，包括 STDRIVE101 datasheet；hash 与官方 URL 记录在 `materials/raw/st_manuals/manifest.json`。
-- 本地检索索引：`vector_store/`。
-- Windows 工具链：CubeMX 生成工程已完成；STM32CubeIDE for VS Code 扩展本体已安装；扩展托管的 CMake/Ninja/GNU Arm GCC bundle 已可用于构建。当前已验证系统 PATH 中 `cmake` 可用，`ninja`、`arm-none-eabi-gcc` 未加入 PATH；这是 bundle 托管工具链下的正常状态。状态记录见 `workflow/windows_toolchain_status.md`。
-- 用户确认版硬件器件与阈值线索：`hardware/bom/2026-05-09_user_provided_power_stage_parts.md`（用户说明不能保证全部正确，尚未做 Datasheet/库存/PCB/实测复核）。
-- 原理图截图：`hardware/schematic/2026-05-09_power_board_schematic_screenshot.jpg`，截图元数据：`hardware/schematic/2026-05-09_power_board_schematic_screenshot.md`。
-- 阶段推进闸门：`workflow/phase_gate_checklist.md`。
-- 首次资料导入规则：`workflow/intake_checklist.md`。
-- MacBook Codex 双机配置入口：`workflow/macbook_codex_replica.md`、`tools/create_mac_codex_setup_bundle.ps1`、`tools/bootstrap_mac_codex.sh`。
-- GitHub 双机同步远端：`origin` -> `https://github.com/pinganyan0-eng/foc_learning_repo`（私有仓库）。
-- STM32 baseline 工程：`apps/stm32_g474_foc/nucleo_g474re_baseline/`，CubeMX/CMake 生成成功，Debug 构建通过并生成 `build/Debug/nucleo_g474re_baseline.elf`。当前固件已在 NUCLEO-G474RE 上通过 COM5 / ST-LINK VCP 输出状态机日志；证据见 `experiments/2026-05-09_nucleo_baseline/logs/2026-05-11_vofa_mode_name_log.md`。2026-05-12 已追加串口命令验证和学习用 `SET_RPM` 验证；证据见 `experiments/2026-05-09_nucleo_baseline/logs/2026-05-12_com5_set_rpm_validation.md`。
-- ESP32 工程占位目录：`apps/esp32_c3_gateway/`。
-- STM32 与 ESP32 协议契约：`interfaces/`。
-- 实验记录与答辩交付物目录：`experiments/`、`deliverables/`。
-- NUCLEO 基础工程实验记录：`experiments/2026-05-09_nucleo_baseline/`。
-- 学习闭环维护脚本：`tools/normalize_learning_loop.py`、`tools/start_learning_session.*`、`tools/end_learning_session.*`。
-- 项目自动化契约：`workflow/automation_playbook.md`；当前 Codex 自动化包括每日学习视频邮件、每日项目进化巡检邮件和每周项目复盘邮件，均绑定项目根目录运行。
-- 双师制任务入口：`workflow/ACTIVE_TASK.md`、`workflow/task_packet_template.md`、`workflow/session_close_checklist.md`。
-- 双师制审计与恢复文件：`workflow/task_state_machine.md`、`workflow/definition_of_done.md`、`workflow/evidence_register.md`、`workflow/risk_gate_matrix.md`、`workflow/prompt_recipes.md`。
-- 双师制教学契约：`workflow/teaching_contract.md`，规定 ChatGPT/Codex 教学时的新名词解释、代码讲解顺序、课后学习记录和 GitHub PR 写入规则。
-- B 算法同学教学与交付总计划：`workflow/algo_b_teaching_delivery_plan.md`，把两份 8 周/56 天 HTML 学习计划转成当前真实阶段可执行的教学节奏、补进度机制、每课/每周上交物和安全闸门规则。
-- 当前学习执行层：`learning/NEXT_LESSON.md`、`learning/MASTERY_MAP.md`、`workflow/current_learning_sprint.md`，把 P1 下一课、掌握证据、复习优先级和 sprint 交付物从长计划里抽成短入口。
-- P1 catch-up 交付包：`deliverables/2026-05-12_p1_catchup_pack.md`，并已把 UART 命令副作用表写入 `docs/05_test_and_logs/week1_nucleo_baseline.md`、DMA + IDLE 接收流程写入 `docs/04_iot_gateway/uart_dma_idle.md`。
-- P2 MCSDK 无功率预检卡草案：`deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`，当前记录本机工具版本/status、baseline `.ioc` 读回、MCSDK pin/config 草案、ST 官方来源交叉核验、pin-function 冲突处理、shell GUI 证据探测和未来 Motor Profiler 停止/回退计划；2026-05-14 已追加独立无功率草案目录 `apps/stm32_g474_foc/mcsdk_no_power_precheck/`、CubeMX 启动路径、GUI 阻塞记录、NUCLEO-G474RE CubeMX `.ioc` 草案 `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc`，以及 STDRIVE101 保护路径审查 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；2026-05-18 已新增 Packet A 捕获任务包 `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`，只固定未来 `.stwb6`、截图、字段验收和停止条件。这些只是无功率配置、审查和任务治理证据，不是 `.stmcx`、MCSDK MotorControl 工程、Motor Profiler、Hall 或功率级验证。
-- Obsidian 笔记工作区：仓库根目录已配置 `.obsidian/`，个人笔记和看板放在 `notes/`，入口为 `notes/00_home/foc_dashboard.md`。
+## 瑜版挸澧犻張顏勭磻婵?
 
-## 当前未开始
+- NUCLEO-G474RE baseline CubeMX/CMake 瀹搞儳鈻煎鍙夋杹閸忋儻绱盤2 瀹稿弶鏌婃晶?NUCLEO-G474RE CubeMX `.ioc` 閼藉顢嶉獮鏈电箽鐎?`PB12/TIM1_BKIN`閵嗕梗PB14/TIM1_CH2N`閵嗕梗PA2/PA3` VCP 閸?`PB3` SWO閵嗕净CSDK 閻㈠灚婧€閹貉冨煑瀹搞儳鈻肩亸姘弓閺€鎯у弳閿涙稖绻栨禍娑樷偓娆撯偓澶婄毣閺堫亞绮℃潻?MCSDK/Workbench `.stmcx` 閸?CN8/EDA/netlist 閸忓崬鎮撶涵顔款吇閿涘苯鐨婚張顏嗘晸閹存劗婀＄€?`.stmcx` 閹?MotorControl 闁板秶鐤嗛幋顏勬禈鐠囦焦宓侀妴?- 閻喎鐤?ESP32-C3 缂冩垵鍙у銉р柤鐏忔碍婀弨鎯у弳閵?
+- 閸樼喓鎮婇崶鐐焻閸ユ儳鍑￠弨鎯у弳閿涙宝DA 濠ф劖鏋冩禒韬测偓浣割嚤閸?PDF閵嗕赋CB閵嗕笩erber/閸ф劖鐖ｉ弬鍥︽閵嗕礁娅掓禒?Datasheet 閸栧懎鎷板锝呯础 BOM 鐞涖劌鐨婚張顏呮杹閸忋儯鈧?
+- 瀹稿弶婀侀惃鍕暏閹撮鈥樼拋銈囧绾兛娆㈠〒鍛礋娴犲秵妲稿鍛槻閺嶅摜鍤庣槐顫礉娑撳秳鍞悰銊р€栨禒鎯邦啎鐠佲€冲嚒鐎光剝鐓￠柅姘崇箖閵?
+- NUCLEO baseline 娑撴彃褰涢弮銉ョ箶閸滃苯顒熸稊鐘垫暏 `SET_RPM` 閸涙垝鎶ゆ宀冪槈瀹歌弓楠囬悽鐕傜幢缁€鐑樺皾閸ｃ劍灏濊ぐ顫偓涓畂tor Profiler 缂佹挻鐏夐妴涓燼ll 闂傤厾骞嗙拋鏉跨秿鐏忔碍婀禍褏鏁撻妴?
 
-- NUCLEO-G474RE baseline CubeMX/CMake 工程已放入；P2 已新增 NUCLEO-G474RE CubeMX `.ioc` 草案并保存 `PB12/TIM1_BKIN`、`PB14/TIM1_CH2N`、`PA2/PA3` VCP 和 `PB3` SWO。MCSDK 电机控制工程尚未放入；这些候选尚未经过 MCSDK/Workbench `.stmcx` 和 CN8/EDA/netlist 共同确认，尚未生成真实 `.stmcx` 或 MotorControl 配置截图证据。
-- 真实 ESP32-C3 网关工程尚未放入。
-- 原理图截图已放入；EDA 源文件、导出 PDF、PCB、Gerber/坐标文件、器件 Datasheet 包和正式 BOM 表尚未放入。
-- 已有的用户确认版硬件清单仍是待复核线索，不代表硬件设计已审查通过。
-- NUCLEO baseline 串口日志和学习用 `SET_RPM` 命令验证已产生；示波器波形、Motor Profiler 结果、Hall 闭环记录尚未产生。
+鏉╂瑤绨烘稉宥嗘Ц闁板秶鐤嗙紓鍝勩亼閿涘矁鈧本妲告い鍦窗鐏忔碍婀潻娑樺弳鐎电懓绨查梼鑸殿唽閵?
 
-这些不是配置缺失，而是项目尚未进入对应阶段。
+## 娑撳绔村銉︽付鐏忓繐濮╂担?
 
-## 下一步最小动作
+1. 婵″倹鐏夌憰浣哥磻婵顒熸稊?鐎圭偞鎼烽敍姘崇箻閸?NUCLEO-G474RE 閸╄櫣顢呭銉р柤閿涘苯鍘涢崑姘卞仯閻忣垬鈧椒瑕嗛崣锝嗗ⅵ閸楄埇鈧礁鐣鹃弮璺烘珤閸?UART DMA + IDLE閿涙稐绗夐幒?24V閵嗕椒绗夐幒銉ュ閻滃洦婢橀妴浣风瑝閹恒儳鏁搁張鎭掆偓?
+2. 婵″倹鐏夌憰浣瑰腹鏉╂盯妯佸▓纰夌窗閸忓牆顕悡?`workflow/phase_gate_checklist.md`閿涘瞼鈥樼拋銈堢箻閸忋儲娼禒韬测偓浣烽獓閸戦缚鐦夐幑顔兼嫲缁備焦顒涢崝銊ょ稊閵?
+3. 婵″倹鐏夌憰浣割嚤閸忋儲鏌婄挧鍕灐閿涙艾鍘涢幐?`workflow/intake_checklist.md` 閸掑棛琚崨钘夋倳閿涘苯鍟€閺囧瓨鏌婄€电懓绨茬槐銏犵穿閵?
+4. 婵″倹鐏夌憰浣烘埛缂?P2 MCSDK 閺冪姴濮涢悳鍥暕濡偓閿涙艾鍘涚拠?`deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`閵嗕梗apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`閵嗕梗apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md`閵嗕梗apps/stm32_g474_foc/mcsdk_no_power_precheck/hands_on_evidence_2026-05-14.md` 閸?`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`閿涙稑缍嬮崜宥呭嚒閺?NUCLEO-G474RE CubeMX `.ioc` 閼藉顢嶉妴涓砤cket A 閹规洝骞忔禒璇插閸栧懎鎷?STDRIVE101 娣囨繃濮㈢捄顖氱窞缂傞缚鐦夐惌鈺呮█閿涘奔绲炬禒宥堫洣鐞涖儳婀＄€?MCSDK/Workbench `.stwb6` 閹?MotorControl 闁板秶鐤嗛幋顏勬禈閵嗕竼N8/EDA/netlist 鐠ф壆鍤庣拠浣瑰祦閸滃苯缍嬮崜宥囧 STDRIVE101 娣囨繃濮㈢捄顖氱窞濠ф劘鐦夐幑顕嗙幢娴犲秳绗夐幒?24V閵嗕椒绗夐幒銉ュ閻滃洦婢橀妴浣风瑝閹恒儳鏁搁張鎭掆偓浣风瑝鏉╂劘顢?Motor Profiler閵?5. 婵″倹鐏夌憰浣烘埛缂?STM32 baseline閿涙艾婀鏌ョ崣鐠?COM5 娑撴彃褰涢崨鎴掓姢鐠侯垰绶為惃鍕唨绾偓娑撳绱濈悰銉ㄥ€濋惇?LD2 闂傤亞鍎婄拠浣瑰祦閿涘本鍨ㄩ悽?Codex 鏉╂稖顢戦惇鐔风杽 UART DMA + IDLE callback 閻ㄥ嫭妫ら崝鐔哄芳鐎圭偟骞?閺嬪嫬缂撴宀冪槈閵?
+6. 婵″倹鐏夌憰浣哥磻婵鈥栨禒璺侯吀閺屻儻绱版禒?`hardware/bom/2026-05-09_user_provided_power_stage_parts.md` 娑撳搫娅掓禒鍓佸殠缁鳖澁绱濈紒褏鐢荤悰銉ュ斧閻炲棗娴?PDF閵嗕赋CB 閹搭亜娴橀妴浣诡劀瀵?BOM閵嗕笍atasheet 閸滃苯鍙ч柨顔荤箽閹躲倝妲囬崐鑹邦吀缁犳ぜ鈧?
 
-1. 如果要开始学习/实操：进入 NUCLEO-G474RE 基础工程，先做点灯、串口打印、定时器和 UART DMA + IDLE；不接 24V、不接功率板、不接电机。
-2. 如果要推进阶段：先对照 `workflow/phase_gate_checklist.md`，确认进入条件、产出证据和禁止动作。
-3. 如果要导入新资料：先按 `workflow/intake_checklist.md` 分类命名，再更新对应索引。
-4. 如果要继续 P2 MCSDK 无功率预检：先读 `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_capture_task_2026-05-18.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/config_draft.md`、`apps/stm32_g474_foc/mcsdk_no_power_precheck/hands_on_evidence_2026-05-14.md` 和 `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_path_review_2026-05-14.md`；当前已有 NUCLEO-G474RE CubeMX `.ioc` 草案、Packet A 捕获任务包和 STDRIVE101 保护路径缺证矩阵，但仍要补真实 MCSDK/Workbench `.stwb6` 或 MotorControl 配置截图、CN8/EDA/netlist 走线证据和当前版 STDRIVE101 保护路径源证据；仍不接 24V、不接功率板、不接电机、不运行 Motor Profiler。
-5. 如果要继续 STM32 baseline：在已验证 COM5 串口命令路径的基础上，补肉眼 LD2 闪烁证据，或由 Codex 进行真实 UART DMA + IDLE callback 的无功率实现/构建验证。
-6. 如果要开始硬件审查：以 `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` 为器件线索，继续补原理图 PDF、PCB 截图、正式 BOM、Datasheet 和关键保护阈值计算。
+## 鐎瑰鍙忕痪銏㈠殠
 
-## 安全红线
+- 娑撳秶娲块幒?24V 婢堆呮暩濞翠椒绗傞悽鐐光偓?
+- 妫ｆ牗顐兼稉濠勬暩娴ｈ法鏁ら梽鎰ウ閻㈠灚绨敍宀勭帛鐠併倓绮?0.2A 缁狙冨焼瀵偓婵鈧?
+- 閹恒儳鏁搁張鍝勫閸忓牆浠涚粚楦挎祰 PWM閵嗕笩ate 濞夈垹鑸伴妴涔禙AULT閵嗕箓S/REG12/VREG 閸滃矂鍣伴弽鐑芥懠鐠侯垱顥呴弻銉ｂ偓?
+- JEOC/FOC ISR 閸愬懍绗夐弨?`printf`閵嗕梗HAL_Delay`閵嗕福SON 鐟欙絾鐎介妴涔別bSocket閵嗕礁濮╅幀浣稿敶鐎涙ɑ鍨ㄩ梹鑳偓妤佹闁槒绶妴?
+- V9 娑撳骸鐣奸弬?Datasheet 閸愯尙鐛婇弮璁圭礉閸忓牏娴夋穱鈥崇暭閺傜绁弬娆忚嫙閹绘劗銇氭搴ㄦ珦閿涙矂9 娑撳骸鐤勫ù瀣暱缁愪焦妞傞敍灞藉帥濡偓閺屻儲绁寸拠鏇熸蒋娴犺翰鈧?
 
-- 不直接 24V 大电流上电。
-- 首次上电使用限流电源，默认从 0.2A 级别开始。
-- 接电机前先做空载 PWM、Gate 波形、nFAULT、VS/REG12/VREG 和采样链路检查。
-- JEOC/FOC ISR 内不放 `printf`、`HAL_Delay`、JSON 解析、WebSocket、动态内存或长耗时逻辑。
-- V9 与官方 Datasheet 冲突时，先相信官方资料并提示风险；V9 与实测冲突时，先检查测试条件。
+## 鐢摜鏁ら崗銉ュ經
 
-## 常用入口
-
-- 项目规则：`AGENTS.md`
-- Obsidian 总控台：`notes/00_home/foc_dashboard.md`
-- 学习入口：`materials/START_HERE.md`
-- 项目事实：`docs/00_project_truth/project_context.md`
-- 阶段闸门：`workflow/phase_gate_checklist.md`
-- 资料导入：`workflow/intake_checklist.md`
-- 当前任务包：`workflow/ACTIVE_TASK.md`
-- 任务包模板：`workflow/task_packet_template.md`
-- 收工检查：`workflow/session_close_checklist.md`
-- 任务状态机：`workflow/task_state_machine.md`
-- 完成定义：`workflow/definition_of_done.md`
-- 证据登记：`workflow/evidence_register.md`
-- 风险矩阵：`workflow/risk_gate_matrix.md`
-- 教学与交付总计划：`workflow/algo_b_teaching_delivery_plan.md`
-- 下一课执行卡：`learning/NEXT_LESSON.md`
-- 掌握证据地图：`learning/MASTERY_MAP.md`
-- 当前学习 sprint：`workflow/current_learning_sprint.md`
-- 教学契约：`workflow/teaching_contract.md`
-- 提示词模板：`workflow/prompt_recipes.md`
-- 本地检索：`python tools/ask_local.py "你的问题"`
-- 开工入口：`powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1`
-- 收工入口：`powershell -ExecutionPolicy Bypass -File .\tools\end_learning_session.ps1 -Topic "主题" -Summary "今天做了什么"`
-- 学习队列整理：`python tools/normalize_learning_loop.py`
-- 重建检索索引：`python tools/build_vector_store.py`
-- 回归测试：`python -m unittest discover -s tests`
+- 妞ゅ湱娲扮憴鍕灟閿涙瓪AGENTS.md`
+- Obsidian 閹粯甯堕崣甯窗`notes/00_home/foc_dashboard.md`
+- 鐎涳缚绡勯崗銉ュ經閿涙瓪materials/START_HERE.md`
+- 妞ゅ湱娲版禍瀣杽閿涙瓪docs/00_project_truth/project_context.md`
+- 闂冭埖顔岄梻鎼佹，閿涙瓪workflow/phase_gate_checklist.md`
+- 鐠у嫭鏋＄€电厧鍙嗛敍姝歸orkflow/intake_checklist.md`
+- 瑜版挸澧犳禒璇插閸栧拑绱癭workflow/ACTIVE_TASK.md`
+- 娴犺濮熼崠鍛侀弶鍖＄窗`workflow/task_packet_template.md`
+- 閺€璺轰紣濡偓閺屻儻绱癭workflow/session_close_checklist.md`
+- 娴犺濮熼悩鑸碘偓浣规簚閿涙瓪workflow/task_state_machine.md`
+- 鐎瑰本鍨氱€规矮绠熼敍姝歸orkflow/definition_of_done.md`
+- 鐠囦焦宓侀惂鏄忣唶閿涙瓪workflow/evidence_register.md`
+- 妞嬪酣娅撻惌鈺呮█閿涙瓪workflow/risk_gate_matrix.md`
+- 閺佹瑥顒熸稉搴濇唉娴犳ɑ鈧槒顓搁崚鎺炵窗`workflow/algo_b_teaching_delivery_plan.md`
+- 娑撳绔寸拠鐐⒔鐞涘苯宕遍敍姝歭earning/NEXT_LESSON.md`
+- 閹哄本褰欑拠浣瑰祦閸︽澘娴橀敍姝歭earning/MASTERY_MAP.md`
+- 瑜版挸澧犵€涳缚绡?sprint閿涙瓪workflow/current_learning_sprint.md`
+- 閺佹瑥顒熸總鎴犲閿涙瓪workflow/teaching_contract.md`
+- 閹绘劗銇氱拠宥喣侀弶鍖＄窗`workflow/prompt_recipes.md`
+- 閺堫剙婀村Λ鈧槐顫窗`python tools/ask_local.py "娴ｇ姷娈戦梻顕€顣?`
+- 瀵偓瀹搞儱鍙嗛崣锝忕窗`powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1`
+- 閺€璺轰紣閸忋儱褰涢敍姝歱owershell -ExecutionPolicy Bypass -File .\tools\end_learning_session.ps1 -Topic "娑撳顣? -Summary "娴犲﹤銇夐崑姘啊娴犫偓娑?`
+- 鐎涳缚绡勯梼鐔峰灙閺佸鎮婇敍姝歱ython tools/normalize_learning_loop.py`
+- 闁插秴缂撳Λ鈧槐銏㈠偍瀵洩绱癭python tools/build_vector_store.py`
+- 閸ョ偛缍婂ù瀣槸閿涙瓪python -m unittest discover -s tests`

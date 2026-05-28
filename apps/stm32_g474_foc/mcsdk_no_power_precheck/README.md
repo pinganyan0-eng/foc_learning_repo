@@ -2,9 +2,9 @@
 
 This directory is the P2 no-power MCSDK practice area.
 
-It is not a generated MCSDK motor-control project yet. It exists to hold the
-planning artifacts that must be checked before any later generated project,
-Motor Profiler step, power-board connection, motor connection, or PWM Gate
+It is not the firmware working tree for manual edits. It holds no-power
+planning, source-review, and build-only evidence that must be checked before
+any Motor Profiler step, power-board connection, motor connection, or PWM Gate
 output.
 
 ## Current Status
@@ -13,7 +13,7 @@ output.
 - Scope: configuration planning only.
 - Existing evidence in this directory: draft configuration, tool probe notes,
   a CubeMX Home screenshot, a CubeMX `.ioc` pinout screenshot, pin/config safety
-  review, GUI capture result, a current P2 证据包, source packet intake rules,
+  review, GUI capture result, a current P2 璇佹嵁鍖? source packet intake rules,
   a source packet request pack, a source packet review template, and a user
   action queue, STM32-side signal/build gates, a P2 readiness snapshot, a
   2026-05-16 custom Workbench capture package, 2026-05-17 vendor motor /
@@ -29,13 +29,32 @@ output.
   Designer / Board Manager path review, plus a Packet A Board Designer /
   Manager GUI-only checklist, a `MY_FOC` generated-project source review, a
   `MY_FOC` manual FOC edit rollback record, and a 2026-05-20 Packet C
-  STDRIVE101 protection detail review.
+  STDRIVE101 protection detail review, plus a 2026-05-22 DMM continuity /
+  short-check request before software Hall adapter implementation, and a
+  2026-05-22 software Hall no-power algorithm prep artifact, plus a
+  2026-05-22 software Hall state-machine exercise card, plus a 2026-05-27
+  software Hall adapter pseudocode draft, plus a 2026-05-27 software Hall
+  adapter processing-order teaching card, plus a 2026-05-27 host-side software
+  Hall reference model review, plus 2026-05-27 software Hall golden vectors
+  and replay test, plus a 2026-05-27 read-only MCSDK integration probe for
+  the software Hall route, plus a 2026-05-27 firmware-entry checklist that
+  freezes the missing conditions before any future adapter code, plus a
+  2026-05-27 GPIO/EXTI boundary review draft for `PA0/PA1/PB4`, plus a
+  2026-05-27 timestamp-source review draft that excludes `TIM1`, keeps current
+  `TIM2` as a generated MCSDK Hall clue only, limits `HAL_GetTick()` to coarse
+  logs, and leaves an isolated free-running timer as a future review target,
+  plus a 2026-05-27 no-power Debug build-only result record for
+  `QIANSAI_G474_STDRIVE101_FOC_P2`, plus a 2026-05-27 low-frequency
+  debug-output route review draft that defines
+  snapshot fields and blocks ISR printing / UART transmit / JSON / ESP32 /
+  SWO / every-edge streaming, plus a 2026-05-27 MCSDK firmware-integration boundary review draft that blocks direct writes to `HALL_M1`, speed loop, PID, JEOC / FOC ISR, or TIM1 PWM, plus a 2026-05-28 Chinese-first software Hall firmware-entry plan that defines the future debug-only adapter layers, state-machine order, ISR limits, debug fields, and MCSDK hard stops without opening firmware implementation.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   Packet A / firmware feasibility proof for the current PCB2
   `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
   Hall route beyond no-power design review, a corrected FOC Workbench
-  configuration for `MY_FOC` or a replacement project, no-power continuity
-  checks, and all powered hardware evidence.
+  configuration for `MY_FOC` or a replacement project, filled no-power DMM
+  continuity / short-check results, software Hall firmware implementation, and
+  all powered hardware evidence.
 
 ## Safety Boundary
 
@@ -55,10 +74,13 @@ Forbidden in this directory and this P2 stage:
 - `config_draft.md`: no-power MCSDK configuration draft and conflict policy.
 - `pin_config_review_2026-05-14.md`: next-ring pin/config safety review and
   hard-stop checklist before trusting any generated MCSDK configuration.
-- `evidence_packet_2026-05-14.md`: 当前证据等级、仓库库存和信任任何生成
-  MCSDK 配置前的阻塞项。
-- `source_packet_intake_checklist_2026-05-14.md`: accepted / rejected source
+- `evidence_packet_2026-05-14.md`: 褰撳墠璇佹嵁绛夌骇銆佷粨搴撳簱瀛樺拰淇′换浠讳綍鐢熸垚
+  MCSDK 閰嶇疆鍓嶇殑闃诲椤广€?- `source_packet_intake_checklist_2026-05-14.md`: accepted / rejected source
   rules before any missing P2 evidence can be upgraded.
+- `software_hall_firmware_entry_plan_2026-05-28.md`: Chinese-first no-power
+  firmware-entry plan for the future `PA0/PA1/PB4` debug-only software Hall
+  adapter. Decision:
+  `Software Hall firmware-entry plan / debug-only no-power boundary / no firmware implementation / no MCSDK hook / no Hall readiness`.
 - `source_packet_request_pack_2026-05-14.md`: concrete request pack for the
   next `.stmcx`, MotorControl screenshot, CN8/EDA/netlist, and STDRIVE101
   protection-path handoff.
@@ -142,6 +164,119 @@ Forbidden in this directory and this P2 stage:
   boundaries, and `hardware-rework planning` fallback conditions without
   adding firmware, runtime APIs, generated source, build-only clearance, or
   Hall readiness.
+- `dmm_continuity_short_check_request_2026-05-22.md`: no-power table template
+  for the next real-world evidence before software Hall adapter implementation.
+  It requests continuity for `IA->PA0`, `IB->PA1`, `IC->PB4`, `PB3->LIN1`,
+  `P14->3V3`, `P15->GND`, `nFAULT->PB12`, plus rail, signal-to-rail, and
+  Hall-line short checks. It is not a measurement result.
+- `software_hall_no_power_algorithm_prep_2026-05-22.md`: algorithm-side
+  no-power preparation for the current software Hall route. Current decision is
+  `Algorithm-side no-power preparation / no firmware implementation / no Hall
+  readiness`; it defines valid/illegal Hall states, transition rules, candidate
+  sequences, debug observables, ISR limits, and MCSDK hard stops while the
+  unpopulated-board DMM gate is deferred, not passed.
+- `software_hall_state_machine_exercise_card_2026-05-22.md`: Chinese-first
+  no-power exercise card for the algorithm role. Current decision is
+  `User Hall state-machine exercise requested / no firmware implementation /
+  no Hall readiness`; it asks five concept checks and a four-row Hall
+  transition table before any pseudocode or firmware work.
+- `software_hall_adapter_pseudocode_draft_2026-05-27.md`: Chinese-first
+  no-power pseudocode draft for the future `PA0/PA1/PB4` software Hall
+  adapter. Current decision is `Software Hall adapter pseudocode draft / no
+  firmware implementation / no MCSDK Hall integration / no Hall readiness`;
+  it defines function responsibilities, state fields, decision order, ISR
+  limits, debug observables, MCSDK hard stops, and future code-entry
+  conditions without adding firmware or hardware evidence.
+- `software_hall_adapter_processing_order_card_2026-05-27.md`: Chinese-first
+  no-power repair card for the future software Hall adapter processing order.
+  Current decision is `Software Hall adapter processing-order teaching card /
+  no firmware implementation / no MCSDK Hall integration / no Hall readiness`;
+  it explains raw read, illegal-state check, first-valid handling, repeated
+  state handling, bounce/timing check, adjacent direction check, and
+  abnormal-jump count after the user could not restate the sequence.
+- `software_hall_host_model_review_2026-05-27.md`: review of the host-side
+  executable software Hall reference model in `src/software_hall_model.py` and
+  `tests/test_software_hall_model.py`. Current decision is `Host-side software
+  Hall reference model / no firmware implementation / no MCSDK Hall integration
+  / no Hall readiness`; it proves only host-side algorithm behavior.
+- `software_hall_golden_vectors_review_2026-05-27.md`: review of the
+  host-side software Hall golden vectors in
+  `tests/fixtures/software_hall_golden_vectors.json` and replay test
+  `tests/test_software_hall_vectors.py`. Current decision is `Host-side
+  software Hall golden vectors / no firmware implementation / no MCSDK Hall
+  integration / no Hall readiness`; it proves only host-side no-power
+  algorithm replay behavior.
+- `software_hall_mcsdk_integration_probe_2026-05-27.md`: read-only probe of
+  the 2026-05-21 generated-project clue files for speed/position feedback
+  integration points. Current decision is `MCSDK Hall integration points
+  identified as read-only clues / no firmware implementation / no MCSDK Hall
+  integration / no Hall readiness`; it identifies standard TIM2 hardware Hall
+  clues and keeps the current `PA0/PA1/PB4` software Hall route outside MCSDK
+  Hall integration.
+- `software_hall_firmware_entry_checklist_2026-05-27.md`: no-power entry
+  checklist for any future `PA0/PA1/PB4` software Hall adapter firmware work.
+  Current decision is `Software Hall firmware-entry checklist / no firmware
+  implementation / no MCSDK Hall integration / no Hall readiness`; it requires
+  populated-board DMM evidence, GPIO/EXTI boundary review, timestamp-source
+  decision, debug route, and separate MCSDK firmware-integration review before
+  any adapter code or powered claim. The build-only record now exists but does
+  not open firmware implementation.
+- `software_hall_gpio_exti_boundary_review_2026-05-27.md`: no-power
+  GPIO/EXTI boundary draft for the future software Hall adapter. Current
+  decision is `Software Hall GPIO/EXTI boundary review draft / no firmware
+  implementation / no GPIO runtime proof / no Hall readiness`; it records
+  `PA0/PA1/PB4` as software input candidates, `EXTI0/EXTI1/EXTI4` as
+  event-capture candidates, minimal ISR duties, and the remaining pull-mode,
+  timestamp, debug, build-only, DMM, and MCSDK integration blockers.
+- `software_hall_timestamp_source_review_2026-05-27.md`: no-power timestamp
+  source review for the future `PA0/PA1/PB4` software Hall adapter. Current
+  decision is `Software Hall timestamp-source review draft / no firmware
+  implementation / no timer configuration / no Hall readiness`; it records
+  `TIM1` as unavailable, current `TIM2` as the generated MCSDK Hall clue path,
+  `HAL_GetTick()` as coarse-only, and a future isolated free-running timer plus
+  `unsigned delta` as review targets only.
+- `software_hall_debug_output_route_review_2026-05-27.md`: no-power
+  low-frequency debug-output route review for the future software Hall adapter.
+  Current decision is `Software Hall low-frequency debug-output route review
+  draft / no firmware implementation / no UART implementation / no Hall
+  readiness`; it defines future snapshot fields and blocks ISR printing,
+  JSON formatting, UART transmit, ESP32 / WebSocket, SWO, every-edge streaming,
+  and direct MCSDK speed feedback.
+- `software_hall_mcsdk_firmware_integration_boundary_review_2026-05-27.md`:
+  no-power MCSDK firmware-integration boundary review for the future software
+  Hall adapter. Current decision is `Software Hall MCSDK firmware-integration
+  boundary review draft / no firmware implementation / no MCSDK hook / no Hall
+  readiness`; it records generated MCSDK clues such as `HALL_M1`,
+  `SpeednTorqCtrlM1`, `PIDSpeedHandle_M1`, `pSTC`, `MCI_Handle_t`, `FOCVars`,
+  `SPD_HALL_TIM_M1_IRQHandler`, `M1_SPEED_SENSOR=HALL_SENSOR`, and
+  `M1_HALL_TIMER_SELECTION=HALL_TIM2` as clues or hard stops, not hooks.
+- `software_hall_mcsdk_hook_evidence_request_checklist_2026-05-27.md`:
+  no-power MCSDK hook evidence request checklist for the future software Hall
+  adapter. Current decision is `Software Hall MCSDK hook evidence request
+  checklist / no firmware implementation / no MCSDK hook / no Hall readiness`;
+  it requests exact generated or interface sources such as
+  `hall_speed_pos_fdbk.c/.h`, `speed_torq_ctrl.c/.h`, `mc_tasks.c/.h`,
+  `mc_tasks_foc.c`, `mc_interface.c/.h`, `mc_api.c/.h`, `mc_app_hooks.c/.h`,
+  `mc_parameters.c/.h`, `motorcontrol.c/.h`, interrupt sources,
+  current-feedback backend files, and ASPEP / register-interface files before
+  any hook proposal.
+- `source_packet_review_2026-05-27_001_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot.md`:
+  no-power review of the full generated Workbench `Src/Inc` snapshot copied
+  from `C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2`.
+  Current decision is `Full generated Src/Inc snapshot archived / source
+  interface evidence available for read-only review / no firmware
+  implementation / no MCSDK hook / no Hall readiness`; the snapshot lives at
+  `packet_a_sources/2026-05-27_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot/`
+  and includes manifest/hash evidence for read-only interface review only.
+- `software_hall_mcsdk_speed_position_feedback_interface_review_2026-05-27.md`:
+  no-power MCSDK speed / position feedback interface review for the future
+  software Hall route. Current decision is `Software Hall MCSDK speed/position
+  feedback interface review / no firmware implementation / no MCSDK hook / no
+  Hall readiness`; it traces `HALL_M1`, `HALL_CalcAvrgMecSpeedUnit`,
+  `STC_GetSpeedSensor`, `SPD_GetAvrgMecSpeedUnit`, and `SPD_GetElAngle`, and
+  records that a future hook needs a reviewed `SpeednPosFdbk`-compatible
+  component rather than direct writes of `direction_candidate` or
+  `speed_candidate`.
 - `packet_a_board_designer_manager_path_review_2026-05-19.md`: no-power Packet
   A path review for the Workbench Board Designer / Board Manager path. Current
   decision is `Board Designer / Board Manager path exists as local

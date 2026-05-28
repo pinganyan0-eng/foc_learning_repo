@@ -1,0 +1,197 @@
+{
+  "metadata": {
+    "name": "software_hall_golden_vectors_2026-05-27",
+    "decision": "Host-side software Hall golden vectors / no firmware implementation / no MCSDK Hall integration / no Hall readiness",
+    "route": "HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4",
+    "pin_constraint": "PB3=LIN1; PB3 is not Hall",
+    "scope": "host-side no-power algorithm fixture only",
+    "not_evidence_for": [
+      "firmware implementation",
+      "GPIO/EXTI runtime behavior",
+      "MCSDK Hall integration",
+      "DMM continuity proof",
+      "Gate PWM safety",
+      "Hall readiness",
+      "motor readiness",
+      "power-stage readiness"
+    ]
+  },
+  "cases": [
+    {
+      "name": "forward_cycle",
+      "min_edge_ticks": null,
+      "samples": [
+        {
+          "raw": "001",
+          "ticks": 0,
+          "decision": "first_valid",
+          "accepted": "001",
+          "previous": null,
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": false,
+          "edge_count": 0
+        },
+        {
+          "raw": "101",
+          "ticks": 10,
+          "decision": "forward_step",
+          "accepted": "101",
+          "previous": "001",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 1
+        },
+        {
+          "raw": "100",
+          "ticks": 20,
+          "decision": "forward_step",
+          "accepted": "100",
+          "previous": "101",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 2
+        },
+        {
+          "raw": "110",
+          "ticks": 30,
+          "decision": "forward_step",
+          "accepted": "110",
+          "previous": "100",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 3
+        },
+        {
+          "raw": "010",
+          "ticks": 40,
+          "decision": "forward_step",
+          "accepted": "010",
+          "previous": "110",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 4
+        },
+        {
+          "raw": "011",
+          "ticks": 50,
+          "decision": "forward_step",
+          "accepted": "011",
+          "previous": "010",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 5
+        },
+        {
+          "raw": "001",
+          "ticks": 60,
+          "decision": "forward_step",
+          "accepted": "001",
+          "previous": "011",
+          "direction": "forward",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 10,
+          "edge_count": 6,
+          "illegal_state_count": 0,
+          "repeat_count": 0,
+          "bounce_candidate_count": 0,
+          "abnormal_jump_count": 0
+        }
+      ]
+    },
+    {
+      "name": "illegal_repeat_jump_and_bounce",
+      "min_edge_ticks": 10,
+      "samples": [
+        {
+          "raw": "100",
+          "ticks": 100,
+          "decision": "first_valid",
+          "accepted": "100",
+          "previous": null,
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": false,
+          "edge_count": 0
+        },
+        {
+          "raw": "000",
+          "ticks": 102,
+          "decision": "illegal_state",
+          "accepted": "100",
+          "previous": "100",
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": true,
+          "edge_count": 0,
+          "illegal_state_count": 1
+        },
+        {
+          "raw": "100",
+          "ticks": 103,
+          "decision": "repeat_state",
+          "accepted": "100",
+          "previous": "100",
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": false,
+          "edge_count": 0,
+          "repeat_count": 1
+        },
+        {
+          "raw": "110",
+          "ticks": 105,
+          "decision": "bounce_candidate",
+          "accepted": "100",
+          "previous": "100",
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": false,
+          "dt_ticks": 5,
+          "edge_count": 0,
+          "bounce_candidate_count": 1
+        },
+        {
+          "raw": "011",
+          "ticks": 120,
+          "decision": "abnormal_jump",
+          "accepted": "100",
+          "previous": "100",
+          "direction": "unknown",
+          "counted_edge": false,
+          "abnormal": true,
+          "dt_ticks": 20,
+          "edge_count": 0,
+          "abnormal_jump_count": 1
+        },
+        {
+          "raw": "101",
+          "ticks": 140,
+          "decision": "reverse_step",
+          "accepted": "101",
+          "previous": "100",
+          "direction": "reverse",
+          "counted_edge": true,
+          "abnormal": false,
+          "dt_ticks": 40,
+          "edge_count": 1,
+          "illegal_state_count": 1,
+          "repeat_count": 1,
+          "bounce_candidate_count": 1,
+          "abnormal_jump_count": 1
+        }
+      ]
+    }
+  ]
+}

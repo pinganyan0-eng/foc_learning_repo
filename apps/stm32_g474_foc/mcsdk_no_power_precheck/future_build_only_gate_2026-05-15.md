@@ -26,8 +26,8 @@ configuration evidence exists.
 
 | State | Meaning | Current project decision |
 | --- | --- | --- |
-| `Not allowed` | Required config evidence is missing or only partial. | Current state because Packet A is only `Partial clue`. |
-| `Build-only allowed` | Packet A selected fields are accepted and the project is explicitly marked no-power. | Future state only. |
+| `Not allowed` | Required config evidence is missing or only partial. | Superseded for Packet A on 2026-05-21 by `source_packet_review_2026-05-21_001_qiansai_g474_stdrive101_foc_p2_generated_project.md`. |
+| `Build-only allowed` | Packet A selected fields are accepted and the project is explicitly marked no-power. | Source prerequisite satisfied on 2026-05-21; local Debug build-only pass recorded on 2026-05-27. |
 | `Hardware allowed` | Later phase gates provide no-power checks, current limits, measurement points, rollback path, and safety evidence. | Not a P2 state. |
 
 ## Prerequisites For Build-Only
@@ -46,6 +46,10 @@ these are true:
 4. The build output is recorded as configuration/build evidence only.
 5. Packet B/C blockers are copied forward if endpoint mapping, `DT/MODE`,
    `STBY`, or STDRIVE101 protection proof is still missing.
+
+2026-05-21 route clarification: current PCB2 `PB3` is fixed as `LIN1`, not
+current Hall. Software Hall planning uses `PA0/PA1/PB4`, and `P14/P15` are
+confirmed `3V3/GND`. Any `PB3` Hall use is alternate/hardware-rework only.
 
 ## Allowed Build-Only Actions
 
@@ -83,7 +87,7 @@ When the gate is used later, record:
 | Build command | Exact command and working directory. |
 | Result | Pass/fail, warnings, binary path, and size if available. |
 | Evidence limit | State that it proves build-only configuration familiarity. |
-| Carry-forward blockers | Packet B/C, `DT/MODE`, `STBY`, PB3/SWO, endpoint mapping, continuity checks, and powered checks. |
+| Carry-forward blockers | Packet B/C, `DT/MODE`, `STBY`, alternate-use PB3/SWO, endpoint mapping where still needed, continuity checks, and powered checks. |
 
 ## Exit Rule
 
@@ -105,6 +109,31 @@ It cannot upgrade any of these statements:
 
 ## Current Decision
 
-Current state is `Not allowed` for generated-project trust because Packet A is
-only `Partial clue`. This file only creates the future gate so that a later
-generated project, if created, stays build-only until stronger evidence exists.
+Current state is `Build-only source prerequisite satisfied / no-power Debug build-only pass recorded`.
+
+`source_packet_review_2026-05-21_001_qiansai_g474_stdrive101_foc_p2_generated_project.md`
+accepts the Packet A selected fields as no-power configuration evidence. The
+generated Workbench project was then checked by a no-power Debug build-only
+command on 2026-05-27.
+
+Build record:
+
+- Result file:
+  `build_only_result_2026-05-27_qiansai_g474_stdrive101_foc_p2_debug.md`.
+- Command:
+  `cmake --build "C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2\build\Debug" --config Debug`.
+- Result: exit code `0`; Ninja output `ninja: no work to do`.
+- Artifacts confirmed: `.elf` and `.map`.
+- Tool paths came from STM32Cube bundled Ninja and GNU Arm GCC, not from
+  global `PATH`.
+
+Build success proves only:
+
+`The generated project compiles in the local toolchain under no-power scope.`
+
+It will not prove current PCB2 routing, STDRIVE101 protection, current sensing,
+Hall behavior, Gate PWM safety, Motor Profiler readiness, motor readiness,
+power-stage readiness, or sensorless / SMO behavior.
+
+It also will not prove the software Hall adapter on `PA0/PA1/PB4` is integrated
+with MCSDK or safe for Hall closed-loop use.

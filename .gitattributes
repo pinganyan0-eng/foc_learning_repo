@@ -4,3 +4,4 @@
 *.md text
 *.json text
 *.jsonl text
+apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/** -whitespace

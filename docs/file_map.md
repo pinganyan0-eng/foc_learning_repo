@@ -13,6 +13,8 @@
 | `hardware_initial_parts_2026_05_09` | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 用户确认版功率板关键器件、电源轨、保护外围和阈值线索，尚待 Datasheet/原理图/BOM/PCB/实测复核 |
 | `power_board_schematic_screenshot_2026_05_09` | `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md` | 用户提供的功率板原理图截图元数据和截图初审观察 |
 | `automation_playbook` | `workflow/automation_playbook.md` | Codex 每日/每周项目自动化的项目侧契约、边界和人工维护命令 |
+| `ai_architecture` | `docs/00_project_truth/ai_architecture.md` | AI 架构契约，定义事实源、上下文包、检索、任务控制、安全闸门、学习记忆、契约检查和后续探针边界 |
+| `current_snapshot` | `workflow/CURRENT_SNAPSHOT.md` | 低 token 当前状态快照，避免日常 handoff 默认读取完整 `CURRENT_STATUS.md` 历史 |
 | `active_task` | `workflow/ACTIVE_TASK.md` | 当前唯一执行任务包 |
 | `task_packet_template` | `workflow/task_packet_template.md` | ChatGPT/Codex 任务包模板 |
 | `session_close_checklist` | `workflow/session_close_checklist.md` | 收工、测试、证据与提交前检查清单 |
@@ -30,6 +32,9 @@
 | `uart_dma_idle` | `docs/04_iot_gateway/uart_dma_idle.md` | DMA + IDLE 接收流程、`Size` count/index 规则和 callback 迁移边界 |
 | `p1_catchup_pack_2026_05_12` | `deliverables/2026-05-12_p1_catchup_pack.md` | P1 catch-up 周/阶段交付包，链接证据、掌握地图、复习队列和禁止范围 |
 | `p2_mcsdk_no_power_precheck_2026_05_13` | `deliverables/2026-05-13_p2_mcsdk_no_power_precheck.md` | P2 MCSDK 无功率预检卡，记录工具版本/status、baseline `.ioc` 读回、pin/config 草案和冲突清单 |
+| `build_context_pack` | `tools/build_context_pack.py` | 按 `codex_task`、`teaching`、`hardware_review`、`mcsdk_packet`、`experiment_analysis`、`report_defense` 生成最小上下文包 |
+| `check_ai_contracts` | `tools/check_ai_contracts.py` | 只读检查 AI 架构入口、当前任务状态、安全短语、索引入口、复习队列和危险正向 claim |
+| `search_local_v2` | `tools/search_local_v2.py` | 带事实源优先级、最低可信分、查询扩展和 `retrieval_eval/queries.json` 回归评测的本地证据检索 |
 
 ## 共享链接中已读 Google Docs
 

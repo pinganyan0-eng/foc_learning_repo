@@ -34,6 +34,23 @@ not generated source, not a build record, and not hardware validation.
 | `source_packet_review_2026-05-19_004_pcb2_mapping_pin1_protection.md` | Current PCB2 mapping source: Hall route is `J_HALL -> IA/IB/IC -> PA0/PA1/PB4`. |
 | `future_build_only_gate_2026-05-15.md` | Rule that build-only work needs accepted Packet A selected fields first. |
 
+## 2026-05-21 Route Confirmation Update
+
+User confirmation upgrades this review from open feasibility discussion to the
+current no-PCB-change software Hall route decision, still under no-power
+boundaries:
+
+- `P14/P15` are confirmed as `3V3/GND`; they are no longer a route-selection
+  blocker, although continuity and short checks are still required before P3.
+- Current PCB2 Hall route is `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`.
+- `PB3` is fixed as current PCB2 `LIN1` / low-side PWM driver input, not a
+  current Hall candidate.
+- MCSDK standard TIM2 Hall `PA15/PB3/PB10` is not the current PCB2 Hall route
+  and cannot be used directly as current-board Hall proof.
+- The active direction is `software Hall adapter first`; hardware rework is
+  only a fallback if later MCSDK integration cannot safely consume or isolate
+  this route.
+
 ## Current Hall Route
 
 Current PCB2 Hall inputs remain:
@@ -44,13 +61,13 @@ J_HALL -> IA/IB/IC -> PA0/PA1/PB4
 
 | Hall net | STM32 pin | Candidate no-power use | Current decision |
 | --- | --- | --- | --- |
-| `IA` / future `HALL_A` | `PA0` | GPIO/EXTI sampling candidate with timestamped edge capture. | Feasibility only. |
-| `IB` / future `HALL_B` | `PA1` | GPIO/EXTI sampling candidate with timestamped edge capture. | Feasibility only. |
-| `IC` / future `HALL_C` | `PB4` | GPIO/EXTI sampling candidate with timestamped edge capture. | Feasibility only; it is split from the `TIM2` pair. |
+| `IA` / future `HALL_A` | `PA0` | GPIO/EXTI sampling candidate with timestamped edge capture. | Current software Hall route for no-power adapter planning only. |
+| `IB` / future `HALL_B` | `PA1` | GPIO/EXTI sampling candidate with timestamped edge capture. | Current software Hall route for no-power adapter planning only. |
+| `IC` / future `HALL_C` | `PB4` | GPIO/EXTI sampling candidate with timestamped edge capture. | Current software Hall route for no-power adapter planning only; it is split from the `TIM2` pair. |
 
-Decision: `PA0/PA1/PB4` remains a software Hall adapter design topic only. It
-is not cleared as a same-timer hardware Hall interface and does not upgrade
-Hall readiness.
+Decision: `Software Hall route confirmed for no-power adapter planning / no
+firmware implementation / no Hall readiness`. `PA0/PA1/PB4` is not cleared as a
+same-timer hardware Hall interface and does not upgrade Hall readiness.
 
 ## Adapter Responsibilities For A Later Firmware Task
 
@@ -74,10 +91,39 @@ trusted:
   validated rotor movement;
 - keep ISR responsibility minimal: capture timestamp/state and defer decoding,
   logging, JSON formatting, and control decisions to a lower-priority context.
+- do not run `printf`, JSON formatting/parsing, blocking delay, dynamic
+  allocation, or long control decisions inside the EXTI/timer ISR.
 - keep minimal ISR responsibility as a design rule for any later implementation.
 
 This review intentionally does not define function names, buffers, public
 runtime APIs, MCSDK hooks, or generated-project edits.
+
+## 2026-05-22 Algorithm-Side Preparation Update
+
+Added:
+`software_hall_no_power_algorithm_prep_2026-05-22.md`.
+
+Decision:
+`Algorithm-side no-power preparation / no firmware implementation / no Hall readiness`.
+
+The new artifact is allowed while PCB2 is unpopulated because it is only a
+state-machine and test-contract preparation record. The DMM continuity /
+short-check gate is hardware-side deferred, not passed, and still blocks any
+firmware implementation, MCSDK hook, powered action, or Hall-readiness claim.
+
+It locks the algorithm exercise contract:
+
+- valid state candidates are `001`, `010`, `011`, `100`, `101`, and `110`;
+- `000` and `111` are illegal;
+- repeated states do not count as new accepted edges;
+- non-adjacent jumps are abnormal and are not normal rotor movement;
+- candidate forward sequence is
+  `001 -> 101 -> 100 -> 110 -> 010 -> 011 -> 001`;
+- candidate reverse sequence is
+  `001 -> 011 -> 010 -> 110 -> 100 -> 101 -> 001`;
+- low-frequency debug observables include raw/accepted state, edge count,
+  illegal count, abnormal-jump count, repeat count, bounce-candidate count,
+  edge delta, direction candidate, and speed candidate.
 
 ## MCSDK Integration Boundary
 
@@ -89,6 +135,7 @@ Workbench / MCSDK can represent or safely isolate the current PCB2 choice:
 - current PWM / driver-input route
   `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 -> PA15/PB3/PB10/PA8/PA9/PA10`;
 - software Hall inputs on `PA0/PA1/PB4`;
+- `P14/P15` as confirmed `3V3/GND` rail/return pins, not Hall blockers;
 - `NFAULT` / break-input policy;
 - current-sense mode;
 - `PA2/PA3` communication policy;
@@ -121,11 +168,15 @@ connection, Hall closed-loop, or SMO.
 
 ## Decision
 
-Decision: `Software Hall adapter remains no-power design review / Packet A not accepted`.
+Decision: `Software Hall route confirmed for no-power adapter planning / no firmware implementation / no Hall readiness`.
+
+Historical 2026-05-19 decision retained for traceability:
+`Software Hall adapter remains no-power design review / Packet A not accepted`.
 
 This review advances the no-PCB-change path by defining the future software
 Hall adapter responsibilities and hard stops. It does not create an adapter,
-does not accept Packet A, and provides no generated-project trust.
+does not edit firmware, does not define runtime APIs, and provides no
+current-board Hall readiness.
 
 This review cannot be used to claim:
 

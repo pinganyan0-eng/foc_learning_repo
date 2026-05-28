@@ -34,6 +34,13 @@ not a build record, and not hardware validation.
 | `F:\STMCSDK\MC_SDK_6.4.2\Utilities\PC_Software\STMCWB\assets\hardware\mcu\STM32G474RETx.json` | Local MCSDK MCU pin-function clue; not Packet A evidence by itself. |
 | `p2_readiness_snapshot_2026-05-15.md` | Current P2 gate decision and generated-project trust boundary. |
 
+## 2026-05-21 Route Confirmation Update
+
+User confirmed the current PCB2 route used for no-PCB-change planning:
+`P14/P15=3V3/GND`, `PB3=LIN1`, and
+`HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`. Software Hall is now the priority
+route for later no-power adapter design. Hardware rework is fallback only.
+
 ## Current PCB2 Routes Under Review
 
 | Signal group | Current PCB2 route | No-power strategy decision |
@@ -58,7 +65,8 @@ Because current Hall is `PA0/PA1/PB4`, the project must not claim standard
 same-timer hardware Hall readiness. The next no-PCB-change path is a firmware
 design review for software Hall sampling/edge handling on `PA0/PA1/PB4`, plus
 a Workbench/MCSDK feasibility check for how that state would be consumed.
-In this task, software Hall is only a feasibility-review topic.
+In this task, software Hall is only a feasibility-review topic, but the route
+selection is now confirmed for no-power adapter planning.
 
 ## Historical Candidates Downgraded
 
@@ -74,7 +82,7 @@ In this task, software Hall is only a feasibility-review topic.
 | --- | --- | --- |
 | No PCB change, software Hall review first | Default current path | It preserves current PCB2 and turns the next work into Packet A / firmware feasibility review. |
 | Direct MCSDK hardware Hall claim on `PA0/PA1/PB4` | Not allowed | The three Hall inputs are not a normal same-timer three-channel Hall set. |
-| Direct generated-project trust | Not allowed | Packet A selected fields are still missing. |
+| Direct generated-project trust | Not allowed | Packet A selected fields are accepted as generated configuration evidence only; current PCB2 software Hall integration remains unimplemented. |
 | Hardware rework to timer-compatible Hall pins | Fallback only | Open this only if the no-PCB-change Workbench/firmware review fails. No rework is executed in this task. |
 | Powered Hall or motor validation | Not allowed | P2 has no continuity, current-limited bring-up, Gate waveform, Hall powered behavior, or motor evidence. |
 
@@ -91,7 +99,10 @@ In this task, software Hall is only a feasibility-review topic.
 
 ## Evidence Limit
 
-Decision: `No-power strategy review opened / no PCB change first`.
+Decision: `Software Hall route confirmed for no-power adapter planning / no PCB change first`.
+
+Historical 2026-05-19 decision retained for traceability:
+`No-power strategy review opened / no PCB change first`.
 
 This document can be used to explain why the next step is a Packet A /
 firmware strategy review. It cannot be used to claim:

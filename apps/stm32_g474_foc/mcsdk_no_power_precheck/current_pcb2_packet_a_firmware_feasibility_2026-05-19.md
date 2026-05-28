@@ -34,6 +34,13 @@ not firmware implementation, not a build record, and not hardware validation.
 | Local MCSDK `STM32G474RETx.json` | Pin-function clue for `PA15/PB3/PB10/PA8/PA9/PA10` and `PA0/PA1/PB4`. |
 | `future_build_only_gate_2026-05-15.md` | Rule that build-only work needs accepted Packet A first. |
 
+## 2026-05-21 Route Confirmation Update
+
+User confirmed `P14/P15=3V3/GND`, `PB3=LIN1`, and
+`HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`. This confirms the current
+no-PCB-change software Hall route for later adapter design only. It does not
+implement the adapter, prove MCSDK integration, or upgrade Hall readiness.
+
 ## PWM / Driver-Input Feasibility
 
 Current PCB2 routes driver inputs as:
@@ -77,18 +84,18 @@ Local pin-function clues show:
 | `HALL_C` / `IC` | `PB4` | `GPIO_EXTI4`, `TIM3_CH1` | Candidate input for software Hall review only; it is split from TIM2. |
 
 Decision: `PA0/PA1/PB4` is not cleared as a same-timer hardware Hall interface.
-The no-PCB-change route remains a firmware feasibility topic: a later design
-review may define minimal EXTI/GPIO sampling, timestamping, valid-state
-filtering, and MCSDK integration boundaries. This task does not implement that
-adapter and does not upgrade Hall readiness.
+The no-PCB-change software Hall route is now confirmed for adapter planning:
+a later design review may define minimal EXTI/GPIO sampling, timestamping,
+valid-state filtering, and MCSDK integration boundaries. This task does not
+implement that adapter and does not upgrade Hall readiness.
 
 ## Packet A Decision
 
 | Question | Current answer |
 | --- | --- |
-| Can Packet A be accepted now? | No. There is no accepted project-specific `.stwb6`, legacy `.stmcx`, or selected-field screenshot for this current PCB2 route. |
-| Can build-only generated-project work open now? | No. `future_build_only_gate_2026-05-15.md` requires accepted Packet A selected fields first. |
-| Can current PCB2 continue without PCB change? | Only as a no-power firmware feasibility review, not as generated-project trust. |
+| Can Packet A be accepted now? | Selected Workbench fields are accepted by the later 2026-05-21 generated-source review, but not as current PCB2 Hall proof. |
+| Can build-only generated-project work open now? | Source gate is open after the 2026-05-21 review, but CLI build tools are still missing and any build remains no-power compile evidence only. |
+| Can current PCB2 continue without PCB change? | Yes, as the software Hall adapter priority route for no-power design only, not as Hall readiness. |
 | Is hardware rework required now? | Not decided. Rework is a fallback if Workbench/firmware feasibility fails. |
 
 ## Firmware Review Boundaries For A Later Task
@@ -107,7 +114,10 @@ high-frequency motor-control path.
 
 ## Decision
 
-Decision: `No-PCB-change route remains feasibility only / Packet A not accepted`.
+Decision: `Software Hall route confirmed for no-power adapter planning / no firmware implementation / no Hall readiness`.
+
+Historical 2026-05-19 decision retained for traceability:
+`No-PCB-change route remains feasibility only / Packet A not accepted`.
 
 This review narrows the next step from "can we use the current mapping?" to
 "which no-power firmware or Workbench evidence would be needed to keep the

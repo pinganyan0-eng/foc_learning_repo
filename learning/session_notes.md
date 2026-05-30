@@ -2,6 +2,16 @@
 
 Append one entry after teaching, Q&A, homework review, debugging help, or experiment review when the turn reveals learning progress or weak points.
 
+## 2026-05-30 Hall state-machine ChatGPT follow-up
+
+- Summary: User pasted back the ChatGPT-taught five-question Hall software state-machine review. The answer correctly classified `110 -> 010` as forward adjacent, `010 -> 110` as reverse adjacent, `111` as illegal, computed `60 / 7 = 8.57 deg` mechanical for a 7-pole-pair motor, and explained why `PB3=LIN1` cannot be reused as Hall.
+- Evidence level: L4 for no-power Hall transition classification and PB3 route constraint; L2-L3 for electrical-to-mechanical angle conversion.
+- Confidence: medium-high for the corrected concept that reverse adjacent transitions are not abnormal.
+- Weak point update: reverse adjacent vs abnormal jump is repaired. The full software Hall adapter processing order remains the next check.
+- Next review: Ask for one-sentence teach-back of raw read -> illegal-state check -> first-valid baseline -> repeat check -> bounce/timing check -> forward/reverse adjacent check -> abnormal-jump count.
+- Source:
+  `learning/review_items/2026-05-30_hall_state_machine_chatgpt_followup.md`
+
 ## 2026-05-27 Software Hall adapter processing-order repair
 
 - Summary: User could correctly classify individual Hall transition rows, but

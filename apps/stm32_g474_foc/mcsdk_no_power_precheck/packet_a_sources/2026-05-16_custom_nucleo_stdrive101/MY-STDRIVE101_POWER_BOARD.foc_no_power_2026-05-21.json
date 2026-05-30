@@ -1,0 +1,185 @@
+{
+  "type": "power",
+  "contentVersion": "1.0",
+  "descVersion": 4,
+  "name": "MY-STDRIVE101_POWER_BOARD",
+  "PN": "CUSTOM_STDRIVE101_3SHUNT_V1",
+  "longDescription": "Custom 24V three-phase BLDC/PMSM power board based on STDRIVE101 gate driver. The board uses six external MOSFETs, three low-side shunt resistors for current sensing, Hall sensor inputs, and nFAULT protection. It is intended to be used with NUCLEO-G474RE and STM32 MCSDK FOC projects.",
+  "shortDescription": "STDRIVE101 3-shunt BLDC/PMSM power board",
+  "motorDrives": [
+    {
+      "name": "M1",
+      "connectorType": "morpho",
+      "minRatedVoltage": 12,
+      "maxRatedVoltage": 24,
+      "resistorOffset": 0,
+      "features": [
+        {
+          "type": "CurrentSensing",
+          "name": "CurrentSensing",
+          "tRise": 1000,
+          "hwVariants": [
+            {
+              "signals": {
+                "CURRENT_AMPL_U": [
+                  {
+                    "name": "ML30",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_AMPL_V": [
+                  {
+                    "name": "MR24",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "CURRENT_AMPL_W": [
+                  {
+                    "name": "ML34",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "ThreeShunt_AmplifiedCurrents",
+              "cost": 0,
+              "shuntResistor": 0.02,
+              "amplifyingNetworkImax": 5,
+              "metaData": [
+                {
+                  "type": "OpAmp",
+                  "partNumber": "TSV994"
+                }
+              ],
+              "amplifyingNetworkVm": 3.3,
+              "opAmpGain": 2,
+              "amplifyingNetworkPrating": 1.4,
+              "polarizationOffset": 1.559,
+              "offsetNetworkAttenuation": 0.765
+            }
+          ]
+        },
+        {
+          "type": "PhaseVoltageGeneration",
+          "name": "PhaseVoltageGeneration",
+          "driverName": "STDRIVE101",
+          "driverPN": "STDRIVE101",
+          "minDeadTime": 500,
+          "maxSwitchingFreq": 30,
+          "hwVariants": [
+            {
+              "signals": {
+                "PWM_CHU_H": [
+                  {
+                    "name": "MR23",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_H": [
+                  {
+                    "name": "MR21",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_H": [
+                  {
+                    "name": "MR33",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHU_L": [
+                  {
+                    "name": "MR30",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHV_L": [
+                  {
+                    "name": "MR28",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "PWM_CHW_L": [
+                  {
+                    "name": "MR26",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "DrivingHighAndLowSides",
+              "cost": 0,
+              "deadTime": 500,
+              "highSideSwitchesDrivingPolarity": "Active high",
+              "lowSideSwitchesDrivingPolarity": "Active high"
+            }
+          ],
+          "tNoise": 500
+        },
+        {
+          "type": "SpeedAndPositionSensing",
+          "name": "SpeedAndPositionSensing",
+          "hwVariants": [
+            {
+              "signals": {
+                "HALLSENSOR_H2": [
+                  {
+                    "name": "MR31",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "HALLSENSOR_H1": [
+                  {
+                    "name": "ML17",
+                    "help": {},
+                    "cost": 0
+                  }
+                ],
+                "HALLSENSOR_H3": [
+                  {
+                    "name": "MR25",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "HallEffectSensor",
+              "cost": 0
+            }
+          ]
+        },
+        {
+          "type": "DriverProtection",
+          "name": "DriverProtection",
+          "hwVariants": [
+            {
+              "signals": {
+                "DP_TRIGGER": [
+                  {
+                    "name": "MR16",
+                    "help": {},
+                    "cost": 0
+                  }
+                ]
+              },
+              "type": "SingleErrorTrigger_FixedReference",
+              "cost": 0,
+              "DPSignalPolarity": "Active low",
+              "DPTriggerFilterDuration": 0
+            }
+          ]
+        }
+      ],
+      "maxRatedCurrent": 5,
+      "maxRatedPower": 120
+    }
+  ]
+}

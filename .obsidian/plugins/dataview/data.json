@@ -1,6 +1,0 @@
-{
-  "enableDataviewJs": false,
-  "renderNullAs": "-",
-  "taskCompletionTracking": true,
-  "taskCompletionUseEmojiShorthand": true
-}

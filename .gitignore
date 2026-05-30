@@ -7,13 +7,22 @@ __pycache__/
 # Local build outputs
 **/build/
 **/.cache/
+**/Debug/
+**/Release/
 *.o
 *.obj
 *.elf
 *.bin
 *.hex
 *.map
+compile_commands.json
 
 # Obsidian local window state
 .obsidian/graph.json
 .obsidian/workspace*.json
+
+# Rebuildable local context/cache outputs.
+# These rules prevent future cache growth only; they do not remove or untrack
+# existing evidence or already tracked files.
+vector_store/
+.obsidian/plugins/

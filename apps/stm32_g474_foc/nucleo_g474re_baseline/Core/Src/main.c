@@ -42,6 +42,8 @@ typedef enum
 #define APP_CMD_LINE_MAX 32U
 #define APP_TARGET_RPM_MIN (-4000L)
 #define APP_TARGET_RPM_MAX 4000L
+#define APP_UART_RX_DMA_BUF_SIZE 64U
+#define APP_UART_RX_RING_SIZE 128U
 
 /* USER CODE END PD */
 
@@ -55,6 +57,16 @@ typedef enum
 COM_InitTypeDef BspCOMInit;
 
 /* USER CODE BEGIN PV */
+DMA_HandleTypeDef hdma_lpuart1_rx;
+
+static uint8_t app_uart_rx_dma_buf[APP_UART_RX_DMA_BUF_SIZE];
+static uint8_t app_uart_rx_ring[APP_UART_RX_RING_SIZE];
+static volatile uint16_t app_uart_rx_ring_head = 0U;
+static volatile uint16_t app_uart_rx_ring_tail = 0U;
+static volatile uint32_t app_uart_rx_bytes_total = 0U;
+static volatile uint32_t app_uart_rx_drop_count = 0U;
+static volatile uint32_t app_uart_rx_restart_error_count = 0U;
+static volatile uint32_t app_uart_error_count = 0U;
 
 /* USER CODE END PV */
 
@@ -65,7 +77,11 @@ static void MX_GPIO_Init(void);
 static const char *AppModeName(app_mode_t mode);
 static void AppHandleCommand(const char *cmd, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
 static void AppFeedRxByte(uint8_t rx_ch, app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
-static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
+static HAL_StatusTypeDef AppComRxDmaInit(void);
+static HAL_StatusTypeDef AppStartUartRxDmaIdle(UART_HandleTypeDef *huart);
+static void AppRxRingPushFromIsr(uint8_t rx_ch);
+static uint8_t AppRxRingPop(uint8_t *rx_ch);
+static uint32_t AppDrainRxQueue(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm);
 
 /* USER CODE END PFP */
 
@@ -228,13 +244,120 @@ static void AppFeedRxByte(uint8_t rx_ch, app_mode_t *app_mode, uint32_t *mode_ch
   }
 }
 
-static void AppPollCommand(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm)
+static HAL_StatusTypeDef AppComRxDmaInit(void)
+{
+  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  hdma_lpuart1_rx.Instance = DMA1_Channel1;
+  hdma_lpuart1_rx.Init.Request = DMA_REQUEST_LPUART1_RX;
+  hdma_lpuart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+  hdma_lpuart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+  hdma_lpuart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+  hdma_lpuart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  hdma_lpuart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+  hdma_lpuart1_rx.Init.Mode = DMA_NORMAL;
+  hdma_lpuart1_rx.Init.Priority = DMA_PRIORITY_LOW;
+
+  if (HAL_DMA_Init(&hdma_lpuart1_rx) != HAL_OK)
+  {
+    return HAL_ERROR;
+  }
+
+  __HAL_LINKDMA(&hcom_uart[COM1], hdmarx, hdma_lpuart1_rx);
+
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1U, 0U);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  HAL_NVIC_SetPriority(LPUART1_IRQn, 1U, 1U);
+  HAL_NVIC_EnableIRQ(LPUART1_IRQn);
+
+  return HAL_OK;
+}
+
+static HAL_StatusTypeDef AppStartUartRxDmaIdle(UART_HandleTypeDef *huart)
+{
+  HAL_StatusTypeDef status = HAL_UARTEx_ReceiveToIdle_DMA(huart,
+                                                          app_uart_rx_dma_buf,
+                                                          sizeof(app_uart_rx_dma_buf));
+
+  if ((status == HAL_OK) && (huart->hdmarx != NULL))
+  {
+    __HAL_DMA_DISABLE_IT(huart->hdmarx, DMA_IT_HT);
+  }
+
+  return status;
+}
+
+static void AppRxRingPushFromIsr(uint8_t rx_ch)
+{
+  uint16_t next_head = (uint16_t)((app_uart_rx_ring_head + 1U) % APP_UART_RX_RING_SIZE);
+
+  if (next_head == app_uart_rx_ring_tail)
+  {
+    app_uart_rx_drop_count++;
+    return;
+  }
+
+  app_uart_rx_ring[app_uart_rx_ring_head] = rx_ch;
+  app_uart_rx_ring_head = next_head;
+  app_uart_rx_bytes_total++;
+}
+
+static uint8_t AppRxRingPop(uint8_t *rx_ch)
+{
+  uint8_t has_byte = 0U;
+
+  __disable_irq();
+  if (app_uart_rx_ring_tail != app_uart_rx_ring_head)
+  {
+    *rx_ch = app_uart_rx_ring[app_uart_rx_ring_tail];
+    app_uart_rx_ring_tail = (uint16_t)((app_uart_rx_ring_tail + 1U) % APP_UART_RX_RING_SIZE);
+    has_byte = 1U;
+  }
+  __enable_irq();
+
+  return has_byte;
+}
+
+static uint32_t AppDrainRxQueue(app_mode_t *app_mode, uint32_t *mode_change_count, int32_t *target_rpm)
 {
   uint8_t rx_ch = 0U;
+  uint32_t drained = 0U;
 
-  while (HAL_UART_Receive(&hcom_uart[COM1], &rx_ch, 1U, 0U) == HAL_OK)
+  while (AppRxRingPop(&rx_ch) != 0U)
   {
     AppFeedRxByte(rx_ch, app_mode, mode_change_count, target_rpm);
+    drained++;
+  }
+
+  return drained;
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+  if (huart->Instance == LPUART1)
+  {
+    for (uint16_t i = 0U; i < Size; i++)
+    {
+      AppRxRingPushFromIsr(app_uart_rx_dma_buf[i]);
+    }
+
+    if (AppStartUartRxDmaIdle(huart) != HAL_OK)
+    {
+      app_uart_rx_restart_error_count++;
+    }
+  }
+}
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == LPUART1)
+  {
+    app_uart_error_count++;
+    if (AppStartUartRxDmaIdle(huart) != HAL_OK)
+    {
+      app_uart_rx_restart_error_count++;
+    }
   }
 }
 
@@ -328,6 +451,16 @@ int main(void)
     Error_Handler();
   }
 
+  if (AppComRxDmaInit() != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  if (AppStartUartRxDmaIdle(&hcom_uart[COM1]) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
   /* USER CODE BEGIN COM_READY */
   /* 上电后先强制关灯，让 LED 初始状态可预测 */
   BSP_LED_Off(LED_GREEN);
@@ -338,7 +471,7 @@ int main(void)
   button_last_state = button_state;
 
   /* 串口初始化完成后的启动标记，复位后应只打印一次 */
-  printf("BOOT OK\r\n");
+  printf("BOOT OK rx=dma_idle\r\n");
   /* USER CODE END COM_READY */
 
   /* Infinite loop */
@@ -352,8 +485,8 @@ int main(void)
     /* HAL_GetTick() 是系统毫秒计数器，来自 SysTick */
     uint32_t now = HAL_GetTick();
 
-    /* 轮询接收一行串口命令；当前阶段先不用中断/DMA，方便观察命令表行为 */
-    AppPollCommand(&app_mode, &mode_change_count, &target_rpm);
+    /* Drain bytes captured by DMA + IDLE; command parsing stays in main loop. */
+    (void)AppDrainRxQueue(&app_mode, &mode_change_count, &target_rpm);
 
     /* 每 100 ms 翻转一次 LD2：亮 100 ms，灭 100 ms */
     if ((now - led_last_tick) >= 100U)
@@ -427,7 +560,7 @@ int main(void)
       report_count++;
 
       /* 每 500 ms 打印一次状态，观察两个任务的执行次数关系 */
-      printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_name=%s, mode_chg=%lu, target_rpm=%ld\r\n",
+      printf("tick_ms=%lu, led=%u, led_toggle=%lu, report=%lu, btn=%u, btn_press=%lu, mode=%u, mode_name=%s, mode_chg=%lu, target_rpm=%ld, rx_bytes=%lu, rx_drop=%lu, rx_restart_err=%lu, uart_err=%lu\r\n",
        (unsigned long)now,
        led_state,
        (unsigned long)led_toggle_count,
@@ -437,7 +570,11 @@ int main(void)
        (unsigned int)app_mode,
        AppModeName(app_mode),
        (unsigned long)mode_change_count,
-       (long)target_rpm);
+       (long)target_rpm,
+       (unsigned long)app_uart_rx_bytes_total,
+       (unsigned long)app_uart_rx_drop_count,
+       (unsigned long)app_uart_rx_restart_error_count,
+       (unsigned long)app_uart_error_count);
 
 
     }

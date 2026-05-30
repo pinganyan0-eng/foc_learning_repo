@@ -7,6 +7,7 @@ from src.protocol_model import (
     ERR_FAULT,
     ERR_STATE,
     ERR_UNKNOWN_CMD,
+    LineFramer,
     MAX_SPEED_RPM,
     MotorStateMachine,
     OK,
@@ -42,6 +43,55 @@ class ProtocolParsingTests(unittest.TestCase):
         command, code = parse_frame('{"cmd":"set_speed","rpm":"fast"}')
         self.assertIsNone(command)
         self.assertEqual(code, ERR_BAD_VALUE)
+
+
+class LineFramerTests(unittest.TestCase):
+    def test_collects_frame_across_dma_like_chunks(self):
+        framer = LineFramer()
+
+        self.assertEqual(framer.feed(b'{"cmd":"heart'), [])
+        frames = framer.feed(b'beat","seq":1}\n')
+
+        self.assertEqual(frames, [b'{"cmd":"heartbeat","seq":1}'])
+        command, code = parse_frame(frames[0])
+        self.assertEqual(code, OK)
+        self.assertIsNotNone(command)
+        self.assertEqual(command.name, "heartbeat")
+
+    def test_returns_multiple_frames_from_one_chunk(self):
+        framer = LineFramer()
+
+        frames = framer.feed(b'{"cmd":"heartbeat"}\n{"cmd":"arm"}\n')
+
+        self.assertEqual(len(frames), 2)
+        first, first_code = parse_frame(frames[0])
+        second, second_code = parse_frame(frames[1])
+        self.assertEqual(first_code, OK)
+        self.assertEqual(second_code, OK)
+        self.assertEqual(first.name, "heartbeat")
+        self.assertEqual(second.name, "arm")
+
+    def test_empty_line_is_ignored(self):
+        framer = LineFramer()
+
+        self.assertEqual(framer.feed(b"\r\n\n"), [])
+        self.assertEqual(framer.overflow_count, 0)
+
+    def test_oversize_partial_frame_is_dropped(self):
+        framer = LineFramer(max_frame_bytes=32)
+
+        self.assertEqual(framer.feed(b"123456789012345678901234567890123\n"), [])
+        self.assertEqual(framer.overflow_count, 1)
+        self.assertEqual(framer.feed(b'{"cmd":"heartbeat"}\n'), [b'{"cmd":"heartbeat"}'])
+
+    def test_oversize_frame_discards_until_line_end_across_chunks(self):
+        framer = LineFramer(max_frame_bytes=32)
+
+        self.assertEqual(framer.feed(b"12345678901234567890123456789012"), [])
+        self.assertEqual(framer.feed(b"90tail"), [])
+        self.assertEqual(framer.feed(b"\n"), [])
+        self.assertEqual(framer.overflow_count, 1)
+        self.assertEqual(framer.feed(b'{"cmd":"stop"}\n'), [b'{"cmd":"stop"}'])
 
 
 class StateMachineTests(unittest.TestCase):

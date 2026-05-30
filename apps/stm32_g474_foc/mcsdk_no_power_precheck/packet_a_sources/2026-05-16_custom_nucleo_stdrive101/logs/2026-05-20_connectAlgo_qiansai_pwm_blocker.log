@@ -1,0 +1,7 @@
+ INFO - --root assets --control NUCLEO-G474RE --power '~QIANSAI_STDRIVE101_PCB2_POWER'
+ DEBUG - General: --- Processing start  NUCLEO-G474RE   ~QIANSAI_STDRIVE101_PCB2_POWER
+ DEBUG - PVConnect: DrivingHighAndLowSides Global processing start
+ ERROR - PVConnect: DrivingHighAndLowSides No timer matches all signals requirement
+ DEBUG - PVConnect: DrivingHighAndLowSides Global processing completed
+ DEBUG - SWConnect: SingleErrorTrigger_FixedReference Global processing start
+ DEBUG - SWConnect: SingleErrorTrigger_FixedReference Global processing completed

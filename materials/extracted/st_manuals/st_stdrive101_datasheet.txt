@@ -1,0 +1,1300 @@
+===== PAGE 1 =====
+Features
+• Operating voltage from 5.5 to 75 V
+• 600 mA sink/source current capability
+• 3.3 V and 5 V control logic
+• Two input strategies:
+– ENx/INx with adjustable deadtime generation
+– INHx/INLx with interlocking
+• Matched propagation delay for all channels
+• Very short propagation delay: 40 ns
+• Integrated bootstrap diodes
+• 12 V LDO linear regulator (50 mA max.)
+• Embedded V DS monitor for each external MOSFET
+• Overcurrent comparator
+• UVLO and thermal shutdown protection
+• Standby mode for low current consumption operation
+Application
+• Home automation and appliances
+• e-bikes
+• Power tools
+• Fans and pumps
+• Industrial automation
+• Textile machines
+• Gaming and consoles
+Description
+The STDRIVE101 is a low voltage gate driver suitable for driving three-phase
+brushless motors.
+It is a single-chip with three half-bridge gate drivers for N-channel power MOSFETs.
+Each driver has a current capability of 600 mA (sink/source). It integrates a low drop
+linear regulator generating the supply voltage for both low-side and high-side gate
+drivers through a bootstrap circuitry.
+The device provides Under Voltage Lock Out (UVLO) on both the low-side and
+high-side sections, preventing the power switches from operating in low efficiency or
+dangerous conditions.
+The control logic integrated into the STDRIVE101 allows two input strategies (high-
+side and low-side or enable and PWM driving signals). The driving method is
+selected according to DT/MODE pin. In both cases, prevention from cross conduction
+is ensured by interlocking or internally generated deadtime.
+The STDRIVE101 also features a VDS monitoring protection for each external
+MOSFET, thermal shutdown and can be put in the standby mode to reduce the power
+consumption.
+The device is available in a VFQFPN 4x4 24 leads package option.
+Product status link
+STDRIVE101
+Product label
+Triple half-bridge gate driver 
+STDRIVE101
+Datasheet
+DS13472 - Rev 2 - June 2022
+For further information contact your local STMicroelectronics sales office.
+www.st.com
+
+===== PAGE 2 =====
+1 Block diagram
+Figure 1. STDRIVE101 block diagram
++
+VM12V
+Half-bridge 1
+Half-bridge 2
+Half-bridge 3
+M
+VDD
+EN3/INL3
+EN1/INL1
+nFAULT
+EN2/INL2
+IN3/INH3
+DT/MODE
+SCREF
+IN1/INH1
+IN2/INH2
+GND
+GLS2
+OUT2
+GHS2
+BOOT2
+GLS3
+CP
+OUT3
+GHS3
+BOOT3
+STBY
+HS
+LS
+BOOT1
+GHS1
+OUT1
+GLS1
+REG12
+VS
+12 V 
+LDO Reg
+Decoding logic
+and dead-time
++
+-
++
+-
++
+-
++
++
+VSCREF VBOOTVCC
+VREF
+VDSth
+VDSth
+VCC
+VCC
+STDRIVE101
+Block diagram
+DS13472 - Rev 2 page 2/33
+
+===== PAGE 3 =====
+2 Electrical data
+2.1 Absolute maximum ratings
+Stresses above the absolute maximum ratings listed in Table 1 may cause permanent damage to the device.
+Exposure to maximum rating conditions for extended periods may affect device reliability.
+Table 1. Absolute maximum ratings
+Symbol Parameter Test Condition Value Unit
+VS Supply voltage -0.3 to 78 V
+dVS/dt Supply voltage slew rate ± 10 V/µs
+VREG12 Gate driving supply voltage REG12 shorted to VS -0.3 to 20 V
+VOUTx OUTx pin voltage -2 to VS + 2 V
+VBOOTx Bootstrap pin voltage -0.3 to 98 V
+VBOx High-side driver supply voltage VBOOTx - VOUTx -0.3 to 20 V
+VGHSx High-side gates voltage VOUT-0.3 to VBOOT+0.3 V
+VGLSx Low-side gates voltage -0.3 to VREG12+0.3 V
+dVOUT/dt Output slew rate ± 10 V/ns
+VIN Logic input voltage -0.3 to 5.5 V
+VCP
+Overcurrent comparator inputs
+voltage -2 to 5.5 V
+VDT/MODE Deadtime input voltage -0.3 to 3.6 V
+VSCREF
+VDS monitoring protection
+reference voltage -0.3 to 3.6 V
+VFAULT nFAULT output voltage -0.3 to 5.5 V
+IFAULT nFAULT output sink current Up to 8 mA
+Tstg Storage temperature -55 to 150 °C
+TJ Junction temperature -40 to 150 °C
+STDRIVE101
+Electrical data
+DS13472 - Rev 2 page 3/33
+
+===== PAGE 4 =====
+2.2 Recommended operating conditions
+Table 2. Recommended operating conditions
+Symbol Parameter Test Condition Min. Typ. Max. Unit
+VS Supply voltage 5.5(1) 75 V
+VREG12
+12 V linear regulator output and
+gate driving supply voltage
+VS ≥ 15 V 12 V
+VS shorted to REG12 (2) 5.5 (1) 15 V
+VBOOTx Bootstrap pin voltage 89 V
+IREG12
+12 V linear regulator total current
+consumption (3)
+Internal (gate drivers) and external
+consumption 50 mA
+CREG12
+12 V linear regulator output
+capacitance 4.7 µF
+RDT Deadtime resistor
+ENx/INx mode 50 250
+kΩ
+INHx/INLx mode Short to ground
+VIN Logic input voltage 0 5 (4) V
+VCP
+Overcurrent comparator input
+voltage -1 1 V
+VSCREF
+VDS monitoring protection
+reference voltage (5)
+Protection enabled 0.2 2.5 V
+Protection disabled 2.9 3.3 V
+VFAULT nFAULT output voltage 0 5 V
+Tamb Operative ambient temperature -40 125 (6) °C
+ 
+1. Actual operative range can be limited by UVLO protections
+2. Refer to Figure 12
+3. Actual linear regulator current consumption can be limited by power dissipation
+4. All digital inputs are 3.3 V TTL/CMOS thresholds compliant and 5 V tolerant. They can be biased within the respective AMR
+whatever the supply condition of the device (supplied, floating or shorted to ground) without causing damage to the device.
+5. SCREF pin structure does not allow a bias without VS supply voltage
+6. Actual operative range is limited by thermal shutdown
+ 
+Important:
+It is mandatory to use a VS voltage equal or greater than power stage voltage (VM in Figure 1). If not, the device is
+damaged.
+STDRIVE101
+Recommended operating conditions
+DS13472 - Rev 2 page 4/33
+
+===== PAGE 5 =====
+2.3 Thermal data
+Table 3. Thermal data
+Symbol Parameter Conditions Value Unit
+RthJA
+Junction-to-ambient thermal
+resistance Natural convection, according to JESD51-2a (1) 94.5 °C/W
+RthJCtop
+Junction-to-case thermal
+resistance (top side) Cold plate on top, according to JESD51-12 (1) 28.4 °C/W
+RthJCbot
+Junction-to-case thermal
+resistance (bottom side) Cold plate on exposed pad, according to JESD51-12(1) 1.47 °C/W
+RthJB
+Junction-to-board thermal
+resistance According to JESD51-8(1) 14.4 °C/W
+ΨJT
+Junction-to-top
+characterization parameter According to JESD51-2a(1) 0.6 °C/W
+ΨJB
+Junction-to-board
+characterization parameter According to JESD51-2a(1) 14.2 °C/W
+ 
+1. Simulated on a 21.2x21.2 mm board, 2s2p 1 Oz copper and four 300 µm vias below exposed pad.
+ 
+2.4 Electrical sensitivity characteristics
+Table 4. ESD protection ratings
+Symbol Parameter Test Condition Class Value Unit
+HBM Human Body Model Conforming to ANSI/ESDA/JEDEC JS-001-2017 H2 2 kV
+CDM Charge Device Model Conforming to ANSI/ESDA/JEDEC JS-002-2014 C2B 750 V
+STDRIVE101
+Thermal data
+DS13472 - Rev 2 page 5/33
+
+===== PAGE 6 =====
+3 Electrical characteristics
+Testing conditions: VS = 60 V unless otherwise specified.
+Typical values are tested at TJ = 25 °C, minimum and maximum values are guaranteed by thermal
+characterization in the temperature range of -40 to 125 °C, unless otherwise specified.
+Table 5. Electrical characteristics
+Symbol Parameter Test Condition Min. Typ. Max. Unit
+Supply and standby mode
+VREG12(On)
+VREG12 UVLO turn-on
+threshold VREG12 rising 5.5 V
+VREG12(Hyst) VREG12 UVLO hysteresis VREG12 falling 100 mV
+VBO(On)
+VBOOT - VOUT UVLO turn-
+on threshold VBOOT rising 5 V
+VBO(Hyst)
+VBOOT - VOUT UVLO
+hysteresis VBOOT falling 100
+IBOOT
+VBOOT - VOUT quiescent
+current TJ = 25 °C 85 155 225 µA
+Iqu
+Overall quiescent
+consumption from VS
+VS = 60 V
+All gate driver outputs low
+SCREF = 3.3 V
+1700 2800 µA
+ISTBY
+Overall standby
+consumption from VS
+VS = 60 V, Device in standby mode
+TJ = 25 °C
+10 16 µA
+tSTBY Standby time See Figure 15 and Figure 16 300 1200 µs
+tWAKE Wake-up time
+VS = VREG12 = 12 V
+Figure 15 and Figure 16
+50 µs
+12 V Linear regulator
+VREG12
+12 V linear regulator output
+and gate driving supply
+voltage
+VS = 60 V
+IREG12 = 50 mA
+All gate driver outputs low
+11.4 12.2 12.75 V
+IREG12lim
+12 V linear regulator
+current limit REG12 shorted to ground 55 mA
+Gate drivers
+ISI
+Maximum sink current
+capabilities
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+TJ = 25 °C
+400 600 mA
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+Full temperature range
+300 mA
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+TJ = 25 °C
+350 mA
+STDRIVE101
+Electrical characteristics
+DS13472 - Rev 2 page 6/33
+
+===== PAGE 7 =====
+Symbol Parameter Test Condition Min. Typ. Max. Unit
+ISI
+Maximum sink current
+capabilities
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+Full temperature range
+250 mA
+ISO
+Maximum source current
+capabilities
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+TJ = 25 °C
+350 600 mA
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+Full temperature range
+300 mA
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+TJ = 25 °C
+300 mA
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+Full temperature range
+250 mA
+RPMOS PMOS on resistance
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+Isource = 100 mA
+TJ = 25 °C
+3.8 4.8 Ω
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+Isource = 100 mA
+Full temperature range
+6.1 Ω
+RNMOS NMOS on resistance
+VS = VREG12 = 12 V
+VBOOTx-VOUTx = 12 V
+Isink = 100 mA
+TJ = 25 °C
+1.8 2.3 Ω
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+Isink = 100 mA
+Full temperature range
+3 Ω
+IOUT,bias OUTx bias current
+OUTx = VS = 60 V
+TJ = 25 °C
+85 155 225 µA
+OUTx = 0 V
+TJ = 25 °C
+85 155 225 µA
+ton, toff
+Input to output propagation
+delay
+(1) 40 70 ns
+VS = VREG12 = 5.5 V
+VBOOTx-VOUTx = 5.5 V
+Full temperature range
+120 ns
+MT Delay matching, HS and
+LS turn-on/off
+(2) 20 ns
+STDRIVE101
+Electrical characteristics
+DS13472 - Rev 2 page 7/33
+
+===== PAGE 8 =====
+Symbol Parameter Test Condition Min. Typ. Max. Unit
+MTCH
+Delay matching between
+channels
+(3) 20 ns
+RDS_diode
+Bootstrap diode ON
+resistance 100 240 Ω
+tDT Deadtime
+RDT = 50 kΩ 480 570 650
+nsRDT = 250 kΩ;
+TJ = 25 °C
+2100 2600 3200
+MDT Matching deadtime RDT = 50 kΩ (4) 70 ns
+MDTCH
+Matching deadtime
+between channels RDT = 50 kΩ (5) 70 ns
+Logic inputs
+VIL Low logic input voltage 0.8 V
+VIH High logic input voltage 2 V
+IIH Logic “1” input bias current
+IN = 3.3 V
+TJ = 25 °C
+12 16.5 25 µA
+IIL Logic “0” input bias current
+IN = 0 V
+TJ = 25 °C
+100 nA
+RPDin
+Input lines pull-down
+resistor TJ = 25 °C 132 200 275 kΩ
+VFAULT,L
+nFAULT low logic output
+voltage ISINK = 4 mA 0.6 V
+Overcurrent Comparator
+VREF
+Comparator reference
+voltage Full temperature range 470 505 525 mV
+ICP
+Comparator input leakage
+current
+VCP = 1 V 2 µA
+VCP = -0.5 V -2.5 µA
+tDELAY,OC Overcurrent delay time See Figure 5 200 ns
+tDFOC Deglitch filter time See Figure 5 1.3 1.8 2.8 µs
+tDISABLE Overcurrent disable time See Figure 5 455 600 865 µs
+VDS monitoring protection
+VDSth
+VDS monitoring protection
+threshold
+VSCREF = 0.2 V 0.1 0.2 0.3
+VVSCREF = 1 V 0.8 1 1.2
+VSCREF = 2.5 V 2.2 2.5 2.8
+VSCREF,dis
+VDS monitoring protection
+disable voltage 2.9 V
+VSCREF,en
+VDS monitoring protection
+enable voltage 2.54 V
+RSCREF
+VDS monitoring reference
+pull-down resistor 450 kΩ
+tDFSC
+VDS monitoring protection
+deglitch time See Figure 6 2.75 4.4 6.45 µs
+tDELAY,SC
+VDS monitoring protection
+delay time See Figure 6 200 ns
+STDRIVE101
+Electrical characteristics
+DS13472 - Rev 2 page 8/33
+
+===== PAGE 9 =====
+Symbol Parameter Test Condition Min. Typ. Max. Unit
+Thermal protection(6)
+TSD
+Thermal shutdown
+temperature 150 165 °C
+TSDhys
+Thermal shutdown
+hystreresis 30 °C
+ 
+1. These timings are measured using INHx/INLx mode (refer to Figure 4). An extra time is added when the device works with
+ENx/INx mode (refer to Figure 2 and Figure 3)
+2. MT = max. (|t on(GLS) - toff(GLS)|, |ton(GHS) - toff(GHS)|, |toff(GLS) - ton(GHS)|, |toff(GHS) - ton(GLS)|).
+3. MT CH is the difference between the ton and toff of a channel and the same timings of any other channel.
+4. MDT = | t DTHL - tDTLH | see Figure 2.
+5. MDT CH is the difference between the t DTHL and t DTLH of a channel and the same timings of any other channel.
+6. Based on characterization data on a limited number of samples, not tested during production
+ 
+Figure 2. INx timings and deadtime (ENx/INx mode)
+toff (1)
+toff (1)
+Note:
+(1)  this propagation delay is typically 16 ns longer than the one measured in INH/INL driving mode (testing condition). 
+Figure 3. ENx timings (ENx/INx mode)
+EN
+GHS
+GLS
+Note:
+(1)  this propagation delay is typically 16 ns longer than the one measured in INH/INL driving mode (testing condition). 
+toff (1)
+ton (1) toff (1)
+tDT  + t on (1)
+IN
+STDRIVE101
+Electrical characteristics
+DS13472 - Rev 2 page 9/33
+
+===== PAGE 10 =====
+Figure 4. INHx and INLx timings (INHx/INLx mode)
+INL
+INH
+50%
+10%
+90%
+50%
+t on
+GLS
+GHS
+t off
+Figure 5. Overcurrent comparator timings
+GLSx
+nFAULT
+V REF
+CP
+t DISABLE
+t DELAY,OC
+t DFOC
+< t DFOC
+> t DFOC
+GHSx
+Figure 6. VDS monitoring protection timing
+tDELAY,SC
+GLSx
+GHSx - OUTx
+INx
+(ENx = high)
+OUTx
+VS
+VS - V DSth
+VS
+VDSth
+nFAULT
+tDTLH
+tDFSC
+Expected 
+behavior
+Output
+short to ground
+condition
+Expected 
+behavior
+Output
+short Vs
+condition
+tDELAY,SC
+GLSx
+GHSx - OUTx
+INx
+(ENx = high)
+OUTx
+nFAULT
+tDTLH
+tDFSC
+STDRIVE101
+Electrical characteristics
+DS13472 - Rev 2 page 10/33
+
+===== PAGE 11 =====
+4 Pin description
+Figure 7. STDRIVE101 pin connection in QFN 4x4 24L with exposed PAD (Top view)
+EPAD/GND
+(1)
+1
+2
+3
+4
+5
+6
+INH2/IN2
+INH3/IN3
+INL3/EN3
+INL2/EN2
+INL1/EN1
+INH1/IN1
+18
+17
+16
+15
+14
+13
+OUT1
+GHS1
+OUT2
+GLS2
+BOOT1
+GLS17
+8
+9
+10
+11
+12
+GHS3
+OUT3
+GHS2
+BOOT2
+GLS3
+BOOT3
+24
+23
+22
+21
+20
+19
+VS
+REG12
+CP
+DT/MODE
+SCREF
+nFAULT
+(1) The Exposed PAD is the ground connection of the device
+STDRIVE101
+Pin description
+DS13472 - Rev 2 page 11/33
+
+===== PAGE 12 =====
+Table 6. STDRIVE101 pin description
+QFN 24L Name Type Function
+1 CP Analog in Overcurrent comparator input.
+2 DT/MODE Analog in
+Adjust deadtime duration through a pull-down resistor
+(EHx/INx mode).
+When shorted to ground, deadtime is disabled and the
+INHx/INLx driving mode is selected.
+3 SCREF Analog in Set the threshold voltage of the VDS monitoring protection
+(internal pull-down resistor).
+4 VS Power Supply voltage.
+5 REG12 Power 12 V linear regulator output and gate drivers supply
+voltage.
+6 nFAULT Open-drain output
+Fault output
+Forced low when one of the following failure conditions
+occurs:
+• Overcurrent
+• V DS monitoring protection triggered
+• Thermal shutdown
+• UVLO on REG12 pin
+7 INH1/IN1 Digital in
+Output 1 high-side driving input (INHx/INLx mode)
+Output 1 driving input (EHx/INx mode)
+8 INH2/IN2 Digital in
+Output 2 high-side driving input (INHx/INLx mode)
+Output 2 driving input (EHx/INx mode)
+9 INH3/IN3 Digital in
+Output 3 high-side driving input (INHx/INLx mode)
+Output 3 driving input
+10 INL1/EN1 Digital in
+Output 1 low-side driving input (INHx/INLx mode)
+Output 1 enable input (EHx/INx mode)
+11 INL2/EN2 Digital in
+Output 2 low-side driving input (INHx/INLx mode)
+Output 2 enable input (EHx/INx mode)
+12 INL3/EN3 Digital in
+Output 3 low-side driving input (INHx/INLx mode)
+Output 3 enable input (EHx/INx mode)
+13 BOOT3 Power Half-bridge 3 bootstrap voltage
+14 GHS3 Analog out Half-bridge 3 high-side gate driver output
+15 OUT3 Power Half-bridge 3 high-side (floating) common voltage
+16 GLS3 Analog out Half-bridge 3 low-side gate driver output
+17 BOOT2 Power Half-bridge 2 bootstrap voltage
+18 GHS2 Analog out Half-bridge 2 high-side gate driver output
+19 OUT2 Power Half-bridge 2 high-side (floating) common voltage
+20 GLS2 Analog out Half-bridge 2 low-side gate driver output
+21 BOOT1 Power Half-bridge 1 bootstrap voltage
+22 GHS1 Analog out Half-bridge 1 high-side gate driver output
+23 OUT1 Power Half-bridge 1 high-side (floating) common voltage
+24 GLS1 Analog out Half-bridge 1 low-side gate driver output
+EPAD/GND Power Ground
+STDRIVE101
+Pin description
+DS13472 - Rev 2 page 12/33
+
+===== PAGE 13 =====
+5 Device description
+The STDRIVE101 is a low voltage gate driver for three-phase power stages with integrated linear regulator.
+The device supply voltage is applied to VS pin. The VS is also used both as input voltage of 12 V LDO linear
+regulator and to supply some internal circuitries, including the VDS monitoring protection reference voltage for the
+high-side driver.
+The power stage voltage (VM in Figure 1) must be equal or lower than VS voltage. If the VM voltage exceeds
+the VS voltage, the device is damaged due to the violation of OUT pins absolute maximum rating as reported in
+Table 1.
+If a VM voltage lower than VS is used, the VDS monitoring protection cannot be used (refer to dedicated
+Section  5.6  ).
+5.1 Gate drivers’ characteristics
+The STDRIVE101 integrates a triple half-bridge gate driver able to drive N-channel power MOSFETs. The high-
+side section is supplied by a bootstrapped voltage technique with integrated bootstrap diode.
+Figure 8. Gate drivers’ outputs characteristics in UVLO conditions
+The device is designed to operate using VS as the supply voltage of the external power stage (i.e. motor supply
+voltage). For this reason, the AMR rating of the OUTx pins is strictly related to the VS value and, more generally, it
+is not possible to bias the OUT pins when the VS supply is not present (i.e. floating or shorted to ground).
+5.2 12 V LDO linear regulator
+The device integrates a LDO linear regulator generating 12 V output starting from the VS supply. The regulator is
+disabled during standby mode.
+STDRIVE101
+Device description
+DS13472 - Rev 2 page 13/33
+
+===== PAGE 14 =====
+Figure 9. 12 V LDO linear regulator typical configuration
+VS
+12 V 
+LDO reg
+REG12
+VS
+C REG12 220 nF 100 nF
+The regulator supplies the gate drivers and can be used to supply small external loads. The average current
+consumption IREG12 is given by the internal consumption of the gate drivers, the current provided to the gates of
+the external MOSFETs and the external load consumption, if any. IREG12 cannot exceed IREG12lim.
+The internal consumption of the gate drivers is proportional to the switching frequency and its typical value is
+reported in Figure 10; this is the overall consumption of the six gate drivers and it is measured without any load
+connected on the drivers’ outputs.
+Figure 10. Typical current consumption (gate driver’s outputs unloaded)
+On top of this, the current supplied to the external MOSFETs’ gates must be considered. The overall gate current
+IG,tot for the six MOSFETs of the power stage can be calculated as:
+Equation 1
+(1)
+IG, tot = 6 ⋅ Qg ⋅ fSW
+where Qg is the gate charge value of the external MOSFETs, taken at gate voltage equal to VREG12 and fSW is the
+switching frequency of the MOSFETs (i.e. the frequency of the PWM signals applied to the drivers).
+Another aspect to consider for the maximum current of the linear regulator is the power dissipation. An excessive
+power dissipation leads to the thermal shutdown of the device ( Section  5.8  ). The total power dissipation of the
+regulator PREG12 can be calculated as:
+STDRIVE101
+12 V LDO linear regulator
+DS13472 - Rev 2 page 14/33
+
+===== PAGE 15 =====
+Equation 2
+(2)
+PREG12 = VS − VREG12 ⋅ IREG12
+where VS is the voltage supply of the STDRIVE101, VREG12 is the regulator output voltage and IREG12 is the
+average current consumption described previously.
+Note: The size of the external power MOSFETs and the switching frequency increase the gate driver’s
+consumption, thus reducing the current availability for external loads.
+In addition to the average value IREG12 dynamic contributions must be considered: these are the currents needed
+to charge the bootstrap capacitors, e.g. after the high-side MOSFET is kept on for a considerable amount of
+time or after leaving the stand-by condition. In these cases, the amount of current is higher than IREG12lim, so
+it is mainly provided by the bypass capacitor CREG12 connected to REG12 pin. In this situation, a voltage drop
+ΔVREG12 occurs on REG12, while the LDO maximum current IREG12lim mainly recharges CREG12. During this
+recharge time (tcharge,REG12 expressed in Equation 3), the availability of current for external loads is reduced.
+Equation 3
+(3)
+tcℎarge, REG12 > CREG
+∆ VREG12
+IREG12lim
+5.2.1 Bootstrap section
+The bootstrap circuitry allows to generate a voltage higher than the supply VS and it is used to supply the
+high-side drivers. When one high-side MOSFET is turned on, its source voltage (OUTx pin) increases up to VS.
+Therefore, the gate must be driven at a voltage higher than VS. The bootstrap capacitor is referred to the OUTx
+pin:
+• When the OUTx pin is forced to GND (i.e. the respective low-side MOSFET is on), the bootstrap capacitor is
+charged through the bootstrap diode.
+• When the OUTx is forced to VS (i.e. the respective high-side MOSFET is on), the bootstrap capacitor
+supplies the respective high-side driver and discharges.
+The voltage drop on the bootstrap capacitors corresponds to the supply of the high-side drivers. Each bootstrap
+capacitor must be charged after the corresponding high-side is turned on, otherwise its voltage falls below the
+VBO(On) - VBO(Hyst) threshold, causing the turning off of the respective driver ( Section  5.5  ). A limitation in a
+bootstrap architecture is that the high-side MOSFET cannot be kept on for an indefinite amount of time. In fact,
+when the high-side is on, the respective bootstrap capacitor starts discharging. If not recharged, the bootstrap
+capacitor voltage falls below the VBO(On) - VBO(Hyst) (i.e. the UVLO on BOOTx pin). For this reason, working at
+100% duty cycle is possible, but only for a limited number of PWM periods. The bigger the bootstrap capacitor,
+the longer the time the high-side MOSFET can be kept on.
+To avoid excessive drop on the REG12 pin, a proper bypass capacitor is required. Even using an external supply
+connected to the REG12 pin, it is important to have a bypass capacitor with low ESR providing fast current
+transients when required by the bootstrap capacitors.
+The bypass capacitor on REG12 pin must provide the charge for the three bootstrap capacitors: the bigger the
+bootstrap capacitors are, the bigger should be the REG12 capacitor (refer to Equation 4 in Section  5.2.1.2  ).
+5.2.1.1 Power-up and wake-up
+During the power-up or after leaving the standby condition, there may be no charge in bootstrap capacitors. In
+these cases, the drivers cannot start immediately with normal operation, but the bootstrap capacitor should be
+charged turning on the low-side MOSFET. At the beginning of this procedure, a large amount of current could be
+required. If the internal 12 V LDO regulator is used, its current is limited at IREG12lim (Section  5.2  ).
+5.2.1.2 Charging time and external bootstrap diodes
+The charging time required to charge the bootstrap capacitors depends on their value but also on the resistance
+of the bootstrap diode (RDS_diode), which limits the current flow. In order to reduce the minimum time for bootstrap
+recharge (i.e. the minimum time the low-side MOSFET must be on), external bootstrap diodes can be used as
+shown in Figure 11.
+STDRIVE101
+12 V LDO linear regulator
+DS13472 - Rev 2 page 15/33
+
+===== PAGE 16 =====
+Each diode is in parallel with the corresponding internal bootstrap diode. An external series resistor, smaller
+than RDS_diode, can be still used together with each diode to reduce the maximum charging current and helps
+to limit the voltage drop on the REG12 pin. The maximum drop on the CREG12 capacitor occurs when the three
+bootstrap capacitors must be recharged and no series resistor is used with the external diodes. This drop can be
+approximated as:
+Equation 4
+(4)
+ΔVCREG12 ≈ VREG12 ∙
+3 ∙ CBOOT
+CREG12 + 3 ∙ CBOOT
+Figure 11. External bootstrap diode configuration
+12 V
+LDO reg
+REG12
+C REG12
+C BOOTx
+BOOTx
+OUTx
+x3 bootstrap circuitries
+5.2.2 Externally provided gate driver’s supply voltage
+It is possible to provide externally the supply voltage for the gate driving circuitry directly, bypassing the integrated
+regulator and shorting VS and REG12 pins together.
+Important: Using this configuration the consumption is partially reduced in standby mode.
+Figure 12. 12 V LDO supply voltage externally provided
+VS
+12 V 
+LDO Reg
+REG12
+V REG12
+C REG12 100 nF
+to VM
+power stage voltage
+STDRIVE101
+12 V LDO linear regulator
+DS13472 - Rev 2 page 16/33
+
+===== PAGE 17 =====
+5.3 Control logic
+The device integrates a control logic providing two input strategies. The driving method is selected according to
+DT/MODE pin status:
+• DT/MODE connected to the ground through an R DT resistor: digital inputs provide enable and input lines for
+each half-bridge and an internal deadtime is generated according to RDT value (ENx/INx mode).
+• DT/MODE shorted to ground: digital inputs provide high and low-side driving lines for each half-bridge, no
+deadtime is internally generated (INHx/INLx mode). In any case, the high and low-side outputs of same
+half-bridge cannot be simultaneously driven high because of the integrated interlocking function.
+Note: The DT/MODE pin status must not be changed during device operation.
+All the input lines have an internal pull-down to guarantee the low logic level even if no driving input is present.
+Table 7. INxL and INxH inputs truth table
+INxH INxL GHSx GHLx ‘x’ Half-bridge condition
+L L L L Disabled
+L H L H Low-side on
+H L H L High-side on
+H H L L Disabled (interlocking)
+Table 8. ENx and INx inputs truth table
+ENx INx GHSx GLSx ‘x’ Half-bridge condition
+L X L L Disabled
+H L L H Low-side on
+H H H L High-side on
+Note: X: don't care
+5.3.1 Deadtime
+When the DT/MODE pin is connected to the ground through an RDT resistor (ENx/INx mode selected), the device
+internally generates a deadtime between the MOSFET turn-off and the turn-on of the opposite one.
+Input pulses shorter than the deadtime cause an immediate turn on of the gate driver, back to the former status as
+shown in Figure 13.
+Figure 13. Deadtime management for short pulses
+50% 50%IN
+GHS
+90%
+GLS
+10%
+50% 50%
+90%
+10%
+t DTHLt DTLH
+Note:
+(1)  this propagation delay is typically 16 ns longer than the one measured in INH/INL driving mode (testing condition). 
+t off
+(1) t on
+(1)
+t off
+(1) t on
+(1)
+The deadtime depends on the RDT value according to the following equation:
+STDRIVE101
+Control logic
+DS13472 - Rev 2 page 17/33
+
+===== PAGE 18 =====
+Equation 5
+(5)
+RDT kΩ = 96.15  ∙ DT  μs − 4.45
+The equation is valid only with RDT value ranging from 50 kΩ to 250 kΩ.
+Figure 14. Typical deadtime vs. DT resistor value
+0
+500
+1000
+1500
+2000
+2500
+3000
+0 50 100 150 200 250 300
+Dead Time [ns]
+DT resistor [kΩ]
+Note: If DT/MODE pin is left floating, the resulting deadtime is about 1 μs (typical at TJ = 25°C). However, it
+should not be considered an operative condition. If the DT/MODE pin is shorted to ground, the device
+operates in INHx/INLx mode.
+5.4 Standby mode
+The STDRIVE101 provides a standby mode to reduce power consumption, in particular:
+• All the outputs driver forced low (external power switches turned off)
+• The overcurrent comparator is disabled
+• TheV DS monitoring protection is disabled
+• The UVLO protection is disabled
+• The 12 V LDO linear regulator is switched off
+Important: If the 12 V regulator is bypassed, the consumption in standby mode is not reduced.
+The device enters standby mode keeping low all the driving input pins (INx/INHx and ENx/INLx) for at least tSTBY
+time. At power-up, if all the driving inputs are low, the device is immediately set in standby condition. The device
+leaves standby mode after a tWAKE time after at least one of the logic inputs is set high (refer to Figure 15 and
+Figure 16). Considering the standby condition disables the 12 V regulator, the device returns operative only after
+the REG12 voltage returns above the UVLO turn-on threshold. When the device exits from standby condition, the
+bootstrap capacitors charge via low-side turn-on is required, as described in Section  5.2.1.1  
+STDRIVE101
+Standby mode
+DS13472 - Rev 2 page 18/33
+
+===== PAGE 19 =====
+Figure 15. Standby and wake-up time (ENx/INx mode, with VS = VREG12 = 12 V)
+t
+50%
+t STBY
+off
+ENx
+INx
+GLSx
+GHSx
+50%
+Device mode
+t WAKE
+Operative Operative Standby Standby
+90%
+rising ONE of the 6 input lines
+ the IC exits from standby
+GLS/GHS status 
+according to ENx & INx inputs
+t on
+10%
+Figure 16. Standby and wake-up time (INHx/INLx mode, with VS = VREG12 = 12 V)
+t
+50%
+t STBY
+off
+INxx
+GLSx
+GHSx
+50%
+Device mode
+t WAKE
+Operative Operative Standby Standby
+90%
+rising ONE of the 6 input lines
+ the IC exits from standby
+GLS/GHS status 
+according to INxx inputs
+t on
+10%
+5.5 Undervoltage protection
+The device provides UVLO protections on each power supply.
+During power-up (see Figure 17), the device leaves the UVLO condition when the respective supply voltage rises
+above the turn-on threshold. When the supply voltage is below the on-threshold voltage of a hysteresis, the UVLO
+condition is set.
+Table 9 summarizes which blocks are switched off in UVLO condition.
+Table 9. UVLO and OT protection management
+Block VREG12 UVLO VBOOTx UVLO
+HSU, HSV, HSW output LOW(1) LOW(1) (2)
+LSU, LSV, LSW output LOW(1)
+nFAULT open-drain output LOW OPEN
+ 
+1. The N-channel of the gate driver is turned ON with all the available supply voltage, refer to Figure 8 .
+2. Each high-side gate driver provides independent UVLO protection (e.g. UVLO on BOOTU causes the HSU to turn off only).
+ 
+STDRIVE101
+Undervoltage protection
+DS13472 - Rev 2 page 19/33
+
+===== PAGE 20 =====
+Figure 17. Power-up sequence, internal 12 V regulator used
+Standby Bootstrap cap. charge Operative
+t
+wake
+V
+REG12(on)
+Vs
+INLx/ENx
+REG12
+nFAULT
+GLSx
+VBOx
+Voltage on boot capacitor
+STDRIVE101
+Undervoltage protection
+DS13472 - Rev 2 page 20/33
+
+===== PAGE 21 =====
+When the REG12 pin is supplied externally, the internal regulator is disabled. When leaving the standby condition
+raising one of the digital inputs, the nFAULT pin goes low, even if there is no UVLO condition on the REG12 pin,
+as shown in Figure 18
+Figure 18. Power-up sequence, external supply on REG12 pin
+t
+wake
+Vs/REG12
+INLx/ENx
+nFAULT
+GLSx
+Standby Bootstrap cap. charge Operative
+VBOx
+Voltage on boot capacitor
+STDRIVE101
+Undervoltage protection
+DS13472 - Rev 2 page 21/33
+
+===== PAGE 22 =====
+5.6 VDS monitoring protection
+The device monitors the VDS of the power stage’s MOSFETs in order to detect anomalous conditions. The VDS of
+each MOSFET is compared to a reference threshold ( VDSth).
+The reference threshold is generated according to the voltage applied to the SCREF pin:
+Equation 6
+(6)
+VDStℎ = VSCREF
+The SCREF voltage must be in the range between 0.2 V to VSCREF,en.
+If the voltage is above VSCREF,dis, the protection is disabled.
+When enabled, the protection triggers one of the following conditions occur:
+• GLSx output is high and V OUTx > VDSth for more than tDFSC
+• GHSx output is high and (V S - VOUTx) > VDSth for more than tDFSC
+Important:
+The VDS monitoring is implemented assuming that the supply of the power stage (VM) is at the same voltage of the
+STDRIVE101 supply (VS). Supplying the power stage with a voltage VM lower than VS the VDS monitoring protection
+could not work properly. In particular, if the voltage difference 'VS - VM' is greater than VDSth, the protection will be
+triggered each time the high-side is turned on, regardless of the current flowing in the MOSFET.
+For this reason it is recommended, when using the VDS monitoring protection to supply the STDRIVE101 (VS) and the
+power stage (VM) at the same voltage. In case it is required to use a VM voltage lower than VS, the VDS monitoring
+protection must be disabled setting the SCREF pin above the VSCREF,dis voltage.
+As soon as the protection is triggered, all the gate drivers outputs are forced low, the nFAULT output is forced low
+and the protection is latched. In this condition all the gate driver outputs are kept low whatever the driving inputs
+(refer to Figure 6).
+The protection is released only when the device enters standby mode.
+Note: SCREF pins structure does not allow a bias without VS supply voltage.
+5.7 Overcurrent comparator
+The STDRIVE101 embeds a comparator suitable for overcurrent detection of the power stage through a shunt
+resistor.
+When the input voltage at CP pin is higher than internal reference voltage (VREF), the device enters into a
+protection state: all the gate driver outputs are forced low and the nFAULT open drain output is forced low. The
+device automatically leaves the protection state after a tDISABLE time (refer to Figure 5 for details).
+5.8 Thermal protection
+The device embeds an overtemperature shutdown protection through thermal sensor placed next to the linear
+regulator block.
+When the overtemperature protection occurs, the linear regulator is switched off and the nFAULT output is forced
+low. The thermal shutdown condition expires when the temperature goes below the “TSD- TSDhys” temperature
+(auto-restart).
+STDRIVE101
+VDS monitoring protection
+DS13472 - Rev 2 page 22/33
+
+===== PAGE 23 =====
+Figure 19. Thermal shutdown management
+VnFAULT
+T j
+TjSD
+Thermal
+shutdown
+TjSD,hyst
+Power
+stage ENABLED ENABLEDDISABLED
+STDRIVE101
+Thermal protection
+DS13472 - Rev 2 page 23/33
+
+===== PAGE 24 =====
+6 ESD protection strategy
+Figure 20. ESD protection strategy
+STDRIVE101
+ESD protection strategy
+DS13472 - Rev 2 page 24/33
+
+===== PAGE 25 =====
+7 Application example
+Figure 21 shows an application example using the STDRIVE101 to drive a three-phase motor with triple shunt
+configuration.
+Table 10. Typical application values (VDD = 3.3 V)
+Name Value
+CS 100 nF / 100 V
+CSCER 100 nF / 100 V (1)
+CSPOL 120 µF / 100 V
+CREG 100 nF / 25 V
+CREGPOL 4.7 µF / 25 V
+CBOOT 1 µF / 25 V
+RDT 50 kΩ (tDT ≅570 ns)
+RSC1 18 kΩ
+RSC2 10 kΩ
+RFAULT 39 kΩ
+RS1, RS2, RS3 Values according to application requirements
+RSNS1, RSNS2, RSNS3 Values according to application requirements
+CCP 2.2 nF / 16 V
+RCP Values according to application requirements
+ 
+1. to be kept close to the relative HS MOSFET (see Figure 21)
+ 
+The others features implemented are:
+• V DS monitoring protection with SCREF = 1.2 V (VDD = 3.3 V)
+• Overcurrent protection with internal comparator (CP pin)
+Figure 21. Typical application schematic
++
+VM12V
+VSCREF
+Half-bridge 1
+Half-bridge 2
+Half-bridge 3
+M
+VDD
+EN3/INL3
+EN1/INL1
+nFAULT
+EN2/INL2
+IN3/INH3
+DT/MODE
+SCREF
+IN1/INH1
+IN2/INH2
+GND
+GLS2
+OUT2
+GHS2
+BOOT2
+GLS3
+CP
+OUT3
+GHS3
+BOOT3
+STBY
+HS
+VBOOT
+LS
+BOOT1
+GHS1
+OUT1
+GLS1
+VCC
+REG12
+VS
+12 V 
+LDO Reg
+Decoding logic
+and dead-time
++
+-
++
+-
++
+-
+VREF
++
+VDSth
++
+RDT
+RFAULT
+CS CSPOLCREGPOL CREG
+RSNS2
+RSNS3
+RSNS1
+RS1RS2RS3
+VDD
+RCP
+CCP +
+-
+Signal conditioning
+VDD
+RSC1
+RSC2
++
+VDSth
+VCC
+VCC
+CBOOT CSCER
+STDRIVE101
+Application example
+DS13472 - Rev 2 page 25/33
+
+===== PAGE 26 =====
+8 Package information
+In order to meet environmental requirements, ST offers these devices in different grades of ECOPACK packages,
+depending on their level of environmental compliance. ECOPACK specifications, grade definitions and product
+status are available at: www.st.com. ECOPACK is an ST trademark.
+Figure 22. VFQFPN 4x4x1.0 24 PITCH 0.5 package outline
+STDRIVE101
+Package information
+DS13472 - Rev 2 page 26/33
+
+===== PAGE 27 =====
+Table 11. VFQFPN 4x4x1.0 24 PITCH 0.5 package mechanical data
+Symbol
+Dimensions (mm)
+Min. Typ. Max.
+A 0.80 0.90 1.00
+A1 0.00 0.02 0.05
+A3 0.20
+b 0.18 0.25 0.30
+D 3.85 4.00 4.15
+D2 2.60 2.70 2.80
+E 3.85 4.00 4.15
+E2 2.60 2.70 2.80
+e 0.50
+L 0.30 0.40 0.50
+k 0.25
+Figure 23. VFQFPN 4x4x1.0 24 PITCH 0.5 suggested footprint
+STDRIVE101
+Package information
+DS13472 - Rev 2 page 27/33
+
+===== PAGE 28 =====
+9 Ordering information
+Table 12. Device summary
+Order code Package Packaging
+STDRIVE101 VFQFPN 4x4x1.0 24 PITCH 0.5 Tube
+STDRIVE101TR VFQFPN 4x4x1.0 24 PITCH 0.5 Tape & Reel
+STDRIVE101
+Ordering information
+DS13472 - Rev 2 page 28/33
+
+===== PAGE 29 =====
+Revision history
+Table 13. Document revision history
+Date Version Changes
+26-Oct-2020 1 Initial release.
+24-Jun-2022 2
+Added Note 2 in Table 2, updated SCREF description in Table 6
+Updated Table 10 and Table 11.
+Updated Figure 10 title, Figure 12, Figure 21, Figure 22.
+STDRIVE101
+DS13472 - Rev 2 page 29/33
+
+===== PAGE 30 =====
+Contents
+1 Block diagram ..................................................................... 2
+2 Electrical data ..................................................................... 3
+2.1 Absolute maximum ratings....................................................... 3
+2.2 Recommended operating conditions .............................................. 4
+2.3 Thermal data .................................................................. 5
+2.4 Electrical sensitivity characteristics................................................ 5
+3 Electrical characteristics........................................................... 6
+4 Pin description ................................................................... 11
+5 Device description................................................................ 13
+5.1 Gate drivers’ characteristics..................................................... 13
+5.2 12 V LDO linear regulator ...................................................... 13
+5.2.1 Bootstrap section ....................................................... 15
+5.2.2 Externally provided gate driver’s supply voltage ................................ 16
+5.3 Control logic.................................................................. 17
+5.3.1 Deadtime ............................................................. 17
+5.4 Standby mode ................................................................ 18
+5.5 Undervoltage protection ........................................................ 19
+5.6 VDS monitoring protection ...................................................... 22
+5.7 Overcurrent comparator ........................................................ 22
+5.8 Thermal protection ............................................................ 22
+6 ESD protection strategy .......................................................... 24
+7 Application example .............................................................. 25
+8 Package information.............................................................. 26
+9 Ordering information ............................................................. 28
+Revision history ....................................................................... 29
+Contents .............................................................................. 30
+List of tables .......................................................................... 31
+List of figures.......................................................................... 32
+STDRIVE101
+Contents
+DS13472 - Rev 2 page 30/33
+
+===== PAGE 31 =====
+List of tables
+Table 1.  Absolute maximum ratings ............................................................. 3
+Table 2.  Recommended operating conditions....................................................... 4
+Table 3.  Thermal data....................................................................... 5
+Table 4.  ESD protection ratings ................................................................ 5
+Table 5.  Electrical characteristics ............................................................... 6
+Table 6.  STDRIVE101 pin description ........................................................... 12
+Table 7.  INxL and INxH inputs truth table ........................................................ 17
+Table 8.  ENx and INx inputs truth table .......................................................... 17
+Table 9.  UVLO and OT protection management .................................................... 19
+Table 10.  Typical application values (VDD = 3.3 V) ................................................... 25
+Table 11.  VFQFPN 4x4x1.0 24 PITCH 0.5 package mechanical data ...................................... 27
+Table 12.  Device summary ................................................................... 28
+Table 13.  Document revision history ............................................................. 29
+STDRIVE101
+List of tables
+DS13472 - Rev 2 page 31/33
+
+===== PAGE 32 =====
+List of figures
+Figure 1.  STDRIVE101 block diagram........................................................... 2
+Figure 2.  INx timings and deadtime (ENx/INx mode) ................................................. 9
+Figure 3.  ENx timings (ENx/INx mode) .......................................................... 9
+Figure 4.  INHx and INLx timings (INHx/INLx mode)................................................. 10
+Figure 5.  Overcurrent comparator timings ....................................................... 10
+Figure 6.  VDS monitoring protection timing ....................................................... 10
+Figure 7.  STDRIVE101 pin connection in QFN 4x4 24L with exposed PAD (Top view)......................... 11
+Figure 8.  Gate drivers’ outputs characteristics in UVLO conditions ...................................... 13
+Figure 9.  12 V LDO linear regulator typical configuration ............................................. 14
+Figure 10.  Typical current consumption (gate driver’s outputs unloaded) ................................... 14
+Figure 11.  External bootstrap diode configuration ................................................... 16
+Figure 12.  12 V LDO supply voltage externally provided .............................................. 16
+Figure 13.  Deadtime management for short pulses.................................................. 17
+Figure 14.  Typical deadtime vs. DT resistor value................................................... 18
+Figure 15.  Standby and wake-up time (ENx/INx mode, with VS = VREG12 = 12 V) ............................. 19
+Figure 16.  Standby and wake-up time (INHx/INLx mode, with VS = VREG12 = 12 V) ........................... 19
+Figure 17.  Power-up sequence, internal 12 V regulator used ........................................... 20
+Figure 18.  Power-up sequence, external supply on REG12 pin ......................................... 21
+Figure 19.  Thermal shutdown management ....................................................... 23
+Figure 20.  ESD protection strategy ............................................................. 24
+Figure 21.  Typical application schematic ......................................................... 25
+Figure 22.  VFQFPN 4x4x1.0 24 PITCH 0.5 package outline ........................................... 26
+Figure 23.  VFQFPN 4x4x1.0 24 PITCH 0.5 suggested footprint ......................................... 27
+STDRIVE101
+List of figures
+DS13472 - Rev 2 page 32/33
+
+===== PAGE 33 =====
+IMPORTANT NOTICE – READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgment.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability for application assistance or the design of
+purchasers’ products.
+No license, express or implied, to any intellectual property right is granted by ST herein.
+Resale of ST products with provisions different from the information set forth herein shall void any warranty granted by ST for such product.
+ST and the ST logo are trademarks of ST. For additional information about ST trademarks, refer to www.st.com/trademarks. All other product or service names
+are the property of their respective owners.
+Information in this document supersedes and replaces information previously supplied in any prior versions of this document.
+© 2022 STMicroelectronics – All rights reserved
+STDRIVE101
+DS13472 - Rev 2 page 33/33

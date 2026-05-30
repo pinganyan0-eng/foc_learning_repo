@@ -1,0 +1,65 @@
+[
+  {
+    "id": "jeoc_printf_forbidden",
+    "query": "JEOC ISR printf HAL_Delay JSON WebSocket",
+    "must_include_any": [
+      "docs/protocol.md",
+      "templates/jeoc_interrupt_review_template.md",
+      "apps/stm32_g474_foc/AGENTS.md"
+    ],
+    "expected_terms_any": [
+      "printf",
+      "HAL_Delay",
+      "JSON",
+      "WebSocket",
+      "ISR"
+    ]
+  },
+  {
+    "id": "esp32_realtime_boundary",
+    "query": "ESP32 FOC realtime STM32 control loop",
+    "must_include_any": [
+      "docs/00_project_truth/project_context.md",
+      "docs/protocol.md",
+      "docs/project_brief.md"
+    ],
+    "expected_terms_any": [
+      "ESP32",
+      "FOC",
+      "STM32"
+    ]
+  },
+  {
+    "id": "current_pcb2_hall_route",
+    "query": "HALL_A/B/C PA0/PA1/PB4 LIN1 software Hall",
+    "must_include_any": [
+      "workflow/CURRENT_SNAPSHOT.md",
+      "apps/stm32_g474_foc/mcsdk_no_power_precheck/p2_readiness_snapshot_2026-05-15.md",
+      "CURRENT_STATUS.md",
+      "apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_design_review_2026-05-19.md"
+    ],
+    "expected_terms_any": [
+      "PA0",
+      "PA1",
+      "PB4",
+      "PB3",
+      "LIN1"
+    ]
+  },
+  {
+    "id": "dual_teacher_concept_guard",
+    "query": "Concept-only role guard ChatGPT teaching turn",
+    "must_include_any": [
+      "workflow/codex_dual_teacher_execution_gate.md",
+      "workflow/teaching_contract.md",
+      "AI_CONTEXT.md",
+      "docs/00_project_truth/ai_architecture.md"
+    ],
+    "expected_terms_any": [
+      "Concept-only role guard",
+      "ChatGPT teaching turn",
+      "learning-evidence PR",
+      "Codex reviews and records"
+    ]
+  }
+]

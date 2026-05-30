@@ -38,6 +38,38 @@ class Result:
         return self.code == OK
 
 
+class LineFramer:
+    def __init__(self, max_frame_bytes: int = MAX_FRAME_BYTES) -> None:
+        self.max_frame_bytes = max_frame_bytes
+        self._buf = bytearray()
+        self._discarding = False
+        self.overflow_count = 0
+
+    def feed(self, chunk: bytes | bytearray | memoryview) -> list[bytes]:
+        frames: list[bytes] = []
+
+        for value in bytes(chunk):
+            if value in (ord("\n"), ord("\r")):
+                self._discarding = False
+                if self._buf:
+                    frames.append(bytes(self._buf))
+                    self._buf.clear()
+                continue
+
+            if self._discarding:
+                continue
+
+            if len(self._buf) >= self.max_frame_bytes:
+                self._buf.clear()
+                self._discarding = True
+                self.overflow_count += 1
+                continue
+
+            self._buf.append(value)
+
+        return frames
+
+
 def clamp_rpm(value: int) -> int:
     return max(-MAX_SPEED_RPM, min(MAX_SPEED_RPM, value))
 

@@ -1,6 +1,6 @@
 # LEARNING_STATUS
 
-Last updated: 2026-05-12
+Last updated: 2026-05-14
 
 ## Current Learning Mode
 
@@ -19,25 +19,34 @@ The assistant should teach through small executable tasks, evidence checks, and 
 For teaching or Q&A turns:
 
 1. Start from the current project stage and the learner's known weak points.
-2. Read `workflow/algo_b_teaching_delivery_plan.md` and `workflow/teaching_contract.md` before continuing a lesson.
-3. Start with a short progress checkpoint: current real stage, planned milestone, lesson target, deliverable, pace status, and forbidden scope.
-4. Tie each lesson to a small submission or catch-up item so teaching keeps pace with the B algorithm plan.
-5. Teach in plain language first: use a concrete analogy, the current board/code/log, or a small visible behavior before naming formal terms.
-6. Explain new terms, concepts, and abbreviations before using them heavily.
-7. For code lessons, use: feature sentence -> rule table -> function responsibilities -> C code -> test.
-8. Explain only the minimum theory needed for the next action.
-9. Add at least one teach-back or small practice question when useful.
-10. Do not keep asking very simple repeated questions after the learner has clearly answered them; summarize the mastered point and move to the next practical step or a higher-value check.
-11. Record observed weak points and next review work only when there is real evidence or a safety-critical check.
-12. Do not claim mastery without evidence.
-13. Prefer parking old low-risk weak points over letting every historical item stay in the active queue.
+2. Read `learning/NEXT_LESSON.md` for the immediate teaching target when present.
+3. Read `learning/MASTERY_MAP.md` so already-demonstrated basics are not drilled again without reason.
+4. Read `workflow/current_learning_sprint.md`, `workflow/algo_b_teaching_delivery_plan.md`, and `workflow/teaching_contract.md` before continuing a lesson.
+5. Start with a short progress checkpoint: current real stage, planned milestone, lesson target, deliverable, pace status, and forbidden scope.
+6. Tie each lesson to a small submission or catch-up item so teaching keeps pace with the B algorithm plan.
+7. Teach in plain language first: use a concrete analogy, the current board/code/log, or a small visible behavior before naming formal terms.
+8. Explain new terms, concepts, and abbreviations before using them heavily.
+9. For code lessons, use: feature sentence -> rule table -> function responsibilities -> C code -> test.
+10. Explain only the minimum theory needed for the next action.
+11. Add at least one teach-back or small practice question when useful.
+12. Do not keep asking very simple repeated questions after the learner has clearly answered them; summarize the mastered point and move to the next practical step or a higher-value check.
+13. Record observed weak points and next review work only when there is real evidence or a safety-critical check.
+14. Do not claim mastery without evidence.
+15. Prefer parking old low-risk weak points over letting every historical item stay in the active queue.
 
 ## Active Weak Point Summary
 
-Current evidence is mainly L1-L2 from NUCLEO-G474RE baseline practice, plus one L5 serial-log validation. Active review should now focus on UART command handling rather than repeating early button/state-machine basics:
+Current evidence includes L4 P1 concept checks for STOP side effects, DMA `Size` count/index, command side-effect reading, and DMA + IDLE callback flow, plus L5 serial-log validation for the NUCLEO command path. Active review should now focus on P2 MCSDK no-power artifact implementation rather than repeating early button/state-machine basics:
 
-- Read-only query commands versus state-changing commands.
-- Guarded transitions for ARM and idempotent STOP behavior.
-- C string command matching with `strcmp(...) == 0`.
-- Distinguishing branch conditions from side-effect assignments.
-- UART line assembly: receive characters, detect newline, terminate string, dispatch command, handle overflow.
+- Separating P2 no-power planning evidence from real MCSDK, Motor Profiler, Hall, power-board, or motor validation.
+- Explaining why a generated or drafted config does not prove motor-control behavior.
+- Resolving `PA2/PA3` UART-vs-OPAMP, `PC5` nFAULT-vs-OPAMP, and `PB3` SWO-vs-Hall pin conflicts before any generated project.
+- Keeping Motor Profiler as a later hardware-stage plan with current limits, stop conditions, and abort criteria.
+- Skipping basic CubeMX/CubeIDE/VS Code navigation unless explicitly requested; the learner has stated they already know the toolchain.
+
+## Current Execution Layer
+
+- Immediate lesson card: `learning/NEXT_LESSON.md`.
+- Mastery / not-yet-mastery map: `learning/MASTERY_MAP.md`.
+- Current sprint: `workflow/current_learning_sprint.md`.
+- Sprint status: P2 no-power precheck started; current artifact has tool/status, pin/config draft evidence, a dedicated no-power planning directory, a proven CubeMX launch path, a pin/config safety review, a saved NUCLEO-G474RE CubeMX `.ioc` draft that reads back `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO, fallback CubeMX `Pinout & Configuration` screenshots proving that `.ioc` can be reopened in the GUI, and a Workbench entry probe proving MotorControl package data exists but no `.stmcx` or launcher was found. It still needs MCSDK/Workbench `.stmcx` or MotorControl config screenshot plus board-routing confirmation.

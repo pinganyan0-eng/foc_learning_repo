@@ -57,6 +57,8 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
+extern UART_HandleTypeDef hcom_uart[];
+extern DMA_HandleTypeDef hdma_lpuart1_rx;
 
 /* USER CODE END EV */
 
@@ -213,5 +215,14 @@ void EXTI15_10_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+void DMA1_Channel1_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&hdma_lpuart1_rx);
+}
+
+void LPUART1_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&hcom_uart[COM1]);
+}
 
 /* USER CODE END 1 */

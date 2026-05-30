@@ -1,6 +1,6 @@
 # Windows 工具链状态
 
-最后更新：2026-05-09
+最后更新：2026-05-14
 
 ## 状态
 
@@ -10,6 +10,7 @@
 - 已验证可用：STM32Cube bundle `cmake` 返回 4.3.1。
 - 已验证可用：STM32Cube bundle `ninja` 返回 1.13.2。
 - 已验证可用：STM32Cube bundle `arm-none-eabi-gcc` 返回 GNU Tools for STM32 14.3.1。
+- 已验证路径：`F:\STMCubeMX\STM32CubeMX.exe` 存在，并在 2026-05-14 启动到 `F:\STMCubeMX\jre\bin\javaw.exe` 进程。
 - 未加入系统 PATH：`ninja`、`arm-none-eabi-gcc`。这是 VS Code bundle 托管工具链下的正常状态，不代表 VS Code 内不可构建。
 - 待验证：`STM32_Programmer_CLI` 或 VS Code 调试/下载所用 ST-LINK 后端。
 - 已验证安装：`stmicroelectronics.stm32-vscode-extension-3.9.0` 及 `stm32cube-ide-*` VS Code 扩展组件。
@@ -36,7 +37,7 @@
 
 - VS Code 版本。
 - STM32CubeIDE 插件 / STM32Cube for VS Code 版本或截图。
-- STM32CubeMX 版本。
+- STM32CubeMX GUI 截图或版本界面截图。
 - MCSDK / Motor Control Workbench 版本。
 - ST-LINK 驱动或 STM32CubeProgrammer 版本。
 - 串口工具名称和可打开 ST-LINK Virtual COM 的截图或记录。

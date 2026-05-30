@@ -1,5 +1,17 @@
 # UART Protocol
 
+## 2026-05-14 Host Model Status
+
+- `src/protocol_model.py` now includes `LineFramer`.
+- `LineFramer.feed(...)` accepts DMA/IDLE-like byte chunks and returns complete
+  newline-terminated frames.
+- Empty lines are ignored.
+- Oversize partial frames are dropped until the next line ending and counted
+  with `overflow_count`.
+- `tests/test_protocol_model.py` covers chunk-split frames, multiple frames in
+  one chunk, empty lines, oversize recovery, and recovery when the overlong
+  frame spans DMA/IDLE-like chunks.
+
 STM32 与 ESP32-C3 之间采用 UART DMA + IDLE 接收，一行一个 JSON 帧，`\n` 结尾。
 
 ## 基础命令帧

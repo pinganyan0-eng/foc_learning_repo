@@ -1,0 +1,101 @@
+{
+  "last_updated": "2026-05-13",
+  "purpose": "Repo-local mirror of frequently used ST official PDFs. Use these PDFs for figures, exact tables, and page checks; use materials/extracted/st_manuals/*.txt for fast rg retrieval.",
+  "ingest_note": "Direct shell download from st.com failed in this Codex session due remote connection/TLS timeout, so existing local PDF cache files from F:\\嵌赛\\1手册 were copied into the repository. Official URLs were checked online on 2026-05-13 and are recorded here for refresh.",
+  "documents": [
+    {
+      "id": "st_rm0440_stm32g4_reference_manual",
+      "title": "RM0440 - STM32G4 Series reference manual",
+      "local_pdf": "materials/raw/st_manuals/st_rm0440_stm32g4_reference_manual.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_rm0440_stm32g4_reference_manual.txt",
+      "official_url": "https://www.st.com/resource/en/reference_manual/rm0440-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf",
+      "bytes": 39045335,
+      "sha256": "7f8c15bc667c46614e2c5ad0341b9eaa20e8d417f21b819b9f2dde7dfe1ae564",
+      "role": "STM32G4 peripheral reference: TIM1/TIM8, ADC, DMA, DMAMUX, OPAMP, COMP, CORDIC, FMAC, RCC, GPIO, USART"
+    },
+    {
+      "id": "st_stm32g474re_datasheet",
+      "title": "STM32G474RE datasheet",
+      "local_pdf": "materials/raw/st_manuals/st_stm32g474re_datasheet.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_stm32g474re_datasheet.txt",
+      "official_url": "https://www.st.com/resource/en/datasheet/stm32g474rb.pdf",
+      "bytes": 3062163,
+      "sha256": "b018e20dbe34b63a43e49365518b186ef0e0e8e899deeabc1c9f53a3a10c1add",
+      "role": "STM32G474RE package, pinout, alternate functions, electrical limits"
+    },
+    {
+      "id": "st_um2505_nucleo64_mb1367",
+      "title": "UM2505 - STM32G4 Nucleo-64 boards MB1367 user manual",
+      "local_pdf": "materials/raw/st_manuals/st_um2505_nucleo64_mb1367.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_um2505_nucleo64_mb1367.txt",
+      "official_url": "https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf",
+      "bytes": 2852820,
+      "sha256": "321040c92bad6e01c957e4fa8ca18d9e95bf46b48c1b55963208ce7b18631c1c",
+      "role": "NUCLEO-G474RE connectors, solder bridges, ST-LINK VCP, power and board-level details"
+    },
+    {
+      "id": "st_an5306_opamp_stm32g4",
+      "title": "AN5306 - Operational amplifier usage in STM32G4 Series",
+      "local_pdf": "materials/raw/st_manuals/st_an5306_opamp_stm32g4.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_an5306_opamp_stm32g4.txt",
+      "official_url": "https://www.st.com/resource/en/application_note/dm00605707-operational-amplifier-opamp-usage-in-stm32g4-series-stmicroelectronics.pdf",
+      "bytes": 907123,
+      "sha256": "ebd6eb0e7bb0c8601ea93af7113395dba1d710b7557432bcb967c65138a76b5a",
+      "role": "STM32G4 OPAMP/PGA/current-sense concepts"
+    },
+    {
+      "id": "st_um3027_motor_control_sdk",
+      "title": "UM3027 - STM32 Motor Control SDK user manual",
+      "local_pdf": "materials/raw/st_manuals/st_um3027_motor_control_sdk.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_um3027_motor_control_sdk.txt",
+      "official_url": "https://www.st.com/resource/en/user_manual/um3027-how-to-use-stm32-motor-control-sdk-v60-workbench-stmicroelectronics.pdf",
+      "bytes": 3905778,
+      "sha256": "8aba7ce1c9159a5f7b8c6394ba99ddd15a43cc79c28c26851fe59ac843629db4",
+      "role": "MCSDK Workbench, Motor Profiler, generated project and tuning workflow"
+    },
+    {
+      "id": "st_an5397_sensorless_pmsm_foc",
+      "title": "AN5397 - Sensorless PMSM FOC controller",
+      "local_pdf": "materials/raw/st_manuals/st_an5397_sensorless_pmsm_foc.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_an5397_sensorless_pmsm_foc.txt",
+      "official_url": "https://www.st.com/resource/en/application_note/an5397-sensorless-pmsm-foc-controller-stmicroelectronics.pdf",
+      "bytes": 364038,
+      "sha256": "6a120a127511721e0ee8fcdfdd3a69a1bb717b4e31bbacbcf29b6be21aaa5152",
+      "role": "Sensorless PMSM FOC observer/startup background"
+    },
+    {
+      "id": "st_an4144_stm32f0_foc_mcsdk",
+      "title": "AN4144 - Field-oriented control using STM32F0 and ST Motor Control SDK",
+      "local_pdf": "materials/raw/st_manuals/st_an4144_stm32f0_foc_mcsdk.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_an4144_stm32f0_foc_mcsdk.txt",
+      "official_url": "https://www.st.com/resource/en/application_note/an4144-fieldoriented-control-using-the-stm32f0-and-the-stmicroelectronics-motor-control-sdk-stmicroelectronics.pdf",
+      "bytes": 1362878,
+      "sha256": "f9f66da76f127417ee61e9d1f22066a55b070473eeadf1bb281a61b15092d81e",
+      "role": "Legacy FOC/MCSDK background only; do not override STM32G4-specific documents"
+    },
+    {
+      "id": "st_nucleo_g474re_brief",
+      "title": "NUCLEO-G474RE board brief",
+      "local_pdf": "materials/raw/st_manuals/st_nucleo_g474re_brief.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_nucleo_g474re_brief.txt",
+      "official_url": "https://www.st.com/resource/en/data_brief/nucleo-g474re.pdf",
+      "bytes": 4774889,
+      "sha256": "257a13318dfe8d9c8fea7737a8000fe42bd2d0941059d9483f9e96138c14cb0f",
+      "role": "Quick NUCLEO-G474RE board reference"
+    },
+    {
+      "id": "st_stdrive101_datasheet",
+      "title": "STDRIVE101 datasheet",
+      "document_id": "DS13472 Rev 2, June 2022",
+      "local_pdf": "materials/raw/st_manuals/st_stdrive101_datasheet.pdf",
+      "source_download": "materials/raw/st_manuals/stdrive101.pdf",
+      "extracted_text": "materials/extracted/st_manuals/st_stdrive101_datasheet.txt",
+      "digest_file": "materials/extracted/st_manuals/st_stdrive101_datasheet_digest.md",
+      "official_url": "https://www.st.com/resource/en/datasheet/stdrive101.pdf",
+      "bytes": 932725,
+      "sha256": "e2e66182313b02886a8e95533d116ce4ea34c26c39a007721bd23de5d38b77af",
+      "role": "STDRIVE101 triple half-bridge gate driver: nFAULT, DT/MODE, CP, SCREF, REG12, VS/VM and protection behavior"
+    }
+  ],
+  "pending_documents": []
+}

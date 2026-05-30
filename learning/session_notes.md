@@ -2,6 +2,43 @@
 
 Append one entry after teaching, Q&A, homework review, debugging help, or experiment review when the turn reveals learning progress or weak points.
 
+## 2026-05-30 Hall state-machine ChatGPT follow-up
+
+- Summary: User pasted back the ChatGPT-taught five-question Hall software state-machine review. The answer correctly classified `110 -> 010` as forward adjacent, `010 -> 110` as reverse adjacent, `111` as illegal, computed `60 / 7 = 8.57 deg` mechanical for a 7-pole-pair motor, and explained why `PB3=LIN1` cannot be reused as Hall.
+- Evidence level: L4 for no-power Hall transition classification and PB3 route constraint; L2-L3 for electrical-to-mechanical angle conversion.
+- Confidence: medium-high for the corrected concept that reverse adjacent transitions are not abnormal.
+- Weak point update: reverse adjacent vs abnormal jump is repaired. The full software Hall adapter processing order remains the next check.
+- Next review: Ask for one-sentence teach-back of raw read -> illegal-state check -> first-valid baseline -> repeat check -> bounce/timing check -> forward/reverse adjacent check -> abnormal-jump count.
+- Source:
+  `learning/review_items/2026-05-30_hall_state_machine_chatgpt_followup.md`
+
+## 2026-05-27 Software Hall adapter processing-order repair
+
+- Summary: User could correctly classify individual Hall transition rows, but
+  answered `我不知道啊` when asked to restate the adapter processing order.
+  Codex added a Chinese-first processing-order card that explains raw read,
+  illegal-state check, first-valid handling, repeat handling, bounce/timing
+  check, adjacent direction check, and abnormal-jump count.
+- Evidence level: L1 repair artifact for processing-order understanding; not
+  a new mastery upgrade.
+- Confidence: medium for identifying the weak point; low for mastery until the
+  user gives a one-sentence teach-back.
+- Weak point observed: software Hall adapter processing order is not yet
+  independently explainable.
+- Next review: Ask the user to say the one-sentence rule from
+  `software_hall_adapter_processing_order_card_2026-05-27.md`.
+- Source:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_processing_order_card_2026-05-27.md`
+
+## 2026-05-27 Hall state-machine follow-up review
+
+- Summary: User correctly classified `100 -> 110` as forward adjacent, `100 -> 101` as reverse adjacent, `100 -> 011` as abnormal jump, and `000` / `111` as illegal Hall states.
+- Evidence level: L4 for table-level no-power Hall state-machine classification.
+- Confidence: medium-high for concept transfer.
+- Weak point observed: None in the table. Still must separate table mastery from firmware/hardware readiness.
+- Next review: Ask user to restate the adapter processing order and why DMM plus GPIO/EXTI boundary review still block firmware work.
+- Source: `learning/session_notes/2026-05-27_hall_state_machine_review_followup.md`
+
 ## 2026-05-09 Learning Loop Initialized
 
 - Topic: Project learning workflow.
@@ -365,3 +402,243 @@ Append one entry after teaching, Q&A, homework review, debugging help, or experi
 - Next review: In the ChatGPT-led concept turn, classify PING, MODE?, ARM, SET_RPM, and STOP as read-only, safety command, or guarded command; then predict final `mode`, `target_rpm`, and `mode_change_count` for both `IDLE + STOP` and `ARMED + STOP`.
 - Workflow note: User again reminded Codex to preserve the dual-teacher split. Codex should stop at repo sync/handoff when the next step is concept teaching, and ChatGPT should lead the next concept segment.
 - Source: User answers and workflow correction in Codex chat on 2026-05-12.
+
+## 2026-05-13 NUCLEO P0 transfer checks passed
+
+- Topic: STOP side effects and DMA receive `Size` count/index rule.
+- Summary: User independently predicted `ARMED,target_rpm=1200,mode_change_count=5 + STOP` as `mode=IDLE`, `target_rpm=0`, `mode_change_count=6`, and `IDLE,target_rpm=1200,mode_change_count=5 + STOP` as `mode=IDLE`, `target_rpm=0`, `mode_change_count=5`. User also answered that `Size = 10` means processing indices `0..9` with loop condition `i < Size`.
+- Evidence level: L4 for STOP side-effect transfer and DMA `Size` count/index transfer.
+- Confidence: medium.
+- Weak point observed: No new weak point. The remaining next check is full DMA + IDLE callback structure: DMA fills the buffer, IDLE marks a ready batch, CPU feeds `rx_buf[0..Size-1]` into `AppFeedRxByte(...)`, then reception restarts.
+- Next review: Move to P1 command classification and branch side-effect reading; then ask the user to describe the DMA + IDLE callback flow in five steps.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO command variable classification
+
+- Topic: Command side-effect classification across `PING`, `MODE?`, `ARM`, `SET_RPM`, and `STOP`.
+- Summary: User correctly classified `PING` and `MODE?` as changing no variables, `ARM` as changing `app_mode` and `mode_change_count`, and `SET_RPM` as changing `target_rpm`. User classified `STOP` as changing `app_mode` and `mode_change_count`, but omitted its unconditional `target_rpm=0` side effect.
+- Evidence level: L3 for command variable classification; STOP target clear still needs one compact repair check.
+- Confidence: medium.
+- Weak point observed: Existing WP-028 remains open: variable classification must include both conditional state/counter side effects and unconditional safety side effects.
+- Next review: Ask the user to restate `STOP` as `target_rpm` always changes to 0, while `app_mode` and `mode_change_count` only change when the previous mode is not `IDLE`.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO STOP unconditional vs conditional side effects
+
+- Topic: Separating side effects outside and inside the `STOP` branch guard.
+- Summary: User correctly answered that `STOP` always clears `target_rpm` to 0, but then listed `app_mode` and `target_rpm` as the conditional side effects. This shows the remaining confusion is not the STOP outcome itself, but separating the line that always runs from the lines inside `if (mode != IDLE)`.
+- Evidence level: L2-L3.
+- Confidence: medium.
+- Weak point observed: Existing WP-028 remains open; emphasize code block location: outside the `if` is unconditional, inside the `if` is conditional.
+- Next review: Show the three-line STOP pseudocode and ask which exact two lines are inside the `if`.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO STOP branch location repair
+
+- Topic: Reading side effects by code block location.
+- Summary: After seeing the STOP pseudocode, user correctly identified the two statements inside `if (mode != IDLE)` as `app_mode = IDLE` and `mode_change_count++`. This repairs the immediate confusion between unconditional `target_rpm=0` and conditional state/counter side effects.
+- Evidence level: L3.
+- Confidence: medium.
+- Weak point observed: Existing WP-028 can move forward from STOP repair to transfer: apply the same outside-if versus inside-if reading to `ARM` and read-only query branches.
+- Next review: On the `ARM` branch, label the command match condition, the state guard, the assignment side effect, the counter side effect, and the response output.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO ARM branch guard and side effects
+
+- Topic: Reading the `ARM` command guard and successful side effects.
+- Summary: User correctly answered that the `ARM` command condition is the current mode being `IDLE`, and that successful `ARM` changes `app_mode` and increments `mode_change_count`.
+- Evidence level: L3.
+- Confidence: medium.
+- Weak point observed: Existing WP-023 is improving, but needs one transfer check for rejected `RUN_SIM + ARM`. Existing WP-028 still needs response-output labeling on the `ARM` branch.
+- Next review: Ask what `RUN_SIM + ARM` should do to `app_mode` and `mode_change_count`, then identify which `printf` response line reports accepted versus rejected.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO ARM rejected-state transfer
+
+- Topic: Applying the `ARM` guard to a rejected run-like state.
+- Summary: User correctly answered that `RUN_SIM + ARM` does not change `app_mode`, does not increment `mode_change_count`, and should return `ERR`.
+- Evidence level: L4 for the current `ARM` guard transfer check.
+- Confidence: medium.
+- Weak point observed: WP-023 can be parked for the current P1 layer. WP-028 remains open for code-reading transfer to response output lines and read-only query branches.
+- Next review: Move to `MODE?`: identify that `strcmp(cmd, "MODE?") == 0` selects the branch, `printf(...)` outputs the mode, and no assignment means no state change.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO MODE query branch reading
+
+- Topic: Reading the `MODE?` query branch.
+- Summary: User correctly identified the first line, `strcmp(cmd, "MODE?") == 0`, as the command-match check and described `MODE?` as a read-only query. The remaining code-reading step is to prove read-only behavior from the branch body: it has `printf(...)` output but no `app_mode = ...` assignment.
+- Evidence level: L2-L3.
+- Confidence: medium.
+- Weak point observed: Existing WP-027 and WP-028 remain open until the user states that `printf` only reports and no assignment means no state change.
+- Next review: Ask why a branch with only `printf(...)` and no `app_mode = ...` cannot change `app_mode`.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO query branch evidence and difficulty adjustment
+
+- Topic: Closing low-value query-branch drills and raising lesson difficulty.
+- Summary: User identified `printf("mode=... mode_name=...");` as the `MODE?` output evidence, then explicitly said the question was too simple. This is enough for the current P1 layer: future teaching should stop drilling simple read-only query recognition and move to callback structure or multi-line branch reading.
+- Evidence level: L3 for current-layer query branch reading.
+- Confidence: medium.
+- Weak point observed: No new weak point. Existing WP-027 should be parked for the current layer; WP-028 should move to higher-value transfer checks rather than more simple fill-in questions.
+- Next review: Use a harder exercise: read a DMA + IDLE callback skeleton and identify data movement, loop bounds, parser feeding, and restart responsibilities.
+- Source: User answer and difficulty feedback in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO DMA + IDLE callback skeleton reading
+
+- Topic: Reading callback responsibilities for DMA + IDLE UART receive.
+- Summary: User correctly identified `AppFeedRxByte(rx_buf[i], ...)` as the line that feeds bytes into the command parser, `HAL_UARTEx_ReceiveToIdle_DMA(&huart2, rx_buf, sizeof(rx_buf))` as the line that restarts reception, and that the callback should not contain direct `ARM`/`STOP`/`SET_RPM` command logic because it must stay short. User answered the processed range as `0 到 i-1`, which mixes the changing loop index with the fixed batch count; the correct range for one callback batch is `0..Size-1`.
+- Evidence level: L3 for callback responsibility reading; L2-L3 for callback loop-bound transfer.
+- Confidence: medium.
+- Weak point observed: WP-029 should reopen narrowly for callback loop-bound wording: `i` is the current index, while `Size` is the received byte count.
+- Next review: Ask the user to state the difference between `i` and `Size` in the callback, then describe the full callback flow in five steps.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO DMA index versus batch size repair
+
+- Topic: Distinguishing the loop index from the received-byte count.
+- Summary: User correctly explained that `i` is the changing current index inside the loop, `Size` is the total byte count received in the current batch, and array indices start at 0. This repairs the immediate `0..i-1` wording slip from the callback skeleton exercise.
+- Evidence level: L4 for the current `i` versus `Size` distinction.
+- Confidence: medium.
+- Weak point observed: WP-029 can be parked again for the current layer. The remaining useful check is the full DMA + IDLE callback flow in five steps.
+- Next review: Ask the user to describe the callback flow: DMA fills `rx_buf`, IDLE marks a batch ready, CPU loops `i < Size`, each byte feeds `AppFeedRxByte(...)`, then DMA + IDLE receive restarts.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO DMA + IDLE five-step flow partial
+
+- Topic: Full DMA + IDLE callback flow.
+- Summary: User correctly answered that DMA transfers data, each byte is handed to `AppFeedRxByte(rx_buf[i], &app_mode, &mode_change_count, &target_rpm)`, and reception must restart because otherwise the next batch may not be received. User described IDLE as "空闲状态", which needs sharpening: in this context it is UART line idle / no new byte for a short interval, meaning the current receive batch is ready. User left the CPU loop step blank; the needed line is `for (uint16_t i = 0; i < Size; i++)`, processing `rx_buf[0..Size-1]`.
+- Evidence level: L3 for parser/restart responsibility; L2-L3 for full callback-flow description.
+- Confidence: medium.
+- Weak point observed: WP-028 remains open for full callback-flow sequencing; add a narrow review for UART IDLE meaning versus application `IDLE` mode.
+- Next review: Ask the user to restate two missing pieces only: what UART IDLE means in this callback, and which loop processes `rx_buf[0..Size-1]`.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 NUCLEO DMA + IDLE callback flow completed
+
+- Topic: Completing the full DMA + IDLE callback explanation.
+- Summary: User correctly restated that UART IDLE means the current byte batch is temporarily complete and ready to process, and that CPU processes `rx_buf[0..Size-1]` with `for (i = 0; i < Size; i++)`. Combined with the previous answer, the user can now describe the full callback flow: DMA transfers bytes into `rx_buf`, UART IDLE marks a ready batch, CPU loops through valid indices, each byte feeds `AppFeedRxByte(...)`, and reception is restarted for the next batch.
+- Evidence level: L4 for current-layer DMA + IDLE callback structure.
+- Confidence: medium.
+- Weak point observed: No new weak point. WP-028 can be parked for the current P1 layer; reopen only when implementing or reviewing the real HAL callback.
+- Next review: Move from concept reading to implementation/verification when appropriate: connect the existing `AppFeedRxByte(...)` parser split to a future real `HAL_UARTEx_RxEventCallback(...)`, then build/validate without adding command logic inside the callback.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 P2 MCSDK no-power precheck boundary
+
+- Topic: MCSDK no-power precheck and Motor Profiler boundary.
+- Summary: User correctly answered that Motor Profiler cannot be run in P2 because it needs a real motor and power chain. User also correctly distinguished what an MCSDK-generated project can prove without power: familiarity with the toolchain and configuration flow, but not real motor parameters, power-chain behavior, or motor-control validation.
+- Evidence level: L3 for P2 no-power boundary understanding.
+- Confidence: medium.
+- Weak point observed: No new weak point. The next useful check is artifact planning: tool version table, Workbench/config placeholder, pin map draft, Motor Profiler plan, and risk/no-go checklist.
+- Next review: Ask the learner to list the P2 no-power artifacts and identify which later artifacts require real hardware.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 P2 MCSDK no-power artifact planning
+
+- Topic: P2 no-power artifact list versus later hardware evidence.
+- Summary: User listed P2 no-power artifacts as pin map, motor-parameter table, no-power configuration file, risk/no-go checklist, and Motor Profiler plan. User also correctly stated that real motor parameters must wait until a later stage with real motor and power chain. The only wording repair is that P2 may contain a motor-parameter template or placeholder, not measured parameters.
+- Evidence level: L3-L4 for P2 artifact planning.
+- Confidence: medium.
+- Weak point observed: No new weak point. Keep the distinction between planned/template artifacts and measured hardware evidence explicit in future P2 work.
+- Next review: Start building the P2 artifact set, beginning with a tool version/status table and pin/config draft, while keeping Motor Profiler as a plan only.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-13 P2 MCSDK config evidence boundary
+
+- Topic: `.stmcx`, generated project, and Motor Profiler evidence boundaries.
+- Summary: User correctly explained that a `.stmcx` in P2 can prove the saved/planned MCSDK configuration choices such as MCU, PWM pins, current-sensing approach, Hall versus sensorless selection, and protection input location. User also correctly stated that even a compiled MCSDK project cannot prove safe motor behavior because nFAULT, PWM, current sensing, Hall, power board, current limit, and rollback evidence are still missing. User answered that Motor Profiler needs real hardware; precision added by Codex: the later valid Profiler stage must also include a real motor, verified power chain, current-limited supply, instruments, stop conditions, and rollback path.
+- Evidence level: L3-L4 for P2 configuration-evidence boundary; L3 for Motor Profiler hardware-boundary wording.
+- Confidence: medium-high.
+- Weak point observed: No new weak point. Keep reinforcing that configuration artifacts prove planning/build readiness only, not motor-control behavior.
+- Next review: When Workbench/CubeMX screenshot or `.stmcx` evidence arrives, ask the learner to identify which fields are configuration evidence and which still require board-routing or hardware-stage proof.
+- Source: User answer in Codex chat on 2026-05-13.
+
+## 2026-05-14 P2 MCSDK no-power practice start
+
+- Topic: Moving from P2 concept checks into no-power MCSDK configuration practice.
+- Summary: User asked to stop extending concept-only evidence drills and start practical work. Codex kept the P2 safety boundary, created `apps/stm32_g474_foc/mcsdk_no_power_precheck/`, wrote `config_draft.md` and `tool_probe_2026-05-14.md`, confirmed CubeMX path `F:\STMCubeMX\STM32CubeMX.exe`, and launched CubeMX to a `javaw.exe` process. Repo search still found no `.stmcx`, and no standalone Workbench executable was found under `MCSDK_v6.4.2-Full`.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for local file/tool facts; medium for GUI readiness because no screenshot or saved config is present yet.
+- Weak point observed: No new learner weak point. The practical gap remains P2 artifact implementation.
+- Next review: Once a screenshot or `.stmcx` is captured, ask the learner to classify it as configuration/tool evidence and list which hardware-stage proofs remain blocked.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 NUCLEO UART DMA + IDLE implementation
+
+- Topic: Moving project firmware forward instead of adding more tool screenshots.
+- Summary: Codex updated `apps/stm32_g474_foc/nucleo_g474re_baseline/Core/Src/main.c` so COM1 receive now uses LPUART1 RX DMA + IDLE. The callback copies bytes into a ring buffer and restarts receive-to-idle DMA; the main loop drains the queue and calls the existing command parser. `stm32g4xx_it.c` and `stm32g4xx_it.h` now include `DMA1_Channel1_IRQHandler()` and `LPUART1_IRQHandler()`. Debug build passed with RAM 2552 B and FLASH 23652 B.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for compile-level firmware integration. Board-level serial behavior still needs a COM5 run if the user wants live confirmation.
+- Weak point observed: No new learner weak point.
+- Next review: If a live NUCLEO check is run later, verify that `PING`, `MODE?`, `ARM`, `SET_RPM`, and `STOP` keep the same semantics under DMA + IDLE.
+- Source: Codex execution and Debug build in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 UART protocol line framer model
+
+- Topic: Advancing the ESP32/STM32 UART protocol path with host-verifiable code.
+- Summary: Codex added `LineFramer` to `src/protocol_model.py` and expanded `tests/test_protocol_model.py` from 14 to 19 tests. The model accepts DMA/IDLE-like byte chunks, emits complete newline-terminated frames, ignores empty lines, drops oversize partial frames, discards overlong data until line end, and recovers for later frames. The full test suite now has 24 tests including workflow-gate checks.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for host protocol behavior because `python -m unittest discover -s tests` passed.
+- Weak point observed: No new learner weak point.
+- Next review: When embedded C builds can be rerun, move command parsing out of `main.c` toward the tested line-framing/protocol model.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 CubeMX Home screenshot capture
+
+- Topic: Turning the opened CubeMX GUI into repo-visible P2 evidence.
+- Summary: Codex cropped the visible CubeMX Home window from the desktop screenshot and saved it as `apps/stm32_g474_foc/mcsdk_no_power_precheck/screenshots/2026-05-14_cubemx_home.png`. Codex also added `gui_capture_checklist_2026-05-14.md` to define the next allowed GUI-only capture targets and forbidden hardware actions.
+- Evidence level: L5 for repo/tool execution by Codex; no new learner mastery claim.
+- Confidence: high for the screenshot file and repo artifact. The screenshot is GUI launch evidence only; it is not an MCSDK draft configuration screenshot or `.stmcx`.
+- Weak point observed: No new learner weak point. The practical gap is still a saved Workbench/CubeMX draft or exact GUI block record.
+- Next review: After the draft screenshot or `.stmcx` exists, ask the learner to classify each field as configuration evidence, board-routing evidence, or later powered-hardware evidence.
+- Source: Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 Codex dual-teacher gate hardening
+
+- Topic: Preventing Codex from drifting into silent engineering execution.
+- Summary: User corrected that Codex must not only do project work; each continuation must keep the teaching role visible. Codex added `workflow/codex_dual_teacher_execution_gate.md`, linked it from `AGENTS.md`, `workflow/teaching_contract.md`, `workflow/prompt_recipes.md`, `workflow/session_close_checklist.md`, and the project Skill source, then added `tests/test_workflow_contracts.py` to guard the rule.
+- Evidence level: L5 for repo/workflow implementation by Codex; no new learner mastery claim.
+- Confidence: high for repository rule hardening once tests pass.
+- Weak point observed: No learner weak point. The assistant workflow risk is now tracked as a repo rule rather than a chat-only reminder.
+- Next review: On the next `继续吧` turn, Codex must begin with `项目目标` / `学习目标` / `修改范围` / `禁止范围` before tool use or edits.
+- Source: User correction and Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 pin/config safety review start
+
+- Topic: Moving beyond toolchain navigation into the next P2 engineering review ring.
+- Summary: User clarified they are already familiar with the toolchain, so Codex should stop hand-holding CubeMX/CubeIDE navigation and begin the next stage directly. Codex added `apps/stm32_g474_foc/mcsdk_no_power_precheck/pin_config_review_2026-05-14.md`, which defines evidence classes, acceptance rules, fail conditions, and hard stops for `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3`, `PB3`, `DT/MODE`, and STDRIVE101 protection paths.
+- Evidence level: L5 for repo/workflow implementation by Codex; no new learner mastery claim.
+- Confidence: high for repo artifact creation and source linkage; hardware confidence remains P2-only because no `.stmcx`, CN8/EDA/netlist, continuity check, power-board connection, or powered log exists.
+- Weak point observed: No learner weak point. Teaching preference recorded separately: skip basic toolchain navigation unless explicitly requested.
+- Next review: Use the pin/config safety review as the next checkpoint. Collect `.stmcx` or config screenshot, CN8/EDA/netlist routing evidence, and STDRIVE101 `nFAULT` / `DT/MODE` / protection evidence before trusting generated MCSDK configuration.
+- Source: User correction and Codex execution in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 NUCLEO CubeMX hands-on draft
+
+- Topic: Turning the P2 no-power lesson into a user-performed CubeMX Board Selector draft.
+- Summary: User corrected the workflow from bare MCU selection to the real `NUCLEO-G474RE` board path, then used CubeMX Pinout to inspect and save a no-power draft. User-provided GUI screenshots showed `PA13/PA14` as SWD, `PA2/PA3` as VCP, `PB3` as SWO, `PB12` as `TIM1_BKIN`, and `PB14` as `TIM1_CH2N`. Codex read back the saved `.ioc` at `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_no_power_nucleo_g474re_draft/mcsdk_no_power_nucleo_g474re_draft.ioc` and confirmed the same assignments.
+- Evidence level: L4 for learner hands-on recognition of NUCLEO board-level pin ownership and CubeMX config evidence; L5 for repo/tool evidence because the `.ioc` is saved and readable.
+- Confidence: high for CubeMX config-layer evidence; hardware confidence remains P2-only because there is still no `.stmcx`, CN8/EDA/netlist, continuity check, power-board connection, or powered log.
+- Weak point observed: No new learner weak point. The useful next check is whether the learner can explain why the saved `.ioc` proves configuration intent but not STDRIVE101 wiring or safe motor behavior.
+- Next review: Ask the learner to classify `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO as configuration evidence, board-ownership evidence, or later hardware-stage proof.
+- Source: User hands-on CubeMX screenshots and Codex `.ioc` readback on 2026-05-14.
+
+## 2026-05-14 P2 CubeMX `.ioc` GUI capture
+
+- Topic: Converting the saved NUCLEO `.ioc` into repo-visible GUI fallback evidence.
+- Summary: Codex launched `F:\STMCubeMX\STM32CubeMX.exe` with the saved NUCLEO-G474RE `.ioc`, captured CubeMX `Pinout & Configuration` screenshots, and wrote `apps/stm32_g474_foc/mcsdk_no_power_precheck/gui_capture_result_2026-05-14.md`. The screenshots show the `.ioc` open in CubeMX with `STM32G474RETx - NUCLEO-G474RE`; `.ioc` readback still confirms `PB12/TIM1_BKIN`, `PB14/TIM1_CH2N`, `PA2/PA3` VCP, and `PB3` SWO. Repo search still found no `.stmcx`, and no MotorControl configuration page was captured.
+- Evidence level: L5 for repo/tool evidence that the `.ioc` can be reopened and captured in CubeMX; no new learner mastery claim.
+- Confidence: high for the screenshot files and `.ioc` readback. This remains fallback GUI evidence only, not MCSDK/Workbench MotorControl evidence.
+- Weak point observed: No new learner weak point. The practical gap remains collecting real `.stmcx` or MotorControl screenshot, CN8/EDA/netlist, and STDRIVE101 protection-path evidence.
+- Next review: Ask the learner to explain why a CubeMX pinout screenshot plus `.ioc` readback still cannot prove board wiring, Motor Profiler readiness, or safe motor-control behavior.
+- Source: Codex GUI screenshot capture and repo search in `foc_learning_repo` on 2026-05-14.
+
+## 2026-05-14 P2 Workbench entry probe
+
+- Topic: Turning the missing Workbench / `.stmcx` entry into a concrete no-power blocker.
+- Summary: Codex added `apps/stm32_g474_foc/mcsdk_no_power_precheck/workbench_entry_probe_2026-05-14.md`. Targeted checks covered the repo, `F:\STMCubeMX`, the MCSDK package, VS Code STM32 extension folders, `.stm32cubemx`, and common ST program roots. The probe confirmed MCSDK `MotorControl` package data exists, including `MotorControl_Configs.xml`, `MotorControl_Modes.xml`, `MCSDK/`, `templates/`, `libMP/`, and `libHSO/`, but still found no `.stmcx`, no standalone Workbench launcher, and no MotorControl configuration page evidence.
+- Evidence level: L5 for repo/tool evidence that MotorControl package data is installed; no new learner mastery claim.
+- Confidence: high for the checked local paths. This remains package-presence evidence only, not saved project configuration evidence.
+- Weak point observed: No new learner weak point. The next practical gap is to obtain either a real `.stmcx`, a MotorControl screenshot, or board-routing evidence.
+- Next review: Ask the learner to distinguish package data, saved configuration, generated firmware, and hardware validation.
+- Source: Codex targeted local path probe in `foc_learning_repo` on 2026-05-14.

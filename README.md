@@ -7,10 +7,14 @@
 
 ## 先读这里
 
+- `AI_CONTEXT.md`：省 token 接手入口，先确认当前阶段、安全边界和按需展开规则。
 - `CURRENT_STATUS.md`：项目总控页，记录当前阶段、缺口和下一步最小动作。
 - `AGENTS.md`：Codex 在本仓库里的行为规则，包含事实源优先级、联网核查和硬件安全边界。
 - `workflow/phase_gate_checklist.md`：阶段闸门表，规定每个阶段的进入条件、证据和禁止动作。
 - `workflow/algo_b_teaching_delivery_plan.md`：B 算法/主控 8 周和 56 天计划的消化版，规定教学节奏、补进度机制、每课/每周上交物和安全边界。
+- `learning/NEXT_LESSON.md`：下一课执行卡，把当前阶段、复习优先级、教学流程、验收标准和 Codex 接力压缩成短入口。
+- `learning/MASTERY_MAP.md`：掌握证据地图，区分已经证明的能力、仍需迁移验证的弱点和不能声称完成的高阶阶段。
+- `workflow/current_learning_sprint.md`：当前学习 sprint，追踪 P2 MCSDK 无功率预检交付物、冲突清单和退出条件。
 - `workflow/intake_checklist.md`：首次资料导入清单，规定新工程、硬件资料和实验日志放哪里。
 - `workflow/macbook_codex_replica.md`：在 MacBook Codex 上再配置一份同源项目环境，并用 Git 做后续双机同步。
 - `workflow/teaching_contract.md`：ChatGPT/Codex 双师制教学规则，规定新名词解释、代码讲解顺序和课后学习记录。
@@ -22,6 +26,10 @@
 - 已放入：共享链接文章规则、本地 HTML/PDF/DOCX 抽取文本、V9 方案、技术报告、申报书版本、B 同学学习计划。
 - 未放入：真实 VS Code/STM32CubeIDE 插件 + STM32CubeMX/MCSDK 源码树、真实 ESP32-C3 工程、真实实验日志、真实串口日志。等你给出后分别放到 `apps/stm32_g474_foc/`、`apps/esp32_c3_gateway/`、`experiments/`、`logs/`。
 - 开发环境不在本仓库范围内；本仓库只配置“Codex 学习助手环境”。
+
+## 省 token 接手路径
+
+默认只读 `AI_CONTEXT.md`、`workflow/ACTIVE_TASK.md`、`docs/00_project_truth/project_context.md` 和 `CURRENT_STATUS.md` 顶部最新段落。只有涉及证据复核、硬件安全、Packet A/B/C、阶段推进或具体实现时，才展开 `materials/extracted/`、`workflow/evidence_register.md`、历史 Packet 记录和生成目录。
 
 ## 常用命令
 

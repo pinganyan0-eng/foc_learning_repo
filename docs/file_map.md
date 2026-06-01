@@ -10,8 +10,12 @@
 | `v9_final` | `materials/extracted/v9_final.txt` | V9 最终方案，硬件/系统高优先级参考 |
 | `proposal_v8` | `materials/extracted/proposal_v8.txt` | V8 申报书，工程盲区修正版 |
 | `proposal_v71` | `materials/extracted/proposal_v71.txt` | V7.1 申报书，历史版本 |
-| `hardware_initial_parts_2026_05_09` | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 用户确认版功率板关键器件、电源轨、保护外围和阈值线索，尚待 Datasheet/原理图/BOM/PCB/实测复核 |
+| `hardware_initial_parts_2026_05_09` | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 用户确认版功率板关键器件、电源轨、保护外围和阈值线索，尚待功率级器件规格页/原始 EDA/正式 BOM/PCB/实测复核 |
 | `power_board_schematic_screenshot_2026_05_09` | `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md` | 用户提供的功率板原理图截图元数据和截图初审观察 |
+| `power_board_no_power_dmm_2026_06_01` | `experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md` | 用户提供的 Hall/LIN1/nFAULT、电源轨、BOOTx、OUTx、R1/R2、R_GND_ISO、CN8 Pin15 和 Gate drive 局部无电 DMM 检查记录；SCREF 连接已有截图/BOM 级证据，不能作为自研板上电放行证据 |
+| `power_board_evidence_package` | `docs/03_hardware_notes/power_board_evidence_package.md` | 自研功率板首次限流上电前证据包清单，区分已消化方案/报告/官方资料与仍待补的原始 EDA、原理图 PDF、PCB、BOM、Gerber/坐标、功率级器件规格页和保护阈值复核缺口 |
+| `power_board_first_limited_power_precheck_2026_06_01` | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_first_limited_power_precheck_record.md` | 首次限流上电前现场记录模板，包含 24V/0.2A 级别限流、观测点、停止条件和禁止动作 |
+| `power_board_24v_0p2a_static_power_on_opsheet_2026_06_01` | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` | 功率板单独、无电机、无 NUCLEO/MCU、无 PWM 的首次 24V/0.2A 限流静态上电现场操作单和记录表 |
 | `automation_playbook` | `workflow/automation_playbook.md` | Codex 每日/每周项目自动化的项目侧契约、边界和人工维护命令 |
 | `active_task` | `workflow/ACTIVE_TASK.md` | 当前唯一执行任务包 |
 | `task_packet_template` | `workflow/task_packet_template.md` | ChatGPT/Codex 任务包模板 |
@@ -63,5 +67,5 @@
 - `apps/stm32_g474_foc/`：VS Code/STM32CubeIDE 插件使用的 STM32CubeMX 或 MCSDK 生成工程。
 - `apps/esp32_c3_gateway/`：ESP32-C3 网关真实工程。
 - `experiments/`：每次联调记录、波形截图、串口日志。
-- `hardware/`：已记录用户确认版关键器件清单和原理图截图；仍待补 EDA 源文件、原理图 PDF、PCB 截图、正式 BOM、Gerber/坐标文件和器件 Datasheet。
+- `hardware/`：方案/报告/部分官方 ST 资料已在 `materials/` 和 `references/` 中记录；硬件签核层已记录用户确认版关键器件清单和原理图截图，仍待补 EDA 源文件、原理图 PDF、PCB 源文件或关键截图、正式 BOM、Gerber/坐标文件和功率级器件规格页。
 - `learning/`：已开始记录 NUCLEO 基础学习过程、薄弱点和复习队列；使用 `tools/normalize_learning_loop.py` 保持编号与表格整洁。

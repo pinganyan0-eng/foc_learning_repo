@@ -76,6 +76,9 @@ void Error_Handler(void);
 #define T_SWO_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define APP_PA8_WAVEFORM_TEST 1U
+#define APP_WAVE_Pin GPIO_PIN_8
+#define APP_WAVE_GPIO_Port GPIOA
 
 /* USER CODE END Private defines */
 

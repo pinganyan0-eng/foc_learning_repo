@@ -349,6 +349,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    if (APP_PA8_WAVEFORM_TEST != 0U)
+    {
+      HAL_GPIO_TogglePin(APP_WAVE_GPIO_Port, APP_WAVE_Pin);
+      HAL_Delay(1U);
+      continue;
+    }
+
     /* HAL_GetTick() 是系统毫秒计数器，来自 SysTick */
     uint32_t now = HAL_GetTick();
 
@@ -499,6 +506,7 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   /* USER CODE BEGIN MX_GPIO_Init_1 */
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* USER CODE END MX_GPIO_Init_1 */
 
@@ -509,6 +517,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
+  HAL_GPIO_WritePin(APP_WAVE_GPIO_Port, APP_WAVE_Pin, GPIO_PIN_RESET);
+
+  GPIO_InitStruct.Pin = APP_WAVE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(APP_WAVE_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE END MX_GPIO_Init_2 */
 }

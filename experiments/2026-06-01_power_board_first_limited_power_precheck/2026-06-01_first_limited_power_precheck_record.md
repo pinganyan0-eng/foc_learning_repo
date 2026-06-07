@@ -15,9 +15,9 @@
 | 项目 | 要求 | 记录 |
 | --- | --- | --- |
 | 板卡版本/照片编号 | 写明实物板版本或照片编号 | TODO |
-| 供电方式 | 实验室可调限流电源 | TODO |
-| 初始电压 | 24V 目标，实际旋钮设置需现场记录 | TODO |
-| 初始限流 | 0.2A 级别起步 | TODO |
+| 供电方式 | 实验室可调限流电源 | 汉晟普源 HSPY-30-05 |
+| 初始电压 | 24V 目标，实际旋钮设置需现场记录 | 24V target; static run measurement record dated 2026-06-05 |
+| 初始限流 | 0.2A 级别起步 | 0.2A level |
 | 万用表 | 可测 DCV、电阻/蜂鸣 | TODO |
 | 电机 | 不连接 | TODO |
 | PWM | 不输出 | TODO |
@@ -38,14 +38,14 @@
 
 | 顺序 | 测量/观察点 | 预期 | 实测 | 判定 |
 | --- | --- | --- | --- | --- |
-| 1 | 电源是否进入恒流 CC | 不应进入 CC | TODO | TODO |
-| 2 | 输入电流 | 应在 0.2A 限流内，且无异常上升 | TODO | TODO |
-| 3 | 5V 对 GND | 接近设计值，无异常跌落 | TODO | TODO |
-| 4 | 3V3 对 GND | 接近设计值，无异常跌落 | TODO | TODO |
-| 5 | REG12 对 GND | 接近 STDRIVE101 内部 REG12 输出目标，无异常跌落 | TODO | TODO |
-| 6 | nFAULT | 保持非故障状态；若低电平/异常，停止 | TODO | TODO |
-| 7 | 异味/冒烟/异常发热 | 无 | TODO | TODO |
-| 8 | D6/TVS/DCDC/STDRIVE101/MOS 温升 | 手靠近或温度计观察，无快速异常发热 | TODO | TODO |
+| 1 | 电源是否进入恒流 CC | 不应进入 CC | CV | Pass |
+| 2 | 输入电流 | 应在 0.2A 限流内，且无异常上升 | 0.04A | Pass |
+| 3 | 5V 对 GND | 接近设计值，无异常跌落 | 5V | Pass |
+| 4 | 3V3 对 GND | 接近设计值，无异常跌落 | 3.34V | Pass |
+| 5 | REG12 对 GND | 接近 STDRIVE101 内部 REG12 输出目标，无异常跌落 | 12V | Pass |
+| 6 | nFAULT | 保持非故障状态；若低电平/异常，停止 | 3.3V | Pass |
+| 7 | 异味/冒烟/异常发热 | 无 | 无 | Pass |
+| 8 | D6/TVS/DCDC/STDRIVE101/MOS 温升 | 手靠近或温度计观察，无快速异常发热 | 无快速异常发热 | Pass |
 
 ## Immediate Stop Conditions
 
@@ -62,8 +62,8 @@
 
 | 项目 | 记录 |
 | --- | --- |
-| 是否执行上电 | No |
+| 是否执行上电 | Yes, 2026-06-05, 24V/0.2A level static limited power-on |
 | 是否接电机 | No |
 | 是否输出 PWM | No |
-| 是否允许进入下一步 | No，本表仍未填写现场项；下一物理动作需按 `2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` 现场确认 |
-| 复盘备注 | TODO |
+| 是否允许进入下一步 | Yes, but only to separately planned MCU connection/empty PWM/Gate waveform checks; not to motor connection |
+| 复盘备注 | HSPY-30-05 reported CV, input current 0.04A, 5V/3V3/REG12/nFAULT rails normal, no abnormal smell/sound/fast heating. |

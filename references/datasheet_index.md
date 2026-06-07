@@ -13,9 +13,14 @@
 - AN4144 Field-oriented control using STM32F0 and ST Motor Control SDK: `F:\嵌赛\1手册\an4144-fieldoriented-control-using-the-stm32f0-and-the-stmicroelectronics-motor-control-sdk-stmicroelectronics.pdf`
 - AN5306 Operational Amplifier usage in STM32G4 Series: `F:\嵌赛\1手册\an5306-dual-motor-control-using-the-stm32g4-stmicroelectronics.pdf`
 
+## 官方在线已核验，尚未本地摄入
+
+- DS13472 STDRIVE101 Datasheet Rev 2, June 2022: https://www.st.com/resource/en/datasheet/stdrive101.pdf
+- STDRIVE101 product page: https://www.st.com/en/power-management/stdrive101.html
+- EVALSTDRIVE101 product and design resources: https://www.st.com/en/evaluation-tools/evalstdrive101.html
+
 ## 仍待补充
 
-- DS13472 STDRIVE101 Datasheet
 - EVLDRIVE101-HPD UM3257
 - NCEP40T11G MOSFET Datasheet
 - LM2596S-5V 成品降压模块规格页 / LM2596S Datasheet

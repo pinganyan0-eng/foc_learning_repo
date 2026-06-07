@@ -16,6 +16,8 @@
 | `power_board_evidence_package` | `docs/03_hardware_notes/power_board_evidence_package.md` | 自研功率板首次限流上电前证据包清单，区分已消化方案/报告/官方资料与仍待补的原始 EDA、原理图 PDF、PCB、BOM、Gerber/坐标、功率级器件规格页和保护阈值复核缺口 |
 | `power_board_first_limited_power_precheck_2026_06_01` | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_first_limited_power_precheck_record.md` | 首次限流上电前现场记录模板，包含 24V/0.2A 级别限流、观测点、停止条件和禁止动作 |
 | `power_board_24v_0p2a_static_power_on_opsheet_2026_06_01` | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` | 功率板单独、无电机、无 NUCLEO/MCU、无 PWM 的首次 24V/0.2A 限流静态上电现场操作单和记录表 |
+| `power_board_24v_0p2a_static_power_on_result_2026_06_05` | `experiments/2026-06-01_power_board_first_limited_power_precheck/logs/2026-06-05_24v_0p2a_static_power_on_result.md` | 用户报告的自研功率板首次 24V/0.2A 级别限流静态上电结果：CV、0.04A、5V/3V3/REG12/nFAULT 正常、无异常气味/声音/快速发热；不代表可输出 PWM 或可接电机 |
+| `power_board_mcu_prejoin_pwm_gate_prep_2026_06_07` | `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/README.md` | MCU 接入前审查、示波器接地安全、空载 PWM/Gate 波形准备、照片和波形证据规范；当前结论为动态检查尚未放行 |
 | `automation_playbook` | `workflow/automation_playbook.md` | Codex 每日/每周项目自动化的项目侧契约、边界和人工维护命令 |
 | `active_task` | `workflow/ACTIVE_TASK.md` | 当前唯一执行任务包 |
 | `task_packet_template` | `workflow/task_packet_template.md` | ChatGPT/Codex 任务包模板 |

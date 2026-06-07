@@ -2,6 +2,16 @@
 
 本单用于自研 STDRIVE101 功率板首次 24V/0.2A 限流静态上电。它只验证静态供电是否基本健康，不授权接电机、不授权输出 PWM、不授权放开限流。
 
+## Execution Record
+
+| Item | Record |
+| --- | --- |
+| Execution date | 2026-06-05 |
+| Power supply | 汉晟普源 HSPY-30-05 |
+| Operator-reported result | Static 24V/0.2A limited power-on normal |
+| Evidence source | User-reported bench measurements in Codex chat |
+| Evidence boundary | No motor/PWM/MCU drive authorization; no oscilloscope Gate waveform evidence yet |
+
 ## Fixed Boundary
 
 - 功率板单独上电。
@@ -15,15 +25,15 @@
 
 | Check | Required state | Record |
 | --- | --- | --- |
-| Power supply output | Off before wiring | TODO |
-| Supply CV setting | 24V | TODO |
-| Supply current limit | 0.2A level | TODO |
-| Board input wiring | Supply + to board 24V, supply - to board GND | TODO |
-| Motor | Not connected | TODO |
-| NUCLEO/MCU/PWM lines | Not connected | TODO |
-| DMM black probe | Fixed to confirmed GND, preferably CN8 Pin15/GND_SIGNAL or known GND pad | TODO |
-| DMM mode | DC voltage | TODO |
-| No-power evidence | `experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md` reviewed | TODO |
+| Power supply output | Off before wiring | User confirmed setup before power-on. |
+| Supply CV setting | 24V | 24V target on HSPY-30-05. |
+| Supply current limit | 0.2A level | 0.2A level. |
+| Board input wiring | Supply + to board 24V, supply - to board GND | Board input 24V/GND only per static-test boundary. |
+| Motor | Not connected | Not connected per static-test boundary. |
+| NUCLEO/MCU/PWM lines | Not connected | Not connected per static-test boundary. |
+| DMM black probe | Fixed to confirmed GND, preferably CN8 Pin15/GND_SIGNAL or known GND pad | DMM readings reported relative to GND. |
+| DMM mode | DC voltage | DC voltage readings reported. |
+| No-power evidence | `experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md` reviewed | Reviewed before this operation sheet was created. |
 
 If any row above is not clearly satisfied, stop here and do not turn on the supply output.
 
@@ -31,16 +41,16 @@ If any row above is not clearly satisfied, stop here and do not turn on the supp
 
 | Step | Action | Expected result | Record |
 | --- | --- | --- | --- |
-| 1 | Keep supply output off; confirm 24V and 0.2A limit on the supply display. | Settings match this sheet. | TODO |
-| 2 | Connect board input 24V/GND only. | No motor, no NUCLEO/MCU/PWM wires attached. | TODO |
-| 3 | Turn on supply output and watch CC/CV and input current immediately. | Supply should not enter CC; current should stay below the 0.2A limit and not climb rapidly. | TODO |
-| 4 | If Step 3 is stable, record steady input current. | Stable current below limit. | TODO |
-| 5 | Measure 5V to GND. | Near 5V and not dropping. | TODO |
-| 6 | Measure 3V3 to GND. | Near 3.3V and not dropping. | TODO |
-| 7 | Measure REG12 to GND. | Near the STDRIVE101 REG12 target, normally about 12V, and not dropping. | TODO |
-| 8 | Measure nFAULT to GND. | Non-fault/high state, expected near 3V3 because the project record shows a 10k pull-up to 3V3. | TODO |
-| 9 | Observe smell, sound, smoke, and fast heating around DCDC, STDRIVE101, D6, TVS, MOS, PTC, and bus capacitor without touching unknown-hot parts. | No abnormal smell, sound, smoke, or fast heating. | TODO |
-| 10 | Turn off supply output after measurements and wait before handling the board. | Board is no longer powered; do not touch until the bus has fallen from 24V. | TODO |
+| 1 | Keep supply output off; confirm 24V and 0.2A limit on the supply display. | Settings match this sheet. | User confirmed HSPY-30-05 can set current limit with output off; 24V/0.2A level used. |
+| 2 | Connect board input 24V/GND only. | No motor, no NUCLEO/MCU/PWM wires attached. | Static-test boundary maintained. |
+| 3 | Turn on supply output and watch CC/CV and input current immediately. | Supply should not enter CC; current should stay below the 0.2A limit and not climb rapidly. | CV, 0.04A. |
+| 4 | If Step 3 is stable, record steady input current. | Stable current below limit. | 0.04A. |
+| 5 | Measure 5V to GND. | Near 5V and not dropping. | 5V. |
+| 6 | Measure 3V3 to GND. | Near 3.3V and not dropping. | 3.34V. |
+| 7 | Measure REG12 to GND. | Near the STDRIVE101 REG12 target, normally about 12V, and not dropping. | 12V. |
+| 8 | Measure nFAULT to GND. | Non-fault/high state, expected near 3V3 because the project record shows a 10k pull-up to 3V3. | 3.3V. |
+| 9 | Observe smell, sound, smoke, and fast heating around DCDC, STDRIVE101, D6, TVS, MOS, PTC, and bus capacitor without touching unknown-hot parts. | No abnormal smell, sound, smoke, or fast heating. | None reported. |
+| 10 | Turn off supply output after measurements and wait before handling the board. | Board is no longer powered; do not touch until the bus has fallen from 24V. | User was instructed to power off and wait after measurements; final power-down confirmation not separately recorded. |
 
 ## Immediate Stop Conditions
 
@@ -58,24 +68,24 @@ If any row above is not clearly satisfied, stop here and do not turn on the supp
 
 | Item | Expected | Actual | Pass/Fail | Note |
 | --- | --- | --- | --- | --- |
-| Supply mode | CV, not CC | TODO | TODO | TODO |
-| Input current | Stable and below 0.2A limit | TODO | TODO | TODO |
-| 5V -> GND | Near 5V | TODO | TODO | TODO |
-| 3V3 -> GND | Near 3.3V | TODO | TODO | TODO |
-| REG12 -> GND | Near REG12 target, normally about 12V | TODO | TODO | TODO |
-| nFAULT -> GND | Non-fault/high, expected near 3V3 | TODO | TODO | TODO |
-| Abnormal smell/smoke/sound | None | TODO | TODO | TODO |
-| Fast heating | None | TODO | TODO | TODO |
+| Supply mode | CV, not CC | CV | Pass | HSPY-30-05 display reported by user. |
+| Input current | Stable and below 0.2A limit | 0.04A | Pass | Well below 0.2A current limit. |
+| 5V -> GND | Near 5V | 5V | Pass | User-reported DMM reading. |
+| 3V3 -> GND | Near 3.3V | 3.34V | Pass | User-reported DMM reading. |
+| REG12 -> GND | Near REG12 target, normally about 12V | 12V | Pass | User-reported DMM reading. |
+| nFAULT -> GND | Non-fault/high, expected near 3V3 | 3.3V | Pass | High/non-fault state. |
+| Abnormal smell/smoke/sound | None | None reported | Pass | User reported no abnormal smell/sound/heating. |
+| Fast heating | None | None reported | Pass | User reported no fast heating. |
 
 ## Result Gate
 
 | Gate | Required condition | Record |
 | --- | --- | --- |
-| Static power result | Pass only if all measurement rows pass and no stop condition occurred | TODO |
+| Static power result | Pass only if all measurement rows pass and no stop condition occurred | Pass for static limited power-on only, based on 2026-06-05 user-reported measurements. |
 | Motor connection | Always No after this sheet | No |
 | PWM output | Always No after this sheet | No |
-| Next allowed work | If static power passes, plan MCU connection and empty PWM/Gate waveform check separately | TODO |
-| If failed | Power off, keep motor/PWM disconnected, return to no-power debug | TODO |
+| Next allowed work | If static power passes, plan MCU connection and empty PWM/Gate waveform check separately | Plan MCU connection/empty PWM/Gate waveform check separately; do not connect motor yet. |
+| If failed | Power off, keep motor/PWM disconnected, return to no-power debug | Not applicable; no stop condition reported in this run. |
 
 ## Notes
 

@@ -14,7 +14,8 @@
 | 用户确认版关键器件记录 | `hardware/bom/2026-05-09_user_provided_power_stage_parts.md` | 已记录关键器件、电源轨、保护外围和阈值线索；用户说明不能保证全部正确。 |
 | 保护阈值记录 | `docs/03_hardware_notes/protection_thresholds.md` | 已记录 SCREF/VDS、PTC、TVS、SS34、采样电阻等待复核项。 |
 | 无电 DMM 检查 | `experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md` | 已排除多项明显短路；不能证明可上电或可接电机。 |
-| 24V/0.2A 静态上电操作单 | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` | 已限定功率板单独上电、无电机、无 NUCLEO/MCU、无 PWM、0.2A 限流和立即断电条件；尚未执行。 |
+| 24V/0.2A 静态上电操作单 | `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` | 已限定功率板单独上电、无电机、无 NUCLEO/MCU、无 PWM、0.2A 限流和立即断电条件；2026-06-05 已按用户实测完成静态限流上电记录。 |
+| 24V/0.2A 静态上电结果 | `experiments/2026-06-01_power_board_first_limited_power_precheck/logs/2026-06-05_24v_0p2a_static_power_on_result.md` | HSPY-30-05 处于 CV，输入电流 0.04A，5V=5V，3V3=3.34V，REG12=12V，nFAULT=3.3V，无异味/异响/快速发热；只证明限流静态供电初步正常。 |
 
 ## 仍缺签核资料
 
@@ -47,4 +48,4 @@
 
 ## 当前结论
 
-无电 DMM 检查已完成大部分低风险排查，未发现明显电源轨、BOOT、Gate 或三相输出短路。首次限流上电前记录表和 24V/0.2A 静态上电操作单已建立。仓库已有方案、报告、截图、BOM 线索和部分官方资料作为背景证据；后续硬件签核仍应补原始 EDA/PCB/BOM/Gerber/坐标和功率级器件规格页。任何情况下仍禁止接电机、输出 PWM、放开限流或绕过保护。
+无电 DMM 检查已完成大部分低风险排查，未发现明显电源轨、BOOT、Gate 或三相输出短路。2026-06-05 用户报告首次 24V/0.2A 级别限流静态上电通过，基础电源轨和 nFAULT 在静态条件下初步正常。仓库已有方案、报告、截图、BOM 线索和部分官方资料作为背景证据；后续硬件签核仍应补原始 EDA/PCB/BOM/Gerber/坐标和功率级器件规格页。任何情况下仍禁止接电机、输出 PWM、放开限流或绕过保护；下一步只能进入单独规划的 MCU 连接前检查、空载 PWM/Gate 波形和采样链路检查。

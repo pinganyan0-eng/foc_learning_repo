@@ -1,129 +1,110 @@
 # 当前任务
 
-这是当前唯一任务，不是长期计划。每次执行前先读本文件，再按任务边界执行；任务完成后由 Codex 更新结果区，并由 ChatGPT 继续教学、拆解或复盘。
-
 ## Task ID
 
-- ID：TASK-2026-05-12-algo-b-teaching-delivery-plan
-- 主题：消化 B 算法/主控 8 周与 56 天计划，固化教学节奏、补进度机制和上交物规则
+- ID：TASK-2026-06-07-L4-power-board-mcu-prejoin-pwm-gate-prep
+- 主题：自研功率板 MCU 接入前审查与空载 PWM/Gate 波形检查准备
 - Status：done
-- Risk Level：L0
-- Definition of Done：`workflow/definition_of_done.md#仓库维护任务`
-- Evidence ID：EV-2026-05-12-WORKFLOW-PLAN-001
+- User Approval：2026-06-07
+- Risk Level：L4
+- Definition of Done：`workflow/definition_of_done.md#硬件审查任务`
+- Evidence ID：EV-2026-06-07-HW-GATE-PREP-001
 - Review Required：yes
 
 ## 背景
 
-用户指出两份 B 算法/主控 HTML 计划里有明确的每日/每周上交物、验收、Git tag、周报和里程碑要求，但当前教学只在讲局部知识点，没有让教学节奏追上计划，也没有把每课/每周交付物写进规则。
+自研 STDRIVE101 功率板已完成 24V/0.2A 级别限流静态上电。HSPY-30-05 处于 CV，输入电流 0.04A；5V=5V，3V3=3.34V，REG12=12V，nFAULT=3.3V；无异味、异响和快速发热。证据已登记为 `EV-2026-06-05-HW-STATIC-PWR-001`。
+
+当前尚未接电机、尚未输出 PWM、尚未测 Gate 波形。静态上电通过不能等同于动态功率级通过。
 
 ## 当前阶段
 
-阶段 0/教学与交付计划固化；真实工程仍处于 P1 NUCLEO 基础与 UART 命令阶段。此任务只改工作流、计划、索引和教学规则，不进入硬件或电机动作。
+- 阶段 5：自研板首次上电 / 空载 PWM 与 Gate 波形检查准备。
+- 当前不是电机运行、Hall 闭环或 SMO 无感阶段。
+- 本任务只完成 MCU 接入前审查和空载 PWM/Gate 检查准备，不执行动态功率测试。
 
 ## 任务目标
 
-把 `materials/extracted/algo_b_8week.txt` 和 `materials/extracted/algo_56day.txt` 消化为一份可执行的教学与交付总计划，并把“教学必须做进度检查点、必须绑定上交物、落后先 catch-up、阶段闸门高于日历计划”写入规则文件。
+1. 审查 MCU 接入前必须满足的硬件、供电、地线、信号、保护和测量条件。
+2. 建立空载 PWM/Gate 波形检查准备表、示波器接地安全表、照片/波形命名规则和异常回退表。
+3. 核对 STDRIVE101 官方资料和可靠的示波器接地/差分测量资料。
+4. 明确当前已确认项、未确认项、禁止动作和下一阶段进入条件。
 
 ## 允许做
 
-- 新增 `workflow/algo_b_teaching_delivery_plan.md`。
-- 更新 `workflow/teaching_contract.md`。
-- 更新 `workflow/learning_feedback_loop.md`。
-- 更新 `workflow/prompt_recipes.md`。
-- 更新 `workflow/session_close_checklist.md`。
-- 更新 `codex_skills/stm32g474-foc-assistant/SKILL.md`。
-- 更新 `deliverables/submission_checklist.md`。
-- 更新 `learning/LEARNING_STATUS.md`。
-- 更新 `CURRENT_STATUS.md`、`README.md`、`materials/START_HERE.md`、`docs/file_map.md`。
-- 更新 `workflow/evidence_register.md`。
-- 运行文档、学习记录和索引维护命令。
+- 读取项目状态、阶段闸门、风险矩阵、原理图截图/BOM 线索、无电 DMM 和首次静态上电记录。
+- 核验 STDRIVE101 官方 Datasheet/Application Note 和仪器厂商的示波器接地/差分测量资料。
+- 新增 MCU 接入前审查、空载 PWM/Gate 准备、示波器安全、照片/波形目录和实验记录模板。
+- 更新 `CURRENT_STATUS.md`、`docs/file_map.md`、`workflow/evidence_register.md` 和本任务结果区。
+- 运行文档、索引和仓库状态检查命令。
 
 ## 禁止做
 
-- 不接 24V。
-- 不接功率板。
-- 不接电机。
-- 不改 PWM、Gate、FOC 实时控制路径。
-- 不改 MCSDK/CubeMX/ESP-IDF 工程配置。
-- 不修改硬件参数或保护阈值。
-- 不自动 commit。
-- 不自动 push。
+- 不接电机、不带载、不提高母线电压、不放开限流。
+- 不远程指挥用户上电、反复上电或输出 PWM。
+- 不修改 PWM、Gate、FOC、TIM1/TIM8、MCSDK 实时代码。
+- 不修改保护阈值、死区、过流或 VDS 参数。
+- 不把普通示波器地夹接到 OUTU/OUTV/OUTW、BOOT 或其他开关节点。
+- 不采用断开示波器保护地的浮地测量方式。
+- 不声称动态功率级、电流采样、电机运行、Hall 闭环或 SMO 已通过。
 
 ## 输入文件
 
-- `materials/extracted/algo_b_8week.txt`
-- `materials/extracted/algo_56day.txt`
 - `CURRENT_STATUS.md`
-- `workflow/phase_gate_checklist.md`
 - `workflow/teaching_contract.md`
-- `workflow/learning_feedback_loop.md`
-- `workflow/prompt_recipes.md`
-- `learning/LEARNING_STATUS.md`
-- `deliverables/submission_checklist.md`
-- `codex_skills/stm32g474-foc-assistant/SKILL.md`
+- `workflow/phase_gate_checklist.md`
+- `workflow/risk_gate_matrix.md`
+- `docs/03_hardware_notes/power_board_evidence_package.md`
+- `hardware/schematic/2026-05-09_power_board_schematic_screenshot.md`
+- `hardware/schematic/2026-05-09_power_board_schematic_screenshot.jpg`
+- `hardware/bom/2026-05-09_user_provided_power_stage_parts.md`
+- `experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md`
+- `experiments/2026-06-01_power_board_first_limited_power_precheck/`
+- STDRIVE101 官方资料和仪器厂商测量安全资料
 
 ## 输出文件
 
-- `workflow/algo_b_teaching_delivery_plan.md`
-- `workflow/teaching_contract.md`
-- `workflow/learning_feedback_loop.md`
-- `workflow/prompt_recipes.md`
-- `workflow/session_close_checklist.md`
-- `codex_skills/stm32g474-foc-assistant/SKILL.md`
-- `deliverables/submission_checklist.md`
-- `learning/LEARNING_STATUS.md`
-- `CURRENT_STATUS.md`
-- `README.md`
-- `materials/START_HERE.md`
-- `docs/file_map.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/README.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/2026-06-07_mcu_prejoin_review_checklist.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/2026-06-07_pwm_gate_waveform_prep_sheet.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/2026-06-07_scope_grounding_safety_table.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/photos/README.md`
+- `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/waveforms/README.md`
 - `workflow/evidence_register.md`
-- `workflow/ACTIVE_TASK.md`
+- `docs/file_map.md`
+- 必要时更新 `CURRENT_STATUS.md`
 
 ## 验收证据
 
-- 总计划文件存在，明确来源、官方核验、冲突处理、进度检查点、补进度机制、阶段路线、当前阶段上交物和 ChatGPT/Codex 规则补丁。
-- 教学契约和学习反馈流程要求每次教学先做进度检查点，并绑定上交物。
-- prompt recipes 和 Skill 源文件包含新计划读取顺序。
-- `CURRENT_STATUS.md`、`docs/file_map.md`、`README.md` 和 `materials/START_HERE.md` 能找到新计划入口。
-- `deliverables/submission_checklist.md` 包含周交付包模板。
-- 证据登记表包含本任务证据行。
-- 维护命令已运行并记录结果。
-
-## 安全边界
-
-本任务仅固化教学与交付工作流，不进入硬件、电机或功率动作。涉及 24V、PWM、Gate、nFAULT、电流采样、Hall/SMO、电机接入的后续任务，必须回到 `workflow/phase_gate_checklist.md`。
-
-## 执行步骤
-
-1. 读取两份 B 算法/主控计划和当前阶段文件。
-2. 联网核验 MCSDK、STM32CubeIDE for VS Code、STM32G474、STDRIVE101、CORDIC/FMAC、ESP32-C3 UART 等关键假设。
-3. 新增教学与交付总计划。
-4. 更新教学契约、学习反馈、提示词、Skill、索引、状态页和提交清单。
-5. 运行维护命令。
-6. 输出修改摘要、命令结果、`git status` 摘要和建议 commit message。
-
-## Definition of Done
-
-- 新计划覆盖教学、交付、进度、补课、阶段闸门和双师分工。
-- 入口文件和索引均指向新计划。
-- 指定命令已运行并记录结果，或明确说明未运行原因。
-- 未修改功率相关代码、CubeMX/MCSDK/ESP-IDF 配置、硬件参数、PWM、Gate 或 FOC 实时控制代码。
+- MCU 接入前审查清单、示波器接地安全表和空载 PWM/Gate 准备表已完成。
+- 照片和波形截图命名规范已完成。
+- 官方资料来源、当前缺失证据、异常回退和禁止动作已明确。
+- 未修改固件实时控制代码，未执行或指挥危险硬件动作。
+- `workflow/evidence_register.md` 登记本任务证据。
 
 ## Blocked Handling
 
-如果缺文件、命令失败、证据不足或风险升级，Codex 应把 Status 改为 `blocked`，记录失败命令、报错摘要、可能原因和下一步建议，不得绕过限制继续执行。
+如果缺少原始 EDA、明确的控制接口引脚映射、示波器/探头型号或固件版本，只将对应项标记为未确认，不推断、不放行动态测试。若无法形成最低限度风险清单，则把任务状态改为 `blocked`。
 
 ## Codex 结果区
 
-- 执行状态：done
-- 修改文件：`workflow/algo_b_teaching_delivery_plan.md`、`workflow/teaching_contract.md`、`workflow/learning_feedback_loop.md`、`workflow/prompt_recipes.md`、`workflow/session_close_checklist.md`、`codex_skills/stm32g474-foc-assistant/SKILL.md`、`deliverables/submission_checklist.md`、`learning/LEARNING_STATUS.md`、`CURRENT_STATUS.md`、`README.md`、`materials/START_HERE.md`、`docs/file_map.md`、`workflow/evidence_register.md`、`workflow/ACTIVE_TASK.md`
-- 证据：`workflow/evidence_register.md` 中新增 `EV-2026-05-12-WORKFLOW-PLAN-001`；`python tools\normalize_learning_loop.py` 成功；`python tools\build_vector_store.py` 成功并生成 7503 chunks；`python -m unittest discover -s tests` 成功，14 tests OK
-- Evidence ID：EV-2026-05-12-WORKFLOW-PLAN-001
-- 失败命令：无已知失败
-- 剩余风险：需要后续真实执行周交付包；P1 当前 UART 命令副作用表和 DMA + IDLE 流程图仍需补齐为正式上交物
+- 执行状态：done，等待 ChatGPT 或用户复盘为 `reviewed`。
+- 已完成：
+  - 核对原理图截图、用户 BOM 线索、无电 DMM、静态上电记录和 baseline 固件状态。
+  - 核验 STDRIVE101 DS13472 Rev 2、ST 官方产品/评估板资料和 Tektronix 浮地测量安全资料。
+  - 建立 MCU 接入前清单、PWM/Gate 准备表、示波器接地安全表、照片和波形证据规范。
+  - 更新 `CURRENT_STATUS.md`、`docs/file_map.md`、`references/datasheet_index.md` 和 `workflow/evidence_register.md`。
+- 关键结论：本任务的准备文档已完成，但动态 PWM/Gate 检查未放行。仍缺 DT/MODE 实物或 EDA 证据、六路 MCU 映射、可回滚 PWM 固件、示波器/探头型号和断电接线照片。
+- 证据：`EV-2026-06-07-HW-GATE-PREP-001`。
+- 验证：
+  - `python3 tools/build_vector_store.py`：成功，生成 7548 chunks。
+  - `python3 -m unittest discover -s tests`：成功，14 tests OK。
+- 硬件动作：未执行；未指导输出 PWM、上电或接电机。
+- 固件动作：未修改 PWM、Gate、FOC、TIM1/TIM8 或 MCSDK 代码。
+- Review Required：yes。
 
 ## 建议 commit message
 
 ```text
-docs: 固化 B 算法教学与交付计划
+docs: prepare power-board PWM and gate review
 ```

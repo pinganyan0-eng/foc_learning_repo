@@ -1,12 +1,12 @@
 # CURRENT_STATUS
 
-最后更新：2026-06-01
+最后更新：2026-06-07
 
 这个文件是项目总控页。每次继续 FOC 项目时，先读这里，再读 `AGENTS.md`、`materials/START_HERE.md` 和 `docs/00_project_truth/project_context.md`。
 
 ## 当前阶段
 
-项目处于 NUCLEO 基础工程阶段，同时自研功率板开始进入无电 DMM 后的首次限流上电前准备。2026-05-09 已生成并编译通过 NUCLEO-G474RE baseline CubeMX/CMake 工程；2026-05-11 用户提供 VOFA+ 截图，证明当前固件已下载运行并通过 COM5 / ST-LINK VCP 输出状态机日志，`mode` 与 `mode_name` 能同步显示 `IDLE`、`ARMED`、`RUN_SIM`。2026-05-12 Codex 通过 COM5 验证了 `PING`、`MODE?`、`ARM`、`STOP` 和学习用 `SET_RPM <rpm>` 命令：解析错误、范围错误、状态拒绝、ARM 后目标值更新、STOP 清零均符合规则表。2026-06-01 用户提供 Hall、LIN1、nFAULT、电源轨、BOOTx、三相 OUTx、R1/R2、R_GND_ISO、CN8 Pin15 和 Gate drive 的无电 DMM 读数，多数短路检查符合预期，R1/R2 本体值、CN8 Pin15 到 GND_SIGNAL、Gate 到 GND 和 Gate 串阻路径也符合预期；R1/R2 中点不在顶层裸露，不能安全直接 DMM 探测，但既有原理图截图/BOM 记录已给出 R1/R2 中点连接到 STDRIVE101 Pin3/SCREF 的设计证据。已新增功率板证据包清单、首次限流上电前记录表和 24V/0.2A 静态上电现场操作单；这些仍不代表自研板已上电通过。ESP32 工程、PCB/Gerber、正式 BOM 文件和功率/电机实测日志还没有开始沉淀。
+项目处于 NUCLEO 基础工程阶段，同时自研功率板已完成无电 DMM 后的首次 24V/0.2A 级别限流静态上电。2026-05-09 已生成并编译通过 NUCLEO-G474RE baseline CubeMX/CMake 工程；2026-05-11 用户提供 VOFA+ 截图，证明当前固件已下载运行并通过 COM5 / ST-LINK VCP 输出状态机日志，`mode` 与 `mode_name` 能同步显示 `IDLE`、`ARMED`、`RUN_SIM`。2026-05-12 Codex 通过 COM5 验证了 `PING`、`MODE?`、`ARM`、`STOP` 和学习用 `SET_RPM <rpm>` 命令：解析错误、范围错误、状态拒绝、ARM 后目标值更新、STOP 清零均符合规则表。2026-06-01 用户提供 Hall、LIN1、nFAULT、电源轨、BOOTx、三相 OUTx、R1/R2、R_GND_ISO、CN8 Pin15 和 Gate drive 的无电 DMM 读数，多数短路检查符合预期，R1/R2 本体值、CN8 Pin15 到 GND_SIGNAL、Gate 到 GND 和 Gate 串阻路径也符合预期；R1/R2 中点不在顶层裸露，不能安全直接 DMM 探测，但既有原理图截图/BOM 记录已给出 R1/R2 中点连接到 STDRIVE101 Pin3/SCREF 的设计证据。2026-06-05 用户使用汉晟普源 HSPY-30-05 执行 24V/0.2A 级别限流静态上电，电源处于 CV，输入电流 0.04A，5V=5V，3V3=3.34V，REG12=12V，nFAULT=3.3V，无异味/异响/快速发热；证据编号 `EV-2026-06-05-HW-STATIC-PWR-001`。2026-06-07 已完成 MCU 接入前和空载 PWM/Gate 检查准备审查，证据编号 `EV-2026-06-07-HW-GATE-PREP-001`；因仍缺 DT/MODE 实物或 EDA 证据、六路 MCU 映射、可回滚 PWM 固件和示波器/探头型号，动态检查尚未放行。ESP32 工程、PCB/Gerber、正式 BOM 文件和 PWM/Gate/电机实测日志还没有开始沉淀。
 
 当前仓库的主要作用是：固定项目事实源、学习路线、安全红线、资料索引、接口契约和后续交付物目录。
 
@@ -42,7 +42,8 @@
 - 实验记录与答辩交付物目录：`experiments/`、`deliverables/`。
 - NUCLEO 基础工程实验记录：`experiments/2026-05-09_nucleo_baseline/`。
 - 自研功率板无电 DMM 局部检查记录：`experiments/2026-06-01_power_board_no_power_dmm/logs/2026-06-01_hall_control_connector_dmm_check.md`；证据编号 `EV-2026-06-01-HW-DMM-001`。
-- 自研功率板上电前证据包清单：`docs/03_hardware_notes/power_board_evidence_package.md`；首次限流上电前记录表：`experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_first_limited_power_precheck_record.md`；24V/0.2A 静态上电现场操作单：`experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md`。
+- 自研功率板上电前证据包清单：`docs/03_hardware_notes/power_board_evidence_package.md`；首次限流上电前记录表：`experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_first_limited_power_precheck_record.md`；24V/0.2A 静态上电现场操作单：`experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md`。2026-06-05 用户报告 HSPY-30-05 限流静态上电通过，证据编号 `EV-2026-06-05-HW-STATIC-PWR-001`。
+- 自研功率板 MCU 接入与 PWM/Gate 准备审查：`experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/`；证据编号 `EV-2026-06-07-HW-GATE-PREP-001`。当前只完成准备清单，未执行动态测试。
 - 学习闭环维护脚本：`tools/normalize_learning_loop.py`、`tools/start_learning_session.*`、`tools/end_learning_session.*`。
 - 项目自动化契约：`workflow/automation_playbook.md`；当前 Codex 自动化包括每日学习视频邮件、每日项目进化巡检邮件和每周项目复盘邮件，均绑定项目根目录运行。
 - 双师制任务入口：`workflow/ACTIVE_TASK.md`、`workflow/task_packet_template.md`、`workflow/session_close_checklist.md`。
@@ -56,7 +57,7 @@
 - NUCLEO-G474RE baseline CubeMX/CMake 工程已放入；MCSDK 电机控制工程尚未放入。
 - 真实 ESP32-C3 网关工程尚未放入。
 - 方案、报告、原理图截图、用户确认版硬件清单和部分官方 ST/MCU 资料已入库并已消化；硬件签核层仍缺 EDA 源文件/网表、导出 PDF、PCB 源文件或关键截图、Gerber/坐标文件、正式 BOM，以及 STDRIVE101/MOS/DCDC/TVS/SS34/PTC/采样电阻/母线电容/电机等功率级器件规格页。
-- 已有的用户确认版硬件清单仍是待复核线索，不代表硬件设计已审查通过。2026-06-01 的无电 DMM 表已覆盖 Hall/LIN1/nFAULT、24V/5V/REG12 对地、BOOTx-OUTx、OUTx 对地/24V/相间、R1/R2 本体、R_GND_ISO、CN8 Pin15/GND_SIGNAL、Gate 到 GND 和 Gate 串阻路径检查；SCREF 连接已有截图/BOM 级设计证据，但原始 EDA/netlist/PCB-source、原理图 PDF、PCB 源文件/关键截图、正式 BOM 和功率级器件规格页仍未入库。
+- 已有的用户确认版硬件清单仍是待复核线索，不代表硬件设计已审查通过。2026-06-01 的无电 DMM 表已覆盖 Hall/LIN1/nFAULT、24V/5V/REG12 对地、BOOTx-OUTx、OUTx 对地/24V/相间、R1/R2 本体、R_GND_ISO、CN8 Pin15/GND_SIGNAL、Gate 到 GND 和 Gate 串阻路径检查；2026-06-05 的 24V/0.2A 级别限流静态上电已显示基础电源轨和 nFAULT 正常。SCREF 连接已有截图/BOM 级设计证据，但原始 EDA/netlist/PCB-source、原理图 PDF、PCB 源文件/关键截图、正式 BOM、功率级器件规格页、空载 PWM/Gate 波形和电机运行证据仍未入库。
 - NUCLEO baseline 串口日志和学习用 `SET_RPM` 命令验证已产生；示波器波形、Motor Profiler 结果、Hall 闭环记录尚未产生。
 
 这些不是配置缺失，而是项目尚未进入对应阶段。
@@ -67,7 +68,7 @@
 2. 如果要推进阶段：先对照 `workflow/phase_gate_checklist.md`，确认进入条件、产出证据和禁止动作。
 3. 如果要导入新资料：先按 `workflow/intake_checklist.md` 分类命名，再更新对应索引。
 4. 如果要继续 STM32 baseline：在已验证 COM5 串口命令路径的基础上，补肉眼 LD2 闪烁证据，或继续做 UART DMA + IDLE 接收一行命令。
-5. 如果要继续硬件审查/首次静态上电：按 `experiments/2026-06-01_power_board_first_limited_power_precheck/2026-06-01_24v_0p2a_static_power_on_operation_sheet.md` 执行功率板单独 24V/0.2A 限流静态上电记录；仍不接电机、不接 NUCLEO/MCU、不输出 PWM。并继续按 `docs/03_hardware_notes/power_board_evidence_package.md` 补硬件签核资料。
+5. 如果要继续硬件审查/功率板推进：先补 `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/` 标出的 DT/MODE、六路 MCU 映射、PWM 固件 commit、示波器/探头型号和断电接线照片。补齐并经 ChatGPT/用户复盘后，再新建单独 L4 任务；仍不接电机、不放开限流。
 
 ## 安全红线
 

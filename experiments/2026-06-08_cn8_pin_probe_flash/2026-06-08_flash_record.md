@@ -77,21 +77,34 @@ User-provided RIGOL DS1102E Plus screenshots:
 | --- | --- | --- | --- | --- |
 | PA8 | `D7` | about 400 Hz | about 401 Hz, period about 2.495 ms | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pa8_ard_d7_400hz_scope.jpg` |
 | PA9 | `D8` | about 1 kHz | 1.00 kHz, period 1.000 ms | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pa9_ard_d8_1khz_scope.jpg` |
+| PA10 | `D2` | about 2 kHz | 2.00 kHz, period 500.0 us | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pa10_ard_d2_2khz_scope.jpg` |
+| PB3 | `D3` | about 100 Hz | 100 Hz, period 9.980 ms | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pb3_ard_d3_100hz_scope.jpg` |
+| PB10 | `D6` | about 200 Hz | 200 Hz, period 5.000 ms | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pb10_ard_d6_200hz_scope.jpg` |
+| PA15 | ST Morpho `CN7-17` | about 50 Hz | 50.0 Hz, period 20.00 ms | `experiments/2026-06-08_cn8_pin_probe_flash/photos/2026-06-08_pa15_cn7_17_50hz_scope.jpg` |
 
 Correction note: Codex previously conflated STM32 `PA9` with the NUCLEO Arduino
 silk label `D9`. The correct NUCLEO Arduino point for checking firmware `PA9`
 is `D8`; Arduino `D9` is not the PA9 check point. This correction affects only
 the user-facing measurement guidance, not the compiled firmware pin assignment.
 
-These screenshots confirm only the NUCLEO pin-probe behavior for PA8 and PA9.
-They do not validate Gate outputs, the power board, 24 V operation, motor
+These screenshots confirm the expected identification frequencies on all six
+NUCLEO pin-probe outputs: PA15, PB3, PB10, PA8, PA9, and PA10. They do not
+validate Gate outputs, edge quality, the power board, 24 V operation, motor
 operation, MCSDK, FOC, or deadtime.
 
 ## Next Measurement Boundary
 
 - Scope ground clip may be connected only to NUCLEO GND for this check.
-- Probe PA8/D7, PA9/D8, PA10/D2, PB3/D3, and PB10/D6 one at a time. Confirm
-  the exact safe PA15 access point before probing PA15.
+- All six NUCLEO-only identification outputs are measured at their expected
+  frequencies.
+- This closes only the NUCLEO MCU-pin mapping check. A separate reviewed task
+  is required before connecting CN8 to the power board or measuring Gate
+  outputs.
 - Do not connect scope ground to OUTx, BOOTx, high-side source/switch-node, or
   any unreviewed power-board point.
 - Do not connect CN8 to the power board during this NUCLEO-only pin check.
+
+Official connector source:
+
+- ST UM2505, ST Morpho connector table:
+  `https://www.st.com/resource/en/user_manual/dm00556337.pdf`

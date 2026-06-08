@@ -41,10 +41,10 @@ NUCLEO-G474RE, Arduino `D9` is not `PA9`; use Arduino `D8` to check `PA9`.
 | --- | --- | --- | --- |
 | PA8 | 400 Hz | `D7` | Measured 2026-06-08: about 401 Hz |
 | PA9 | 1 kHz | `D8` | Measured 2026-06-08: 1.00 kHz |
-| PA10 | 2 kHz | `D2` | Pending |
-| PB3 | 100 Hz | `D3` | Pending |
-| PB10 | 200 Hz | `D6` | Pending |
-| PA15 | 50 Hz | PA15 / T_JTDI access point must be confirmed before probing | Pending |
+| PA10 | 2 kHz | `D2` | Measured 2026-06-08: 2.00 kHz |
+| PB3 | 100 Hz | `D3` | Measured 2026-06-08: 100 Hz |
+| PB10 | 200 Hz | `D6` | Measured 2026-06-08: 200 Hz |
+| PA15 | 50 Hz | ST Morpho `CN7-17` | Measured 2026-06-08: 50.0 Hz |
 
 ## Build
 
@@ -67,7 +67,8 @@ Expected outputs:
 4. Flash `cn8_pin_probe.hex` to the NUCLEO.
 5. Clip the oscilloscope ground to NUCLEO GND.
 6. Probe the user-facing points in the NUCLEO Arduino header map one at a
-   time. For PA15, confirm the exact safe access point before probing.
+   time. For PA15, use ST Morpho `CN7-17`: the odd-numbered column, ninth
+   position from the `CN7-1/2` end. Do not touch adjacent `CN7-18` (5 V).
 
 Record one screenshot per pin with time scale, voltage scale, and measured
 frequency visible.

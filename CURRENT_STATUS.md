@@ -12,7 +12,10 @@
   disconnected.
 - NUCLEO-only waveform checks have started. User-provided RIGOL DS1102E Plus
   photos show PA8 via Arduino `D7` at about 401 Hz and PA9 via Arduino `D8`
-  at 1.00 kHz.
+  at 1.00 kHz, PA10 via Arduino `D2` at 2.00 kHz, and PB3 via Arduino `D3`
+  at 100 Hz. PB10 via Arduino `D6` was measured at 200 Hz, and PA15 via ST
+  Morpho `CN7-17` was measured at 50.0 Hz. All six NUCLEO identification
+  outputs are now confirmed at their expected frequencies.
 - Correction recorded: Codex previously conflated STM32 `PA9` with the NUCLEO
   Arduino silk label `D9`. On the NUCLEO-G474RE measurement header, PA9 is
   checked at Arduino `D8`; Arduino `D9` must not be used as the PA9 check

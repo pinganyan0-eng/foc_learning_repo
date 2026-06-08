@@ -20,10 +20,46 @@ Evidence ID: `EV-2026-06-07-HW-GATE-PREP-001`
 | --- | --- | --- |
 | 无电短路检查 | `EV-2026-06-01-HW-DMM-001` | 局部通过；不等于动态放行。 |
 | 24V/0.2A 静态上电 | `EV-2026-06-05-HW-STATIC-PWR-001` | 静态供电初步通过。 |
-| CN8 接口 | 截图显示六路 HIN/LIN、ADC、Hall、nFAULT、3V3、GND_SIGNAL | 引脚名称可用，供电方向和 MCU 六路映射仍需确认。 |
+| CN8 接口 | 截图显示六路 HIN/LIN、ADC、Hall、nFAULT、3V3、GND_SIGNAL；2026-05-19 PCB2 映射证据已恢复 | 引脚名称和六路 MCU 映射线索可用；仍需确认供电方向、当前固件和实际线缆一致性。 |
 | DT/MODE | 截图中连接不清；用户记录称短接 GND | 未通过正式证据确认。 |
 | PWM 固件 | 仓库只有 NUCLEO baseline，无三相互补 PWM/MCSDK 工程 | 未准备。 |
 | Gate 波形 | 无示波器截图 | 未验证。 |
+
+## Recovered Mapping Evidence - 2026-06-07
+
+The earlier 2026-05-19 PCB2 mapping packet has been restored into the synced
+master workspace:
+
+`hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/pcb2_mapping_pin1_protection_note_2026-05-19.md`
+
+It records the six driver inputs as:
+
+| CN8 | Signal | STM32 pin |
+| --- | --- | --- |
+| P1 | HIN1 | PA15 |
+| P2 | LIN1 | PB3 |
+| P3 | HIN2 | PB10 |
+| P4 | LIN2 | PA8 |
+| P5 | HIN3 | PA9 |
+| P6 | LIN3 | PA10 |
+
+Decision: this closes the "mapping absent" gap for preparation review. It does
+not close the current firmware commit, `.ioc` ownership, reset/default safe
+state, physical cable review, DT/MODE proof, or dynamic waveform approval.
+
+## CN8 Pin Probe Firmware Source - 2026-06-07
+
+Added source-only NUCLEO probe firmware:
+
+`apps/stm32_g474_foc/cn8_pin_probe/`
+
+It drives the recovered PCB2 CN8 P1-P6 STM32 pins with identification square
+waves while the power board is disconnected. It uses TIM6 and GPIO only; it is
+not MCSDK, FOC, TIM1 MotorControl PWM, Gate, 24 V, or motor validation.
+
+Local build status: CMake configure uses the installed `mingw32-make.exe` and
+is blocked because `arm-none-eabi-gcc.exe` and `arm-none-eabi-g++.exe` are not
+available in PATH or detected local ST tool directories.
 
 ## Key Review Result
 
@@ -55,6 +91,26 @@ STDRIVE101 官方 Datasheet 说明：
 - `2026-06-07_scope_grounding_safety_table.md`
 - `photos/README.md`
 - `waveforms/README.md`
+
+## Photo Evidence Update - 2026-06-07
+
+User-provided photos have been archived under `photos/` and reviewed as
+preparation evidence. They improve the evidence state for board overview, CN3/CN8
+orientation, STDRIVE101 local area, and available scope/probe equipment.
+
+Updated decision:
+
+- Board overview and connector/equipment photo requirements are partially
+  satisfied.
+- The RIGOL DS1102E Plus must be treated as an earth-referenced bench scope.
+- The shown RIGOL passive probe is not a differential probe.
+- Ground-referenced logic, nFAULT, REG12, and low-side Gate measurements may be
+  planned only in a future approved dynamic task.
+- High-side Vgs, OUTx, and BOOTx measurements remain prohibited with the shown
+  equipment.
+- Dynamic PWM/Gate testing remains blocked until the recovered six-channel
+  mapping is reconciled with the current firmware and cable, and DT/MODE proof,
+  PWM firmware commit/rollback, and the unpowered wiring table are reviewed.
 
 ## Official Sources
 

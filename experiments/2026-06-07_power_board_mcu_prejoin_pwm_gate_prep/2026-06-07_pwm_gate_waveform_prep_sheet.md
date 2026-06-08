@@ -16,7 +16,7 @@ Official basis: STDRIVE101 Datasheet DS13472 Rev 2, Section 5.3 and Table 7/8.
 
 | Signal | Reference | Tool class | Purpose | Current gate |
 | --- | --- | --- | --- | --- |
-| MCU HIN/LIN input at CN8 | GND_SIGNAL | Passive x10 probe or logic analyzer after equipment review | Confirm frequency, duty and complementary relationship | BLOCKED: pin map/firmware missing |
+| MCU HIN/LIN input at CN8 | GND_SIGNAL | Passive x10 probe or logic analyzer after equipment review | Confirm frequency, duty and complementary relationship | BLOCKED: mapping recovered; current firmware/cable match still missing |
 | nFAULT | GND_SIGNAL | DMM or passive x10 probe | Confirm fault state and timing | PREPARATION ONLY |
 | GLS1/2/3 | Confirmed GND | Passive x10 probe after probe rating review | Observe low-side gate amplitude and timing | BLOCKED: no approved dynamic task |
 | GHSx - OUTx | Differential | Rated differential probe only | Observe high-side Vgs | BLOCKED unless probe model/rating approved |

@@ -25,17 +25,28 @@ Do not approve a measurement until every field is filled:
 
 | Item | Record |
 | --- | --- |
-| Oscilloscope manufacturer/model | TODO |
-| Input grounding architecture | TODO: earth-referenced / isolated / unknown |
-| Channel-to-channel isolation | TODO |
-| Passive probe model | TODO |
-| Probe attenuation | TODO |
-| Tip-to-ground rating | TODO |
-| Differential probe model | TODO / none |
-| Differential voltage rating | TODO |
-| Common-mode voltage rating | TODO |
-| Bandwidth and CMRR at relevant frequency | TODO |
-| Manual URL/page | TODO |
+| Oscilloscope manufacturer/model | RIGOL DS1102E Plus, 2-channel, 120 MHz, 1 GSa/s; photo `photos/2026-06-07_rigol_front_model.jpg`. |
+| Input grounding architecture | Treat as earth-referenced. Rear label says line powered and "maintain ground"; photo `photos/2026-06-07_rigol_back_label.jpg`. |
+| Channel-to-channel isolation | Not proven. Treat channel grounds as common unless the instrument manual proves isolated inputs. |
+| Passive probe model | RIGOL RP2200-class passive probe from photo `photos/2026-06-07_rigol_rp2200_passive_probe.jpg`. |
+| Probe attenuation | 1x/10x marking visible; use 10x for any approved board measurement. |
+| Tip-to-ground rating | Photo marking appears to show 1x/150 V CAT II and 10x/300 V CAT II; verify on the physical probe before use. |
+| Differential probe model | None shown. |
+| Differential voltage rating | Not available. |
+| Common-mode voltage rating | Not available. |
+| Bandwidth and CMRR at relevant frequency | Not available without a differential probe. |
+| Manual URL/page | TODO: add RIGOL DS1102E Plus and RP2200 manual references before a dynamic task. |
+
+## Equipment Decision - 2026-06-07 Photo Review
+
+- The RIGOL scope and passive probe can be considered only for ground-referenced
+  logic input, nFAULT, REG12, or low-side Gate measurements after a separate
+  dynamic task is approved.
+- Ordinary passive-probe ground clips must be connected only to reviewed
+  GND_SIGNAL / board GND.
+- High-side `GHSx - OUTx`, `OUTx`, and `BOOTx` measurements remain prohibited
+  with the shown equipment because no differential probe or isolated-input
+  instrument was provided.
 
 ## Pre-Measurement Review
 

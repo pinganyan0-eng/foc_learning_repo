@@ -1,5 +1,40 @@
 # CURRENT_STATUS
 
+## 2026-06-07 CN8 Pin Probe Firmware Scaffolded
+
+- Added NUCLEO-only probe firmware under
+  `apps/stm32_g474_foc/cn8_pin_probe/`.
+- Purpose: drive recovered PCB2 CN8 P1-P6 mapping pins
+  PA15/PB3/PB10/PA8/PA9/PA10 with identification square waves while the power
+  board, CN8 cable, 24 V bus, and motor are disconnected.
+- This is not MCSDK, FOC, Gate, power-board, or motor validation.
+- Static text checks show the probe uses TIM6 and the six target GPIOs only;
+  it does not use TIM1/TIM2 MotorControl PWM outputs.
+- Local CMake configuration was adjusted to use the installed
+  `C:/mingw64/bin/mingw32-make.exe` with `MinGW Makefiles`. Configure now
+  blocks only because `arm-none-eabi-gcc.exe` and `arm-none-eabi-g++.exe` are
+  not available in PATH or the detected local ST extension/package directories.
+
+## 2026-06-07 Photo Evidence Added For PWM/Gate Preparation
+
+- Archived user-provided photos under
+  `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/photos/`.
+- Evidence now covers power-board top/bottom overviews, CN3/CN8 connector
+  close-up, STDRIVE101 local area close-up, RIGOL DS1102E Plus scope labels,
+  and a RIGOL RP2200-class passive probe.
+- This partially closes preparation-record gaps for board photos and
+  equipment identification.
+- Recovered 2026-05-19 PCB2 mapping evidence has also been archived under
+  `hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/`. It records
+  CN8 P1-P6 as HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 mapped to
+  PA15/PB3/PB10/PA8/PA9/PA10.
+- It does not close DT/MODE mode, current PWM firmware commit/rollback,
+  NUCLEO cable plan, firmware-to-cable reconciliation, or differential-probe
+  evidence.
+- Dynamic PWM/Gate measurement is still not approved. Ordinary passive-probe
+  ground clips must not be connected to OUTx, BOOTx, high-side source/switch
+  nodes, or any non-reviewed ground point.
+
 最后更新：2026-06-07
 
 这个文件是项目总控页。每次继续 FOC 项目时，先读这里，再读 `AGENTS.md`、`materials/START_HERE.md` 和 `docs/00_project_truth/project_context.md`。

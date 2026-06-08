@@ -1,6 +1,22 @@
 # Windows 工具链状态
 
-最后更新：2026-05-09
+最后更新：2026-06-07
+
+## 2026-06-07 命令行复查
+
+- `cmake` 可用：`C:\Program Files\CMake\bin\cmake.exe`。
+- `mingw32-make.exe` 可用：`C:\mingw64\bin\mingw32-make.exe`。
+- `STM32_Programmer_CLI.exe` 可用：
+  `F:\STMCubePROG\bin\STM32_Programmer_CLI.exe`。
+- `arm-none-eabi-gcc.exe` 和 `arm-none-eabi-g++.exe` 未在 PATH 或已搜索的
+  ST/Cube/VS Code 工具目录中找到。
+- `apps/stm32_g474_foc/cn8_pin_probe/` 暂时不能从命令行生成 `.elf`、
+  `.hex` 或 `.bin`。当前缺口是 ARM GCC，不是烧录 CLI。
+- `STM32_Programmer_CLI.exe -l` 当前显示：No ST-Link detected，Total
+  number of serial ports available: 0。烧录前还需要把 NUCLEO/ST-LINK 接入并
+  重新确认。
+- 下方 2026-05-09 bundle 记录保留为历史证据；用于当前烧录或构建结论前，
+  需要重新验证 bundle 实际路径。
 
 ## 状态
 

@@ -32,6 +32,20 @@ These are identification waveforms, not motor-control PWM waveforms. Their
 purpose is to prove that the firmware can drive the six STM32 pins that match
 the recovered PCB2 CN8 mapping.
 
+## NUCLEO Arduino Header Measurement Map
+
+Do not infer the NUCLEO Arduino silk label from the STM32 pin name. On the
+NUCLEO-G474RE, Arduino `D9` is not `PA9`; use Arduino `D8` to check `PA9`.
+
+| Firmware STM32 pin | Approx. square wave | NUCLEO Arduino silk label / access point | Status |
+| --- | --- | --- | --- |
+| PA8 | 400 Hz | `D7` | Measured 2026-06-08: about 401 Hz |
+| PA9 | 1 kHz | `D8` | Measured 2026-06-08: 1.00 kHz |
+| PA10 | 2 kHz | `D2` | Pending |
+| PB3 | 100 Hz | `D3` | Pending |
+| PB10 | 200 Hz | `D6` | Pending |
+| PA15 | 50 Hz | PA15 / T_JTDI access point must be confirmed before probing | Pending |
+
 ## Build
 
 ```powershell
@@ -52,7 +66,8 @@ Expected outputs:
 3. Power the NUCLEO from USB only.
 4. Flash `cn8_pin_probe.hex` to the NUCLEO.
 5. Clip the oscilloscope ground to NUCLEO GND.
-6. Probe PA15, PB3, PB10, PA8, PA9, and PA10 one at a time.
+6. Probe the user-facing points in the NUCLEO Arduino header map one at a
+   time. For PA15, confirm the exact safe access point before probing.
 
 Record one screenshot per pin with time scale, voltage scale, and measured
 frequency visible.

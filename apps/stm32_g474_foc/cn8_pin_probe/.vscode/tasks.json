@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CN8 Probe: list ST-LINK",
+            "type": "process",
+            "command": "F:\\STMCubePROG\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-l"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CN8 Probe: configure",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "--preset",
+                "Debug"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CN8 Probe: build",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "--preset",
+                "Debug"
+            ],
+            "dependsOn": [
+                "CN8 Probe: configure"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CN8 Probe: flash",
+            "type": "process",
+            "command": "F:\\STMCubePROG\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-c",
+                "port=SWD",
+                "-w",
+                "${workspaceFolder}\\build\\Debug-mingw\\cn8_pin_probe.hex",
+                "-v",
+                "-rst"
+            ],
+            "dependsOn": [
+                "CN8 Probe: build"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

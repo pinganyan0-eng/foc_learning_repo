@@ -1,5 +1,25 @@
 # CURRENT_STATUS
 
+## 2026-06-08 CN8 Pin Probe Flashed To NUCLEO
+
+- Built and flashed `apps/stm32_g474_foc/cn8_pin_probe/build/Debug-mingw/cn8_pin_probe.hex`
+  to NUCLEO-G474RE through ST-LINK SN `002F00253235511337333439`.
+- STM32CubeProgrammer v2.22.0 reported board `NUCLEO-G474RE`, target voltage
+  3.28 V, device ID `0x469`, STM32G47x/G48x/G414, 512 KB NVM.
+- Programmed 5.98 KB at `0x08000000`; download verified successfully; software
+  reset performed.
+- User confirmed before flashing that CN8/power board, 24 V, and motor were
+  disconnected.
+- NUCLEO-only waveform checks have started. User-provided RIGOL DS1102E Plus
+  photos show PA8 via Arduino `D7` at about 401 Hz and PA9 via Arduino `D8`
+  at 1.00 kHz.
+- Correction recorded: Codex previously conflated STM32 `PA9` with the NUCLEO
+  Arduino silk label `D9`. On the NUCLEO-G474RE measurement header, PA9 is
+  checked at Arduino `D8`; Arduino `D9` must not be used as the PA9 check
+  point.
+- This is NUCLEO-only pin waveform evidence preparation. It is not Gate,
+  power-board, 24 V, motor, MCSDK, FOC, or deadtime validation.
+
 ## 2026-06-07 CN8 Pin Probe Firmware Scaffolded
 
 - Added NUCLEO-only probe firmware under

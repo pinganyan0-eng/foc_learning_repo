@@ -28,3 +28,24 @@
 - `CURRENT_STATUS.md`：当前阶段、已通过闸门、下一步最小动作。
 - `experiments/YYYY-MM-DD_topic/`：真实实验条件、步骤、现象和结论。
 - `deliverables/submission_checklist.md`：如果阶段变化影响答辩材料。
+
+## 2026-06-08 NUCLEO TIM1 preparation status
+
+- The six-pin GPIO identification check is complete.
+- A separate TIM1 complementary PWM source project now exists and has passing
+  static contract tests.
+- ARM build and NUCLEO flash are complete.
+- Startup-low, complementary deadtime, software STOP, and BKIN waveform
+  evidence are complete for the NUCLEO-only probe task.
+- This work does not pass phase 5 and does not authorize a CN8/power-board,
+  24 V, Gate, or motor test.
+- DT/MODE design evidence is complete: the archived schematic shows
+  `U1 Pin 2 / DT/MODE -> GND_POWER`, with the populated `R_GND_ISO` link
+  measured at approximately 0.1 ohm.
+- CN3/CN8-alias no-power cable evidence is complete: eight intended wires
+  passed continuity, pairwise isolation passed, P7-P12 and P14/3V3 remained
+  open, orientation photos were reviewed, and post-installation targeted
+  sanity checks passed.
+- This still does not pass phase 5 and does not authorize 24 V, Gate probing,
+  OUTx/BOOTx/high-side Vgs measurement, motor connection, or power-stage
+  dynamic behavior.

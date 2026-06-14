@@ -1,5 +1,84 @@
 # CURRENT_STATUS
 
+## 2026-06-09 CN3 15-pin No-Power Cable Remap Closed
+
+- Opened `TASK-2026-06-09-L3-cn8-no-power-cable-remap`.
+- Prepared an eight-wire physical mapping and DMM continuity/isolation record
+  under `experiments/2026-06-09_cn8_no_power_cable_remap/`.
+- 2026-06-12 correction: the populated long 15-pin control connector on the
+  PCB silkscreen is `CN3`; earlier schematic/history records may call the same
+  pin list `CN8`. The separate 6-pin connector is not the TIM1 control
+  interface and must not be used for this cable.
+- Required endpoints are physical CN3 P1-P6, P13, and P15. CN3 P7-P12 and
+  P14/3V3 must remain unpopulated.
+- The raw DMM continuity/isolation results and 2026-06-12 orientation photos
+  pass for no-power cable installation into physical CN3 only. User-reported
+  post-installation sanity checks also passed: P14-P15, P1-P2, P3-P4, P5-P6,
+  and P13-P15 all showed no beep.
+- `TASK-2026-06-09-L3-cn8-no-power-cable-remap` is closed as done for
+  no-power cable mapping/installation evidence only.
+- This task does not authorize 24 V, motor, Gate probing, OUTx/BOOTx/high-side
+  Vgs measurement, or motor operation. The next possible step is a separate
+  reviewed NUCLEO USB-only logic-input check with the power board still
+  unpowered and no 24 V.
+
+## 2026-06-08 TIM1 Complementary PWM Probe Built And Flashed
+
+- Added the independent NUCLEO-only project
+  `apps/stm32_g474_foc/tim1_complementary_pwm_probe/`.
+- It configures TIM1 center-aligned PWM at 10 kHz, 25% duty, with DTG `0xCA`
+  (336 timer ticks, approximately 1.976 us at 170 MHz).
+- Dynamic output mapping is PA8/PA7, PA9/PB14, and PA10/PB15 for TIM1
+  CH1/1N, CH2/2N, and CH3/3N. PB12 is active-low TIM1_BKIN.
+- CHxN outputs use TIM1's default complementary relationship; the brief
+  `CCxNP` polarity-inversion attempt was rejected because the follow-up PA8/PA7
+  capture still showed same-phase high windows.
+- Reset leaves MOE clear. B1 explicitly arms; a second B1 press latches STOP;
+  BKIN clears MOE asynchronously and latches until reset. AOE is disabled.
+- Static contract tests pass 6/6, and the repository unittest run passes
+  20/20. The STM32 project safe-claim dry run reports no unsafe added claims.
+  The ARM Debug build now succeeds with GNU Arm 14.3.1 and generated
+  `tim1_complementary_pwm_probe.elf/.hex/.bin`.
+- Flashed `tim1_complementary_pwm_probe.hex` to NUCLEO-G474RE through ST-LINK
+  SN `002F00253235511337333439`. STM32CubeProgrammer v2.22.0 reported target
+  voltage 3.28 V, device ID `0x469`, programmed 6.52 KB at `0x08000000`,
+  verified the download successfully, and performed software reset.
+- User-provided RIGOL DS1102E Plus screenshots now accept PA8/PA7,
+  PA9/PB14, and PA10/PB15 as NUCLEO-only TIM1 complementary PWM pairs after
+  B1 arm: all three pairs show about 10.0 kHz, no visible high-level overlap,
+  and about 2 us deadtime in both transition directions. On the measured
+  PA10/PB15 pair, the second B1 press stops PWM and a further B1 press without
+  reset does not restart it, accepting the software STOP latch behavior.
+  Pulling PB12/CN10-16 low also stops PA10/PB15; releasing PB12 and pressing
+  B1 without reset does not restart PWM. After reset, the pair remains inactive
+  before B1 and returns to about 10.0 kHz complementary PWM only after one B1
+  press. This accepts the measured BKIN action, latch, post-reset safe state,
+  and explicit re-arm chain. Reset-before-B1 low evidence has been directly
+  captured for PA8/PA7, PA9/PB14, and PA10/PB15, completing direct startup-low
+  evidence for all six outputs.
+- The NUCLEO-only TIM1 complementary PWM validation is complete: all three
+  pairs passed approximately 10 kHz complementary PWM, no visible high-level
+  overlap, and about 2 us deadtime in both directions; all six outputs passed
+  reset-before-B1 inactive checks; software STOP and PB12/BKIN action and
+  latching were measured on PA10/PB15. This does not approve CN8, the power
+  board, 24 V, Gate probing, or motor operation.
+- PA8/PA7 dual-channel captures with same-phase high windows are recorded as
+  failed/inconclusive intermediate captures, not as complementary PWM evidence.
+  The `CCxNP` attempt has been removed. On 2026-06-09 the rollback build was
+  rebuilt, flashed under reset, verified successfully, and software-reset.
+  Follow-up D7/D11 oscilloscope evidence now accepts PA8/PA7 after rollback.
+- Mapping decision and the NUCLEO-only measurement record are under
+  `hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/` and
+  `experiments/2026-06-08_nucleo_tim1_complementary_pwm_probe/`.
+- The old PA15/PB3/PB10/PA8/PA9/PA10 map remains identification evidence only.
+  It is not the dynamic complementary PWM cable map.
+- No power-board 24 V or motor action is approved. The archived schematic now
+  directly confirms `U1 Pin 2 / DT/MODE -> GND_POWER`, and the populated
+  `R_GND_ISO` 0-ohm link measured approximately 0.1 ohm. The CN3/CN8-alias
+  cable continuity, isolation, orientation, P14-open, and post-installation
+  sanity evidence are now closed separately by
+  `EV-2026-06-09-HW-CN8-CABLE-CONTINUITY-001`.
+
 ## 2026-06-08 CN8 Pin Probe Flashed To NUCLEO
 
 - Built and flashed `apps/stm32_g474_foc/cn8_pin_probe/build/Debug-mingw/cn8_pin_probe.hex`
@@ -51,20 +130,21 @@
   `hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/`. It records
   CN8 P1-P6 as HIN1/LIN1/HIN2/LIN2/HIN3/LIN3 mapped to
   PA15/PB3/PB10/PA8/PA9/PA10.
-- It does not close DT/MODE mode, current PWM firmware commit/rollback,
-  NUCLEO cable plan, firmware-to-cable reconciliation, or differential-probe
-  evidence.
+- The photo alone did not close DT/MODE mode. A later 2026-06-09 review of the
+  already archived schematic directly confirmed `U1 Pin 2 / DT/MODE` to
+  `GND_POWER`. The NUCLEO cable plan, physical cable evidence, and
+  differential-probe evidence remain separate.
 - Dynamic PWM/Gate measurement is still not approved. Ordinary passive-probe
   ground clips must not be connected to OUTx, BOOTx, high-side source/switch
   nodes, or any non-reviewed ground point.
 
-最后更新：2026-06-07
+最后更新：2026-06-12
 
 这个文件是项目总控页。每次继续 FOC 项目时，先读这里，再读 `AGENTS.md`、`materials/START_HERE.md` 和 `docs/00_project_truth/project_context.md`。
 
 ## 当前阶段
 
-项目处于 NUCLEO 基础工程阶段，同时自研功率板已完成无电 DMM 后的首次 24V/0.2A 级别限流静态上电。2026-05-09 已生成并编译通过 NUCLEO-G474RE baseline CubeMX/CMake 工程；2026-05-11 用户提供 VOFA+ 截图，证明当前固件已下载运行并通过 COM5 / ST-LINK VCP 输出状态机日志，`mode` 与 `mode_name` 能同步显示 `IDLE`、`ARMED`、`RUN_SIM`。2026-05-12 Codex 通过 COM5 验证了 `PING`、`MODE?`、`ARM`、`STOP` 和学习用 `SET_RPM <rpm>` 命令：解析错误、范围错误、状态拒绝、ARM 后目标值更新、STOP 清零均符合规则表。2026-06-01 用户提供 Hall、LIN1、nFAULT、电源轨、BOOTx、三相 OUTx、R1/R2、R_GND_ISO、CN8 Pin15 和 Gate drive 的无电 DMM 读数，多数短路检查符合预期，R1/R2 本体值、CN8 Pin15 到 GND_SIGNAL、Gate 到 GND 和 Gate 串阻路径也符合预期；R1/R2 中点不在顶层裸露，不能安全直接 DMM 探测，但既有原理图截图/BOM 记录已给出 R1/R2 中点连接到 STDRIVE101 Pin3/SCREF 的设计证据。2026-06-05 用户使用汉晟普源 HSPY-30-05 执行 24V/0.2A 级别限流静态上电，电源处于 CV，输入电流 0.04A，5V=5V，3V3=3.34V，REG12=12V，nFAULT=3.3V，无异味/异响/快速发热；证据编号 `EV-2026-06-05-HW-STATIC-PWR-001`。2026-06-07 已完成 MCU 接入前和空载 PWM/Gate 检查准备审查，证据编号 `EV-2026-06-07-HW-GATE-PREP-001`；因仍缺 DT/MODE 实物或 EDA 证据、六路 MCU 映射、可回滚 PWM 固件和示波器/探头型号，动态检查尚未放行。ESP32 工程、PCB/Gerber、正式 BOM 文件和 PWM/Gate/电机实测日志还没有开始沉淀。
+项目处于 NUCLEO-only 三对互补 PWM 验证完成、功率板物理散线接入前审查阶段。2026-06-09 已完成三对 TIM1 互补 PWM、约 2us 死区、复位禁止、B1 STOP 和 PB12/BKIN 锁存的示波器验证。已有原理图局部放大明确显示 `U1 Pin 2 / DT/MODE -> GND_POWER`，并结合 `R_GND_ISO` 本体约 0.1Ω 的无电读数，确认 STDRIVE101 按六输入模式设计，STM32 负责互补 PWM 和死区。该结论仍不批准 CN8、功率板动态 PWM、24V、Gate 或电机测试；下一阻塞项是断电状态下的散线重排、逐线通断和接线照片复核。
 
 当前仓库的主要作用是：固定项目事实源、学习路线、安全红线、资料索引、接口契约和后续交付物目录。
 
@@ -126,7 +206,7 @@
 2. 如果要推进阶段：先对照 `workflow/phase_gate_checklist.md`，确认进入条件、产出证据和禁止动作。
 3. 如果要导入新资料：先按 `workflow/intake_checklist.md` 分类命名，再更新对应索引。
 4. 如果要继续 STM32 baseline：在已验证 COM5 串口命令路径的基础上，补肉眼 LD2 闪烁证据，或继续做 UART DMA + IDLE 接收一行命令。
-5. 如果要继续硬件审查/功率板推进：先补 `experiments/2026-06-07_power_board_mcu_prejoin_pwm_gate_prep/` 标出的 DT/MODE、六路 MCU 映射、PWM 固件 commit、示波器/探头型号和断电接线照片。补齐并经 ChatGPT/用户复盘后，再新建单独 L4 任务；仍不接电机、不放开限流。
+5. 如果要继续硬件审查/功率板推进：下一步只做断电散线任务，按已审查的 PA8/PA7、PA9/PB14、PA10/PB15、PB12 和 GND 映射重排线束，逐线测通断并拍接线照片。完成复核后再新建单独 L4 动态任务；仍不上 24V、不接电机、不放开限流。
 
 ## 安全红线
 

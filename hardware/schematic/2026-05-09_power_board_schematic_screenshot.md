@@ -32,7 +32,9 @@
 - `nFAULT`：`R3 10K` 上拉到 `3V3`，并接 `LED1` 到 `GND_SIGNAL`。
 - 输入串联电阻：`R17/R18/R20/R21/R19/R22` 均为 `10Ω`，位于 `HIN1/HIN2/HIN3/LIN1/LIN2/LIN3` 到 STDRIVE101 输入之间。
 - 自举网络：`C22/C23/C24 1uF`，`D1/D2/D3 SS34`，网络标注 `BOOTx/OUTx/REG12`。
-- 截图中 `DT/MODE` 到 GND 的连接不明显，需用 EDA 源文件或局部高清图确认。
+- 2026-06-09 局部放大复核确认：`U1 Pin 2 / DT/MODE` 的连线直接接到
+  `GND_POWER` 符号，设计为六输入模式。局部证据归档于
+  `experiments/2026-06-08_nucleo_tim1_complementary_pwm_probe/photos/2026-06-09_stdrive101_dt_mode_pin2_gnd_power_schematic.png`。
 
 ### 功率级与采样
 
@@ -52,7 +54,8 @@
 
 ## 截图暴露的待复核点
 
-- `DT/MODE` 配置连接在截图中不清楚；需要 EDA 源文件、局部放大图或网络表确认。
+- `DT/MODE` 设计连接已通过原理图局部放大确认到 `GND_POWER`；实物 QFN
+  细脚不再使用粗表笔复测。
 - 5V/3.3V 模块符号没有显示 LM2596S 具体型号；模块实物和 BOM 仍需确认。
 - 端子型号 KF128-5.08 在截图中不可见；只能确认连接器位号/网络，不能确认物料型号。
 - `SMD1812P050TF` 0.5A 额定与电机目标电流是否匹配，需要按 24V 输入功率和实际工况核算。

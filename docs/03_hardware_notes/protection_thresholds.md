@@ -38,7 +38,9 @@ SCREF/VDS、过流、欠压、TVS、保险丝/PTC 等保护阈值记录。当前
 
 ## 截图相关复核
 
-- `DT/MODE` 连接在截图中不清楚；若该脚配置错误，会直接影响 STDRIVE101 输入模式/死区策略。
+- 2026-06-09 原理图局部放大确认 `U1 Pin 2 / DT/MODE -> GND_POWER`，
+  设计为六输入模式；STM32 负责互补 PWM 和死区。该结论是设计连接证据，
+  不等于功率板动态 Gate 验证。
 - `R_GND_ISO 0Ω` 连接 `GND_POWER` 与 `GND_SIGNAL`，需确认 SCREF、REG12、nFAULT、ADC/Hall 小信号回流不会被功率电流污染。
 
 ## 输入保护阈值/热风险

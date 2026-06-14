@@ -10,7 +10,7 @@
 | 电机保持断开 | 需要新的现场全景照片 | TODO |
 | 电源限流策略 | 首次静态测试为 24V/0.2A | Known; future setting requires separate approval |
 | 原始 EDA/netlist | 未入库 | BLOCKED |
-| DT/MODE 实物连接 | 截图不清；仅有用户线索 | BLOCKED |
+| DT/MODE 设计连接 | 原理图局部放大明确显示 U1 Pin 2 接 GND_POWER；R_GND_ISO 实测约 0.1Ω | PASS (design evidence) |
 | 六路 PWM MCU 映射 | 2026-05-19 PCB2 映射证据已恢复：P1-P6 -> PA15/PB3/PB10/PA8/PA9/PA10 | EVIDENCE FOUND; needs firmware/cable reconciliation |
 | 可回滚 PWM 固件 | baseline 无三相 PWM | BLOCKED |
 | 示波器/探头型号 | 未提供 | BLOCKED |
@@ -100,7 +100,7 @@ directories.
 - [ ] Default/reset state of all six MCU outputs is low or high-impedance.
 - [ ] PWM firmware has a commit ID and a documented rollback.
 - [ ] TIM break/fault behavior and startup order are documented.
-- [ ] DT/MODE mode is confirmed from physical or EDA evidence.
+- [x] DT/MODE mode is confirmed from schematic design evidence.
 - [ ] Deadtime ownership is explicit: STDRIVE101 or STM32, never assumed.
 
 ## Risk Classification
@@ -119,7 +119,7 @@ directories.
 
 - [x] Power-board overview photo: archived as `photos/2026-06-07_power_board_top_overview.jpg`.
 - [x] CN8 close-up showing connector orientation: archived as `photos/2026-06-07_cn3_cn8_closeup.jpg`.
-- [x] DT/MODE area close-up: archived as `photos/2026-06-07_stdrive101_dt_mode_area_closeup.jpg`; this is photo evidence only and does not close DT/MODE mode.
+- [x] DT/MODE area close-up: archived as `photos/2026-06-07_stdrive101_dt_mode_area_closeup.jpg`; physical photo alone is inconclusive, but the archived schematic now closes the design connection.
 - [x] Six-channel NUCLEO-to-CN8 mapping source packet: recovered as `hardware/schematic/2026-05-19_pcb2_mapping_pin1_protection/pcb2_mapping_pin1_protection_note_2026-05-19.md`.
 - [x] NUCLEO-only CN8 pin-probe firmware source: added as `apps/stm32_g474_foc/cn8_pin_probe/`.
 - [ ] NUCLEO connector and intended cable photo.
@@ -138,8 +138,10 @@ Still blocking any dynamic PWM/Gate task:
 - Six-channel NUCLEO-to-CN8 mapping evidence has been recovered from the
   2026-05-19 PCB2 mapping packet, but the current firmware and physical cable
   still need to be reconciled against it.
-- DT/MODE is not conclusively proven by the close-up photo; use EDA/netlist or
-  a targeted no-power continuity/resistance check.
+- DT/MODE is confirmed at design level by the archived schematic:
+  `U1 Pin 2 / DT/MODE -> GND_POWER`. The populated `R_GND_ISO` link measured
+  approximately 0.1 ohm. Do not repeat a direct QFN-pin check with coarse
+  probes.
 - PWM firmware commit, rollback path, reset/default safe-state proof, and
   exact `.ioc`/MCSDK project are not provided.
 - The new `cn8_pin_probe` source is not yet a built/flashed artifact because
@@ -147,4 +149,44 @@ Still blocking any dynamic PWM/Gate task:
 - No NUCLEO connector/cable photo or reviewed wiring table is provided.
 - No differential probe is shown, so high-side Vgs, OUTx, and BOOTx
   measurements remain prohibited.
+
+## 2026-06-08 TIM1 Complementary PWM Preparation Update
+
+The earlier PA15/PB3/PB10/PA8/PA9/PA10 mapping has now been measured and is
+closed as GPIO identification evidence. It is not used as the dynamic PWM
+cable map.
+
+The reviewed dynamic loose-wire map is:
+
+| CN8 | Signal | STM32 | TIM1 | Morpho |
+| --- | --- | --- | --- | --- |
+| P1 | HIN1 | PA8 | CH1 AF6 | CN10-23 |
+| P2 | LIN1 | PA7 | CH1N AF6 | CN10-15 |
+| P3 | HIN2 | PA9 | CH2 AF6 | CN10-21 |
+| P4 | LIN2 | PB14 | CH2N AF6 | CN10-28 |
+| P5 | HIN3 | PA10 | CH3 AF6 | CN10-33 |
+| P6 | LIN3 | PB15 | CH3N AF4 | CN10-26 |
+| P13 | nFAULT | PB12 | BKIN AF6 | CN10-16 |
+| P15 | GND_SIGNAL | GND | Ground | reviewed GND |
+
+Source-only firmware now exists at:
+
+`apps/stm32_g474_foc/tim1_complementary_pwm_probe/`
+
+Current status:
+
+- [x] Separate source project; GPIO probe preserved.
+- [x] Reset/startup design keeps MOE clear.
+- [x] Explicit B1 arm and latched B1 STOP.
+- [x] Active-low BKIN with AOE disabled.
+- [x] Static contract tests pass.
+- [ ] ARM cross-build.
+- [ ] NUCLEO-only startup-low and complementary waveform measurements.
+- [x] DT/MODE ground-mode design evidence confirmed from schematic; direct
+  QFN-pin resistance measurement intentionally omitted because coarse probes
+  cannot contact it safely.
+- [ ] Physical cable continuity table and photo.
+
+Dynamic power-board PWM/Gate testing remains blocked. P14 3V3 must remain
+disconnected during the first cable stage, and P7-P12 remain disconnected.
 

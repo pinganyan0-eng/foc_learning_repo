@@ -21,8 +21,8 @@ Evidence ID: `EV-2026-06-07-HW-GATE-PREP-001`
 | 无电短路检查 | `EV-2026-06-01-HW-DMM-001` | 局部通过；不等于动态放行。 |
 | 24V/0.2A 静态上电 | `EV-2026-06-05-HW-STATIC-PWR-001` | 静态供电初步通过。 |
 | CN8 接口 | 截图显示六路 HIN/LIN、ADC、Hall、nFAULT、3V3、GND_SIGNAL；2026-05-19 PCB2 映射证据已恢复 | 引脚名称和六路 MCU 映射线索可用；仍需确认供电方向、当前固件和实际线缆一致性。 |
-| DT/MODE | 截图中连接不清；用户记录称短接 GND | 未通过正式证据确认。 |
-| PWM 固件 | 仓库只有 NUCLEO baseline，无三相互补 PWM/MCSDK 工程 | 未准备。 |
+| DT/MODE | 已有原理图局部放大明确显示 `U1 Pin 2 / DT/MODE -> GND_POWER`；`R_GND_ISO` 本体实测约 0.1Ω | 六输入模式设计证据通过。 |
+| PWM 固件 | 独立 TIM1 三对互补 PWM 探针工程已构建、烧录并完成 NUCLEO-only 波形验证 | 仅通过 NUCLEO 逻辑验证，未验证功率板 Gate。 |
 | Gate 波形 | 无示波器截图 | 未验证。 |
 
 ## Recovered Mapping Evidence - 2026-06-07
@@ -43,9 +43,10 @@ It records the six driver inputs as:
 | P5 | HIN3 | PA9 |
 | P6 | LIN3 | PA10 |
 
-Decision: this closes the "mapping absent" gap for preparation review. It does
-not close the current firmware commit, `.ioc` ownership, reset/default safe
-state, physical cable review, DT/MODE proof, or dynamic waveform approval.
+Decision: this closes the "mapping absent" gap for preparation review. The
+later TIM1 probe task closes NUCLEO reset/default safe-state and waveform
+evidence, and the archived schematic closes DT/MODE design proof. Physical
+cable review and dynamic power-board approval remain open.
 
 ## CN8 Pin Probe Firmware Source - 2026-06-07
 
@@ -70,18 +71,20 @@ STDRIVE101 官方 Datasheet 说明：
 - 所有输入内部下拉；输入全低时器件可进入 standby。
 - `nFAULT` 为开漏故障输出；UVLO、VDS 保护、过流和过温均可能使其拉低。
 
-当前原理图截图把 CN8 标为六路 `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3`。如果实物 `DT/MODE` 确实直接短接地，则 MCU 固件必须自行保证互补输出和死区。由于缺少原始 EDA/netlist、实物局部照片和 PWM 固件，本任务结论是：
+当前原理图截图把 CN8 标为六路 `HIN1/LIN1/HIN2/LIN2/HIN3/LIN3`。
+2026-06-09 对已有原理图做局部放大后，确认 `U1 Pin 2 / DT/MODE`
+直接连接 `GND_POWER`；`R_GND_ISO` 本体实测约 0.1Ω。因此按六输入模式
+设计，MCU 固件负责互补输出和死区。NUCLEO-only TIM1 固件和波形验证也已完成。
 
-**尚不满足空载 PWM/Gate 动态检查的执行条件，只满足准备清单建立条件。**
+**仍不满足功率板动态 PWM/Gate 检查条件：下一阻塞项是断电状态下的物理散线映射、逐线通断和接线照片复核。**
 
 ## Required Inputs Before A Future Dynamic Task
 
 - 功率板全景和 CN8 丝印近照。
-- STDRIVE101 `DT/MODE` 周边高清照片或 EDA/netlist。
 - NUCLEO 到 CN8 的六路信号映射表。
 - 3V3 电源归属说明，避免 NUCLEO 与功率板双向供电。
 - 示波器、普通探头和差分探头的型号与额定值。
-- 可回滚的 PWM 固件 commit、CubeMX/MCSDK 配置和默认安全态证据。
+- 可回滚 PWM 固件的版本记录和默认安全态证据。
 - 不带电的接线图审查结果。
 
 ## Files
@@ -91,6 +94,15 @@ STDRIVE101 官方 Datasheet 说明：
 - `2026-06-07_scope_grounding_safety_table.md`
 - `photos/README.md`
 - `waveforms/README.md`
+
+## 2026-06-09 Cable Task
+
+The remaining physical-cable prerequisite is now tracked separately under:
+
+`experiments/2026-06-09_cn8_no_power_cable_remap/`
+
+The task remains pending until all eight continuity rows, pairwise isolation,
+P14-open evidence, and orientation photos are accepted.
 
 ## Photo Evidence Update - 2026-06-07
 

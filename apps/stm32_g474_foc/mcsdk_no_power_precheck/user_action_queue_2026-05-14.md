@@ -1,6 +1,63 @@
-# 2026-05-22 Current User Action
+# 2026-06-01 Current User Action
 
-Current next action is no-power DMM evidence, not CLI toolchain work.
+PCB2 is now reported soldered / in hand, and the route is reported unchanged:
+`PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND`.
+
+The immediate action is now the no-power DMM continuity / short-check table.
+Use:
+
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/dmm_continuity_short_check_request_2026-05-22.md`
+
+Return one filled table with raw DMM readings, beep state, and note / photo ID.
+
+Required continuity rows:
+`IA->PA0`, `IB->PA1`, `IC->PB4`, `PB3->LIN1`, `P14->3V3`, `P15->GND`,
+`nFAULT->PB12`.
+
+Required short-check rows:
+`3V3-GND`, `PA0/PA1/PB4/PB3/PB12` to `3V3/GND`, and Hall pairs
+`IA-IB`, `IA-IC`, `IB-IC`.
+
+Board unpowered only. No 24V, no powered power-board connection, no motor, no
+Gate PWM, no flash, no Generate / Build, no Motor Profiler, and no Motor Pilot.
+
+# 2026-05-31 Previous User Action
+
+PCB2 is currently not populated / waiting for hardware. Therefore the immediate
+action is not DMM yet.
+
+Return one hardware status line:
+
+```text
+PCB2 目前未焊好；预计焊接/到手时间：____。
+当前路线是否仍为 PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND：是/否。
+如果路线、原理图、网表、Gerber、BOM 或引脚表有变化，请附最新版文件或截图。
+```
+
+If you have newer hardware files or screenshots, send the latest PCB2
+schematic / EDA / netlist / Gerber / BOM, especially evidence for
+`IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`, `nFAULT->PB12`, `DT/MODE`, `STBY`,
+`SCREF/VDS`, `CP`, and `VS/VM`.
+
+While waiting for hardware, answer the no-power Hall sequence check:
+
+```text
+(1000,100), (1600,100), (2200,110), (2210,010), (3000,111), (3800,011)
+bounce threshold = 50 ticks
+```
+
+Label baseline, repeat, adjacent direction candidate, bounce candidate,
+illegal rejection, and abnormal-jump evidence. Then state why this remains
+debug-only and outside MCSDK Hall integration.
+
+No DMM, 24V, power-board connection, motor connection, Gate PWM, flash,
+Generate / Build, Motor Profiler, or Motor Pilot is allowed from this action.
+
+# 2026-05-22 Previous User Action
+
+This DMM action is pending until PCB2 is populated. It is still the next
+real-world hardware evidence request after populated hardware exists; it is not
+allowed while the board is not populated.
 
 Fill:
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/dmm_continuity_short_check_request_2026-05-22.md`.

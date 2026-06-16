@@ -2,6 +2,26 @@
 
 Append one entry after teaching, Q&A, homework review, debugging help, or experiment review when the turn reveals learning progress or weak points.
 
+## 2026-06-01 Software Hall mixed-sequence trace completed
+
+- Summary: User traced the WP-030 mixed sequence correctly: first valid `(1000,100)` as baseline, `(1600,100)` as repeat, `(2200,110)` as accepted adjacent forward candidate, `(2210,010)` as bounce candidate because `dt=10 < 50`, `(3000,111)` as illegal state, and `(3800,011)` as abnormal jump because the last trusted state stayed `110` and `110 -> 011` is non-adjacent.
+- Evidence level: L4 for no-power mixed-sequence transfer of the software Hall adapter processing order.
+- Confidence: medium-high for debug-only classification; not firmware or hardware readiness.
+- Weak point update: WP-030 can be parked at the no-power sequence level. The next risk is firmware-transfer discipline: ISR-only capture, low-priority state-machine work, and MCSDK hard stops.
+- Boundary preserved: User explicitly explained that `PA0/PA1/PB4` debug candidates do not satisfy MCSDK Hall speed / position feedback requirements such as timer capture, electrical-angle continuity, speed filtering, reliability handling, object update, or real-time synchronization.
+- Source:
+  `learning/review_items/2026-06-01_software_hall_mixed_sequence_review.md`
+
+## 2026-05-31 Software Hall adapter processing-order ChatGPT follow-up
+
+- Summary: User pasted back the ChatGPT check for the Software Hall adapter processing-order review. The user correctly restated the order as raw read from `PA0/PA1/PB4`, reject `000/111`, first valid state only stored as baseline, repeat not counted as edge or direction, too-fast change as bounce candidate, adjacent transition as forward/reverse direction candidate, and non-adjacent legal-state jump as a too-far legal-code jump. ChatGPT's only precision repair was to explicitly add that the final case must record an abnormal-jump event.
+- Evidence level: L2 for processing-order teach-back and key defensive checks.
+- Confidence: medium-high for verbal order recall; not enough for L4 transfer until the user traces a mixed sample sequence.
+- Weak point update: WP-030 improves from "cannot give the full one-sentence order" to L2 recall with one repaired precision point: "record abnormal jump".
+- Next review: Before software Hall firmware work, give a mixed raw-state sequence and ask the user to label baseline, repeat, bounce candidate, forward/reverse adjacent transition, illegal state, and abnormal jump, while keeping the result debug-only and outside MCSDK Hall integration.
+- Source:
+  `learning/review_items/2026-05-31_software_hall_adapter_processing_order_chatgpt_followup.md`
+
 ## 2026-05-30 Hall state-machine ChatGPT follow-up
 
 - Summary: User pasted back the ChatGPT-taught five-question Hall software state-machine review. The answer correctly classified `110 -> 010` as forward adjacent, `010 -> 110` as reverse adjacent, `111` as illegal, computed `60 / 7 = 8.57 deg` mechanical for a 7-pole-pair motor, and explained why `PB3=LIN1` cannot be reused as Hall.

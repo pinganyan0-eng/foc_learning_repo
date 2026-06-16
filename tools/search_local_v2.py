@@ -18,8 +18,20 @@ DEFAULT_MIN_SCORE = 0.18
 SOURCE_PRIORITY: tuple[tuple[str, float], ...] = (
     ("workflow/CURRENT_SNAPSHOT.md", 0.18),
     ("docs/00_project_truth/project_context.md", 0.16),
+    ("docs/00_project_truth/ai_architecture.md", 0.14),
     ("AI_CONTEXT.md", 0.12),
+    ("tools/check_ai_contracts.py", 0.16),
+    ("tools/check_project_skill_install.py", 0.16),
+    ("tools/run_ai_maintenance_audit.py", 0.16),
+    ("codex_skills/stm32g474-foc-assistant/SKILL.md", 0.18),
+    ("codex_skills/stm32g474-foc-assistant/references/", 0.16),
     ("workflow/ACTIVE_TASK.md", 0.12),
+    ("workflow/codex_dual_teacher_execution_gate.md", 0.12),
+    ("workflow/task_state_machine.md", 0.12),
+    ("workflow/automation_playbook.md", 0.18),
+    ("workflow/learning_feedback_loop.md", 0.18),
+    ("workflow/session_close_checklist.md", 0.18),
+    ("workflow/definition_of_done.md", 0.18),
     ("docs/protocol.md", 0.12),
     ("templates/jeoc_interrupt_review_template.md", 0.12),
     ("apps/stm32_g474_foc/AGENTS.md", 0.10),
@@ -43,6 +55,60 @@ QUERY_EXPANSIONS: tuple[tuple[tuple[str, ...], str], ...] = (
     (
         ("hall", "pa0", "pa1", "pb4", "pb3"),
         "HALL_A HALL_B HALL_C IA IB IC PA0 PA1 PB4 PB3 LIN1 current PCB2 route",
+    ),
+    (
+        ("dmm", "continuity", "short-check", "pending"),
+        "PCB2 DMM continuity short-check no-power pending not passed board unpowered no powered action",
+    ),
+    (
+        ("review", "lifecycle", "reviewed", "strict"),
+        "ACTIVE_TASK done Review Required reviewed user review clears strict warnings task_state_machine check_ai_contracts",
+    ),
+    (
+        ("ai_maintenance", "contract", "architecture"),
+        "AI Architecture v2 ai_maintenance build_context_pack check_ai_contracts retrieval_eval strict warnings dangerous positive claims",
+    ),
+    (
+        ("dangerous claim", "positive claim", "hardware claim", "dmm passed", "gate pwm ready"),
+        "check_ai_contracts DANGEROUS_POSITIVE_CLAIMS DANGEROUS_CLAIM_SCAN_PATHS iter_dangerous_claim_scan_files is_dangerous_claim_scan_candidate no-power hardware readiness claim scan surface",
+    ),
+    (
+        (
+            "readability",
+            "mojibake",
+            "乱码",
+            "submission checklist",
+            "evidence register",
+        ),
+        "check_ai_contracts READABILITY_HEADER_REQUIREMENTS READABILITY_MOJIBAKE_MARKERS check_readability_headers evidence_register submission_checklist strict UTF-8 readable entry header",
+    ),
+    (
+        ("project skill", "skill v2", "stm32g474-foc-assistant"),
+        "stm32g474-foc-assistant Project Skill v2 router references no-power boundary workflow maintenance quick_validate install_project_skill",
+    ),
+    (
+        ("skill install", "install drift", "check_project_skill_install"),
+        "check_project_skill_install repo-only installed_compare missing_installed_files changed_installed_files global Skill install drift",
+    ),
+    (
+        ("ai maintenance audit", "run_ai_maintenance_audit", "maintenance audit"),
+        "run_ai_maintenance_audit no-power AI maintenance audit quick full repo-only-skill write-report Markdown report build_vector_store retrieval_eval git_status git status --short dirty worktree preserve_output output_policy workspace_status path_groups classify_path_group status_paths summarize_status_paths focus_groups summarize_focus_groups handoff_review_queue build_handoff_review_queue GROUP_REVIEW_FOCUS contract_status contract_status_from_results parse_contract_output closeout_summary closeout_summary_from_statuses repo_maintenance_closeout_ok review lifecycle warnings strict_ready implementation_closeout_ok status_counts paths items full output diff_check",
+    ),
+    (
+        ("workflow_maintenance", "closeout", "收工", "session"),
+        "workflow_maintenance session_close_checklist closeout build_vector_store unittest git status phase gate no commit push",
+    ),
+    (
+        ("automation", "automations", "repo writes", "no repo writes"),
+        "automation_playbook No repo writes commit push delete reorder user work no generated firmware no hardware parameters",
+    ),
+    (
+        ("learning", "feedback", "weak_points", "review_queue"),
+        "learning_feedback_loop session_notes weak_points review_queue normalize_learning_loop evidence levels L0-L6",
+    ),
+    (
+        ("definition", "done", "仓库维护", "repo maintenance"),
+        "definition_of_done 仓库维护 CURRENT_STATUS docs/file_map git status no firmware control logic",
     ),
     (
         ("24v", "power", "motor", "gate"),
@@ -105,9 +171,10 @@ def source_bonus(path: str) -> float:
     return bonus
 
 
-def phrase_bonus(query: str, text: str) -> float:
+def phrase_bonus(query: str, text: str, path: str = "") -> float:
     query_terms = set(tokenize(query))
     text_lower = text.lower()
+    normalized_path = normalize_path(path)
     bonus = 0.0
 
     if {"j", "e", "o", "c"} & query_terms and "jeoc" in text_lower:
@@ -118,6 +185,62 @@ def phrase_bonus(query: str, text: str) -> float:
         bonus += 0.04
     if "hall" in query.lower() and all(term.lower() in text_lower for term in ("pa0", "pa1", "pb4")):
         bonus += 0.08
+    if "dmm" in query.lower() and "pending" in query.lower() and "dmm" in text_lower and "pending" in text_lower:
+        bonus += 0.08
+    if "review" in query.lower() and "lifecycle" in query.lower() and ("reviewed" in text_lower or "review required" in text_lower):
+        bonus += 0.07
+    if "ai_maintenance" in query.lower() and "ai_maintenance" in text:
+        bonus += 0.07
+    if (
+        "ai maintenance audit" in query.lower()
+        or "run_ai_maintenance_audit" in query.lower()
+        or "maintenance audit runner" in query.lower()
+    ) and normalized_path == "tools/run_ai_maintenance_audit.py":
+        bonus += 0.52
+    if (
+        "readability" in query.lower()
+        or "mojibake" in query.lower()
+        or "submission checklist" in query.lower()
+        or "evidence register" in query.lower()
+    ) and normalized_path == "tools/check_ai_contracts.py":
+        bonus += 0.52
+    if (
+        "dangerous" in query.lower()
+        or "positive claim" in query.lower()
+        or "hardware claim" in query.lower()
+    ) and (
+        "dangerous_claim_scan_paths" in text_lower
+        or "dangerous_positive_claims" in text_lower
+    ):
+        bonus += 0.16
+        if normalized_path == "tools/check_ai_contracts.py":
+            bonus += 0.24
+    if ("skill" in query.lower() or "stm32g474-foc-assistant" in query.lower()) and (
+        "this skill is a v2 router" in text_lower
+        or "project skill maintenance" in text_lower
+        or "stm32g474-foc-assistant" in text_lower
+    ):
+        bonus += 0.16
+    if ("workflow_maintenance" in query.lower() or "closeout" in query.lower() or "收工" in query) and (
+        "session_close_checklist" in text_lower or "收工检查清单" in text
+    ):
+        bonus += 0.16
+        if normalized_path == "workflow/session_close_checklist.md":
+            bonus += 0.32
+    if "automation" in query.lower() and "no repo writes" in text_lower:
+        bonus += 0.16
+        if normalized_path == "workflow/automation_playbook.md":
+            bonus += 0.32
+    if ("learning" in query.lower() or "feedback" in query.lower()) and (
+        "learning_feedback_loop" in text_lower or "learning feedback loop" in text_lower
+    ):
+        bonus += 0.16
+        if normalized_path == "workflow/learning_feedback_loop.md":
+            bonus += 0.32
+    if ("repo maintenance" in query.lower() or "仓库维护" in query) and "仓库维护任务" in text:
+        bonus += 0.16
+        if normalized_path == "workflow/definition_of_done.md":
+            bonus += 0.32
     if "esp32" in query.lower() and "foc" in text_lower and ("实时" in text or "real-time" in text_lower):
         bonus += 0.06
 
@@ -142,7 +265,7 @@ def search(query: str, *, limit: int = 5, min_score: float = DEFAULT_MIN_SCORE) 
     for item in chunks:
         v_score = vector_score(qv, item["vector"])
         s_bonus = source_bonus(item["path"])
-        p_bonus = phrase_bonus(query, item["text"])
+        p_bonus = phrase_bonus(query, item["text"], item["path"])
         final = v_score + s_bonus + p_bonus
         if final >= min_score:
             hits.append(SearchHit(final, v_score, s_bonus, p_bonus, item))

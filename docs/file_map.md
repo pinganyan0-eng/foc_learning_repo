@@ -1,5 +1,28 @@
 # file_map
 
+## AI Architecture v2 Index
+
+| ID | File | Use |
+| --- | --- | --- |
+| `ai_maintenance` | `tools/build_context_pack.py --mode ai_maintenance` | Low-token context pack for AI workflow, retrieval, contract-check, and handoff maintenance. |
+| `workflow_maintenance` | `tools/build_context_pack.py --mode workflow_maintenance` | Low-token context pack for project workflow, automation, learning-loop, closeout, DoD, and submission-checklist maintenance. |
+| `ai_contract_check_strict` | `tools/check_ai_contracts.py --strict` | Post-review target: user review clears strict warnings; Codex must not self-clear required review. |
+| `dangerous_claim_scan_surface` | `tools/check_ai_contracts.py` | Static no-power scan for dangerous positive hardware claims across project truth, workflow, Skill, no-power precheck, deliverable, interface, and learning text. |
+| `entry_readability_contract` | `tools/check_ai_contracts.py` | Strict UTF-8 and clean-entry-header contract for `workflow/evidence_register.md` and `deliverables/submission_checklist.md`; preserves readable AI handoff without claiming full historical mojibake repair. |
+| `retrieval_eval_queries` | `retrieval_eval/queries.json` | Regression cases for dual-teacher guard, PCB2 Hall route, DMM pending/no-power boundary, ACTIVE_TASK review lifecycle, ESP32 real-time boundary, automation no-write boundary, learning loop, closeout checklist, repo-maintenance DoD, project Skill v2 router, and dangerous claim scan coverage. |
+| `search_local_v2_eval` | `tools/search_local_v2.py --eval` | Source-finding regression check; passing it is not hardware validation. |
+| `project_skill_router` | `codex_skills/stm32g474-foc-assistant/SKILL.md` | Project Skill v2 router for STM32G474 FOC no-power work, learning, evidence, and workflow maintenance. |
+| `project_skill_navigation` | `codex_skills/stm32g474-foc-assistant/references/project-navigation.md` | Project Skill reference for fact priority, context mode selection, task routing, and core commands. |
+| `project_skill_no_power` | `codex_skills/stm32g474-foc-assistant/references/no-power-boundary.md` | Project Skill reference for no-power boundary, DMM pending state, Hall route constraints, and ISR hard stops. |
+| `project_skill_learning` | `codex_skills/stm32g474-foc-assistant/references/learning-feedback.md` | Project Skill reference for dual-teacher routing, four-line execution gate, learning records, and evidence levels. |
+| `project_skill_workflow` | `codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md` | Project Skill reference for AI/workflow maintenance, install flow, automation boundary, and closeout commands. |
+| `project_skill_install_check` | `tools/check_project_skill_install.py` | Read-only checker for repo-local project Skill source and installed user Skill drift. |
+| `ai_maintenance_audit_runner` | `tools/run_ai_maintenance_audit.py` | Consolidated no-power AI maintenance audit runner for Skill validation, install drift, context pack, contracts, retrieval, tests, compileall, full `git status --short` dirty-worktree handoff capture, parsed `workspace_status` summary with `status_paths`, `path_groups`, ordered `focus_groups`, `handoff_review_queue`, `contract_status`, and top-level `closeout_summary`, diff check, and optional Markdown report output. |
+| `automation_playbook` | `workflow/automation_playbook.md` | Project-side automation contract; active automations are read/report only with `No repo writes`. |
+| `learning_feedback_loop` | `workflow/learning_feedback_loop.md` | Learning memory update contract for session notes, weak points, review queue, and normalization. |
+| `session_close_checklist` | `workflow/session_close_checklist.md` | Closeout checklist for teaching, engineering, experiment, hardware-adjacent, and pre-submit checks. |
+| `repo_maintenance_dod` | `workflow/definition_of_done.md#仓库维护任务` | Completion standard for repository maintenance tasks, including status/index updates, command evidence, and `git status`. |
+
 ## 本地已导入资料
 
 | ID | 文件 | 用途 |

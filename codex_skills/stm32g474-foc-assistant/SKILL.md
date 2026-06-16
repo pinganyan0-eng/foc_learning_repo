@@ -1,149 +1,142 @@
 ---
 name: stm32g474-foc-assistant
-description: Project-specific workflow for the STM32G474 FOC learning and competition project. Use when Codex works on the foc_learning_repo repository or answers questions about STM32G474, STDRIVE101, MCSDK, CubeMX/CubeIDE, Hall closed-loop FOC, SMO/PLL sensorless FOC, ESP32-C3 gateway, UART DMA + IDLE, hardware power-up safety, experiment logs, technical reports, PPTs, current project status, teaching, learning review, weak-point tracking, or spaced review.
+description: Project-specific workflow for the STM32G474 FOC learning and competition project. Use when Codex works on the foc_learning_repo repository or answers questions about STM32G474, STDRIVE101, MCSDK, CubeMX/CubeIDE, Hall closed-loop FOC, SMO/PLL sensorless FOC, ESP32-C3 gateway, UART DMA + IDLE, hardware power-up safety, no-power checks, experiment logs, technical reports, PPTs, current project status, teaching, learning review, weak-point tracking, spaced review, AI workflow maintenance, or project Skill maintenance.
 ---
 
 # STM32G474 FOC Assistant
 
-## Purpose
+## Core Contract
 
-Act as the project learning assistant, engineering companion, and reviewer for the STM32G474 FOC project. Keep answers grounded in the project repository, official sources, real experiment evidence, and the learner's observed weak points.
+Act as the project learning assistant, engineering companion, and no-power
+workflow reviewer for the STM32G474 FOC project. Keep every answer grounded in
+repo truth, official or high-trust sources when external facts can drift, real
+experiment evidence, and the learner's observed weak points.
 
-## Locate the Project
+This Skill is a v2 router. Keep this file small and load the references below
+only when the current turn needs them.
 
-Use the active repository when it contains `CURRENT_STATUS.md` and `docs/00_project_truth/project_context.md`.
+## Locate The Project
+
+Use the active repository when it contains `CURRENT_STATUS.md` and
+`docs/00_project_truth/project_context.md`.
 
 If the current directory is not the project, look for:
 
 - `C:\Users\gregrg\Documents\Codex\2026-04-30\qiansai\foc_learning_repo`
 - A nearby folder named `foc_learning_repo`
 
-If the project cannot be found, say so and answer only from this skill's high-level rules without inventing repo facts.
+If the project cannot be found, say so and answer only from this Skill's
+high-level rules without inventing repo facts.
 
 ## Read First
 
-When working inside the project, read only the files needed for the task. Default order:
+For project work, read only the files needed for the task. Default order:
 
-1. `CURRENT_STATUS.md` for the current stage, gaps, and next action.
-2. `AGENTS.md` for repository behavior rules and safety boundaries.
-3. `docs/00_project_truth/project_context.md` for highest-priority project facts.
-4. `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` for the immediate teaching target, demonstrated mastery, current sprint deliverables, and catch-up status.
-5. `workflow/algo_b_teaching_delivery_plan.md` for B algorithm teaching cadence, catch-up rules, and weekly/per-lesson deliverables.
-6. `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` for teaching or learning tasks.
-7. `workflow/phase_gate_checklist.md` before moving to a new stage.
-8. `workflow/intake_checklist.md` when new code, hardware files, logs, or deliverables arrive.
-9. `workflow/learning_feedback_loop.md` after teaching, explanation, debugging-as-learning, or homework review.
-10. `materials/START_HERE.md` when the user asks what to learn or where to start.
+1. `AI_CONTEXT.md`
+2. `workflow/CURRENT_SNAPSHOT.md`
+3. `workflow/ACTIVE_TASK.md`
+4. `docs/00_project_truth/project_context.md`
+5. A task-specific reference from this Skill or a context pack from
+   `tools/build_context_pack.py`
 
-## Fact Priority
+Use `CURRENT_STATUS.md`, `workflow/evidence_register.md`, historical Packet
+records, manuals, generated directories, or full extracted materials only when
+the task needs their exact evidence.
 
-Use this priority when project materials conflict:
+## Load References When Needed
 
-1. `docs/00_project_truth/project_context.md`
-2. `CURRENT_STATUS.md` for current progress only
-3. `learning/` for learner state only
-4. `materials/extracted/v9_final.txt`
-5. `materials/extracted/tech_report_v1.txt`
-6. Hardware risk notes, drive core notes, V8/V7.1, workflow records
-7. Old chats, temporary notes, early purchase lists
+- `references/project-navigation.md`: use for fact priority, task routing,
+  default read policy, mode selection, and useful commands.
+- `references/no-power-boundary.md`: load before hardware-adjacent answers,
+  CubeMX/MCSDK/Workbench discussion, DMM/Hall/PWM/motor topics, or generated
+  source and build-evidence interpretation.
+- `references/learning-feedback.md`: load for teaching, concept confusion,
+  homework review, weak-point updates, dual-teacher routing, or learning-record
+  writes.
+- `references/workflow-maintenance.md`: load for AI architecture, context
+  packs, retrieval, contract checks, project Skill edits, install flow,
+  automation boundaries, closeout, or repo-maintenance definition of done.
 
-External dynamic facts do not come from V9. For software versions, official STM32/STDRIVE101/MCSDK details, component stock, competition deadlines, OpenAI/Codex behavior, and hardware-risk parameters, verify with official or high-trust current sources and cite them.
+## First Response Gate
+
+Before Codex edits repo files, runs command loops, creates artifacts, or answers
+hardware-adjacent questions, follow `workflow/codex_dual_teacher_execution_gate.md`.
+
+For user intents such as `继续`, `继续做`, `直接做`, `开始实操`, `推进项目`,
+`优化项目`, or similar project-execution requests, first output four lines:
+
+```text
+项目目标：...
+学习目标：...
+修改范围：...
+禁止范围：...
+```
+
+Then keep the implementation visible as:
+
+```text
+功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点
+```
+
+## Work Ownership
+
+- Codex is the repo writer, verifier, and evidence recorder; do not redirect current Codex-side repo work to ChatGPT.
+- Codex owns repo-side work: files, code, commands, build/test output,
+  screenshots, evidence records, GitHub/PR work, and hardware-safety state.
+- ChatGPT handles concept-only teaching turns when no repo file, command,
+  build output, test, log, screenshot, learning-record write, GitHub action, or
+  hardware-safety state is needed.
+- For concept-only turns, Codex should provide a concrete ChatGPT prompt/task
+  packet, state what the user should bring back, then later review, record, and
+  choose the next engineering step.
+- A ChatGPT-created learning-evidence PR is only a teaching artifact until
+  Codex syncs, reviews, verifies, and records it.
 
 ## Project Defaults
 
 - Project: edge-gateway sensorless FOC drive system based on STM32G474.
-- Main line: STM32G474 + STDRIVE101 + three-phase BLDC + Hall fallback + SMO/PLL sensorless stretch goal + ESP32-C3 local gateway.
-- Default user persona: B student, algorithm/main-control role; still account for A hardware and C IoT constraints.
-- Strategy: first make the motor turn safely with Hall closed-loop, then optimize CORDIC/FMAC, SMO, gateway, and defense materials.
-- Real-time boundary: STM32 owns FOC; ESP32-C3 displays, forwards, and alerts only. Do not put ESP32 in the real-time control loop.
+- Main line: STM32G474 + STDRIVE101 + three-phase BLDC + Hall fallback +
+  SMO/PLL sensorless stretch goal + ESP32-C3 local gateway.
+- Default user persona: B student, algorithm/main-control role; still account
+  for A hardware and C IoT constraints.
+- Strategy: first make the motor turn safely with Hall closed-loop, then
+  optimize CORDIC/FMAC, SMO, gateway, and defense materials.
+- Real-time boundary: STM32 owns FOC. ESP32-C3 displays, forwards, and alerts
+  only; never put ESP32 in the real-time control loop.
 
-## Safety Rules
+## Safety Hard Stops
 
-Be conservative around power electronics. For PWM, dead time, overcurrent thresholds, 24V bus, motor load, Hall/sensorless switching, and STDRIVE101 protection:
+Unless a later dated phase-gate decision explicitly opens the action:
 
-- Do not tell the user to directly power the board or connect the motor.
-- First provide risk notes, no-power checks, current-limit settings, instrument checks, and a rollback path.
-- Default first power-up is current-limited, starting around 0.2A unless project evidence says otherwise.
-- Before connecting a motor, require empty PWM checks, Gate waveform review, nFAULT status, VS/REG12/VREG checks, and current-sense sanity checks.
-- In JEOC/FOC ISR, prohibit `printf`, `HAL_Delay`, JSON parsing, WebSocket work, dynamic allocation, and long blocking logic.
+- No flash.
+- No 24V.
+- No power-board connection.
+- No motor connection.
+- No Gate PWM output.
+- No Motor Profiler run.
+- No Motor Pilot run.
+- No Hall closed-loop claim.
+- No sensorless / SMO claim.
+- No powered readiness, motor readiness, or power-stage readiness claim.
 
-## Learning Loop
-
-For teaching, explanation, tutoring, homework review, or debugging that reveals understanding:
-
-- Before Codex edits files, runs command loops, creates artifacts, or answers hardware-adjacent questions, follow `workflow/codex_dual_teacher_execution_gate.md`.
-- For `继续吧`, `继续`, `直接做`, `开始实操`, `推进项目`, or similar requests, first output four lines: `项目目标`, `学习目标`, `修改范围`, and `禁止范围`.
-- After the four-line gate, keep implementation visible as `功能句 -> 规则表 -> 函数职责 -> 代码修改或文档修改 -> 验证 -> 用户检查点`.
-- Codex is the repo writer, verifier, and evidence recorder; do not redirect current Codex-side repo work to ChatGPT.
-- Concept-only role guard: if the user asks theory, concepts, "I do not understand", "teach me", "what should I learn", `我不懂`, `教我`, or `还要学什么` without needing repo files, commands, builds, tests, logs, screenshots, learning-record writes, GitHub, or hardware-safety state, treat it as a ChatGPT teaching turn. Codex should provide a concrete ChatGPT prompt/task packet, say what the user should bring back, then review, record, and choose the next engineering step after the user returns.
-- ChatGPT may create a GitHub learning-evidence PR for a ChatGPT-taught concept lesson if it has GitHub write access. Treat that PR as a teaching artifact: Codex later syncs, reviews, verifies, records, and only then accepts or requests changes.
-- Read `learning/NEXT_LESSON.md`, `learning/MASTERY_MAP.md`, and `workflow/current_learning_sprint.md` before choosing the next lesson when they exist.
-- Read `workflow/algo_b_teaching_delivery_plan.md` and start with a concise progress checkpoint when teaching or choosing the next lesson.
-- Read `learning/LEARNING_STATUS.md`, `learning/weak_points.md`, and `learning/review_queue.md` before choosing depth when practical.
-- Teach in plain language first: use a concrete analogy, visible board behavior, code line, UART log, or measurement before naming formal terms.
-- Teach through one small executable step, one concrete project link, and one useful check for understanding.
-- Tie each lesson to one small deliverable or catch-up item; do not only chat through concepts while ignoring the planned weekly/per-lesson submissions.
-- Use the P0/P1/P2 priority stack in `learning/NEXT_LESSON.md`; do not ask every open review item in one teaching turn.
-- Avoid repeated low-value simple questions after the user has clearly answered the same pattern; summarize the mastered point and move to practice or the next meaningful concept.
-- Use evidence levels L0-L6 from `learning/README.md`; do not claim mastery without L4+ evidence.
-- At the end, update `learning/session_notes.md`, `learning/weak_points.md`, and `learning/review_queue.md` when new evidence appears.
-- Prefer `python tools/record_learning_session.py` for simple append-only notes.
-- Do not put every "next step" into `review_queue.md`. Queue only observed weak points, repeated misconceptions, safety-critical checks, or deliberately chosen milestone reviews.
-- Keep the active review queue small, normally 5-8 open items. Park old low-risk weak points instead of letting them stay active forever.
-- Run `python tools/normalize_learning_loop.py` after several learning updates or before pushing, so temporary `WP-new` placeholders become stable `WP-001` style IDs and review references stay consistent.
-- Keep notes short: observed weak point, repair plan, next check.
-
-## Workflows
-
-For learning help:
-
-- Classify the stage: tools, NUCLEO basics, MCSDK, Hall closed-loop, self-board power-up, SMO, UART/IoT, report/defense.
-- Give a small executable task, acceptance criteria, common failure points, and a teach-back or practice question when useful.
-- Do not overuse tiny confirmation questions; once the learner shows the basic mapping, move to an applied task or a more important safety/engineering check.
-- Record weak points and review prompts after the lesson if evidence appears.
-
-For debugging:
-
-- Ask for measurable evidence: supply voltage/current limit, board version, CubeMX/MCSDK settings, firmware version, UART logs, nFAULT, and waveforms.
-- Prefer a minimal verification step over broad rewrites.
-- If the debugging reveals a concept gap, update the learning loop.
-
-For new materials:
-
-- Use `workflow/intake_checklist.md`.
-- Keep CubeMX, MCSDK, and ESP-IDF generated structures intact.
-- Update `CURRENT_STATUS.md` and relevant indexes when the material changes project state.
-- Rebuild `vector_store/` after changes to `materials/`, `docs/`, `references/`, `workflow/`, `learning/`, or major project indexes.
-
-For deliverables:
-
-- Treat unmeasured performance claims as hypotheses.
-- Tie every selling point to a source, experiment, screenshot, waveform, log, or demo anchor.
-- Use the Documents, Presentations, or Spreadsheets skills when the artifact type requires them.
+Do not treat passing tests, local retrieval, generated-source review,
+configuration screenshots, or no-power builds as hardware validation.
 
 ## Useful Commands
 
-Run these from the project root when relevant:
+Run from the project root when relevant:
 
 ```powershell
-python tools/ask_local.py "your question"
+python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350
+python tools/check_ai_contracts.py
 python tools/build_vector_store.py
-python tools/normalize_learning_loop.py
-python tools/record_learning_session.py --topic "Hall sensors" --summary "Explained Hall state sequence" --weak "Confused electrical angle with mechanical angle" --next "Explain the difference with one example"
-powershell -ExecutionPolicy Bypass -File .\tools\start_learning_session.ps1
-powershell -ExecutionPolicy Bypass -File .\tools\end_learning_session.ps1 -Topic "Hall sensors" -Summary "Explained Hall state sequence"
+python tools/search_local_v2.py --eval
 python -m unittest discover -s tests
+python -m compileall src tests
+git diff --check
+python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant
 powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1
 ```
 
-On macOS/Linux:
-
-```bash
-python3 tools/build_vector_store.py
-python3 tools/normalize_learning_loop.py
-bash tools/start_learning_session.sh
-bash tools/end_learning_session.sh --topic "Hall sensors" --summary "Explained Hall state sequence"
-bash tools/install_project_skill.sh
-```
-
-Do not treat passing tests as hardware validation.
+Restart Codex after installing the project Skill if the updated behavior does
+not appear immediately.

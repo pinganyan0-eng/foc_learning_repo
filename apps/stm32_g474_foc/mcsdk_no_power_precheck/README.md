@@ -48,6 +48,11 @@ output.
   debug-output route review draft that defines
   snapshot fields and blocks ISR printing / UART transmit / JSON / ESP32 /
   SWO / every-edge streaming, plus a 2026-05-27 MCSDK firmware-integration boundary review draft that blocks direct writes to `HALL_M1`, speed loop, PID, JEOC / FOC ISR, or TIM1 PWM, plus a 2026-05-28 Chinese-first software Hall firmware-entry plan that defines the future debug-only adapter layers, state-machine order, ISR limits, debug fields, and MCSDK hard stops without opening firmware implementation.
+- Current user handoff: 2026-06-01 PCB2 is reported populated / in hand and
+  the route is unchanged. The DMM continuity / short-check gate is open as
+  no-power pending, not passed, and
+  `pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md` is the current
+  action card.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   Packet A / firmware feasibility proof for the current PCB2
   `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
@@ -81,6 +86,15 @@ Forbidden in this directory and this P2 stage:
   firmware-entry plan for the future `PA0/PA1/PB4` debug-only software Hall
   adapter. Decision:
   `Software Hall firmware-entry plan / debug-only no-power boundary / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- `pcb2_waiting_hardware_handoff_2026-05-31.md`: current waiting-hardware
+  handoff. It records PCB2 as not populated / waiting for hardware, keeps DMM
+  deferred, requests a hardware teammate status line and any updated source
+  package, and points the no-power algorithm track to the mixed Hall sequence
+  check under WP-030.
+- `pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md`: current
+  populated-board handoff. It records PCB2 as soldered / in hand with unchanged
+  `PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND` route, opens the DMM table as
+  no-power pending, and keeps all powered / firmware readiness claims blocked.
 - `source_packet_request_pack_2026-05-14.md`: concrete request pack for the
   next `.stmcx`, MotorControl screenshot, CN8/EDA/netlist, and STDRIVE101
   protection-path handoff.

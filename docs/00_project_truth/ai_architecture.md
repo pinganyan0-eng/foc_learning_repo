@@ -19,17 +19,75 @@ The target is not more autonomous hardware action. The target is less repeated
 context loading, better local search, clearer handoff, stronger static checks,
 and more useful experiment analysis while keeping no-power boundaries explicit.
 
+## AI Architecture v2
+
+The v2 maintenance target is to make the AI workflow auditable rather than more
+autonomous. It adds one maintenance context mode, stronger static checks, and
+retrieval regression cases for the current safety-sensitive handoff questions.
+
+- `tools/build_context_pack.py --mode ai_maintenance` is the default context
+  pack for AI architecture, retrieval, workflow-contract, and handoff updates.
+- `tools/build_context_pack.py --mode workflow_maintenance` is the default
+  context pack for automation, learning-loop, closeout, definition-of-done,
+  submission-checklist, and workflow-index maintenance.
+- `tools/check_ai_contracts.py` is the no-power static contract checker. It
+  checks entry files, safety phrases, task review lifecycle, UTF-8 readability,
+  index coverage, retrieval-eval coverage, project workflow contracts, and
+  dangerous positive claims across project truth, workflow, Skill, no-power
+  precheck, deliverable, interface, and learning text. It also guards the
+  readable entry headers of `workflow/evidence_register.md` and
+  `deliverables/submission_checklist.md`, while leaving broader legacy
+  mojibake cleanup as separately reviewed maintenance work.
+- `retrieval_eval/queries.json` must include regression cases for the
+  dual-teacher guard, current PCB2 Hall route, DMM pending/no-power boundary,
+  ACTIVE_TASK review lifecycle, ESP32 real-time boundary, automation no-write
+  boundary, learning feedback loop, closeout checklist, and repo-maintenance
+  definition of done.
+- `tools/search_local_v2.py --eval` verifies local retrieval behavior. Passing
+  retrieval eval is source-finding evidence only, never hardware validation.
+- `codex_skills/stm32g474-foc-assistant/SKILL.md` is the project Skill v2
+  router. It keeps the loaded Skill concise and points to one-level references
+  for project navigation, no-power boundaries, learning feedback, and workflow
+  maintenance.
+- `tools/check_project_skill_install.py` is the read-only install drift checker
+  for the project Skill. It compares repo-local source with the installed user
+  Skill and reports missing, extra, or changed files.
+- `tools/run_ai_maintenance_audit.py` is the consolidated no-power AI
+  maintenance audit runner. It can run the full closeout command set or a quick
+  repo-only Skill/context/contract audit for handoff checks, and can write a
+  human-readable Markdown report with `--write-report`. It records
+  `git status --short` as dirty-worktree handoff evidence before
+  `git diff --check`; the `git_status` step preserves full output even when
+  other step output is tail-limited by `--max-output-chars`, and exposes a
+  parsed `workspace_status` summary with `status_paths`, `path_groups`, and
+  ordered `focus_groups`, plus `handoff_review_queue` review-focus items for
+  handoff. It also exposes `contract_status`, a machine-readable summary of
+  contract errors, review-lifecycle warnings, unexpected warnings,
+  `strict_ready`, and `implementation_closeout_ok`, and `closeout_summary`,
+  a top-level repo-maintenance closeout decision with dirty-worktree state,
+  review-needed flag, next review focus, and explicit hardware-validation
+  falsehood. This is not a cleanup or hardware validation step.
+
+### Review Lifecycle Policy
+
+The checker intentionally warns when `workflow/ACTIVE_TASK.md` is `done` while
+`Review Required: yes` or pending verification remains. Codex must not clear
+that warning by silently marking a task `reviewed`; user review clears strict warnings. Before that review, the acceptable implementation closeout is no
+contract errors and only the known review-lifecycle warnings.
+
 ## Layers
 
 | Layer | Current files or tools | Responsibility | Must not do |
 | --- | --- | --- | --- |
 | Fact source | `docs/00_project_truth/project_context.md`, `workflow/CURRENT_SNAPSHOT.md`, `CURRENT_STATUS.md` | Define current project truth, stage, and evidence-backed state. | Hide conflicts or promote historical notes over current evidence. |
-| Context pack | `AI_CONTEXT.md`, future `tools/build_context_pack.py` | Produce the smallest useful task-specific context. | Read full manuals or long history by default. |
-| Retrieval | `tools/ask_local.py`, `tools/build_vector_store.py` | Find local evidence and source snippets. | Treat retrieval hits as hardware validation. |
+| Context pack | `AI_CONTEXT.md`, `tools/build_context_pack.py` | Produce the smallest useful task-specific context, including `ai_maintenance` and `workflow_maintenance`. | Read full manuals or long history by default. |
+| Retrieval | `tools/ask_local.py`, `tools/search_local_v2.py`, `tools/build_vector_store.py`, `retrieval_eval/queries.json` | Find local evidence and source snippets with regression coverage. | Treat retrieval hits as hardware validation. |
 | Task control | `workflow/ACTIVE_TASK.md`, `workflow/task_state_machine.md`, `workflow/definition_of_done.md` | Keep one executable task, scope, and completion standard. | Execute `draft` tasks or bypass blocked tasks. |
 | Safety gate | `workflow/risk_gate_matrix.md`, `workflow/phase_gate_checklist.md` | Protect PWM, 24V, power board, motor, Hall/SMO, and STDRIVE101 paths. | Claim powered readiness from config, build, screenshot, or generated source alone. |
 | Learning memory | `learning/MASTERY_MAP.md`, `learning/weak_points.md`, `learning/review_queue.md` | Track observed understanding, weak points, and spaced review. | Claim mastery without evidence level L4 or higher. |
-| Contract checks | future `tools/check_ai_contracts.py` | Detect broken links, missing safety phrases, stale tasks, and drift. | Replace human review for hardware evidence. |
+| Project Skill | `codex_skills/stm32g474-foc-assistant/SKILL.md`, `codex_skills/stm32g474-foc-assistant/references/*.md`, `tools/check_project_skill_install.py`, `tools/run_ai_maintenance_audit.py` | Route Codex turns to the right project truth, no-power boundary, learning loop, and workflow-maintenance rules with low token load; detect install drift after the repo-local Skill is installed; run consolidated no-power AI maintenance audits that include dirty-worktree status capture. | Hide detailed rules in an oversized Skill, install unreviewed external hardware-safety Skills, assume the installed Skill matches the repo without checking, clean or reorder user work during audit, or treat audit results as hardware validation. |
+| Project workflow | `workflow/automation_playbook.md`, `workflow/learning_feedback_loop.md`, `workflow/session_close_checklist.md`, `workflow/definition_of_done.md` | Keep automation, learning updates, closeout, and repo-maintenance completion criteria auditable. | Let automation write repo state, skip closeout checks, or treat note-taking as evidence. |
+| Contract checks | `tools/check_ai_contracts.py`, `tests/test_ai_architecture_contracts.py` | Detect missing entries, stale tasks, review lifecycle warnings, missing eval coverage, UTF-8 problems, and dangerous claims. | Replace human review for hardware evidence or self-clear required review. |
 | Probe scripts | future `tools/probes/` | Verify no-power file, toolchain, generated-source, and configuration facts. | Prove continuity, soldering, powered behavior, or motor safety. |
 | Experiment analysis | future `tools/experiment_analyzer/`, `tools/uart_frame_tester/`, `tools/plot_current_speed/` | Parse logs and data into repeatable evidence and defense assets. | Turn a single noisy run into a stable performance claim. |
 
@@ -109,6 +167,39 @@ Automations should stay cheap and conservative:
 Automations must not commit, push, delete, reorder user work, edit generated
 firmware, change hardware parameters, run powered tests, or claim hardware
 readiness.
+
+## Workflow Maintenance Policy
+
+Project workflow maintenance is allowed to update context packs, contract
+checks, retrieval regression cases, workflow indexes, learning-loop contracts,
+automation boundaries, and closeout checklists. It remains a no-power repository
+maintenance task.
+
+Project Skill maintenance follows the same boundary. Keep
+`codex_skills/stm32g474-foc-assistant/SKILL.md` as a concise router, move
+task-specific detail into one-level references, validate with
+`quick_validate.py` and `tools/check_project_skill_install.py --repo-only`,
+and install only after repo-side checks pass. After installation, run
+`tools/check_project_skill_install.py` to detect drift. Use
+`tools/run_ai_maintenance_audit.py` for the full no-power closeout set or
+`--quick --repo-only-skill --json` for handoff checks. Use `--write-report`
+when a human-readable audit report is needed. The Skill may improve routing and
+consistency, but it must not open hardware or firmware actions by itself.
+
+The minimum accepted evidence for this class of work is:
+
+- `tools/check_ai_contracts.py` has no errors.
+- `tools/build_context_pack.py --mode workflow_maintenance` renders the
+  expected source list.
+- `tools/search_local_v2.py --eval` passes after rebuilding the local vector
+  store.
+- `python -m unittest discover -s tests`, `python -m compileall src tests`,
+  `git status --short`, and `git diff --check` complete without new failures
+  beyond known CRLF warnings; the status output is preserved as handoff
+  context, not treated as a failure by itself.
+
+Workflow maintenance must not edit firmware, generated projects, CubeMX/MCSDK
+configuration, hardware parameters, DMM results, or powered-test evidence.
 
 ## Safety Boundary
 

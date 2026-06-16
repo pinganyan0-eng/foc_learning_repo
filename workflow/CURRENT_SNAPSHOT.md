@@ -1,6 +1,6 @@
 # Current Snapshot
 
-Last updated: 2026-05-28
+Last updated: 2026-06-08
 
 This is the short current-state page for low-token AI handoff. It summarizes
 the current project stage and safety boundary. Historical detail remains in
@@ -12,6 +12,10 @@ the current project stage and safety boundary. Historical detail remains in
   project.
 - Current stage: P2 MCSDK no-power precheck and software Hall no-power
   firmware-entry planning.
+- Current real-world blocker: PCB2 is now reported populated / in hand, and
+  the user confirmed the route is unchanged. The DMM continuity / short-check
+  gate is open as a no-power pending action, not passed. The active handoff is
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md`.
 - No-power build-only status: Debug build command completed with exit code `0`
   on 2026-05-27 for
   `QIANSAI_G474_STDRIVE101_FOC_P2`; this is local compile evidence only.
@@ -26,8 +30,12 @@ the current project stage and safety boundary. Historical detail remains in
 - Current Hall planning route: `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`.
 - `PB3=LIN1` and is not current PCB2 Hall.
 - `P14/P15=3V3/GND`.
-- PCB2 is still unpopulated, so DMM continuity / short-check evidence is
-  hardware-side deferred. Deferred does not mean passed.
+- PCB2 populated status is now reported, but DMM continuity / short-check
+  evidence is still missing. Pending does not mean passed.
+- Current user action is to fill the no-power DMM continuity / short-check
+  table for `IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`, `P14/P15=3V3/GND`, and
+  `nFAULT->PB12`, plus rail / signal / Hall-line short checks. The WP-030
+  no-power Hall mixed-sequence check is passed at L4.
 
 ## Current Software Hall State
 
@@ -59,10 +67,21 @@ the current project stage and safety boundary. Historical detail remains in
   It records `cmake --build ... --config Debug`, exit code `0`, `ninja: no
   work to do`, and `.elf` / `.map` artifacts from the external Workbench build
   directory.
+- PR #5, `learning notes`, was reviewed and merged into `master` on
+  2026-06-01 with merge commit
+  `2b614b4aae4eb40a5b2a882c5f2252dadbe06079`. Its two added learning files
+  record only L2 MCSDK Hall speed / position feedback concept evidence and do
+  not claim MCSDK Hall closed-loop, Motor Profiler, power-board, motor, PWM,
+  serial, or build validation.
+- WP-030 software Hall processing-order transfer is now L4 at no-power
+  mixed-sequence level. The next software-Hall learning risk is firmware-entry
+  pseudocode discipline, not more sequence recall.
 - These are no-power planning and host-model evidence only.
 - They do not prove GPIO runtime behavior, MCSDK Hall integration, MCSDK hook
   readiness, DMM continuity, Hall closed-loop behavior, flash readiness, or
   powered readiness.
+- The DMM table may now be filled only with the board unpowered; it is not yet
+  a passed result.
 
 ## Current AI Architecture Work
 
@@ -70,9 +89,50 @@ the current project stage and safety boundary. Historical detail remains in
   short context, grounded retrieval, one active task, explicit safety boundary,
   contract checks, and evidence records.
 - `docs/00_project_truth/ai_architecture.md` is the architecture contract.
-- `tools/build_context_pack.py` is the first low-token context-pack generator.
-- `tools/check_ai_contracts.py` is the first no-power workflow consistency
-  checker.
+- AI Architecture v2 adds `tools/build_context_pack.py --mode ai_maintenance`
+  for AI workflow maintenance handoffs.
+- Project workflow maintenance now uses
+  `tools/build_context_pack.py --mode workflow_maintenance` for automation,
+  learning feedback, closeout checklist, definition-of-done, submission
+  checklist, index, and tool-contract maintenance.
+- Project Skill v2 is now a concise router at
+  `codex_skills/stm32g474-foc-assistant/SKILL.md`, with one-level references
+  for project navigation, no-power boundaries, learning feedback, and workflow
+  maintenance.
+- `tools/check_project_skill_install.py` now checks whether the installed user
+  Skill matches the repo-local project Skill source.
+- `tools/run_ai_maintenance_audit.py` now provides a consolidated no-power AI
+  maintenance audit runner, with full and quick repo-only modes plus optional
+  Markdown report output via `--write-report`. It records
+  `git status --short` as dirty-worktree handoff evidence before
+  `git diff --check`; the `git_status` step preserves full output even when
+  other step output is tail-limited by `--max-output-chars`, and exposes a
+  parsed `workspace_status` summary with `status_paths`, `path_groups`, and
+  ordered `focus_groups`, plus a `handoff_review_queue` that names the review
+  focus for each dirty-worktree group. It also exposes `contract_status` to
+  distinguish contract errors from known review-lifecycle warnings and strict
+  readiness, plus `closeout_summary` for the top-level repo-maintenance
+  closeout decision, dirty-worktree state, review-needed flag, and next review
+  focus. This does not clean the worktree or validate hardware.
+- `tools/check_ai_contracts.py` is the no-power workflow consistency checker.
+  It checks entry files, safety phrases, task review lifecycle, UTF-8
+  readability, index coverage, retrieval-eval coverage, project workflow
+  contracts, and dangerous positive claims across project truth, workflow,
+  Skill, no-power precheck, deliverable, interface, and learning text.
+- The readable entry headers of `workflow/evidence_register.md` and
+  `deliverables/submission_checklist.md` are now contract-checked. Broader
+  legacy historical mojibake remains separate review work rather than a
+  silent full-repair claim.
+- Review lifecycle policy: Codex may leave `done + Review Required` warnings
+  during implementation closeout. User review clears strict warnings; Codex
+  must not silently mark the task `reviewed` just to make strict mode pass.
+- `retrieval_eval/queries.json` covers dual-teacher guard, current PCB2 Hall
+  route, DMM pending/no-power boundary, ACTIVE_TASK review lifecycle, and ESP32
+  real-time boundary, plus workflow closeout, automation no-write, learning
+  feedback, repo-maintenance DoD, project Skill v2 router, and project Skill
+  install drift cases, plus the AI maintenance audit runner case.
+- `tools/search_local_v2.py --eval` is source-finding regression evidence only,
+  not hardware validation.
 - Dual-teacher concept-only role guard is now explicit: ChatGPT teaches pure
   theory/concept turns, while Codex provides the ChatGPT prompt, reviews and
   records returned learning evidence, and keeps repo-side engineering work.

@@ -1,6 +1,6 @@
 # LEARNING_STATUS
 
-Last updated: 2026-05-14
+Last updated: 2026-06-01
 
 ## Current Learning Mode
 
@@ -43,6 +43,7 @@ Current evidence includes L4 P1 concept checks for STOP side effects, DMA `Size`
 - Resolving `PA2/PA3` UART-vs-OPAMP, `PC5` nFAULT-vs-OPAMP, and `PB3` SWO-vs-Hall pin conflicts before any generated project.
 - Keeping Motor Profiler as a later hardware-stage plan with current limits, stop conditions, and abort criteria.
 - Skipping basic CubeMX/CubeIDE/VS Code navigation unless explicitly requested; the learner has stated they already know the toolchain.
+- Software Hall adapter processing order now has L4 no-power mixed-sequence evidence from 2026-06-01. The next risk is firmware-transfer discipline: ISR-only capture, low-priority classification, trusted-state updates, debug-only outputs, and no MCSDK writes without an accepted feedback-object design.
 
 ## Current Execution Layer
 

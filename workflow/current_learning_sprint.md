@@ -1,6 +1,6 @@
 # Current Learning Sprint
 
-Last updated: 2026-05-14
+Last updated: 2026-06-01
 
 This is the short execution layer for the current teaching plan. It turns the long B algorithm delivery plan into a concrete sprint with deliverables, review priority, and exit criteria.
 
@@ -131,6 +131,14 @@ first-valid check -> repeated-state check -> bounce/timing check ->
 forward/reverse adjacent check -> abnormal-jump count. It is not firmware,
 not build evidence, not MCSDK Hall integration, and not Hall readiness.
 
+2026-05-31 software Hall processing-order learning follow-up: the user pasted
+back the ChatGPT check for this card. The one-sentence teach-back is now L2:
+the user included raw read, illegal-state rejection, first-valid baseline,
+repeat non-edge handling, bounce candidate, adjacent direction candidate, and
+repaired the final wording to record non-adjacent legal-state jumps as abnormal
+jump events. The next check is a mixed raw-state trace before any firmware
+boundary discussion.
+
 2026-05-27 software Hall host-model follow-up: Codex added
 `src/software_hall_model.py`, `tests/test_software_hall_model.py`, and
 `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_host_model_review_2026-05-27.md`.
@@ -232,6 +240,37 @@ state-machine order, ISR limits, debug fields, and MCSDK hard stops for the
 current `PA0/PA1/PB4` route while keeping `PB3=LIN1` out of Hall. It does not
 open STM32 firmware implementation, generated-code edits, flash, powered work,
 Gate PWM, motor, Hall closed-loop, or sensorless readiness.
+
+2026-05-31 PCB2 waiting-hardware follow-up: the user selected PCB2 as not
+populated / waiting for hardware. Codex added
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_waiting_hardware_handoff_2026-05-31.md`.
+The current real-world handoff is now: request hardware teammate status and any
+updated source package, keep the DMM continuity / short-check table deferred,
+and run only the no-power software Hall mixed-sequence learning check while
+hardware is unavailable. This does not authorize DMM, firmware, flash, Generate
+/ Build, 24V, power-board connection, motor connection, Gate PWM, Motor
+Profiler, Hall closed-loop, or hardware readiness.
+
+2026-06-01 learning-record follow-up: Codex reviewed and merged PR #5,
+`learning notes`, into `master` with merge commit
+`2b614b4aae4eb40a5b2a882c5f2252dadbe06079`. The PR files record L2 MCSDK Hall
+speed / position feedback concept evidence only and preserve the no-power /
+debug-only boundary. The user also passed the WP-030 mixed-sequence trace at L4:
+baseline, repeat, accepted adjacent direction, rejected bounce candidate,
+illegal-state rejection, and abnormal-jump evidence were all classified
+correctly. This does not authorize DMM, firmware, flash, Generate / Build, 24V,
+power-board connection, motor connection, Gate PWM, Motor Profiler, MCSDK Hall
+closed-loop, or hardware readiness.
+
+2026-06-01 PCB2 populated follow-up: the user reported PCB2 is soldered / in
+hand and that the current route remains
+`PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND`. Codex added
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md`.
+The DMM continuity / short-check gate is now open as no-power pending, not
+passed. The next user action is the filled DMM table only; this does not
+authorize firmware, flash, Generate / Build, 24V, powered power-board
+connection, motor connection, Gate PWM, Motor Profiler, Hall closed-loop, or
+hardware readiness.
 ## Why This Sprint
 
 P1 NUCLEO UART command handling and DMA + IDLE concept checks are recorded as passed. The next useful move is no longer more verbal review of STOP/DMA basics; it is creating the P2 no-power artifact set that will let the team approach MCSDK safely.
@@ -272,7 +311,7 @@ The first P2 card now exists at `deliverables/2026-05-13_p2_mcsdk_no_power_prech
 | Software Hall no-power algorithm prep | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_no_power_algorithm_prep_2026-05-22.md` | filled; algorithm-side no-power prep only | Defines valid states `001/010/011/100/101/110`, rejects `000/111`, records transition rules, candidate forward/reverse sequences, debug observables, ISR limits, and MCSDK hard stops while DMM remains deferred, not passed. |
 | Software Hall state-machine exercise card | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_state_machine_exercise_card_2026-05-22.md` | waiting for user answer | User fills `001 -> 101`, `001 -> 001`, `001 -> 010`, and `000` judgments, plus five concept checks, before any pseudocode draft. |
 | Software Hall adapter pseudocode draft | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_pseudocode_draft_2026-05-27.md` | filled; pseudocode draft only | Defines future adapter responsibilities and ISR/MCSDK hard stops after L2 concept evidence. It is not firmware, not build evidence, not MCSDK Hall integration, and not Hall readiness. |
-| Software Hall adapter processing-order card | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_processing_order_card_2026-05-27.md` | filled; teaching card only | Explains the sequence after the user could not restate it. The next proof is a one-sentence user teach-back; this is not firmware, not build evidence, not MCSDK Hall integration, and not Hall readiness. |
+| Software Hall adapter processing-order card | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_adapter_processing_order_card_2026-05-27.md`, `learning/review_items/2026-05-31_software_hall_adapter_processing_order_chatgpt_followup.md`, `learning/review_items/2026-06-01_software_hall_mixed_sequence_review.md` | L4 no-power mixed-sequence trace recorded | User can now trace baseline, repeat, bounce, adjacent direction, illegal rejection, and abnormal-jump decisions in a mixed sequence. The next proof is no-power pseudocode / firmware-entry boundary; this is not firmware, not build evidence, not MCSDK Hall integration, and not Hall readiness. |
 | Software Hall host model | `src/software_hall_model.py`, `tests/test_software_hall_model.py` | filled; host-side algorithm model only | Tests valid/illegal states, first valid baseline, repeats, forward/reverse steps, abnormal jumps, bounce candidate, and a full candidate forward cycle without touching STM32 firmware or hardware. |
 | Software Hall golden vectors | `tests/fixtures/software_hall_golden_vectors.json`, `tests/test_software_hall_vectors.py` | filled; host-side replay contract only | Replays fixed no-power input/output expectations for forward cycle, illegal/repeat/bounce/jump handling, and reverse adjacent step without touching STM32 firmware or hardware. |
 | Software Hall MCSDK integration probe | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_integration_probe_2026-05-27.md` | filled; read-only integration clue only | Identifies generated standard TIM2 Hall clues and records that current `PA0/PA1/PB4` software Hall is not MCSDK Hall integration. |
@@ -284,6 +323,8 @@ The first P2 card now exists at `deliverables/2026-05-13_p2_mcsdk_no_power_prech
 | Software Hall MCSDK hook evidence request checklist | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_hook_evidence_request_checklist_2026-05-27.md` | filled; source-evidence request only | Requests exact generated or interface source files before any hook proposal, and rejects log-only names, screenshots, different-version files, host tests, and build-only success by itself as hook evidence. |
 | Full Workbench `Src/Inc` snapshot | `apps/stm32_g474_foc/mcsdk_no_power_precheck/packet_a_sources/2026-05-27_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot/`, `apps/stm32_g474_foc/mcsdk_no_power_precheck/source_packet_review_2026-05-27_001_qiansai_g474_stdrive101_foc_p2_full_src_inc_snapshot.md` | filled; read-only generated-source evidence only | Archives exact generated `Src/`, `Inc/`, `cmake/`, and project/build metadata from the existing Workbench project. Enables read-only MCSDK interface review only; no firmware, hook, build, DMM, or Hall readiness claim is opened. |
 | Software Hall MCSDK speed / position feedback interface review | `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_mcsdk_speed_position_feedback_interface_review_2026-05-27.md` | filled; read-only source-interface review only | Traces generated `HALL_M1`, speed/reliability calculation, speed-loop measurement, and FOC angle consumption; keeps software Hall debug-only unless a reviewed `SpeednPosFdbk`-compatible component proposal exists. |
+| PCB2 waiting-hardware handoff | `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_waiting_hardware_handoff_2026-05-31.md` | filled; DMM gate deferred | Records that PCB2 was not populated / waiting for hardware, gives the hardware teammate status template, and keeps DMM pending. The no-power Hall mixed-sequence check is now completed; current hardware progress needs populated-board status and updated source packets if routes changed. |
+| PCB2 populated no-power DMM handoff | `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md` | filled; DMM gate open as pending | Records that PCB2 is now reported soldered / in hand and route unchanged. The next user action is the no-power DMM table; this is not continuity proof, firmware readiness, MCSDK Hall integration, or powered readiness. |
 | Phase gate P2 insert | `workflow/phase_gate_checklist.md` | filled; formal gate now blocks direct NUCLEO-to-Profiler jumps | Adds P2-S1 no-power, P2-S2 build-only, and P2-to-P3 blocker rules tied to Packet A/B/C, PB3/SWO, continuity checks, current limits, stop conditions, and rollback evidence. |
 | Motor Profiler plan | same card or a later P3 plan file | expanded for future P3 | Plan lists required hardware, current limit, motor information, stop conditions, abort criteria, instrument/log needs, and rollback path; no live profiler run occurs in P2. |
 | Evidence register and submission checklist | `workflow/evidence_register.md`, `deliverables/submission_checklist.md` | updated for first P2 card | P2 planning evidence is registered without overstating it as MCSDK, Hall, power, or motor validation. |

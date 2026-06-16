@@ -35,3 +35,17 @@ Definition of Done: workflow/definition_of_done.md#仓库维护任务
 Evidence ID: EV-YYYY-MM-DD-001
 Review Required: yes
 ```
+
+## AI Architecture v2 Review Lifecycle
+
+For AI maintenance tasks, `done` means Codex has implemented the agreed
+repository changes and recorded verification evidence. It does not mean the
+task is reviewed.
+
+- `tools/check_ai_contracts.py` warns when `ACTIVE_TASK.md` is `done` with
+  `Review Required: yes`.
+- `tools/check_ai_contracts.py --strict` treats that warning as a failure.
+- User review clears strict warnings by authorizing the task to move from
+  `done` to `reviewed`.
+- Codex must not silently change `done` to `reviewed` only to make strict mode
+  pass.

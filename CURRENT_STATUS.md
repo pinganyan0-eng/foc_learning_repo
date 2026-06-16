@@ -1,3 +1,769 @@
+## 2026-06-10 Entry Readability Contract Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-10-entry-readability-contract`.
+- Evidence:
+  `EV-2026-06-10-ENTRY-READABILITY-CONTRACT-001`.
+- Decision:
+  `High-value entry readability repair / UTF-8 header contract / no hardware or firmware action`.
+- Restored the readable entry header and weekly/phase template fields in
+  `deliverables/submission_checklist.md`.
+- Restored the title and evidence boundary in
+  `workflow/evidence_register.md`.
+- Extended `tools/check_ai_contracts.py` with
+  `READABILITY_HEADER_REQUIREMENTS`, `READABILITY_MOJIBAKE_MARKERS`, and
+  `check_readability_headers()`.
+- Added unit coverage, retrieval expansion/eval, low-token handoff updates,
+  architecture/index/tool docs, project Skill workflow-maintenance guidance,
+  active task, and evidence record.
+- Verification passed:
+  `python -m py_compile tools\check_ai_contracts.py tools\search_local_v2.py`;
+  `python -m unittest tests.test_ai_architecture_contracts`;
+  `python tools/check_ai_contracts.py` with 0 errors and the two known
+  review-lifecycle warnings;
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills/stm32g474-foc-assistant`;
+  `python tools/check_project_skill_install.py --repo-only --json`;
+  `powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest tests.test_search_local_v2 tests.test_ai_architecture_contracts tests.test_workflow_contracts`;
+  and `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`.
+  The full audit passed with 143 discovered tests, retrieval eval, compileall,
+  Skill install drift check, `closeout_summary.repo_maintenance_closeout_ok:
+  true`, and `git diff --check`; diff check output only contained existing
+  CRLF conversion warnings.
+- This repairs and guards the high-value entry headers only. It does not claim
+  that every legacy historical mojibake row is repaired.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-10 AI Maintenance Audit Closeout Summary Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-10-ai-maintenance-audit-closeout-summary`.
+- Evidence:
+  `EV-2026-06-10-AI-MAINTENANCE-AUDIT-CLOSEOUT-SUMMARY-001`.
+- Decision:
+  `AI maintenance audit closeout summary / top-level repo-maintenance handoff / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with
+  `closeout_summary_from_statuses()` and top-level `closeout_summary`.
+- The summary reports `repo_maintenance_closeout_ok`, `strict_ready`,
+  `needs_user_review`, dirty-worktree state, dirty entry count, next review
+  group/focus, `no_power_boundary_active`, and `hardware_validation: false`.
+- Markdown audit reports now include a `Closeout Summary` section.
+- Updated tests, contract checks, retrieval expansion, retrieval eval,
+  low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, active task, and evidence register.
+- Verification passed:
+  `python -m py_compile tools\run_ai_maintenance_audit.py tools\check_ai_contracts.py tools\search_local_v2.py`;
+  `python -m unittest tests.test_ai_architecture_contracts`;
+  `python tools/check_ai_contracts.py` with 0 errors and the two known
+  review-lifecycle warnings;
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant`;
+  `python tools/check_project_skill_install.py --repo-only --json`;
+  `powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest tests.test_search_local_v2 tests.test_ai_architecture_contracts`;
+  and `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`.
+  The full audit passed with `closeout_summary.repo_maintenance_closeout_ok:
+  true`, `strict_ready: false`, `needs_user_review: true`, 0 contract errors,
+  0 unexpected warnings, 2 known review-lifecycle warnings, 142 discovered unit
+  tests, compileall, Skill install drift check, retrieval eval, and
+  `git diff --check`; diff check output only contained existing CRLF
+  conversion warnings.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-10 AI Maintenance Audit Contract Status Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-10-ai-maintenance-audit-contract-status`.
+- Evidence:
+  `EV-2026-06-10-AI-MAINTENANCE-AUDIT-CONTRACT-STATUS-001`.
+- Decision:
+  `AI maintenance audit contract status / review-lifecycle warning classification / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with
+  `REVIEW_LIFECYCLE_WARNING_MARKERS`, `parse_contract_output()`, and
+  `contract_status_from_results()`.
+- The no-power audit now exposes top-level `contract_status`, including
+  contract error count, warning count, review-lifecycle warning count,
+  unexpected warning count, `strict_ready`, `implementation_closeout_ok`, and
+  the parsed warning lists.
+- The current expected result is no contract errors, two review-lifecycle
+  warnings, no unexpected warnings, implementation closeout allowed, and strict
+  readiness still false until user review clears the old `done + Review
+  Required` lifecycle state.
+- Markdown audit reports now include a `Contract Status` section and a
+  `Review Lifecycle Warnings` subsection.
+- Added `MAINTENANCE_SOURCE_FILES` in `tools/build_vector_store.py` so
+  maintenance tool scripts, tests, and eval JSON stay indexed for local
+  retrieval.
+- Updated `tools/search_local_v2.py` with path-aware topic-entry scoring so
+  workflow entry files and the `tools/check_ai_contracts.py`
+  dangerous-claim implementation remain discoverable after status/evidence
+  docs grow.
+- Updated tests, retrieval expansion, retrieval eval, low-token handoff docs,
+  file index, tools README, project Skill workflow-maintenance reference,
+  active task, and evidence register.
+- Verification passed:
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with 0 errors and the two known
+  review-lifecycle warnings;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest tests.test_search_local_v2 tests.test_ai_architecture_contracts`
+  with 18 tests OK;
+  and `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`,
+  which passed retrieval eval, 142 discovered unit tests, compileall, Skill
+  install drift check, and `git diff --check`. Diff check output only contained
+  existing CRLF conversion warnings.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 Dangerous Claim Scan Surface Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-contract-dangerous-claim-scan-surface`.
+- Evidence:
+  `EV-2026-06-09-AI-CONTRACT-DANGEROUS-CLAIM-SCAN-SURFACE-001`.
+- Decision:
+  `AI contract dangerous claim scan surface / broader no-power static text scan / no hardware or firmware action`.
+- Extended `tools/check_ai_contracts.py` with
+  `DANGEROUS_CLAIM_SCAN_PATHS`, `DANGEROUS_CLAIM_SCAN_SUFFIXES`,
+  `is_dangerous_claim_scan_candidate()`, and
+  `iter_dangerous_claim_scan_files()`.
+- The dangerous positive hardware claim scan now covers project truth,
+  workflow, project Skill, no-power precheck, deliverable, interface, and
+  learning text. It intentionally does not scan tool constants in
+  `tools/check_ai_contracts.py` itself.
+- Added unit coverage that confirms `CURRENT_STATUS.md`,
+  `workflow/ACTIVE_TASK.md`, `docs/00_project_truth/ai_architecture.md`, and
+  the project Skill workflow-maintenance reference are in the scan surface,
+  while `tools/check_ai_contracts.py` is excluded from the claim-text surface.
+- Added the `dangerous_claim_scan_surface` retrieval eval case and search
+  expansion for dangerous positive hardware claim questions.
+- Updated low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, active task, and evidence register.
+- Verification passed:
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  targeted dangerous-claim-scan tests in
+  `tests/test_ai_architecture_contracts.py`;
+  `python tools/build_vector_store.py`;
+  `python -m json.tool retrieval_eval\queries.json`;
+  targeted `rg` dangerous-phrase sweep returned no matches in the scanned
+  project-truth/workflow/Skill/precheck surface;
+  `python tools/search_local_v2.py --eval`;
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant`;
+  `python tools/check_project_skill_install.py --repo-only --json`;
+  `powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  and `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Handoff Review Queue Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-handoff-review-queue`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-HANDOFF-REVIEW-QUEUE-001`.
+- Decision:
+  `AI maintenance audit handoff review queue / group-specific dirty-worktree review focus / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with `GROUP_REVIEW_FOCUS` and
+  `build_handoff_review_queue()`, deriving
+  `workspace_status.handoff_review_queue` from existing `path_groups` and
+  ordered `focus_groups`.
+- The handoff review queue gives each dirty-worktree group a stable review
+  focus, for example AI maintenance scripts/tests/contracts, workflow status
+  and evidence, project Skill source/install drift, no-power precheck files,
+  project truth docs, learning memory, interfaces, and personal notes.
+- Updated Markdown report output with a `Handoff Review Queue` subsection under
+  `Workspace Status`.
+- Added unit assertions for `handoff_review_queue`,
+  `build_handoff_review_queue`, `GROUP_REVIEW_FOCUS`, and Markdown
+  `Handoff Review Queue` output.
+- Updated AI/workflow maintenance contracts, retrieval expansion, retrieval
+  eval, low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, current snapshot, active task, and evidence
+  register so handoff review guidance remains discoverable.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --check git_status --json --max-output-chars 1`;
+  targeted audit tests in `tests/test_ai_architecture_contracts.py`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant`;
+  `python tools/check_project_skill_install.py --repo-only --json`;
+  `powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  and `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Focus Groups Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-focus-groups`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-FOCUS-GROUPS-001`.
+- Decision:
+  `AI maintenance audit focus groups / ordered dirty-worktree handoff / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with `GROUP_FOCUS_ORDER` and
+  `summarize_focus_groups()`, deriving an ordered `workspace_status.focus_groups`
+  list from existing `path_groups`.
+- The ordered focus list prioritizes AI maintenance, workflow/status, project
+  Skill, no-power precheck, project truth docs, learning memory, interfaces,
+  personal notes/Obsidian, then `other`. This helps future Codex inspect dirty
+  scope in a stable order.
+- Updated Markdown report output with a `Focus Groups` subsection under
+  `Workspace Status`, showing per-focus-group counts.
+- Added unit assertions for `focus_groups`, `summarize_focus_groups`, and
+  Markdown `Focus Groups` output.
+- Updated AI/workflow maintenance contracts, retrieval expansion, retrieval
+  eval, low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, current snapshot, active task, and evidence
+  register so ordered focus groups remain discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Status Paths Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-status-paths`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-STATUS-PATHS-001`.
+- Decision:
+  `AI maintenance audit status paths / status-code dirty-worktree handoff / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with `summarize_status_paths()`
+  and `workspace_status.status_paths`, mapping each `git status --short`
+  status code to the matching path list.
+- This makes modified and untracked files directly accessible through the
+  audit JSON, for example `workspace_status.status_paths[" M"]` and
+  `workspace_status.status_paths["??"]`, without reparsing `items` or raw text.
+- Updated Markdown report output with a `Status Paths` subsection under
+  `Workspace Status`, showing per-status counts for handoff.
+- Added unit assertions for `status_paths`, `summarize_status_paths`, and
+  Markdown `Status Paths` output.
+- Updated AI/workflow maintenance contracts, retrieval expansion, retrieval
+  eval, low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, current snapshot, active task, and evidence
+  register so status-code path lists remain discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Workspace Path Groups Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-workspace-path-groups`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-WORKSPACE-PATH-GROUPS-001`.
+- Decision:
+  `AI maintenance audit workspace path groups / repository-area dirty-worktree handoff / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with
+  `classify_path_group()` and `path_groups` inside the top-level
+  `workspace_status` object.
+- Path groups currently classify dirty paths into stable repository areas such
+  as `ai_maintenance`, `project_skill`, `workflow_status`,
+  `project_truth_docs`, `learning_memory`, `no_power_precheck`,
+  `personal_notes_or_obsidian`, `interfaces`, and `other`.
+- Updated Markdown report output with a `Path Groups` subsection under
+  `Workspace Status`, showing per-group counts for handoff.
+- Added unit assertions for `path_groups`, `classify_path_group`, and Markdown
+  `Path Groups` output.
+- Updated AI/workflow maintenance contracts, retrieval expansion, retrieval
+  eval, low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, current snapshot, active task, and evidence
+  register so path grouping remains discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Workspace Status Summary Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-workspace-status-summary`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-WORKSPACE-STATUS-SUMMARY-001`.
+- Decision:
+  `AI maintenance audit workspace-status summary / machine-readable dirty-worktree handoff / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with
+  `parse_git_status_short()` and a top-level `workspace_status` object derived
+  from the existing full `git_status` output.
+- The summary records whether the worktree is dirty, total `git status
+  --short` entries, status-code counts, paths, and per-entry
+  `{status, path}` items. It does not run extra git commands and does not
+  change audit pass/fail semantics.
+- Updated Markdown report output with a `Workspace Status` section that
+  displays dirty state, total entries, and status counts.
+- Added unit assertions for `workspace_status`, `status_counts`, paths/items,
+  and the Markdown `Workspace Status` section.
+- Updated AI/workflow maintenance contracts, retrieval expansion, retrieval
+  eval, low-token handoff docs, file index, tools README, project Skill
+  workflow-maintenance reference, current snapshot, active task, and evidence
+  register so the parsed summary remains discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-09 AI Maintenance Audit Preserves Full Git Status Output
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-09-ai-maintenance-audit-preserve-git-status-output`.
+- Evidence:
+  `EV-2026-06-09-AI-MAINTENANCE-AUDIT-PRESERVE-GIT-STATUS-OUTPUT-001`.
+- Decision:
+  `AI maintenance audit full git-status output / dirty-worktree handoff evidence not truncated / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` so each audit step has an
+  output policy. Normal steps remain `tail` and obey `--max-output-chars`;
+  `git_status` is marked `preserve_output=True` and reports
+  `output_policy: full`.
+- Added a regression test that runs
+  `python tools/run_ai_maintenance_audit.py --check git_status --json --max-output-chars 1`
+  and compares the audit JSON output with raw `git status --short`, proving
+  the dirty-worktree handoff evidence is not truncated by the one-character
+  limit.
+- Updated AI/workflow maintenance contracts, unit tests, retrieval expansion,
+  retrieval eval, low-token handoff docs, file index, tools README, project
+  Skill workflow-maintenance reference, current snapshot, active task, and
+  evidence register so the full-output policy remains discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 1`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 AI Maintenance Audit Git Status Step Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-ai-maintenance-audit-git-status-step`.
+- Evidence:
+  `EV-2026-06-08-AI-MAINTENANCE-AUDIT-GIT-STATUS-001`.
+- Decision:
+  `AI maintenance audit git-status step / dirty-worktree handoff evidence / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with a read-only `git_status`
+  step that runs `git status --short`.
+- The full audit now records `git_status` after compileall and before
+  `git diff --check`. The quick repo-only audit now records
+  `git_status` after project Skill, context-pack, and AI-contract checks.
+- The audit records current dirty-worktree scope for Codex handoff only. It
+  does not clean, reorder, revert, stage, commit, or validate the worktree.
+- Updated AI/workflow maintenance contracts, unit tests, retrieval expansion,
+  retrieval eval, low-token handoff docs, file index, tools README, project
+  Skill workflow-maintenance reference, current snapshot, active task, and
+  evidence register so the git-status audit step remains discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json --max-output-chars 300`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py`;
+  `python tools/search_local_v2.py --eval`;
+  `python -m unittest discover -s tests`;
+  `python -m compileall src tests`;
+  `git status --short`;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 AI Maintenance Audit Markdown Report Output Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-ai-maintenance-audit-markdown-report`.
+- Evidence:
+  `EV-2026-06-08-AI-MAINTENANCE-AUDIT-MARKDOWN-REPORT-001`.
+- Decision:
+  `AI maintenance audit Markdown report output / explicit write-report mode / no hardware or firmware action`.
+- Extended `tools/run_ai_maintenance_audit.py` with `--write-report <path>`.
+  Default audit behavior remains no-write; Markdown output is created only when
+  the caller explicitly passes a report path.
+- The generated report includes audit result, generated UTC timestamp, project
+  Skill mode, no-power boundary, step table, command list, errors, and output
+  tails. It explicitly states that the report is repository maintenance
+  evidence only and not hardware validation.
+- Added a unit test that writes a quick repo-only audit report to a temporary
+  directory and checks the Markdown content and JSON `report_path`.
+- Updated AI/workflow maintenance docs, the project Skill workflow-maintenance
+  reference, retrieval expansion, retrieval eval, and contract checks so
+  `--write-report` remains discoverable.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 700`
+  returned `ok: true`; it ran `Skill is valid!`;
+  `python tools/check_project_skill_install.py` OK;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py` built `8845` chunks;
+  `python tools/search_local_v2.py --eval` passed;
+  `python -m unittest discover -s tests` ran `139` tests OK;
+  `python -m compileall src tests` passed;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 AI Maintenance Audit Runner Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-ai-maintenance-audit-runner`.
+- Evidence:
+  `EV-2026-06-08-AI-MAINTENANCE-AUDIT-RUNNER-001`.
+- Decision:
+  `AI maintenance audit runner / consolidated no-power closeout checks / no hardware or firmware action`.
+- Added `tools/run_ai_maintenance_audit.py`, a consolidated no-power audit
+  runner for AI/workflow maintenance closeout.
+- The full audit runs Skill validation, project Skill install drift check,
+  `workflow_maintenance` context pack rendering, AI contract checks,
+  vector-store rebuild, retrieval eval, unit tests, compileall, and
+  `git diff --check`.
+- The quick audit mode
+  `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json`
+  runs an environment-independent project Skill, context-pack, and AI contract
+  handoff check.
+- Wired the audit runner into `tools/build_context_pack.py`,
+  `tools/check_ai_contracts.py`, `tests/test_ai_architecture_contracts.py`,
+  `retrieval_eval/queries.json`, `tools/search_local_v2.py`, `AI_CONTEXT.md`,
+  `docs/00_project_truth/ai_architecture.md`, `docs/file_map.md`,
+  `tools/README.md`, `workflow/CURRENT_SNAPSHOT.md`, `workflow/ACTIVE_TASK.md`,
+  and `workflow/evidence_register.md`.
+- Reinstalled the validated repo-local project Skill after updating
+  `references/workflow-maintenance.md`; final installed Skill drift check is
+  OK.
+- Verification passed:
+  `python tools/run_ai_maintenance_audit.py --json --max-output-chars 800`
+  returned `ok: true`; it ran `Skill is valid!`;
+  `python tools/check_project_skill_install.py` OK;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py` built `8837` chunks;
+  `python tools/search_local_v2.py --eval` passed;
+  `python -m unittest discover -s tests` ran `138` tests OK;
+  `python -m compileall src tests` passed;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 Project Skill Install Drift Checker Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-project-skill-install-drift-checker`.
+- Evidence:
+  `EV-2026-06-08-PROJECT-SKILL-INSTALL-DRIFT-CHECK-001`.
+- Decision:
+  `Project Skill install drift checker / repo-local versus installed Skill comparison / no hardware or firmware action`.
+- Added `tools/check_project_skill_install.py`, a read-only checker that
+  validates the repo-local project Skill source and optionally compares it with
+  the installed user Skill under `.codex/skills`.
+- The checker reports `missing_installed_files`, `extra_installed_files`, and
+  `changed_installed_files`, and supports `--repo-only --json` for tests or CI.
+- Wired the checker into `tools/build_context_pack.py --mode ai_maintenance`
+  and `--mode workflow_maintenance`, `tools/check_ai_contracts.py`,
+  `tests/test_ai_architecture_contracts.py`, `retrieval_eval/queries.json`,
+  `tools/search_local_v2.py`, `AI_CONTEXT.md`,
+  `docs/00_project_truth/ai_architecture.md`, `docs/file_map.md`,
+  `tools/README.md`, `workflow/CURRENT_SNAPSHOT.md`, `workflow/ACTIVE_TASK.md`,
+  and `workflow/evidence_register.md`.
+- Reinstalled the validated repo-local project Skill to
+  `C:\Users\gregrg\.codex\skills\stm32g474-foc-assistant` after the new
+  checker detected an expected drift in `references/workflow-maintenance.md`.
+- Verification passed:
+  `python tools/check_project_skill_install.py --repo-only --json`;
+  `python tools/check_project_skill_install.py`;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py` built `8827` chunks;
+  `python tools/search_local_v2.py --eval` passed;
+  `python -m unittest discover -s tests` ran `137` tests OK;
+  `python -m compileall src tests` passed;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install external GitHub Skills and does not mark the earlier
+  `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 Project Skill v2 Optimization Implemented
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-project-skill-v2-optimization`.
+- Evidence:
+  `EV-2026-06-08-PROJECT-SKILL-V2-OPT-001`.
+- Decision:
+  `Project Skill v2 router / no-power references / contract-checked workflow maintenance / no hardware or firmware action`.
+- Refactored the project Skill source
+  `codex_skills/stm32g474-foc-assistant/SKILL.md` into a concise v2 router.
+- Added one-level Skill references:
+  `project-navigation.md`, `no-power-boundary.md`,
+  `learning-feedback.md`, and `workflow-maintenance.md`.
+- Updated `agents/openai.yaml` so the visible Skill metadata points to
+  no-power boundaries, weak points, and evidence records.
+- Extended `tools/build_context_pack.py --mode workflow_maintenance` and
+  `--mode ai_maintenance` to include the project Skill router and references.
+- Extended `tools/check_ai_contracts.py` and
+  `tests/test_ai_architecture_contracts.py` with project Skill v2 contracts,
+  including required references, UTF-8 readability, no mojibake markers in the
+  Skill source, install-flow documentation, and the four-line execution gate.
+- Extended local retrieval by indexing `codex_skills/`, adding source priority
+  for the project Skill, and adding the `project_skill_v2_router` eval case.
+- Updated `AI_CONTEXT.md`, `workflow/CURRENT_SNAPSHOT.md`,
+  `docs/00_project_truth/ai_architecture.md`, `docs/file_map.md`,
+  `tools/README.md`, `workflow/ACTIVE_TASK.md`, and
+  `workflow/evidence_register.md` so the Skill v2 maintenance surface is
+  discoverable from low-token handoff.
+- Installed the validated repo-local project Skill to
+  `C:\Users\gregrg\.codex\skills\stm32g474-foc-assistant`; restart Codex if
+  the updated Skill does not appear immediately.
+- Verification passed:
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant`;
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py` built `8819` chunks;
+  `python tools/search_local_v2.py --eval` passed;
+  `python -m unittest discover -s tests` ran `136` tests OK;
+  `python -m compileall src tests` passed;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not install unreviewed external GitHub Skills and does not mark the
+  earlier `done + Review Required` task as `reviewed`.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-08 Project Workflow / AI Architecture Maintenance Implemented
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-08-project-workflow-ai-architecture-optimization`.
+- Evidence:
+  `EV-2026-06-08-PROJECT-WORKFLOW-AI-ARCHITECTURE-OPT-001`.
+- Decision:
+  `Project workflow and AI architecture maintenance / workflow_maintenance context / project workflow contract checks / no hardware or firmware action`.
+- Added `tools/build_context_pack.py --mode workflow_maintenance` for
+  automation, learning feedback, closeout checklist, definition-of-done,
+  submission checklist, index, tool, retrieval, and test maintenance handoffs.
+- Extended `tools/check_ai_contracts.py` so project workflow contracts are now
+  checked along with AI entry files, safety phrases, review lifecycle, UTF-8
+  readability, index coverage, retrieval-eval coverage, and dangerous positive
+  claims.
+- Extended local retrieval regression with workflow cases for closeout,
+  automation `No repo writes`, learning feedback loop, and repo-maintenance
+  definition of done. `tools/search_local_v2.py --eval` remains source-finding
+  evidence only and does not validate hardware.
+- Updated `AI_CONTEXT.md`, `workflow/CURRENT_SNAPSHOT.md`,
+  `docs/00_project_truth/ai_architecture.md`, `docs/file_map.md`,
+  `tools/README.md`, `workflow/ACTIVE_TASK.md`, and
+  `workflow/evidence_register.md` so the new workflow-maintenance contract is
+  discoverable from low-token handoff.
+- Verification passed:
+  `python tools/build_context_pack.py --mode workflow_maintenance --max-chars 350`;
+  `python tools/check_ai_contracts.py` with no errors and only the known
+  `ACTIVE_TASK.md` review-lifecycle warnings;
+  `python tools/build_vector_store.py` built `8786` chunks;
+  `python tools/search_local_v2.py --eval` passed;
+  `python -m unittest discover -s tests` ran `135` tests OK;
+  `python -m compileall src tests` passed;
+  `git diff --check` reported CRLF conversion warnings only.
+- This does not mark the earlier `done + Review Required` task as `reviewed`.
+  User review still clears strict warnings.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-01 PCB2 Populated / Route Unchanged / DMM Pending
+
+- User reported: PCB2 soldered / in hand, and current route still
+  `PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND`.
+- Added the no-power populated-board handoff:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md`.
+- Decision:
+  `PCB2 populated / current route unchanged / DMM continuity and short-check opened as no-power pending / no powered action`.
+- The DMM gate is now open as a no-power user action, but it is not passed.
+  The user must fill the continuity / short-check table before any software
+  Hall adapter implementation, flash, Gate PWM, motor, Motor Profiler, or
+  Hall closed-loop claim.
+- Current route for DMM remains:
+  `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`, and
+  `P14/P15=3V3/GND`.
+- Safety boundary unchanged: board unpowered only; no 24V, no powered
+  power-board connection, no motor connection, no Gate PWM, no flash, no
+  generated-project run, no Motor Profiler / Motor Pilot, and no Hall
+  closed-loop or hardware readiness claim.
+
+## 2026-06-01 PR #5 Learning Notes Merged And WP-030 Mixed Trace Passed
+
+- Reviewed PR #5, `learning notes`, from branch
+  `learning/mcsdk-hall-feedback-2026-06-01`.
+- The two added files stayed inside the teaching contract: L2 MCSDK Hall
+  speed / position feedback concept evidence only, no MCSDK Hall closed-loop
+  completion claim, no Motor Profiler / power-board / motor / PWM / serial /
+  build validation claim, and no-power / debug-only boundary preserved.
+- Merged PR #5 into `master` with merge commit
+  `2b614b4aae4eb40a5b2a882c5f2252dadbe06079`.
+- User reported on 2026-06-01 that the hardware teammate is close to finishing
+  PCB2 soldering. This is a scheduling clue only; until populated-board
+  evidence and a filled DMM continuity / short-check table exist, the DMM gate
+  remains deferred, not passed.
+- User passed the WP-030 no-power mixed-sequence review:
+  `(1000,100)` baseline, `(1600,100)` repeat, `(2200,110)` accepted adjacent
+  forward candidate, `(2210,010)` bounce candidate rejected because
+  `dt=10 < 50`, `(3000,111)` illegal state, and `(3800,011)` abnormal jump
+  from last trusted `110`.
+- Decision:
+  `PR #5 concept-learning evidence accepted / WP-030 mixed trace passed / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- Safety boundary unchanged: no DMM until populated board exists, no 24V, no
+  power-board connection, no motor connection, no Gate PWM, no flash, no
+  generated-project run, no Motor Profiler / Motor Pilot, and no Hall
+  closed-loop or hardware readiness claim.
+
+## 2026-05-31 PCB2 Waiting-Hardware Handoff Added
+
+- Added the no-power waiting-hardware handoff:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_waiting_hardware_handoff_2026-05-31.md`.
+- Decision:
+  `PCB2 waiting for population / DMM gate deferred / no powered action / no firmware implementation`.
+- User-selected current PCB2 state: not populated / waiting for hardware.
+- The DMM continuity / short-check request remains pending and must not be filled from memory or old evidence. Deferred does not mean passed.
+- Current route stays as recorded unless a new hardware source packet says otherwise:
+  `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`, and `P14/P15=3V3/GND`.
+- At that time the user action was to return the hardware teammate status line and any updated schematic / EDA / netlist / Gerber / BOM / pin-table evidence, plus answer the no-power Hall mixed-sequence check under WP-030. The mixed-sequence check was answered and accepted on 2026-06-01; hardware evidence is still pending.
+- Safety boundary unchanged: no DMM until populated board exists, no 24V, no power-board connection, no motor connection, no Gate PWM, no flash, no generated-project run, no Motor Profiler / Motor Pilot, and no Hall closed-loop or hardware readiness claim.
+
 ## 2026-05-28 Dual-Teacher Concept-Only Guard Added
 
 - Added an explicit dual-teacher concept-only role guard after the user reported

@@ -78,11 +78,21 @@ then, the project must keep these claims blocked:
 If PCB2 is not populated yet, this DMM gate is hardware-side deferred. Deferred
 does not mean passed.
 
+2026-05-31 update: the user selected "not populated / waiting for hardware" as
+the current PCB2 state. Therefore this table remains pending and must not be
+filled from memory, old screenshots, or unpopulated-board assumptions.
+
 Algorithm-side no-power state-machine and test-contract preparation may proceed
 while this request is deferred, but firmware implementation, MCSDK hook claims,
 build evidence for the adapter, flash, 24V, Gate PWM, motor work, Hall
 closed-loop, and powered readiness remain blocked until later hardware evidence
 is returned and reviewed.
+
+2026-06-01 update: the previous deferral is superseded. The user reported
+PCB2 is now soldered / in hand and that the current route remains
+`PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND`. This opens this table as the next
+no-power user action. It is still not a passed DMM result until the raw
+readings, beep states, and notes / photo IDs are returned and reviewed.
 
 ## Next Decision After The Table
 

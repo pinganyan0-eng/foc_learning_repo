@@ -10,6 +10,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "vector_store"
 TOKEN_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*|\d+(?:\.\d+)?|[\u4e00-\u9fff]")
+TEXT_SUFFIXES = {".md", ".txt"}
+
+MAINTENANCE_SOURCE_FILES = (
+    "retrieval_eval/queries.json",
+    "tests/test_ai_architecture_contracts.py",
+    "tests/test_search_local_v2.py",
+    "tools/build_context_pack.py",
+    "tools/build_vector_store.py",
+    "tools/check_ai_contracts.py",
+    "tools/check_project_skill_install.py",
+    "tools/run_ai_maintenance_audit.py",
+    "tools/search_local_v2.py",
+)
 
 
 def tokenize(text: str) -> list[str]:
@@ -47,9 +60,15 @@ def chunk_text(text: str, size: int = 1200) -> list[str]:
 def source_files() -> list[Path]:
     files: list[Path] = []
     files.extend(p for p in ROOT.glob("*.md") if p.is_file())
+    files.extend(
+        ROOT / relative_path
+        for relative_path in MAINTENANCE_SOURCE_FILES
+        if (ROOT / relative_path).is_file()
+    )
     for folder in [
         "apps",
         "assets",
+        "codex_skills",
         "deliverables",
         "docs",
         "experiments",
@@ -66,7 +85,7 @@ def source_files() -> list[Path]:
     ]:
         base = ROOT / folder
         if base.exists():
-            files.extend(sorted(p for p in base.rglob("*") if p.suffix.lower() in {".md", ".txt"}))
+            files.extend(sorted(p for p in base.rglob("*") if p.suffix.lower() in TEXT_SUFFIXES))
     return sorted(set(files))
 
 

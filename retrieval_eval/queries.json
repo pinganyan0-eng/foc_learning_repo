@@ -47,6 +47,209 @@
     ]
   },
   {
+    "id": "current_pcb2_dmm_pending_no_power",
+    "query": "PCB2 DMM continuity short-check pending no-power not passed",
+    "must_include_any": [
+      "workflow/CURRENT_SNAPSHOT.md",
+      "workflow/ACTIVE_TASK.md",
+      "apps/stm32_g474_foc/mcsdk_no_power_precheck/dmm_continuity_short_check_request_2026-05-22.md",
+      "apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md"
+    ],
+    "expected_terms_any": [
+      "DMM",
+      "continuity",
+      "short-check",
+      "pending",
+      "not passed",
+      "no-power"
+    ]
+  },
+  {
+    "id": "active_task_review_lifecycle",
+    "query": "ACTIVE_TASK review lifecycle done Review Required reviewed strict warnings",
+    "must_include_any": [
+      "workflow/task_state_machine.md",
+      "workflow/ACTIVE_TASK.md",
+      "docs/00_project_truth/ai_architecture.md",
+      "tools/check_ai_contracts.py"
+    ],
+    "expected_terms_any": [
+      "Review Required",
+      "reviewed",
+      "done",
+      "strict",
+      "warnings"
+    ]
+  },
+  {
+    "id": "workflow_closeout_checklist",
+    "query": "workflow_maintenance closeout checklist build_vector_store unittest git status",
+    "must_include_any": [
+      "workflow/session_close_checklist.md",
+      "tools/README.md",
+      "workflow/codex_dual_teacher_execution_gate.md"
+    ],
+    "expected_terms_any": [
+      "收工",
+      "build_vector_store",
+      "unittest",
+      "git status",
+      "phase_gate_checklist"
+    ]
+  },
+  {
+    "id": "automation_no_repo_writes",
+    "query": "automation No repo writes commit push delete hardware parameters",
+    "must_include_any": [
+      "workflow/automation_playbook.md",
+      "docs/00_project_truth/ai_architecture.md",
+      "tools/README.md"
+    ],
+    "expected_terms_any": [
+      "No repo writes",
+      "commit",
+      "push",
+      "delete",
+      "hardware parameters"
+    ]
+  },
+  {
+    "id": "learning_feedback_loop",
+    "query": "learning_feedback_loop session_notes weak_points review_queue normalize_learning_loop",
+    "must_include_any": [
+      "workflow/learning_feedback_loop.md",
+      "workflow/teaching_contract.md",
+      "tools/README.md"
+    ],
+    "expected_terms_any": [
+      "learning/session_notes.md",
+      "learning/weak_points.md",
+      "learning/review_queue.md",
+      "normalize_learning_loop"
+    ]
+  },
+  {
+    "id": "repo_maintenance_dod",
+    "query": "repo maintenance Definition of Done CURRENT_STATUS file_map git status",
+    "must_include_any": [
+      "workflow/definition_of_done.md",
+      "docs/file_map.md",
+      "tools/README.md"
+    ],
+    "expected_terms_any": [
+      "仓库维护",
+      "CURRENT_STATUS.md",
+      "docs/file_map.md",
+      "git status"
+    ]
+  },
+  {
+    "id": "project_skill_v2_router",
+    "query": "stm32g474-foc-assistant Skill v2 router references no-power boundary workflow maintenance",
+    "must_include_any": [
+      "codex_skills/stm32g474-foc-assistant/SKILL.md",
+      "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
+      "codex_skills/stm32g474-foc-assistant/references/no-power-boundary.md"
+    ],
+    "expected_terms_any": [
+      "This Skill is a v2 router.",
+      "references/workflow-maintenance.md",
+      "no-power",
+      "No repo writes"
+    ]
+  },
+  {
+    "id": "project_skill_install_drift",
+    "query": "project Skill install drift check repo-only installed_compare changed_installed_files",
+    "must_include_any": [
+      "tools/check_project_skill_install.py",
+      "tools/README.md",
+      "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md"
+    ],
+    "expected_terms_any": [
+      "check_project_skill_install",
+      "repo_only",
+      "installed_compare",
+      "changed_installed_files",
+      "install drift"
+    ]
+  },
+  {
+    "id": "ai_maintenance_audit_runner",
+    "query": "AI maintenance audit runner quick repo-only-skill write-report Markdown build_vector_store retrieval_eval git_status git status --short dirty worktree preserve_output output_policy workspace_status path_groups classify_path_group status_paths summarize_status_paths focus_groups summarize_focus_groups handoff_review_queue build_handoff_review_queue GROUP_REVIEW_FOCUS contract_status contract_status_from_results parse_contract_output closeout_summary closeout_summary_from_statuses repo_maintenance_closeout_ok review lifecycle warnings strict_ready implementation_closeout_ok status_counts paths items full output diff_check",
+    "must_include_any": [
+      "tools/run_ai_maintenance_audit.py",
+      "tools/README.md",
+      "docs/00_project_truth/ai_architecture.md"
+    ],
+    "expected_terms_any": [
+      "run_ai_maintenance_audit",
+      "no-power AI maintenance audit",
+      "repo-only-skill",
+      "write-report",
+      "build_vector_store",
+      "git_status",
+      "git status --short",
+      "preserve_output",
+      "output_policy",
+      "workspace_status",
+      "path_groups",
+      "classify_path_group",
+      "status_paths",
+      "summarize_status_paths",
+      "focus_groups",
+      "summarize_focus_groups",
+      "handoff_review_queue",
+      "build_handoff_review_queue",
+      "GROUP_REVIEW_FOCUS",
+      "contract_status",
+      "contract_status_from_results",
+      "parse_contract_output",
+      "closeout_summary",
+      "closeout_summary_from_statuses",
+      "repo_maintenance_closeout_ok",
+      "strict_ready",
+      "implementation_closeout_ok",
+      "status_counts",
+      "diff_check"
+    ]
+  },
+  {
+    "id": "dangerous_claim_scan_surface",
+    "query": "dangerous positive hardware claim scan surface DMM continuity passed Gate PWM ready check_ai_contracts",
+    "must_include_any": [
+      "tools/check_ai_contracts.py",
+      "docs/00_project_truth/ai_architecture.md",
+      "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md"
+    ],
+    "expected_terms_any": [
+      "DANGEROUS_POSITIVE_CLAIMS",
+      "DANGEROUS_CLAIM_SCAN_PATHS",
+      "iter_dangerous_claim_scan_files",
+      "dangerous positive claim",
+      "Gate PWM ready",
+      "DMM continuity passed"
+    ]
+  },
+  {
+    "id": "entry_readability_contract",
+    "query": "readability mojibake 乱码 submission checklist evidence register entry header strict UTF-8",
+    "must_include_any": [
+      "tools/check_ai_contracts.py",
+      "tools/README.md",
+      "docs/00_project_truth/ai_architecture.md"
+    ],
+    "expected_terms_any": [
+      "READABILITY_HEADER_REQUIREMENTS",
+      "READABILITY_MOJIBAKE_MARKERS",
+      "check_readability_headers",
+      "submission_checklist",
+      "evidence_register",
+      "mojibake",
+      "strict UTF-8"
+    ]
+  },
+  {
     "id": "dual_teacher_concept_guard",
     "query": "Concept-only role guard ChatGPT teaching turn",
     "must_include_any": [

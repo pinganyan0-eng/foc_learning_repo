@@ -23,6 +23,14 @@ COMMON_FILES = (
     "docs/00_project_truth/project_context.md",
 )
 
+PROJECT_SKILL_FILES = (
+    "codex_skills/stm32g474-foc-assistant/SKILL.md",
+    "codex_skills/stm32g474-foc-assistant/references/project-navigation.md",
+    "codex_skills/stm32g474-foc-assistant/references/no-power-boundary.md",
+    "codex_skills/stm32g474-foc-assistant/references/learning-feedback.md",
+    "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
+)
+
 
 MODES: dict[str, ModeSpec] = {
     "codex_task": ModeSpec(
@@ -85,6 +93,51 @@ MODES: dict[str, ModeSpec] = {
             "docs/file_map.md",
             "deliverables/submission_checklist.md",
             "workflow/evidence_register.md",
+        ),
+    ),
+    "ai_maintenance": ModeSpec(
+        title="AI Maintenance Context",
+        purpose="Maintain AI workflow architecture, retrieval, checks, and handoff contracts.",
+        files=COMMON_FILES
+        + (
+            "docs/00_project_truth/ai_architecture.md",
+            "workflow/codex_dual_teacher_execution_gate.md",
+            "workflow/task_state_machine.md",
+            "workflow/definition_of_done.md",
+            "tools/build_context_pack.py",
+            "tools/check_ai_contracts.py",
+            "tools/check_project_skill_install.py",
+            "tools/run_ai_maintenance_audit.py",
+            "tools/search_local_v2.py",
+            "retrieval_eval/queries.json",
+            "tests/test_ai_architecture_contracts.py",
+            "docs/file_map.md",
+            "tools/README.md",
+            *PROJECT_SKILL_FILES,
+        ),
+    ),
+    "workflow_maintenance": ModeSpec(
+        title="Workflow Maintenance Context",
+        purpose="Maintain project workflow, learning loop, automation boundaries, and closeout checks.",
+        files=COMMON_FILES
+        + (
+            "docs/00_project_truth/ai_architecture.md",
+            "workflow/automation_playbook.md",
+            "workflow/learning_feedback_loop.md",
+            "workflow/session_close_checklist.md",
+            "workflow/definition_of_done.md",
+            "workflow/task_state_machine.md",
+            "deliverables/submission_checklist.md",
+            "docs/file_map.md",
+            "tools/README.md",
+            "tools/build_context_pack.py",
+            "tools/check_ai_contracts.py",
+            "tools/check_project_skill_install.py",
+            "tools/run_ai_maintenance_audit.py",
+            "tools/search_local_v2.py",
+            "retrieval_eval/queries.json",
+            "tests/test_ai_architecture_contracts.py",
+            *PROJECT_SKILL_FILES,
         ),
     ),
 }

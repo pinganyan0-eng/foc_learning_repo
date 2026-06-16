@@ -1,14 +1,25 @@
 # Submission Checklist
 
-鏈竻鍗曠敤浜庢渶缁堟彁浜わ紱闃舵鎬у涔犲拰宸ョ▼涓婁氦鐗╀互 `workflow/algo_b_teaching_delivery_plan.md` 涓哄噯銆傛瘡鍛ㄦ垨姣忎釜 P 闃舵缁撴潫鏃讹紝鑷冲皯琛ヤ竴浠藉懆浜や粯鍖咃紝璇存槑褰撳墠闃舵銆佸凡瀹屾垚璇佹嵁銆佽繘搴﹀€哄拰鏄惁鍏佽杩涘叆涓嬩竴闃舵銆?
+本清单用于最终提交。阶段性学习和工程交付以
+`workflow/algo_b_teaching_delivery_plan.md` 为准。每周或每个 P 阶段结束
+时，至少补一份周/阶段交付包，说明当前阶段、已完成证据、进度债和是否
+允许进入下一阶段。
+
 ## Weekly / Phase Delivery Pack
 
-- 鍛ㄦ湡鎴栭樁娈碉細
-- 瀵瑰簲鍘熻鍒掞細
-- 褰撳墠鐪熷疄闃舵锛?- 鏈懆瀹屾垚锛?- 鏈懆涓婁氦鐗╋細
-- 璇佹嵁璺緞锛?- 鐢ㄦ埛宸叉帉鎻★細
-- 浠嶉渶澶嶄範锛?- 杩涘害鍊猴細
-- 涓嬪懆鐩爣锛?- 绂佹鎺ㄨ繘鑼冨洿锛?- 鏄惁鍏佽杩涘叆涓嬩竴闃舵锛?
+- 周期或阶段：
+- 对应原计划：
+- 当前真实阶段：
+- 本周完成：
+- 本周交付物：
+- 证据路径：
+- 用户已掌握：
+- 仍需复习：
+- 进度债：
+- 下周目标：
+- 禁止推进范围：
+- 是否允许进入下一阶段：
+
 ## Current P1 Catch-up Pack
 
 Use this section before claiming P1 is on-track.
@@ -88,11 +99,23 @@ Use this section before claiming P2 is ready to generate or build an MCSDK proje
   stops. It does not claim firmware implementation, MCSDK hook, Hall
   closed-loop readiness, Gate PWM safety, motor readiness, power-stage
   readiness, or sensorless validation.
+- PCB2 waiting-hardware handoff 2026-05-31:
+  `pcb2_waiting_hardware_handoff_2026-05-31.md` records that PCB2 is not
+  populated / waiting for hardware. The DMM continuity / short-check gate is
+  deferred, not passed. The current user action is to return the hardware
+  teammate status line, any updated source packet, and the no-power Hall
+  mixed-sequence answer under WP-030.
+- PCB2 populated handoff 2026-06-01:
+  `pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md` records that PCB2
+  is now reported soldered / in hand and the route remains
+  `PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND`. The DMM continuity /
+  short-check table is now open as no-power pending, not passed.
 - DMM 2026-05-22 no-power request:
   `dmm_continuity_short_check_request_2026-05-22.md` now defines the exact
   continuity and short-check table the user should fill before any software
-  Hall adapter implementation. CLI toolchain setup is secondary to this
-  real-world no-power evidence in the current step.
+  Hall adapter implementation. It is now the next user action because PCB2 is
+  reported populated; CLI toolchain setup is secondary to real-world no-power
+  evidence when hardware exists.
 - Software Hall 2026-05-22 algorithm-side no-power prep:
   `software_hall_no_power_algorithm_prep_2026-05-22.md` now defines the Hall
   state-machine contract, valid/illegal states, transition rules, candidate

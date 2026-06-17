@@ -83,6 +83,10 @@ QUERY_EXPANSIONS: tuple[tuple[tuple[str, ...], str], ...] = (
         "check_ai_contracts READABILITY_HEADER_REQUIREMENTS READABILITY_MOJIBAKE_MARKERS check_readability_headers evidence_register submission_checklist strict UTF-8 readable entry header",
     ),
     (
+        ("readability_status", "legacy debt", "legacy mojibake debt", "entry headers ok"),
+        "run_ai_maintenance_audit readability_status_from_repo readability_header_status_from_repo readability_legacy_debt_status_from_repo legacy_debt_present full_legacy_cleanup_claimed audit report",
+    ),
+    (
         ("project skill", "skill v2", "stm32g474-foc-assistant"),
         "stm32g474-foc-assistant Project Skill v2 router references no-power boundary workflow maintenance quick_validate install_project_skill",
     ),
@@ -195,6 +199,13 @@ def phrase_bonus(query: str, text: str, path: str = "") -> float:
         "ai maintenance audit" in query.lower()
         or "run_ai_maintenance_audit" in query.lower()
         or "maintenance audit runner" in query.lower()
+    ) and normalized_path == "tools/run_ai_maintenance_audit.py":
+        bonus += 0.52
+    if (
+        "readability_status" in query.lower()
+        or "legacy debt" in query.lower()
+        or "legacy mojibake debt" in query.lower()
+        or "entry headers ok" in query.lower()
     ) and normalized_path == "tools/run_ai_maintenance_audit.py":
         bonus += 0.52
     if (

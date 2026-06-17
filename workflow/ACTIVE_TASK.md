@@ -6,6 +6,57 @@ implementation, not generated-code editing, not CubeMX / Workbench editing,
 not flashing, not Run / Debug, not hardware validation, and not powered
 testing.
 
+## Current 2026-06-17 AI Maintenance Audit Readability Status Addendum
+
+- Task:
+  `TASK-2026-06-17-ai-maintenance-audit-readability-status`.
+- Evidence:
+  `EV-2026-06-17-AI-MAINTENANCE-AUDIT-READABILITY-STATUS-001`.
+- Decision:
+  `AI maintenance audit readability status / entry-header versus legacy-debt handoff / no hardware or firmware action`.
+- Scope:
+  extended `tools/run_ai_maintenance_audit.py` with
+  `readability_status_from_repo()`, `readability_header_status_from_repo()`,
+  and `readability_legacy_debt_status_from_repo()`. The audit now exposes
+  top-level `readability_status` with `entry_headers_ok`,
+  `guarded_entry_files`, `legacy_debt_present`, `legacy_debt_count`,
+  `legacy_debt_paths`, `full_legacy_cleanup_claimed`, and
+  `hardware_validation: false`. Updated contract checks, tests, retrieval
+  expansion/eval, low-token docs, file index, tools README, and project Skill
+  workflow-maintenance reference.
+- Verification:
+  passed with
+  `python -m py_compile tools\run_ai_maintenance_audit.py tools\check_ai_contracts.py tools\search_local_v2.py tests\test_ai_architecture_contracts.py`,
+  `python -m unittest tests.test_ai_architecture_contracts`,
+  `python tools\check_ai_contracts.py` with 0 errors and the two known
+  review-lifecycle warnings,
+  `python tools\build_vector_store.py`,
+  `python tools\search_local_v2.py --eval`,
+  `python -m unittest discover -s tests`,
+  `python -m compileall src tests`,
+  `git diff --check` with only existing CRLF conversion warnings,
+  `python -X utf8 C:\Users\gregrg\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex_skills\stm32g474-foc-assistant`,
+  `python tools\check_project_skill_install.py --repo-only --json`,
+  `powershell -ExecutionPolicy Bypass -File .\tools\install_project_skill.ps1`,
+  `python tools\check_project_skill_install.py`,
+  `python tools\build_context_pack.py --mode workflow_maintenance --max-chars 350`,
+  and `python tools\run_ai_maintenance_audit.py --json --max-output-chars 700`.
+  The full audit returned `ok: true`, `repo_maintenance_closeout_ok: true`,
+  `readability_status.entry_headers_ok: true`,
+  `readability_status.legacy_debt_present: true`, and
+  `hardware_validation: false`.
+- Boundary:
+  `readability_status` is repo-text handoff evidence only. It separates the
+  guarded entry headers from broader legacy mojibake debt and does not claim
+  full historical cleanup, inspect hardware, run firmware, clean the worktree,
+  or validate readiness. No DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+- Review lifecycle:
+  this addendum does not mark the earlier `done + Review Required` software
+  Hall task as `reviewed`; user review still clears strict warnings.
+
 ## Current 2026-06-10 Entry Readability Contract Addendum
 
 - Task:

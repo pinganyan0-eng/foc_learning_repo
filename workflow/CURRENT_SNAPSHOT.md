@@ -111,9 +111,11 @@ the current project stage and safety boundary. Historical detail remains in
   ordered `focus_groups`, plus a `handoff_review_queue` that names the review
   focus for each dirty-worktree group. It also exposes `contract_status` to
   distinguish contract errors from known review-lifecycle warnings and strict
-  readiness, plus `closeout_summary` for the top-level repo-maintenance
-  closeout decision, dirty-worktree state, review-needed flag, and next review
-  focus. This does not clean the worktree or validate hardware.
+  readiness, `readability_status` to separate guarded entry headers from
+  broader legacy mojibake debt, plus `closeout_summary` for the top-level
+  repo-maintenance closeout decision, dirty-worktree state, review-needed
+  flag, and next review focus. This does not clean the worktree or validate
+  hardware.
 - `tools/check_ai_contracts.py` is the no-power workflow consistency checker.
   It checks entry files, safety phrases, task review lifecycle, UTF-8
   readability, index coverage, retrieval-eval coverage, project workflow

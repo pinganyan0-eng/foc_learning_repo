@@ -72,6 +72,9 @@ Current Packet A selected fields, software Hall firmware-entry plan, software Ha
   `strict_ready`, and `implementation_closeout_ok`, plus `closeout_summary`
   for the top-level repo-maintenance closeout decision, dirty-worktree state,
   review-needed flag, and next review focus.
+- The same audit exposes `readability_status`, which separates guarded entry
+  headers from broader legacy mojibake debt so future Codex turns can tell
+  "entry readability ok" apart from "full historical cleanup not claimed".
 - `tools/check_ai_contracts.py` should have no errors after implementation.
   It scans project truth, workflow, Skill, no-power precheck, deliverable,
   interface, and learning text for dangerous positive hardware claims.

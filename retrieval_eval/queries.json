@@ -215,6 +215,24 @@
     ]
   },
   {
+    "id": "readability_status_audit",
+    "query": "readability_status legacy debt legacy mojibake debt entry headers ok run_ai_maintenance_audit readability_status_from_repo readability_header_status_from_repo readability_legacy_debt_status_from_repo full_legacy_cleanup_claimed guarded entry files legacy_debt_present",
+    "must_include_any": [
+      "tools/run_ai_maintenance_audit.py",
+      "tools/check_ai_contracts.py",
+      "docs/00_project_truth/ai_architecture.md"
+    ],
+    "expected_terms_any": [
+      "readability_status",
+      "readability_status_from_repo",
+      "readability_header_status_from_repo",
+      "readability_legacy_debt_status_from_repo",
+      "entry_headers_ok",
+      "legacy_debt_present",
+      "full_legacy_cleanup_claimed"
+    ]
+  },
+  {
     "id": "dangerous_claim_scan_surface",
     "query": "dangerous positive hardware claim scan surface DMM continuity passed Gate PWM ready check_ai_contracts",
     "must_include_any": [

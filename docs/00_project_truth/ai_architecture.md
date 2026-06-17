@@ -63,10 +63,12 @@ retrieval regression cases for the current safety-sensitive handoff questions.
   ordered `focus_groups`, plus `handoff_review_queue` review-focus items for
   handoff. It also exposes `contract_status`, a machine-readable summary of
   contract errors, review-lifecycle warnings, unexpected warnings,
-  `strict_ready`, and `implementation_closeout_ok`, and `closeout_summary`,
-  a top-level repo-maintenance closeout decision with dirty-worktree state,
-  review-needed flag, next review focus, and explicit hardware-validation
-  falsehood. This is not a cleanup or hardware validation step.
+  `strict_ready`, and `implementation_closeout_ok`, `readability_status`,
+  a repo-text summary that separates guarded entry headers from broader legacy
+  mojibake debt, and `closeout_summary`, a top-level repo-maintenance closeout
+  decision with dirty-worktree state, review-needed flag, next review focus,
+  and explicit hardware-validation falsehood. This is not a cleanup or
+  hardware validation step.
 
 ### Review Lifecycle Policy
 

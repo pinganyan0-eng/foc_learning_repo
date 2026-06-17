@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from collections import Counter
@@ -11,6 +12,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.check_ai_contracts import (  # noqa: E402
+    READABILITY_HEADER_LINE_LIMIT,
+    READABILITY_HEADER_REQUIREMENTS,
+    READABILITY_MOJIBAKE_MARKERS,
+)
+
 PROJECT_SKILL_PATH = Path("codex_skills") / "stm32g474-foc-assistant"
 QUICK_VALIDATE = (
     Path.home()
@@ -78,6 +88,47 @@ GROUP_REVIEW_FOCUS: dict[str, str] = {
 REVIEW_LIFECYCLE_WARNING_MARKERS: tuple[str, ...] = (
     "still requires review",
     "Verification section still contains Pending",
+)
+READABILITY_LEGACY_SCAN_FILES: tuple[str, ...] = (
+    "AI_CONTEXT.md",
+    "CURRENT_STATUS.md",
+    "workflow/CURRENT_SNAPSHOT.md",
+    "workflow/ACTIVE_TASK.md",
+    "workflow/evidence_register.md",
+    "deliverables/submission_checklist.md",
+    "docs/00_project_truth/ai_architecture.md",
+    "docs/file_map.md",
+    "tools/README.md",
+    "workflow/automation_playbook.md",
+    "workflow/definition_of_done.md",
+    "workflow/learning_feedback_loop.md",
+    "workflow/session_close_checklist.md",
+    "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
+)
+READABILITY_CLEANUP_CLAIM_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:full legacy mojibake cleanup|full historical mojibake cleanup)\s+"
+        r"(?:is\s+)?(?:complete|completed|done)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:all|every)\s+legacy\s+(?:historical\s+)?mojibake\s+rows?\s+"
+        r"(?:are|is)\s+(?:repaired|fixed|clean)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\ball legacy history is repaired\b",
+        re.IGNORECASE,
+    ),
+)
+READABILITY_CLEANUP_NEGATION_MARKERS: tuple[str, ...] = (
+    "does not claim",
+    "do not claim",
+    "not claim",
+    "without claiming",
+    "without treating",
+    "not usable to claim",
+    "no claim",
 )
 
 
@@ -361,6 +412,107 @@ def workspace_status_from_results(results: list[dict[str, object]]) -> dict[str,
     }
 
 
+def readability_header_status_from_repo() -> dict[str, object]:
+    guarded_entry_files = list(READABILITY_HEADER_REQUIREMENTS)
+    missing_entry_files: list[str] = []
+    missing_entry_phrases: list[dict[str, str]] = []
+    header_marker_hits: list[dict[str, str]] = []
+
+    for relative_path, required_phrases in READABILITY_HEADER_REQUIREMENTS.items():
+        path = ROOT / relative_path
+        if not path.is_file():
+            missing_entry_files.append(relative_path)
+            continue
+
+        text = path.read_text(encoding="utf-8", errors="replace")
+        header = "\n".join(text.splitlines()[:READABILITY_HEADER_LINE_LIMIT])
+        for phrase in required_phrases:
+            if phrase not in header:
+                missing_entry_phrases.append({"path": relative_path, "phrase": phrase})
+        for marker in READABILITY_MOJIBAKE_MARKERS:
+            if marker in header:
+                header_marker_hits.append({"path": relative_path, "marker": marker})
+
+    return {
+        "guarded_entry_files": guarded_entry_files,
+        "entry_headers_ok": (
+            not missing_entry_files and not missing_entry_phrases and not header_marker_hits
+        ),
+        "missing_entry_files": missing_entry_files,
+        "missing_entry_phrases": missing_entry_phrases,
+        "header_marker_hits": header_marker_hits,
+    }
+
+
+def readability_legacy_debt_status_from_repo() -> dict[str, object]:
+    legacy_debt_details: list[dict[str, object]] = []
+    cleanup_claim_details: list[dict[str, object]] = []
+    legacy_debt_count = 0
+    cleanup_claim_count = 0
+
+    for relative_path in READABILITY_LEGACY_SCAN_FILES:
+        path = ROOT / relative_path
+        if not path.is_file():
+            continue
+
+        text = path.read_text(encoding="utf-8", errors="replace")
+        marker_counts = {
+            marker: text.count(marker)
+            for marker in READABILITY_MOJIBAKE_MARKERS
+            if marker in text
+        }
+        if marker_counts:
+            file_count = sum(marker_counts.values())
+            legacy_debt_count += file_count
+            legacy_debt_details.append(
+                {
+                    "path": relative_path,
+                    "count": file_count,
+                    "markers": sorted(marker_counts),
+                }
+            )
+
+        claim_markers: list[str] = []
+        for pattern in READABILITY_CLEANUP_CLAIM_PATTERNS:
+            for match in pattern.finditer(text):
+                prefix = text[max(0, match.start() - 80) : match.start()].lower()
+                if any(marker in prefix for marker in READABILITY_CLEANUP_NEGATION_MARKERS):
+                    continue
+                claim_markers.append(match.group(0))
+        if claim_markers:
+            cleanup_claim_count += len(claim_markers)
+            cleanup_claim_details.append(
+                {
+                    "path": relative_path,
+                    "markers": claim_markers,
+                }
+            )
+
+    return {
+        "legacy_debt_present": bool(legacy_debt_details),
+        "legacy_debt_count": legacy_debt_count,
+        "legacy_debt_paths": [item["path"] for item in legacy_debt_details],
+        "legacy_debt_details": legacy_debt_details,
+        "full_legacy_cleanup_claimed": bool(cleanup_claim_details),
+        "full_legacy_cleanup_claim_count": cleanup_claim_count,
+        "full_legacy_cleanup_claim_paths": [
+            item["path"] for item in cleanup_claim_details
+        ],
+        "full_legacy_cleanup_claim_details": cleanup_claim_details,
+    }
+
+
+def readability_status_from_repo() -> dict[str, object]:
+    header_status = readability_header_status_from_repo()
+    legacy_status = readability_legacy_debt_status_from_repo()
+    return {
+        "available": True,
+        **header_status,
+        **legacy_status,
+        "hardware_validation": False,
+    }
+
+
 def parse_contract_output(text: str) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -498,6 +650,7 @@ def run_audit(
     audit_ok = all(result["ok"] for result in results)
     workspace_status = workspace_status_from_results(results)
     contract_status = contract_status_from_results(results)
+    readability_status = readability_status_from_repo()
     closeout_summary = closeout_summary_from_statuses(
         audit_ok=audit_ok,
         workspace_status=workspace_status,
@@ -510,6 +663,7 @@ def run_audit(
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "boundary": NO_POWER_BOUNDARY,
         "closeout_summary": closeout_summary,
+        "readability_status": readability_status,
         "workspace_status": workspace_status,
         "contract_status": contract_status,
         "steps": results,
@@ -576,6 +730,41 @@ def render_markdown_report(report: dict[str, object]) -> str:
                 f"- Hardware validation: {closeout_summary.get('hardware_validation')}",
                 "",
                 "This summary is derived from audit outputs only. It does not change task state, clean the worktree, or validate hardware readiness.",
+            ]
+        )
+
+    readability_status = report.get("readability_status")
+    if isinstance(readability_status, dict) and readability_status.get("available"):
+        guarded_files = readability_status.get("guarded_entry_files", [])
+        legacy_paths = readability_status.get("legacy_debt_paths", [])
+        lines.extend(
+            [
+                "",
+                "## Readability Status",
+                "",
+                f"- Entry headers ok: {readability_status.get('entry_headers_ok')}",
+                (
+                    "- Guarded entry files: "
+                    + (
+                        ", ".join(f"`{path}`" for path in guarded_files)
+                        if isinstance(guarded_files, list) and guarded_files
+                        else "none"
+                    )
+                ),
+                f"- Legacy debt present: {readability_status.get('legacy_debt_present')}",
+                f"- Legacy debt count: {readability_status.get('legacy_debt_count')}",
+                (
+                    "- Legacy debt paths: "
+                    + (
+                        ", ".join(f"`{path}`" for path in legacy_paths)
+                        if isinstance(legacy_paths, list) and legacy_paths
+                        else "none"
+                    )
+                ),
+                f"- Full legacy cleanup claimed: {readability_status.get('full_legacy_cleanup_claimed')}",
+                f"- Hardware validation: {readability_status.get('hardware_validation')}",
+                "",
+                "This status separates guarded entry headers from broader legacy mojibake debt. It is repo-text only and does not claim full historical cleanup.",
             ]
         )
 
@@ -676,6 +865,14 @@ def print_text_report(report: dict[str, object]) -> None:
     print(f"result: {'ok' if report['ok'] else 'failed'}")
     if report.get("repo_only_skill"):
         print("project Skill mode: repo-only")
+    readability_status = report.get("readability_status")
+    if isinstance(readability_status, dict) and readability_status.get("available"):
+        print(
+            "readability_status: "
+            f"entry_headers_ok={readability_status.get('entry_headers_ok')}, "
+            f"legacy_debt_present={readability_status.get('legacy_debt_present')}, "
+            f"legacy_debt_count={readability_status.get('legacy_debt_count')}"
+        )
     for step in report.get("steps", []):
         status = "ok" if step["ok"] else f"failed ({step['returncode']})"
         print(f"- {step['id']}: {status}")

@@ -43,6 +43,7 @@
   counts, `status_paths` status-code path lists, path groups by repository
   area, `focus_groups` ordered handoff groups, `handoff_review_queue` review
   focus items, `contract_status` review-lifecycle warning summaries,
+  `readability_status` guarded-entry versus legacy-debt summary,
   `closeout_summary` for the top-level repo-maintenance closeout decision,
   paths, and items.
 - `python tools/run_ai_maintenance_audit.py --write-report workflow/ai_maintenance_audit_report.md`

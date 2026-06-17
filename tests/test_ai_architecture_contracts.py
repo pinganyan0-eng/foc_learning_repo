@@ -312,6 +312,9 @@ class AiArchitectureContractTests(unittest.TestCase):
             "parse_contract_output",
             "REVIEW_LIFECYCLE_WARNING_MARKERS",
             "closeout_summary_from_statuses",
+            "readability_status_from_repo",
+            "readability_header_status_from_repo",
+            "readability_legacy_debt_status_from_repo",
         ):
             self.assertIn(phrase, audit)
 
@@ -341,26 +344,32 @@ class AiArchitectureContractTests(unittest.TestCase):
             [step["id"] for step in report["steps"]],
         )
         self.assertEqual("full", report["steps"][-1]["output_policy"])
-        self.assertTrue(report["workspace_status"]["available"])
-        self.assertTrue(report["workspace_status"]["dirty"])
-        self.assertGreater(report["workspace_status"]["total"], 0)
-        self.assertIn("items", report["workspace_status"])
-        self.assertIn("path_groups", report["workspace_status"])
-        self.assertIn("ai_maintenance", report["workspace_status"]["path_groups"])
-        self.assertIn("workflow_status", report["workspace_status"]["path_groups"])
-        self.assertIn("status_paths", report["workspace_status"])
-        self.assertIn("??", report["workspace_status"]["status_paths"])
-        self.assertIn("focus_groups", report["workspace_status"])
-        self.assertEqual("ai_maintenance", report["workspace_status"]["focus_groups"][0]["group"])
-        self.assertIn("handoff_review_queue", report["workspace_status"])
-        self.assertEqual(
-            "ai_maintenance",
-            report["workspace_status"]["handoff_review_queue"][0]["group"],
-        )
-        self.assertIn(
-            "Review AI maintenance scripts",
-            report["workspace_status"]["handoff_review_queue"][0]["review_focus"],
-        )
+        workspace_status = report["workspace_status"]
+        self.assertTrue(workspace_status["available"])
+        self.assertIn("dirty", workspace_status)
+        self.assertIn("total", workspace_status)
+        self.assertIn("items", workspace_status)
+        self.assertIn("path_groups", workspace_status)
+        self.assertIn("status_paths", workspace_status)
+        self.assertIn("focus_groups", workspace_status)
+        self.assertIn("handoff_review_queue", workspace_status)
+        if workspace_status["dirty"]:
+            self.assertGreater(workspace_status["total"], 0)
+            self.assertTrue(workspace_status["status_paths"])
+            self.assertGreater(len(workspace_status["focus_groups"]), 0)
+            self.assertGreater(len(workspace_status["handoff_review_queue"]), 0)
+            first_review_group = workspace_status["handoff_review_queue"][0]["group"]
+            self.assertEqual(
+                first_review_group,
+                workspace_status["focus_groups"][0]["group"],
+            )
+        else:
+            self.assertEqual(0, workspace_status["total"])
+            self.assertEqual([], workspace_status["items"])
+            self.assertEqual({}, workspace_status["path_groups"])
+            self.assertEqual({}, workspace_status["status_paths"])
+            self.assertEqual([], workspace_status["focus_groups"])
+            self.assertEqual([], workspace_status["handoff_review_queue"])
         self.assertIn("contract_status", report)
         self.assertTrue(report["contract_status"]["available"])
         self.assertEqual(0, report["contract_status"]["error_count"])
@@ -377,11 +386,38 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertTrue(report["closeout_summary"]["repo_maintenance_closeout_ok"])
         self.assertFalse(report["closeout_summary"]["strict_ready"])
         self.assertTrue(report["closeout_summary"]["needs_user_review"])
-        self.assertTrue(report["closeout_summary"]["dirty_worktree"])
-        self.assertGreater(report["closeout_summary"]["dirty_entry_count"], 0)
-        self.assertEqual("ai_maintenance", report["closeout_summary"]["next_review_group"])
+        self.assertEqual(
+            workspace_status["dirty"],
+            report["closeout_summary"]["dirty_worktree"],
+        )
+        self.assertEqual(
+            workspace_status["total"],
+            report["closeout_summary"]["dirty_entry_count"],
+        )
+        if workspace_status["dirty"]:
+            self.assertEqual(
+                workspace_status["focus_groups"][0]["group"],
+                report["closeout_summary"]["next_review_group"],
+            )
+        else:
+            self.assertIsNone(report["closeout_summary"]["next_review_group"])
         self.assertFalse(report["closeout_summary"]["hardware_validation"])
         self.assertTrue(report["closeout_summary"]["no_power_boundary_active"])
+        self.assertIn("readability_status", report)
+        self.assertTrue(report["readability_status"]["available"])
+        self.assertTrue(report["readability_status"]["entry_headers_ok"])
+        self.assertTrue(report["readability_status"]["legacy_debt_present"])
+        self.assertGreaterEqual(report["readability_status"]["legacy_debt_count"], 1)
+        self.assertFalse(report["readability_status"]["full_legacy_cleanup_claimed"])
+        self.assertFalse(report["readability_status"]["hardware_validation"])
+        self.assertEqual(
+            [
+                "workflow/evidence_register.md",
+                "deliverables/submission_checklist.md",
+            ],
+            report["readability_status"]["guarded_entry_files"],
+        )
+        self.assertIn("CURRENT_STATUS.md", report["readability_status"]["legacy_debt_paths"])
 
     def test_ai_maintenance_audit_preserves_full_git_status_output(self):
         result = subprocess.run(
@@ -467,12 +503,17 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("## Contract Status", markdown)
         self.assertIn("Review lifecycle warnings are allowed before user review", markdown)
         self.assertIn("### Review Lifecycle Warnings", markdown)
+        self.assertIn("## Readability Status", markdown)
         self.assertIn("## Workspace Status", markdown)
         self.assertIn("### Focus Groups", markdown)
         self.assertIn("### Handoff Review Queue", markdown)
         self.assertIn("### Path Groups", markdown)
         self.assertIn("### Status Paths", markdown)
         self.assertIn("This is a parsed `git status --short` handoff summary only.", markdown)
+        self.assertIn(
+            "This status separates guarded entry headers from broader legacy mojibake debt.",
+            markdown,
+        )
         self.assertIn("Review AI maintenance scripts", markdown)
         self.assertIn("project_skill_install", markdown)
         self.assertIn("ai_contracts", markdown)
@@ -524,6 +565,14 @@ class AiArchitectureContractTests(unittest.TestCase):
             "handoff_review_queue",
             "build_handoff_review_queue",
             "GROUP_REVIEW_FOCUS",
+            "contract_status",
+            "closeout_summary",
+            "readability_status",
+            "readability_status_from_repo",
+            "readability_header_status_from_repo",
+            "readability_legacy_debt_status_from_repo",
+            "legacy_debt_present",
+            "full_legacy_cleanup_claimed",
             "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
         ):
             self.assertIn(phrase, checker)
@@ -583,6 +632,7 @@ class AiArchitectureContractTests(unittest.TestCase):
                 "project_skill_v2_router",
                 "project_skill_install_drift",
                 "ai_maintenance_audit_runner",
+                "readability_status_audit",
                 "dangerous_claim_scan_surface",
             }.issubset(case_ids)
         )

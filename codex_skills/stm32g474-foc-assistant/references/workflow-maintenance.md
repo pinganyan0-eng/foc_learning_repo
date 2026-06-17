@@ -82,8 +82,10 @@ parsed `workspace_status` summary with `status_paths`, `path_groups`, and
 ordered `focus_groups`, plus `handoff_review_queue` review-focus items for
 handoff. The report also exposes `contract_status` so future Codex turns can
 distinguish contract errors from known review-lifecycle warnings and strict
-readiness, and `closeout_summary` for the top-level repo-maintenance closeout
-decision, dirty-worktree state, review-needed flag, and next review focus.
+readiness, `readability_status` so future Codex turns can separate guarded
+entry headers from broader legacy mojibake debt, and `closeout_summary` for
+the top-level repo-maintenance closeout decision, dirty-worktree state,
+review-needed flag, and next review focus.
 
 For a lightweight environment-independent audit, run:
 

@@ -13,6 +13,15 @@ SOURCE = (
     / "Src"
     / "main.c"
 )
+PA7_GPIO_PROBE_SOURCE = (
+    ROOT
+    / "apps"
+    / "stm32_g474_foc"
+    / "pa7_gpio_probe"
+    / "Core"
+    / "Src"
+    / "main.c"
+)
 
 
 def macro_int(text: str, name: str) -> int:
@@ -78,16 +87,56 @@ class Tim1ComplementaryPwmProbeTests(unittest.TestCase):
         self.assertIn("GPIO_InitStruct.Pin = GPIO_PIN_15;", self.text)
         self.assertIn("GPIO_InitStruct.Alternate = GPIO_AF4_TIM1;", self.text)
         self.assertGreaterEqual(self.text.count("GPIO_AF6_TIM1"), 3)
+        self.assertIn("GPIO_ForceAlternate(GPIOA, 7U, GPIO_AF_TIM1_CH1_TO_CH3);", self.text)
+        self.assertIn("GPIO_ForceAlternate(GPIOB, 15U, GPIO_AF_TIM1_CH3N);", self.text)
 
     def test_startup_and_break_do_not_auto_enable_outputs(self):
         self.assertNotIn("TIM_BDTR_AOE", self.text)
         self.assertEqual(self.text.count("TIM1->BDTR |= TIM_BDTR_MOE;"), 1)
-        self.assertGreaterEqual(self.text.count("TIM1->BDTR &= ~TIM_BDTR_MOE;"), 2)
+        self.assertIn("static void PWM_ConfigureSafeOutputPins(void)", self.text)
+        self.assertIn("PWM_StopAndLatch(PWM_STATE_BREAK_LATCHED);", self.text)
+        self.assertIn("PWM_ConfigureSafeOutputPins();", self.text)
+        self.assertGreaterEqual(self.text.count("TIM1->BDTR &= ~TIM_BDTR_MOE;"), 1)
         self.assertIn("TIM_BDTR_BKE", self.text)
         self.assertIn("TIM1->AF1 = TIM1_AF1_BKINE;", self.text)
         self.assertIn("PWM_STATE_BREAK_LATCHED", self.text)
         self.assertIn("TIM1->DIER &= ~TIM_DIER_BIE;", self.text)
         self.assertIn("require a reset before another arm", self.text)
+
+    def test_outputs_stay_gpio_low_until_explicit_arm(self):
+        main_body = re.search(r"int main\(void\)\s*\{(?P<body>.*?)\n\}", self.text, re.S)
+        if not main_body:
+            raise AssertionError("main body not found")
+        self.assertNotIn("PWM_ConfigureAlternatePins();", main_body.group("body"))
+
+        arm_body = re.search(r"static void PWM_Arm\(void\)\s*\{(?P<body>.*?)\n\}", self.text, re.S)
+        if not arm_body:
+            raise AssertionError("PWM_Arm body not found")
+        arm_text = arm_body.group("body")
+        self.assertLess(
+            arm_text.index("PWM_ConfigureAlternatePins();"),
+            arm_text.index("TIM1->BDTR |= TIM_BDTR_MOE;"),
+        )
+        self.assertLess(
+            arm_text.index("TIM1->EGR = TIM_EGR_UG;"),
+            arm_text.index("TIM1->BDTR |= TIM_BDTR_MOE;"),
+        )
+        self.assertLess(
+            arm_text.index("TIM1->CCER = TIM_CCER_CC1E"),
+            arm_text.index("TIM1->BDTR |= TIM_BDTR_MOE;"),
+        )
+
+        safe_body = re.search(
+            r"static void PWM_ConfigureSafeOutputPins\(void\)\s*\{(?P<body>.*?)\n\}",
+            self.text,
+            re.S,
+        )
+        if not safe_body:
+            raise AssertionError("safe output-pin function not found")
+        safe_text = safe_body.group("body")
+        self.assertIn("TIM1->BDTR &= ~TIM_BDTR_MOE;", safe_text)
+        self.assertIn("GPIO_MODE_OUTPUT_PP", safe_text)
+        self.assertIn("GPIO_PIN_RESET", safe_text)
 
     def test_center_aligned_and_debug_freeze_are_enabled(self):
         self.assertIn("TIM_CR1_CMS_0", self.text)
@@ -101,3 +150,16 @@ class Tim1ComplementaryPwmProbeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Pa7GpioProbeTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.text = PA7_GPIO_PROBE_SOURCE.read_text(encoding="utf-8")
+
+    def test_pa7_probe_drives_pa7_and_pa8_high(self):
+        self.assertIn("#define PA7_TEST_BIT            (1UL << 7)", self.text)
+        self.assertIn("#define PA8_CONTROL_BIT         (1UL << 8)", self.text)
+        self.assertIn("GPIOA->BSRR = GPIOA_PROBE_BITS;", self.text)
+        self.assertNotIn("GPIO_MODE_AF_PP", self.text)
+        self.assertNotIn("HAL_Init", self.text)

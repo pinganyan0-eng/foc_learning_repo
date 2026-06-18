@@ -22,6 +22,10 @@
 #define PWM_BREAK_PIN                       GPIO_PIN_12
 #define USER_BUTTON_PIN                     GPIO_PIN_13
 #define STATUS_LED_PIN                       GPIO_PIN_5
+#define GPIO_AF_TIM1_CH1_TO_CH3             6UL
+#define GPIO_AF_TIM1_CH3N                   4UL
+#define GPIO_PIN_MODE_BITS                  2UL
+#define GPIO_PIN_AF_BITS                    4UL
 
 typedef enum
 {
@@ -36,7 +40,11 @@ static volatile pwm_state_t g_pwm_state = PWM_STATE_DISARMED;
 static void SystemClock_Config(void);
 static void MX_SafeGPIO_Init(void);
 static void MX_TIM1_ComplementaryPWM_Init(void);
+static void PWM_ConfigureSafeOutputPins(void);
 static void PWM_ConfigureAlternatePins(void);
+static void GPIO_ForceAlternate(GPIO_TypeDef *port,
+                                uint32_t pin_index,
+                                uint32_t alternate);
 static void PWM_Arm(void);
 static void PWM_StopAndLatch(pwm_state_t next_state);
 static void Button_Poll(void);
@@ -47,7 +55,6 @@ int main(void)
   SystemClock_Config();
   MX_SafeGPIO_Init();
   MX_TIM1_ComplementaryPWM_Init();
-  PWM_ConfigureAlternatePins();
 
   while (1)
   {
@@ -156,6 +163,25 @@ static void MX_TIM1_ComplementaryPWM_Init(void)
   TIM1->CR1 |= TIM_CR1_CEN;
 }
 
+static void GPIO_ForceAlternate(GPIO_TypeDef *port,
+                                uint32_t pin_index,
+                                uint32_t alternate)
+{
+  uint32_t mode_shift = pin_index * GPIO_PIN_MODE_BITS;
+  uint32_t afr_shift = (pin_index & 0x7UL) * GPIO_PIN_AF_BITS;
+  uint32_t afr_index = pin_index >> 3U;
+
+  port->MODER = (port->MODER & ~(0x3UL << mode_shift)) |
+                (0x2UL << mode_shift);
+  port->OTYPER &= ~(1UL << pin_index);
+  port->OSPEEDR = (port->OSPEEDR & ~(0x3UL << mode_shift)) |
+                  (0x2UL << mode_shift);
+  port->PUPDR = (port->PUPDR & ~(0x3UL << mode_shift)) |
+                (GPIO_PULLDOWN << mode_shift);
+  port->AFR[afr_index] = (port->AFR[afr_index] & ~(0xFUL << afr_shift)) |
+                         (alternate << afr_shift);
+}
+
 static void PWM_ConfigureAlternatePins(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -175,6 +201,33 @@ static void PWM_ConfigureAlternatePins(void)
   GPIO_InitStruct.Pin = GPIO_PIN_15;
   GPIO_InitStruct.Alternate = GPIO_AF4_TIM1;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  GPIO_ForceAlternate(GPIOA, 7U, GPIO_AF_TIM1_CH1_TO_CH3);
+  GPIO_ForceAlternate(GPIOA, 8U, GPIO_AF_TIM1_CH1_TO_CH3);
+  GPIO_ForceAlternate(GPIOA, 9U, GPIO_AF_TIM1_CH1_TO_CH3);
+  GPIO_ForceAlternate(GPIOA, 10U, GPIO_AF_TIM1_CH1_TO_CH3);
+  GPIO_ForceAlternate(GPIOB, 14U, GPIO_AF_TIM1_CH1_TO_CH3);
+  GPIO_ForceAlternate(GPIOB, 15U, GPIO_AF_TIM1_CH3N);
+}
+
+static void PWM_ConfigureSafeOutputPins(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  TIM1->BDTR &= ~TIM_BDTR_MOE;
+
+  HAL_GPIO_WritePin(GPIOA, PWM_OUTPUTS_PORT_A, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, PWM_OUTPUTS_PORT_B, GPIO_PIN_RESET);
+
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+
+  GPIO_InitStruct.Pin = PWM_OUTPUTS_PORT_A;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = PWM_OUTPUTS_PORT_B;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 static void PWM_Arm(void)
@@ -193,6 +246,16 @@ static void PWM_Arm(void)
       ((TIM1->SR & TIM_SR_BIF) == 0U) &&
       (g_pwm_state == PWM_STATE_DISARMED))
   {
+    TIM1->BDTR &= ~TIM_BDTR_MOE;
+    TIM1->CR1 &= ~TIM_CR1_CEN;
+    PWM_ConfigureAlternatePins();
+    TIM1->CNT = 0U;
+    TIM1->EGR = TIM_EGR_UG;
+    TIM1->SR = 0U;
+    TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC1NE |
+                 TIM_CCER_CC2E | TIM_CCER_CC2NE |
+                 TIM_CCER_CC3E | TIM_CCER_CC3NE;
+    TIM1->CR1 |= TIM_CR1_CEN;
     TIM1->BDTR |= TIM_BDTR_MOE;
     g_pwm_state = PWM_STATE_ARMED;
     GPIOA->BSRR = STATUS_LED_PIN;
@@ -210,7 +273,7 @@ static void PWM_Arm(void)
 
 static void PWM_StopAndLatch(pwm_state_t next_state)
 {
-  TIM1->BDTR &= ~TIM_BDTR_MOE;
+  PWM_ConfigureSafeOutputPins();
   g_pwm_state = next_state;
   GPIOA->BRR = STATUS_LED_PIN;
 }
@@ -315,7 +378,7 @@ static void SystemClock_Config(void)
 void Error_Handler(void)
 {
   __disable_irq();
-  TIM1->BDTR &= ~TIM_BDTR_MOE;
+  PWM_ConfigureSafeOutputPins();
   GPIOA->BRR = STATUS_LED_PIN;
 
   while (1)

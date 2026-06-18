@@ -2,78 +2,61 @@
 
 ## Task identity
 
-- ID: `TASK-2026-06-09-L3-cn8-no-power-cable-remap`
-- Topic: CN3 15-pin loose-wire remap and no-power continuity review
-- Status: `done`
-- User approval: 2026-06-09, user explicitly requested implementation of the
-  reviewed CN8 no-power cable plan
-- Risk level: `L3`
+- ID: `TASK-2026-06-18-L4-cn3-connected-static-power-sanity`
+- Topic: CN3 connected static supply sanity before any empty Gate waveform work
+- Status: `open`
+- User approval: 2026-06-18, user accepted continuing after CN3 USB-only logic
+  input sanity closed
+- Risk level: `L4`
 - Planned evidence ID after acceptance:
-  `EV-2026-06-09-HW-CN8-CABLE-CONTINUITY-001`
+  `EV-2026-06-18-HW-CN3-CONNECTED-STATIC-POWER-001`
 - Review required: yes
 
 ## Goal
 
-Build and verify an eight-wire loose cable for the physical PCB `CN3` 15-pin
-control connector. Earlier schematic/history notes may call the same pin list
-`CN8`; `CN8` is now treated as a legacy alias for this task, not the separate
-6-pin connector.
-
-- CN3/CN8-alias P1-P6 to PA8/PA7/PA9/PB14/PA10/PB15;
-- CN3/CN8-alias P13 to PB12;
-- CN3/CN8-alias P15 to reviewed NUCLEO GND.
+Check the power board with the reviewed CN3 cable and NUCLEO connected, but
+with PWM deliberately disabled. This is a static supply sanity check before any
+empty Gate waveform work.
 
 ## Allowed
 
-- Rearrange and label the loose wires while both cable ends are disconnected.
-- Measure wire continuity and pairwise isolation with a DMM.
-- Photograph the loose cable, CN8 pin-1 orientation, NUCLEO endpoints, and
-  open P14 position.
-- Update the experiment record only from reported raw measurements and
-  reviewed photos.
+- Connect the reviewed CN3 cable with P1-P6, P13, and P15 only.
+- Keep CN3 P7-P12 and P14/3V3 open.
+- Connect NUCLEO USB and press RESET.
+- Leave B1 unpressed so TIM1 outputs remain disabled.
+- Power the power-board 24 V input only through a bench supply current-limited
+  to the recorded 0.2 A level.
+- Measure supply mode/current and static rails: 5V, 3V3, REG12, and
+  P13/nFAULT.
+- Update the experiment record only from raw user measurements.
 
 ## Prohibited
 
-- No NUCLEO USB, 24 V, motor, or phase-wire connection.
-- Do not install the cable into either board before continuity and photo
-  review pass.
-- Do not populate CN3/CN8-alias P7-P12 or P14.
-- Do not use the separate 6-pin connector for this TIM1 cable.
-- No firmware change, flash, PWM output, Gate measurement, or oscilloscope
-  work.
+- No motor.
+- No phase wires.
+- Do not press B1 during this task.
+- Do not intentionally output PWM.
+- Do not probe Gate, OUTx, BOOTx, switch nodes, or high-side Vgs.
+- Do not run Motor Pilot or Motor Profiler.
+- Do not claim Gate waveform, power-stage readiness, motor readiness, Hall
+  closed-loop, sensorless, or FOC behavior from this task.
 
 ## Acceptance
 
-- All eight intended wires show stable low-resistance continuity.
-- No intended wire has continuity to another intended wire.
-- P7-P12 and P14 are visibly and electrically unconnected.
-- Photos make CN8 pin 1 and all NUCLEO endpoints reviewable.
+- Bench supply remains in CV, not CC.
+- Input current is stable and comfortably below the 0.2 A current limit.
+- 5V, 3V3, REG12, and P13/nFAULT are present and stable.
+- LD2 remains off before B1.
+- P1 remains inactive before B1.
+- No abnormal smell, sound, smoke, or fast heating occurs.
 
 ## Operation record
 
-`experiments/2026-06-09_cn8_no_power_cable_remap/2026-06-09_cn8_cable_continuity_record.md`
+`experiments/2026-06-18_cn3_connected_static_power_sanity/README.md`
 
 ## Current result
 
-- The physical power-board control connector is `CN3`; `CN8` is retained only
-  as a legacy alias for the same 15-pin control pin list.
-- The separate 6-pin connector was explicitly rejected for this TIM1 cable.
-- User-reported disconnected-end continuity passed for all eight intended
-  wires at 0.1 ohm stable beep: P1-PA8, P2-PA7, P3-PA9, P4-PB14, P5-PA10,
-  P6-PB15, P13-PB12, and P15-GND.
-- User-reported pairwise isolation passed: all listed installed-wire pairs
-  showed no beep.
-- P7-P12 and P14/3V3 remain open.
-- Reviewed photos support installation into the long physical CN3 15-pin
-  connector and NUCLEO CN10/Morpho area; endpoint continuity remains the
-  primary evidence.
-- Post-installation targeted no-power sanity checks passed with no beep on
-  P14-P15, P1-P2, P3-P4, P5-P6, and P13-P15.
-
-This closes only the no-power cable mapping and installation review. It does
-not authorize NUCLEO USB, 24 V, PWM, Gate probing, OUTx/BOOTx/high-side Vgs
-measurement, or motor connection. The next physical step must be opened as a
-separate reviewed task.
+Open. No CN3-connected static powered measurement is accepted yet.
 
 ---
 
@@ -81,141 +64,77 @@ separate reviewed task.
 
 ## Task identity
 
-- ID: `TASK-2026-06-08-L3-nucleo-tim1-complementary-pwm`
-- Topic: NUCLEO-G474RE TIM1 three-pair complementary PWM logic validation
-- Status: `done`
-- User approval: 2026-06-08, user explicitly requested implementation of the
-  reviewed NUCLEO-only TIM1 plan
-- Risk level: `L3`
-- Definition of Done: `workflow/definition_of_done.md#工程代码任务`
-- Evidence ID: `EV-2026-06-08-FW-TIM1-COMPLEMENTARY-PWM-SOURCE-001`
+- ID: `TASK-2026-06-17-L4-cn3-usb-only-logic-input-sanity`
+- Topic: CN3 installed-cable USB-only logic-input sanity check
+- Status: `done-with-limitations`
+- Evidence ID: `EV-2026-06-17-HW-CN3-USB-ONLY-LOGIC-INPUT-001`
 - Review required: yes
 
-## Previous task closure
+## Previous result
 
-`TASK-2026-06-07-L2-nucleo-pa8-square-wave` is closed. It was superseded by
-the dedicated `cn8_pin_probe` project, which was built, flashed, and measured
-on all six identification outputs. Evidence:
+- Pre-B1 DMM low-state sanity passed on CN3 P1-P6 relative to P15/GND.
+- P13/P15 and P13/P14 were checked unpowered and showed no beep in the Mohm
+  range, so no P13/BKIN hard short to GND or 3V3 was accepted.
+- After-B1 P1-P6 logic activity is accepted only for the high-impedance 10X
+  oscilloscope method with P13 disconnected: P1-P6 were reported as about
+  10 kHz and about 3.3 V.
+- P13/BKIN USB-only stop/latch sanity passed with P13 reconnected: pulling P13
+  low stopped P1, releasing P13 did not restart output, and RESET plus one B1
+  restored output.
+- B1 STOP latch and reset/re-arm behavior passed: second B1 stopped P1, third
+  B1 did not restart it, and RESET plus one B1 restored output.
+- CN3-installed DMM ground-contact probing after B1 turned LD2 off and latched
+  the state; this DMM method is recorded as disturbing the unpowered power-board
+  input network and must not be reused for PWM checks.
 
-- `EV-2026-06-08-FW-CN8-PIN-PROBE-FLASH-001`
-- `EV-2026-06-08-FW-CN8-PIN-PROBE-WAVEFORM-001`
+This closed only the USB-only logic-input sanity task. It did not validate Gate
+waveforms, 24 V dynamic behavior, OUTx/BOOTx/high-side Vgs, motor operation,
+Hall closed-loop, sensorless operation, or FOC runtime behavior.
 
-## Goal
+---
 
-Build and measure a separate NUCLEO-only TIM1 firmware with:
+# Earlier task summary
 
-- three main/complementary PWM pairs;
-- center-aligned 10 kHz operation;
-- 25% duty;
-- approximately 2 us hardware deadtime;
-- reset/startup outputs inactive;
-- explicit B1 arm;
-- latched software STOP;
-- active-low PB12/TIM1_BKIN latched shutdown.
+## CN3 15-pin no-power cable remap
 
-## Allowed
+- ID: `TASK-2026-06-09-L3-cn8-no-power-cable-remap`
+- Status: `done`
+- Evidence ID: `EV-2026-06-09-HW-CN8-CABLE-CONTINUITY-001`
 
-- Modify only the new
-  `apps/stm32_g474_foc/tim1_complementary_pwm_probe/` project and supporting
-  tests/documents.
-- Build and flash only while the NUCLEO is isolated from CN8, the power board,
-  24 V, and the motor.
-- Measure PA8/PA7, PA9/PB14, and PA10/PB15 relative to NUCLEO GND.
-- Pull PB12 to NUCLEO GND for the reviewed NUCLEO-only BKIN test.
+Current accepted result:
 
-## Prohibited
+- The physical power-board control connector is `CN3`; `CN8` is retained only
+  as a legacy alias for the same 15-pin control pin list.
+- User-reported disconnected-end continuity passed for all eight intended wires
+  at 0.1 ohm stable beep: P1-PA8, P2-PA7, P3-PA9, P4-PB14, P5-PA10,
+  P6-PB15, P13-PB12, and P15-GND.
+- Pairwise isolation passed, P7-P12 and P14/3V3 remain open, and targeted
+  post-installation short checks passed.
 
-- Do not connect the CN8 cable or power board in this task.
-- Do not connect 24 V or the motor.
-- Do not probe OUTx, BOOTx, switch nodes, or high-side Vgs.
-- Do not treat source tests or a successful build as waveform evidence.
-- Do not reuse the old PA15/PB3/PB10 identification mapping as the dynamic
-  complementary PWM cable map.
+This task did not authorize 24 V, PWM, Gate probing, OUTx/BOOTx/high-side Vgs
+measurement, or motor connection.
 
-## Current result
+## NUCLEO TIM1 complementary PWM
 
-- New source project implemented.
-- Dynamic TIM1 cable mapping decision recorded.
-- Static contract tests pass: 6/6.
-- Repository unittest run passes: 20/20.
-- STM32 project safe-claim dry run reports no unsafe added claims.
-- ARM Debug build succeeds and generated ELF/HEX/BIN.
-- `tim1_complementary_pwm_probe.hex` was flashed to NUCLEO-G474RE through
-  ST-LINK SN `002F00253235511337333439`; STM32CubeProgrammer verified the
-  download successfully and performed software reset.
-- User-provided oscilloscope screenshots accept all three after-B1 pairs:
-  PA8/PA7, PA9/PB14, and PA10/PB15 each show about 10.0 kHz complementary
-  PWM, no visible high-level overlap, and about 2 us deadtime in both
-  transition directions. STOP and BKIN action/latching were subsequently
-  accepted on measured PA10/PB15.
-- User-provided PA8/PA7 dual-channel screenshots showed same-phase high
-  windows, including the temporary `CCxNP` polarity-inversion attempt. These
-  are recorded as failed/inconclusive intermediate captures, not accepted
-  evidence.
-- The temporary `TIM_CCER_CC1NP`, `TIM_CCER_CC2NP`, and `TIM_CCER_CC3NP`
-  change was removed. The current source uses TIM1 default CHxN complementary
-  polarity and the static tests now reject accidental `CCxNP` reintroduction.
-- On 2026-06-09 the rollback build passed 20/20 tests, built successfully, and
-  was flashed under reset to NUCLEO-G474RE. STM32CubeProgrammer verified the
-  download and performed software reset. The D7/D11 retest is accepted below.
-- User-provided PA8/PA7 reset-before-B1 captures show no 0-3.3 V PWM. Because
-  the captures used sensitive or non-uniform vertical scales, they are recorded
-  as preliminary reset/no-large-PWM evidence; final both-channel 2 V/div and
-  20 us/div startup-low evidence remains pending.
-- User-provided PA8/PA7 reset-before-B1 capture at 2 V/div on both channels
-  and 20 us/div shows flat traces with no PWM. PA8/PA7 startup-low evidence is
-  accepted for this checked pair; startup-low for the other pairs remains
-  unmeasured.
-- User-provided PA8/PA7 after-B1 full-period capture at 2 V/div and 20 us/div
-  shows about 10.0 kHz complementary PWM with no visible high-level overlap.
-  PA8/PA7 full-period complementary evidence is accepted.
-- User-provided PA8/PA7 edge zoom at 2 V/div and 1 us/div shows PA7/CH1N
-  falling before PA8/CH1 rising by about 2 us. This accepts the first deadtime
-  direction for PA8/PA7; the opposite direction is accepted below.
-- User-provided PA8/PA7 opposite-edge zoom shows PA8/CH1 falling before
-  PA7/CH1N rising by about 2 us. PA8/PA7 is now accepted for startup-low,
-  10 kHz full-period complementary behavior, no visible high-level overlap, and
-  both-direction deadtime.
-- User-provided PA9/PB14 full-period and edge-zoom captures show about
-  10.0 kHz complementary PWM after B1, no visible high-level overlap, and about
-  2 us deadtime in both transition directions. PA9/PB14 is accepted for the
-  checked after-B1 complementary PWM and deadtime behavior.
-- User-provided PA10/PB15 full-period and edge-zoom captures show about
-  10.0 kHz complementary PWM after B1, no visible high-level overlap, and about
-  2 us deadtime in both transition directions. PA10/PB15 is accepted for the
-  checked after-B1 complementary PWM and deadtime behavior.
-- User-provided PA10/PB15 captures after the second B1 press show both measured
-  outputs inactive. A further B1 press without reset does not restart PWM.
-  Software STOP action and latch behavior are accepted on the measured pair;
-  BKIN was then tested separately.
-- Pulling PB12/CN10-16 low stops the measured PA10/PB15 pair. Releasing PB12
-  and pressing B1 without reset does not restart PWM, accepting BKIN latch
-  behavior on the measured pair. After reset, PA10/PB15 remain inactive until
-  B1 is pressed once, then return to about 10.0 kHz complementary PWM.
-- Reset-before-B1 captures now directly cover PA8/PA7, PA9/PB14, and
-  PA10/PB15 at 2 V/div and 20 us/div. All six outputs have direct startup-low
-  evidence.
-- The NUCLEO-only TIM1 complementary PWM task is complete. STOP and BKIN were
-  directly observed on PA10/PB15; source and static tests confirm both paths
-  clear the global TIM1 MOE controlling all three pairs.
-- DT/MODE design evidence is closed: the archived schematic directly shows
-  `U1 Pin 2 / DT/MODE -> GND_POWER`, and the populated `R_GND_ISO` link
-  measured approximately 0.1 ohm. Physical cable continuity/orientation and
-  disconnected-supply evidence remain prerequisites before any later
-  power-board cable installation.
+- ID: `TASK-2026-06-08-L3-nucleo-tim1-complementary-pwm`
+- Status: `done`
+- Evidence IDs:
+  - `EV-2026-06-08-FW-TIM1-COMPLEMENTARY-PWM-SOURCE-001`
+  - `EV-2026-06-08-FW-TIM1-COMPLEMENTARY-PWM-FLASH-001`
+  - `EV-2026-06-08-FW-TIM1-COMPLEMENTARY-PWM-WAVEFORM-001`
 
-## Acceptance
+Current accepted result:
 
-- ARM Debug build succeeds and produces ELF/HEX/BIN.
-- On reset, all six outputs remain inactive until B1.
-- All three pairs measure approximately 10 kHz, 25% duty, and 2 us deadtime
-  with no simultaneous high state.
-- Second B1 press stops all outputs and cannot re-arm without reset.
-- Pulling PB12 low stops all outputs asynchronously and cannot re-arm without
-  reset.
+- Independent TIM1 probe firmware built, flashed, and verified on the isolated
+  NUCLEO-G474RE.
+- Dynamic TIM1 map is PA8/PA7, PA9/PB14, and PA10/PB15 for CH1/1N, CH2/2N,
+  and CH3/3N.
+- User oscilloscope evidence accepted all three after-B1 complementary PWM
+  pairs at about 10 kHz, no visible high-level overlap, and about 2 us deadtime
+  in both transition directions.
+- Reset-before-B1 inactive evidence directly covers all six outputs.
+- Software STOP and PB12/BKIN latch behavior were observed; source and static
+  tests confirm both paths clear global TIM1 MOE.
 
-## Rollback
-
-Flash the previously verified
-`apps/stm32_g474_foc/cn8_pin_probe/build/Debug-mingw/cn8_pin_probe.hex`, or
-reset and leave B1 unpressed. The new firmware never enables MOE automatically.
+This task did not approve CN3 power-board behavior, 24 V, Gate probing,
+OUTx/BOOTx/high-side Vgs measurement, or motor operation.

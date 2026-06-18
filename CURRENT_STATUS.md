@@ -1,5 +1,57 @@
 # CURRENT_STATUS
 
+## 2026-06-18 CN3 USB-only Logic-Input Sanity Closed; Static Power Sanity Opened
+
+- `TASK-2026-06-17-L4-cn3-usb-only-logic-input-sanity` is closed as
+  done-with-limitations. The evidence record is
+  `experiments/2026-06-17_cn3_usb_only_logic_input_sanity/README.md`.
+- Accepted USB-only logic evidence: pre-B1 CN3 P1-P6 were 0 V; with P13
+  disconnected and a 10X oscilloscope probe, P1-P6 were reported as about
+  10 kHz and about 3.3 V after B1; B1 STOP latch and reset/re-arm passed; P13
+  BKIN stop/latch passed after P13 was reconnected.
+- A CN3-installed DMM ground-contact stop-latch observation is recorded. The
+  DMM method disturbed the unpowered power-board input network and must not be
+  reused for after-B1 PWM checks.
+- This evidence does not validate Gate waveforms, 24 V dynamic behavior,
+  OUTx/BOOTx/high-side Vgs, motor operation, Hall closed-loop, sensorless
+  operation, or FOC runtime behavior.
+- Opened `TASK-2026-06-18-L4-cn3-connected-static-power-sanity` with operation
+  sheet `experiments/2026-06-18_cn3_connected_static_power_sanity/README.md`.
+  It allows only a CN3-connected, B1-unpressed, 24 V / 0.2 A current-limited
+  static rail and nFAULT check before any empty Gate waveform planning.
+
+## 2026-06-17 CN3 USB-only Logic-Input Sanity Check Opened
+
+- Opened `TASK-2026-06-17-L4-cn3-usb-only-logic-input-sanity` and created the
+  operation record at
+  `experiments/2026-06-17_cn3_usb_only_logic_input_sanity/README.md`.
+- Scope is limited to NUCLEO USB-only logic-input sanity with the reviewed CN3
+  eight-wire cable connected to the unpowered power board.
+- The task may check reset-before-B1 low state, after-B1 low-voltage PWM
+  presence, second-B1 STOP latch, and PB12/P13 BKIN latch at the CN3 logic
+  interface.
+- This does not authorize 24 V, motor, phase wires, Gate probing, OUTx,
+  BOOTx, high-side Vgs measurement, Motor Pilot, Motor Profiler, Hall
+  closed-loop, sensorless, or FOC runtime claims.
+
+## 2026-06-17 PA7/PA8 GPIO Mismatch Resolved And TIM1 Restored
+
+- The temporary `apps/stm32_g474_foc/pa7_gpio_probe/` diagnostic was used only
+  to investigate an apparent mismatch where ST-LINK GPIOA register reads showed
+  PA5/PA7/PA8 high while external DMM measurements initially reported PA7/PA8
+  at 0 V.
+- Follow-up connector-level measurements resolved the mismatch: user reported
+  `CN10-11/PA5 = 3.3 V`, `CN10-15/PA7 = 3.3 V`, and `CN10-23/PA8 = 3.3 V`.
+  The earlier PA7/PA8 0 V readings are therefore not accepted as NUCLEO board,
+  PA7, PA8, or connector-path failure evidence.
+- `tim1_complementary_pwm_probe.hex` was rebuilt, reflashed to the
+  NUCLEO-G474RE, verified successfully by STM32CubeProgrammer v2.23.0, and
+  software-reset. The user then reported the NUCLEO-only TIM1 waveform retest
+  was normal.
+- This closes only the NUCLEO-only PA7/PA8 diagnostic and TIM1 firmware
+  restoration. It still does not authorize CN3/power-board connection, 24 V,
+  Gate probing, OUTx/BOOTx/high-side Vgs measurement, or motor operation.
+
 ## 2026-06-09 CN3 15-pin No-Power Cable Remap Closed
 
 - Opened `TASK-2026-06-09-L3-cn8-no-power-cable-remap`.

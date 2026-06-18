@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-set(CMAKE_PROJECT_NAME tim1_complementary_pwm_probe)
+set(CMAKE_PROJECT_NAME pa7_gpio_probe)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 project(${CMAKE_PROJECT_NAME})

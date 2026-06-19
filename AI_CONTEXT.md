@@ -16,7 +16,26 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   `python tools/build_context_pack.py --mode ai_maintenance`.
 - Project workflow maintenance context:
   `python tools/build_context_pack.py --mode workflow_maintenance`.
-- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance.
+- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance.
+- Current PCB2 no-power DMM summary result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`
+  records the user-reported continuity rows as `通` for
+  `CN3_10-PA0`, `CN3_11-PA1`, `CN3_12-PB4`, `CN3_2-PB3`,
+  `CN3_14-3V3`, `CN3_15-GND`, and `CN3_13-PB12`, and records the
+  rail / signal-to-rail / Hall-pair short-check rows as `不通`.
+  Raw ohm values were not provided. This opens only no-power software Hall
+  adapter interface / code-entry boundary planning; it is not powered
+  readiness and does not authorize firmware implementation, flash, 24 V,
+  motor connection, Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop,
+  or sensorless operation.
+- Current post-DMM software Hall boundary:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_code_entry_boundary_after_dmm_2026-06-19.md`
+  records the next allowed no-power work as software Hall adapter code-entry
+  planning for `PA0 / PA1 / PB4`. It defines the future debug-only shape,
+  state-machine contract, remaining GPIO / timestamp / debug-output decisions,
+  and MCSDK hard stops. It does not authorize firmware implementation,
+  generated-code edits, flash, 24 V, motor connection, Gate PWM, Motor Pilot,
+  Motor Profiler, Hall closed loop, or sensorless operation.
 - Current hardware handoff as of 2026-06-19: if the user says
   `开始单输入唤醒诊断`, `单输入唤醒`, `STDRIVE101 唤醒`, or `REG12 唤醒`, treat it as
   the STDRIVE101 single-input wake diagnostic, not Codex/mobile/service
@@ -28,6 +47,12 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   before giving steps. Candidate diagnostic is `CN3_14 / 3V3 -> 10 kohm
   series resistor -> CN3_2 / LIN1`, motor disconnected, HSPY `24 V / 0.2 A`,
   no firmware PWM, no Motor Pilot / Profiler, no readiness claim.
+- Current single-input wake baseline result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md`
+  records `CV`, `0.036 A`, `VS / 24V_FUSED = 24 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and
+  `REG12 = 0.33 V` before any `10 kohm` stimulus was installed. This is
+  baseline evidence only, not a wake result.
 - Current strategy: use ST MCSDK for the motor-control framework, keep Hall closed-loop as the safe fallback path, and treat SMO/PLL sensorless as a later stretch goal.
 - Real-time boundary: STM32 owns FOC. ESP32-C3 displays, forwards, and alerts only.
 

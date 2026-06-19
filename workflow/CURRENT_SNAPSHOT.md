@@ -10,8 +10,25 @@ the current project stage and safety boundary. Historical detail remains in
 
 - Main project: STM32G474 edge-gateway FOC drive learning and competition
   project.
-- Current stage: P2 MCSDK no-power precheck and software Hall no-power
-  firmware-entry planning.
+- Current stage: P2 MCSDK no-power precheck, PCB2 no-power DMM summary
+  recorded, and software Hall no-power firmware-entry planning.
+- Current PCB2 no-power DMM result:
+  `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md` records the
+  user-reported table as `通` for `CN3_10-PA0`, `CN3_11-PA1`,
+  `CN3_12-PB4`, `CN3_2-PB3`, `CN3_14-3V3`, `CN3_15-GND`, and
+  `CN3_13-PB12`, with all requested rail, signal-to-rail, and Hall-pair
+  short checks reported as `不通`. Raw ohm values were not provided. This
+  closes the immediate no-power DMM-table blocker for planning only; it does
+  not authorize firmware implementation, flash, 24 V, motor connection,
+  Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Current post-DMM software Hall boundary:
+  `software_hall_code_entry_boundary_after_dmm_2026-06-19.md` defines the
+  next allowed no-power document-side work for `PA0 / PA1 / PB4`: exact future
+  debug-only file list, GPIO pull / EXTI trigger policy review,
+  timestamp-source criteria, low-frequency debug snapshot route, no-power
+  build checklist, and rollback checklist. It does not create firmware or open
+  MCSDK hooks.
 - Current hardware handoff: the 2026-06-19 no-power and static checks have
   reached the execution-gate decision for a bounded STDRIVE101 single-input
   wake diagnostic. If the user says `开始单输入唤醒诊断` or `单输入唤醒`, this means
@@ -21,14 +38,21 @@ the current project stage and safety boundary. Historical detail remains in
   `stdrive101_reg12_single_input_wake_plan_2026-06-19.md`,
   `stdrive101_reg12_wake_official_web_review_2026-06-19.md`, and
   `out1_output_node_no_power_short_check_result_2026-06-19.md`.
+- Current single-input wake baseline result:
+  `stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md` records
+  the user-reported pre-stimulus baseline as `CV`, `0.036 A`,
+  `VS / 24V_FUSED = 24 V`, `CN3_14 / 3V3 = 3.3 V`,
+  `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`. This closes only the
+  baseline condition; no `10 kohm` stimulus was installed and no wake result
+  exists yet.
 - The single-input wake diagnostic remains a bounded power-stage diagnostic:
   no motor, no firmware PWM, no Motor Pilot, no Motor Profiler, no Hall
   closed-loop claim, no sensorless claim, and no power-stage or motor
   readiness claim.
-- Current real-world blocker: PCB2 is now reported populated / in hand, and
-  the user confirmed the route is unchanged. The DMM continuity / short-check
-  gate is open as a no-power pending action, not passed. The active handoff is
-  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md`.
+- Current real-world blocker update: PCB2 is reported populated / in hand, the
+  route is unchanged, and the 2026-06-19 no-power DMM summary is now recorded.
+  The next allowed hardware-adjacent step is still no-power only: review the
+  software Hall adapter interface / code-entry boundary for `PA0 / PA1 / PB4`.
 - No-power build-only status: Debug build command completed with exit code `0`
   on 2026-05-27 for
   `QIANSAI_G474_STDRIVE101_FOC_P2`; this is local compile evidence only.
@@ -43,12 +67,11 @@ the current project stage and safety boundary. Historical detail remains in
 - Current Hall planning route: `HALL_A/B/C -> IA/IB/IC -> PA0/PA1/PB4`.
 - `PB3=LIN1` and is not current PCB2 Hall.
 - `P14/P15=3V3/GND`.
-- PCB2 populated status is now reported, but DMM continuity / short-check
-  evidence is still missing. Pending does not mean passed.
-- Current user action is to fill the no-power DMM continuity / short-check
-  table for `IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`, `P14/P15=3V3/GND`, and
-  `nFAULT->PB12`, plus rail / signal / Hall-line short checks. The WP-030
-  no-power Hall mixed-sequence check is passed at L4.
+- PCB2 populated status is now reported, and the 2026-06-19 no-power DMM
+  summary records continuity for `IA/IB/IC -> PA0/PA1/PB4`, `PB3=LIN1`,
+  `P14/P15=3V3/GND`, and `nFAULT->PB12`, plus no reported rail / signal /
+  Hall-line hard shorts. The WP-030 no-power Hall mixed-sequence check is
+  passed at L4.
 
 ## Current Software Hall State
 
@@ -63,6 +86,10 @@ the current project stage and safety boundary. Historical detail remains in
   order, ISR limits, debug fields, MCSDK hard stops, and user checkpoint.
   Decision:
   `Software Hall firmware-entry plan / debug-only no-power boundary / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- A post-DMM code-entry boundary now exists at
+  `software_hall_code_entry_boundary_after_dmm_2026-06-19.md`. It updates the
+  entry path after the DMM summary and keeps the next work as document-side
+  no-power planning only.
 - The external Workbench project
   `C:\Users\gregrg\.st_workbench\projects\QIANSAI_G474_STDRIVE101_FOC_P2`
   exists and its generated `Src/`, `Inc/`, `cmake/`, and top-level build
@@ -93,8 +120,9 @@ the current project stage and safety boundary. Historical detail remains in
 - They do not prove GPIO runtime behavior, MCSDK Hall integration, MCSDK hook
   readiness, DMM continuity, Hall closed-loop behavior, flash readiness, or
   powered readiness.
-- The DMM table may now be filled only with the board unpowered; it is not yet
-  a passed result.
+- The DMM table summary is now recorded for no-power planning only. It is not
+  powered validation, firmware runtime proof, MCSDK hook readiness, Hall
+  closed-loop behavior, or motor readiness.
 
 ## Current AI Architecture Work
 

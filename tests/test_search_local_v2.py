@@ -44,6 +44,22 @@ class SearchLocalV2Tests(unittest.TestCase):
         self.assertGreaterEqual(bonus, 0.32)
         self.assertNotIn('"收工检查清单" in text', source)
 
+    def test_esp32_realtime_query_prioritizes_project_context(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                "tools/search_local_v2.py",
+                "ESP32 FOC realtime STM32 control loop",
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+
+        self.assertIn("docs/00_project_truth/project_context.md", result.stdout)
+
     def test_jeoc_printf_query_hits_realtime_boundary_sources(self):
         result = subprocess.run(
             [sys.executable, "tools/search_local_v2.py", "JEOC 中断里能不能 printf"],

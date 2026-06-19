@@ -1,3 +1,88 @@
+## 2026-06-19 Software Hall Code-Entry Boundary After DMM Added
+
+- Added the no-power post-DMM code-entry boundary:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/software_hall_code_entry_boundary_after_dmm_2026-06-19.md`.
+- Evidence:
+  `EV-2026-06-19-SOFTWARE-HALL-CODE-ENTRY-BOUNDARY-POST-DMM-001`.
+- Decision:
+  `Software Hall code-entry boundary after DMM summary /
+  PA0-PA1-PB4 debug-only adapter planning allowed / no firmware
+  implementation / no MCSDK hook / no Hall readiness`.
+- Scope:
+  records that the 2026-06-19 DMM summary stops the no-power DMM table from
+  being the immediate planning blocker, then defines the next allowed
+  document-side work: exact future file list, GPIO pull / EXTI trigger review,
+  timestamp-source selection criteria, low-frequency debug snapshot route,
+  no-power build checklist, and rollback checklist.
+- Boundary:
+  this is a no-power document-side boundary only. It does not create STM32
+  firmware, edit generated MCSDK files, edit CubeMX / Workbench, flash, run
+  hardware, apply 24 V, connect a motor, output Gate PWM, run Motor Pilot,
+  run Motor Profiler, claim GPIO runtime proof, claim MCSDK hook readiness,
+  claim Hall closed-loop behavior, claim power-stage readiness, claim motor
+  readiness, or claim sensorless validation.
+
+## 2026-06-19 PCB2 No-Power DMM Summary Result Recorded
+
+- Added the user-reported no-power DMM continuity / short-check summary:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`.
+- Evidence:
+  `EV-2026-06-19-PCB2-NO-POWER-DMM-SUMMARY-001`.
+- User-reported continuity rows:
+  `CN3_10 / IA -> CN4-A0 / PA0`, `CN3_11 / IB -> CN4-A1 / PA1`,
+  `CN3_12 / IC -> CN5-D5 / PB4`, `CN3_2 / LIN1 -> CN10-D12 / PB3`,
+  `CN3_14 / 3V3 -> CN4-3V3`, `CN3_15 / GND -> CN4-GND`, and
+  `CN3_13 / nFAULT -> CN10-D14 / PB12` are reported as `通`.
+- User-reported short-check rows:
+  `CN3_14 / 3V3` to `CN3_15 / GND`, `CN3_10 / IA`, `CN3_11 / IB`,
+  `CN3_12 / IC`, `CN3_2 / LIN1`, and `CN3_13 / nFAULT` to the relevant
+  `3V3` / `GND` rails, plus `IA-IB`, `IA-IC`, and `IB-IC`, are reported as
+  `不通`.
+- Decision:
+  `PCB2 no-power DMM continuity / short-check summary / expected continuity
+  reported for CN3_10-PA0, CN3_11-PA1, CN3_12-PB4, CN3_2-PB3, CN3_14-3V3,
+  CN3_15-GND, and CN3_13-PB12 / no rail, signal-to-rail, or Hall-line hard
+  short reported / raw ohm values not provided / no powered readiness`.
+- Boundary:
+  this is a no-power DMM summary only. It does not authorize firmware
+  implementation, generated-code edits, CubeMX / Workbench edits, flash,
+  Run / Debug, 24 V, power-board connection, motor connection, Gate PWM,
+  Motor Pilot, Motor Profiler, Hall closed loop, sensorless operation,
+  power-stage readiness, or motor readiness.
+- Next boundary:
+  the immediate DMM-table blocker is no longer the next step for no-power
+  planning. The next allowed project step is a no-power software Hall adapter
+  interface / code-entry boundary review for `PA0 / PA1 / PB4`.
+
+## 2026-06-19 STDRIVE101 Single-Input Wake Baseline Recorded
+
+- Added the bounded pre-stimulus baseline result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md`.
+- Evidence:
+  `EV-2026-06-19-STDRIVE101-SINGLE-INPUT-WAKE-BASELINE-001`.
+- Decision:
+  `STDRIVE101 REG12 single-input wake baseline / HSPY 24 V 0.2 A CV /
+  0.036 A static current / VS 24 V / CN3_14 3.3 V present with USB-STLINK
+  unplugged / nFAULT 3.3 V / REG12 0.33 V / pre-stimulus baseline satisfied
+  only / no wake stimulus installed / no PWM-output validation / no powered-drive
+  readiness`.
+- User-reported raw readings:
+  `CV`, `0.036 A`, `VS / 24V_FUSED = 24 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and
+  `REG12 = 0.33 V`.
+- Boundary:
+  this is a static baseline only. It does not install the `10 kohm` stimulus,
+  drive `CN3_2 / LIN1` high, execute the wake diagnostic, validate Gate PWM,
+  validate Hall closed-loop behavior, validate sensorless behavior, or prove
+  power-stage / motor readiness.
+- Next boundary:
+  if the user wants to keep progressing without installing the `10 kohm`
+  resistor, stop at this recorded evidence and continue non-hardware planning
+  or review. If the user later chooses to execute the wake diagnostic, the
+  next step remains `CN3_14 / 3V3 -> 10 kohm -> CN3_2 / LIN1` with motor
+  disconnected, HSPY `24 V / 0.2 A`, strict CV/CC stop rules, and no direct
+  wire.
+
 ## 2026-06-19 STDRIVE101 Single-Input Wake Handoff Route Added
 
 - Added the hardware phrase handoff task:

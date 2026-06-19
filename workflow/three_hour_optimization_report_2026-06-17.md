@@ -34,6 +34,7 @@ power-stage readiness, motor readiness, or sensorless / SMO readiness.
 | 2026-06-17 18:27 +08:00 | Mid-project review | Architecture slice landed; notes and tooling workers hit rate limits but left inspectable partial edits |
 | 2026-06-17 18:30 +08:00 | Main-agent recovery | Main agent resumed notes and tooling work, preserving user-owned dirty files |
 | 2026-06-17 22:16 +08:00 | Verification pass | Contracts, retrieval eval, unit tests, compileall, quick audit, and diff check completed |
+| 2026-06-19 21:15 +08:00 | Current-tree re-verification | Rebuilt retrieval index, fixed ESP32 real-time project-context ranking, and reran focused/full checks |
 
 ## Mid-Project Review
 
@@ -72,6 +73,9 @@ Status at the 90-minute-style checkpoint:
 - Finished a small maintainability refactor in `tools/search_local_v2.py` by
   moving repeated path-specific retrieval bonuses into configured rules.
 - Added regression coverage in `tests/test_search_local_v2.py`.
+- Added an ESP32 real-time boundary project-context ranking rule after the
+  2026-06-19 current-tree retrieval eval exposed that related AI/Skill files
+  could outrank the expected project fact source.
 - Kept CLI behavior and no-power wording intact.
 
 ## Retrieval Checks
@@ -116,9 +120,26 @@ user review clears them. Passing repository checks is not hardware validation.
 | `python -m compileall src tests` | Passed | Completed source/test compile scan |
 | `git diff --check` | Passed | Only existing CRLF conversion warnings were printed |
 
-Current dirty-worktree note: `notes/00_home/today.md` and
-`notes/90_system/plugin_setup.md` were already modified before this sprint and
-were preserved as user-owned changes.
+### 2026-06-19 Re-Verification
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `python tools/build_vector_store.py` | Passed | Built 9259 chunks in the current tree |
+| `python tools/search_local_v2.py --eval` | Passed | Required retrieval cases OK after the ESP32 project-context boost |
+| `python tools/search_local_v2.py "中文学习 Hall 状态序列 软件 Hall 复习"` | Passed | Returned the Chinese Hall sample card in top results |
+| `python -m unittest tests.test_search_local_v2` | Passed | 5 tests OK |
+| `python -B -m unittest discover -s tests` | Passed | 146 tests OK |
+| `python -B -m py_compile tools\search_local_v2.py tests\test_search_local_v2.py` | Passed | No bytecode writes required |
+| `python -m compileall src tests` | Passed | Completed source/test compile scan |
+| `python tools/check_ai_contracts.py` | Passed | 0 errors; 2 known review-lifecycle warnings |
+| `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json` | Passed | `ok: true`, `repo_maintenance_closeout_ok: true`, hardware validation false |
+| `git diff --check` | Passed | Only CRLF conversion warnings were printed |
+
+Dirty-worktree note: on 2026-06-17, `notes/00_home/today.md` and
+`notes/90_system/plugin_setup.md` were already modified and were preserved as
+user-owned changes. On 2026-06-19, the remaining dirty worktree also includes
+separate no-power DMM / software-Hall boundary / STDRIVE101 baseline handoff
+files that are outside this optimization sprint's ownership.
 
 ## Efficiency Recommendations
 

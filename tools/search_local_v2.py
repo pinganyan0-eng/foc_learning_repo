@@ -195,6 +195,13 @@ PHRASE_BONUS_RULES: tuple[PhraseBonusRule, ...] = (
         text_any=("仓库维护任务",),
         path="workflow/definition_of_done.md",
     ),
+    PhraseBonusRule(
+        "esp32_realtime_project_context",
+        0.32,
+        query_any=("esp32",),
+        text_any=("ESP32-C3", "实时控制", "real-time boundary"),
+        path="docs/00_project_truth/project_context.md",
+    ),
 )
 
 

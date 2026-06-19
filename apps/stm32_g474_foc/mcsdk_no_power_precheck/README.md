@@ -11,6 +11,21 @@ output.
 
 - Created: 2026-05-14.
 - Scope: configuration planning only.
+- Latest PCB2 DMM evidence:
+  `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md` records
+  the user-reported no-power DMM summary: continuity rows for
+  `CN3_10-PA0`, `CN3_11-PA1`, `CN3_12-PB4`, `CN3_2-PB3`,
+  `CN3_14-3V3`, `CN3_15-GND`, and `CN3_13-PB12` are reported as `通`,
+  while rail, signal-to-rail, and Hall-pair short checks are reported as
+  `不通`. Raw ohm values were not provided. This opens only no-power
+  software Hall adapter interface / code-entry boundary planning.
+- Latest post-DMM software Hall boundary:
+  `software_hall_code_entry_boundary_after_dmm_2026-06-19.md` defines the
+  next no-power document-side work for a future `PA0 / PA1 / PB4`
+  debug-only adapter: exact file list, GPIO pull / EXTI policy review,
+  timestamp-source criteria, debug snapshot route, no-power build checklist,
+  and rollback checklist. It does not create firmware or authorize MCSDK
+  hooks.
 - Existing evidence in this directory: draft configuration, tool probe notes,
   a CubeMX Home screenshot, a CubeMX `.ioc` pinout screenshot, pin/config safety
   review, GUI capture result, a current P2 璇佹嵁鍖? source packet intake rules,
@@ -48,18 +63,21 @@ output.
   debug-output route review draft that defines
   snapshot fields and blocks ISR printing / UART transmit / JSON / ESP32 /
   SWO / every-edge streaming, plus a 2026-05-27 MCSDK firmware-integration boundary review draft that blocks direct writes to `HALL_M1`, speed loop, PID, JEOC / FOC ISR, or TIM1 PWM, plus a 2026-05-28 Chinese-first software Hall firmware-entry plan that defines the future debug-only adapter layers, state-machine order, ISR limits, debug fields, and MCSDK hard stops without opening firmware implementation.
-- Current user handoff: 2026-06-01 PCB2 is reported populated / in hand and
-  the route is unchanged. The DMM continuity / short-check gate is open as
-  no-power pending, not passed, and
-  `pcb2_populated_route_unchanged_dmm_pending_2026-06-01.md` is the current
-  action card.
+- Current user handoff: 2026-06-01 PCB2 was reported populated / in hand and
+  the route is unchanged. The 2026-06-19 no-power DMM summary is now recorded
+  as `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`.
+- Latest STDRIVE101 wake-related evidence:
+  `stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md` records
+  the pre-stimulus baseline as `CV`, `0.036 A`, `VS / 24V_FUSED = 24 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`.
+  This is not a wake result and does not validate PWM, Hall closed-loop
+  behavior, sensorless behavior, power-stage readiness, or motor readiness.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   Packet A / firmware feasibility proof for the current PCB2
   `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
   Hall route beyond no-power design review, a corrected FOC Workbench
-  configuration for `MY_FOC` or a replacement project, filled no-power DMM
-  continuity / short-check results, software Hall firmware implementation, and
-  all powered hardware evidence.
+  configuration for `MY_FOC` or a replacement project, software Hall firmware
+  implementation, and all powered hardware evidence.
 
 ## Safety Boundary
 
@@ -95,6 +113,26 @@ Forbidden in this directory and this P2 stage:
   populated-board handoff. It records PCB2 as soldered / in hand with unchanged
   `PA0/PA1/PB4 + PB3=LIN1 + P14/P15=3V3/GND` route, opens the DMM table as
   no-power pending, and keeps all powered / firmware readiness claims blocked.
+- `stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md`:
+  user-reported pre-stimulus baseline for the bounded STDRIVE101 single-input
+  wake diagnostic. It records `CV`, `0.036 A`, `VS / 24V_FUSED = 24 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`
+  before any `10 kohm` stimulus. Current decision is `pre-stimulus baseline
+  satisfied only`; it is not a wake result or powered-drive readiness.
+- `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`:
+  user-reported no-power DMM continuity / short-check summary for the current
+  PCB2 route. It records expected continuity for the `CN3_10-PA0`,
+  `CN3_11-PA1`, `CN3_12-PB4`, `CN3_2-PB3`, `CN3_14-3V3`,
+  `CN3_15-GND`, and `CN3_13-PB12` rows, plus no reported rail,
+  signal-to-rail, or Hall-line hard shorts. Raw ohm values were not provided.
+  It is not powered validation or readiness.
+- `software_hall_code_entry_boundary_after_dmm_2026-06-19.md`:
+  no-power post-DMM code-entry boundary for the future software Hall adapter.
+  Current decision is `Software Hall code-entry boundary after DMM summary /
+  PA0-PA1-PB4 debug-only adapter planning allowed / no firmware
+  implementation / no MCSDK hook / no Hall readiness`. It updates the entry
+  path after the DMM summary and keeps all future code work behind a separate
+  no-power authorization.
 - `source_packet_request_pack_2026-05-14.md`: concrete request pack for the
   next `.stmcx`, MotorControl screenshot, CN8/EDA/netlist, and STDRIVE101
   protection-path handoff.

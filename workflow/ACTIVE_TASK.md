@@ -6,6 +6,30 @@ implementation, not generated-code editing, not CubeMX / Workbench editing,
 not flashing, not Run / Debug, not hardware validation, and not powered
 testing.
 
+## Current 2026-06-19 STDRIVE101 Single-Input Wake Handoff
+
+- Task:
+  `TASK-2026-06-19-stdrive101-single-input-wake-handoff`.
+- Evidence:
+  `EV-2026-06-19-STDRIVE101-SINGLE-INPUT-WAKE-HANDOFF-001`.
+- Trigger phrase:
+  if the user says `开始单输入唤醒诊断`, `单输入唤醒`, `STDRIVE101 唤醒`, or
+  `REG12 唤醒`, route to this hardware handoff, not Codex mobile wakeup,
+  CodexMobileWeb, service wakeup, or automation wakeup.
+- Required files to read before giving the checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_plan_2026-06-19.md`,
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_wake_official_web_review_2026-06-19.md`,
+  and
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/out1_output_node_no_power_short_check_result_2026-06-19.md`.
+- Candidate diagnostic:
+  `CN3_14 / 3V3 -> 10 kohm series resistor -> CN3_2 / LIN1`.
+- Required powered setup if the user explicitly opens the execution gate:
+  motor disconnected, HSPY `24 V / 0.2 A`, CN3 connected as in the static
+  check, no firmware PWM, no Motor Pilot, no Motor Profiler.
+- Boundary:
+  this is not motor validation, not PWM validation, not Hall closed-loop, not
+  sensorless operation, not power-stage readiness, and not motor readiness.
+
 ## Current 2026-06-17 Three-Hour Optimization Sprint Addendum
 
 - Task:

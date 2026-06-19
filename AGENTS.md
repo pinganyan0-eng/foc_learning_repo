@@ -1,5 +1,34 @@
 # Codex 项目规则
 
+## 0.0.1 Current Hardware Phrase Route
+
+If the user says `开始单输入唤醒诊断`, `单输入唤醒`, `STDRIVE101 唤醒`, or
+`REG12 唤醒`, route to the STM32G474 FOC hardware handoff, not Codex mobile
+wakeup, CodexMobileWeb, service wakeup, or automation wakeup.
+
+Read these files before giving the checklist:
+
+```text
+AI_CONTEXT.md
+workflow/CURRENT_SNAPSHOT.md
+workflow/ACTIVE_TASK.md
+apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_plan_2026-06-19.md
+apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_wake_official_web_review_2026-06-19.md
+apps/stm32_g474_foc/mcsdk_no_power_precheck/out1_output_node_no_power_short_check_result_2026-06-19.md
+```
+
+The candidate diagnostic is:
+
+```text
+CN3_14 / 3V3 -> 10 kohm series resistor -> CN3_2 / LIN1
+HSPY: 24 V / 0.2 A
+Motor: disconnected
+PWM / Motor Pilot / Motor Profiler: forbidden
+```
+
+This is not a motor-readiness, power-stage-readiness, Hall closed-loop, or
+sensorless-readiness claim.
+
 ## 0.0 Low-Token Handoff Rule
 
 Default handoff starts with `AI_CONTEXT.md`, then `workflow/ACTIVE_TASK.md`,

@@ -1,3 +1,38 @@
+## 2026-06-19 STDRIVE101 Single-Input Wake Handoff Route Added
+
+- Added the hardware phrase handoff task:
+  `TASK-2026-06-19-stdrive101-single-input-wake-handoff`.
+- Evidence:
+  `EV-2026-06-19-STDRIVE101-SINGLE-INPUT-WAKE-HANDOFF-001`.
+- Decision:
+  `STDRIVE101 single-input wake phrase route / qiansai root AGENTS bridge /
+  project Skill no-power route / no hardware execution`.
+- Scope:
+  added a root-level `AGENTS.md` in the outer `qiansai` workspace so a new
+  Codex session starting outside the Git repo routes STM32G474 FOC work to
+  `foc_learning_repo/`. Updated `AI_CONTEXT.md`,
+  `workflow/CURRENT_SNAPSHOT.md`, `workflow/ACTIVE_TASK.md`, repo
+  `AGENTS.md`, and the project Skill no-power boundary so the phrase
+  `开始单输入唤醒诊断` means the STDRIVE101 `CN3_2 / LIN1` single-input wake
+  diagnostic, not Codex mobile wakeup, CodexMobileWeb, service wakeup, or
+  automation wakeup.
+- Required context before giving the future checklist:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_plan_2026-06-19.md`,
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_wake_official_web_review_2026-06-19.md`,
+  and
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/out1_output_node_no_power_short_check_result_2026-06-19.md`.
+- Candidate diagnostic remains:
+  `CN3_14 / 3V3 -> 10 kohm series resistor -> CN3_2 / LIN1`, motor
+  disconnected, HSPY `24 V / 0.2 A`, no firmware PWM, no Motor Pilot, and no
+  Motor Profiler.
+- Installed the updated project Skill to
+  `C:\Users\gregrg\.codex\skills\stm32g474-foc-assistant`.
+- Boundary:
+  this is handoff and routing evidence only. It does not execute the wake
+  diagnostic, inspect hardware, change firmware, connect a motor, start PWM,
+  run Motor Pilot, run Motor Profiler, claim Hall closed-loop, claim
+  sensorless operation, or claim power-stage / motor readiness.
+
 ## 2026-06-17 AI Maintenance Audit Readability Status Added
 
 - Added the no-power repository maintenance task:

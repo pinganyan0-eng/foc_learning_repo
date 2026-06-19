@@ -1,6 +1,6 @@
 # Current Snapshot
 
-Last updated: 2026-06-17
+Last updated: 2026-06-19
 
 This is the short current-state page for low-token AI handoff. It summarizes
 the current project stage and safety boundary. Historical detail remains in
@@ -12,6 +12,19 @@ the current project stage and safety boundary. Historical detail remains in
   project.
 - Current stage: P2 MCSDK no-power precheck and software Hall no-power
   firmware-entry planning.
+- Current hardware handoff: the 2026-06-19 no-power and static checks have
+  reached the execution-gate decision for a bounded STDRIVE101 single-input
+  wake diagnostic. If the user says `开始单输入唤醒诊断` or `单输入唤醒`, this means
+  `CN3_14 / 3V3 -> 10 kohm series resistor -> CN3_2 / LIN1` with motor
+  disconnected and HSPY `24 V / 0.2 A`. It does not mean Codex mobile wakeup,
+  service wakeup, or automation wakeup. Before giving steps, read
+  `stdrive101_reg12_single_input_wake_plan_2026-06-19.md`,
+  `stdrive101_reg12_wake_official_web_review_2026-06-19.md`, and
+  `out1_output_node_no_power_short_check_result_2026-06-19.md`.
+- The single-input wake diagnostic remains a bounded power-stage diagnostic:
+  no motor, no firmware PWM, no Motor Pilot, no Motor Profiler, no Hall
+  closed-loop claim, no sensorless claim, and no power-stage or motor
+  readiness claim.
 - Current real-world blocker: PCB2 is now reported populated / in hand, and
   the user confirmed the route is unchanged. The DMM continuity / short-check
   gate is open as a no-power pending action, not passed. The active handoff is

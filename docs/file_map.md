@@ -9,7 +9,7 @@
 | `ai_contract_check_strict` | `tools/check_ai_contracts.py --strict` | Post-review target: user review clears strict warnings; Codex must not self-clear required review. |
 | `dangerous_claim_scan_surface` | `tools/check_ai_contracts.py` | Static no-power scan for dangerous positive hardware claims across project truth, workflow, Skill, no-power precheck, deliverable, interface, and learning text. |
 | `entry_readability_contract` | `tools/check_ai_contracts.py` | Strict UTF-8 and clean-entry-header contract for `workflow/evidence_register.md` and `deliverables/submission_checklist.md`; preserves readable AI handoff without claiming full historical mojibake repair. |
-| `retrieval_eval_queries` | `retrieval_eval/queries.json` | Regression cases for dual-teacher guard, PCB2 Hall route, DMM pending/no-power boundary, ACTIVE_TASK review lifecycle, ESP32 real-time boundary, automation no-write boundary, learning loop, closeout checklist, repo-maintenance DoD, project Skill v2 router, and dangerous claim scan coverage. |
+| `retrieval_eval_queries` | `retrieval_eval/queries.json` | Regression cases for dual-teacher guard, PCB2 Hall route, DMM pending/no-power boundary, ACTIVE_TASK review lifecycle, ESP32 real-time boundary, automation no-write boundary, learning loop, closeout checklist, repo-maintenance DoD, project Skill v2 router, subagent protocol, and dangerous claim scan coverage. |
 | `search_local_v2_eval` | `tools/search_local_v2.py --eval` | Source-finding regression check; passing it is not hardware validation. |
 | `project_skill_router` | `codex_skills/stm32g474-foc-assistant/SKILL.md` | Project Skill v2 router for STM32G474 FOC no-power work, learning, evidence, and workflow maintenance. |
 | `project_skill_navigation` | `codex_skills/stm32g474-foc-assistant/references/project-navigation.md` | Project Skill reference for fact priority, context mode selection, task routing, and core commands. |
@@ -18,6 +18,7 @@
 | `project_skill_workflow` | `codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md` | Project Skill reference for AI/workflow maintenance, install flow, automation boundary, and closeout commands. |
 | `project_skill_install_check` | `tools/check_project_skill_install.py` | Read-only checker for repo-local project Skill source and installed user Skill drift. |
 | `ai_maintenance_audit_runner` | `tools/run_ai_maintenance_audit.py` | Consolidated no-power AI maintenance audit runner for Skill validation, install drift, context pack, contracts, retrieval, tests, compileall, full `git status --short` dirty-worktree handoff capture, parsed `workspace_status` summary with `status_paths`, `path_groups`, ordered `focus_groups`, `handoff_review_queue`, `contract_status`, `readability_status`, and top-level `closeout_summary`, diff check, and optional Markdown report output. |
+| `three_hour_optimization_report` | `workflow/three_hour_optimization_report_2026-06-17.md` | Structured optimization sprint report covering subagent roles, timestamped progress, mid-project review, Obsidian Chinese learning notes, retrieval maintainability, verification plan, and efficiency recommendations. |
 | `automation_playbook` | `workflow/automation_playbook.md` | Project-side automation contract; active automations are read/report only with `No repo writes`. |
 | `learning_feedback_loop` | `workflow/learning_feedback_loop.md` | Learning memory update contract for session notes, weak points, review queue, and normalization. |
 | `session_close_checklist` | `workflow/session_close_checklist.md` | Closeout checklist for teaching, engineering, experiment, hardware-adjacent, and pre-submit checks. |
@@ -88,7 +89,12 @@
 | --- | --- |
 | `.obsidian/` | 打开仓库即用的 Obsidian vault 配置、插件启用清单、模板路径和样式片段 |
 | `notes/00_home/foc_dashboard.md` | Obsidian 总控台，聚合当前状态、项目事实、学习、实验、调试和答辩入口 |
+| `notes/10_learning/learning_index.md` | 中文优先学习索引，定义概念卡、术语卡、复习卡、标签、交叉链接和 Dataview 查询 |
+| `notes/10_learning/chinese/` | 中文优先 STM32/FOC 学习样例卡片，包含概念、术语和复习卡 |
 | `notes/99_templates/` | 日报、学习卡片、实验草稿、问题闭环、资料核查和答辩素材模板 |
+| `notes/99_templates/chinese_concept_card.md` | 中文概念卡模板 |
+| `notes/99_templates/chinese_term_card.md` | 中文术语卡模板 |
+| `notes/99_templates/chinese_review_card.md` | 中文复习卡模板 |
 | `notes/90_system/plugin_setup.md` | Obsidian 插件安装与配置说明 |
 
 `notes/` 是个人笔记层，不是项目事实源。可复核结论仍需回写到 `docs/`、`experiments/` 或 `interfaces/`。

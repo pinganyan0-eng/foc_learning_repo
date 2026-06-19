@@ -1,6 +1,6 @@
 # Current Snapshot
 
-Last updated: 2026-06-08
+Last updated: 2026-06-17
 
 This is the short current-state page for low-token AI handoff. It summarizes
 the current project stage and safety boundary. Historical detail remains in
@@ -138,6 +138,15 @@ the current project stage and safety boundary. Historical detail remains in
 - Dual-teacher concept-only role guard is now explicit: ChatGPT teaches pure
   theory/concept turns, while Codex provides the ChatGPT prompt, reviews and
   records returned learning evidence, and keeps repo-side engineering work.
+- The AI architecture doc now also defines a structured subagent communication
+  protocol with hierarchical task decomposition, context filtering, a summary gate,
+  and an old-flat-vs-new-filtered comparison. Subagent output is
+  summarized before it reaches the main-agent decision loop.
+- A three-hour optimization sprint report now exists at
+  `workflow/three_hour_optimization_report_2026-06-17.md`. It records
+  subagent roles, timestamped progress, mid-project review, Obsidian Chinese
+  learning note enhancements, retrieval-maintainability changes, verification
+  commands, and efficiency recommendations.
 
 ## Current Safety Boundary
 

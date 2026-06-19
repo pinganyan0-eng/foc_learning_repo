@@ -44,6 +44,15 @@ Unless a later dated phase-gate decision explicitly opens the action, do not do 
 
 Current Packet A selected fields, software Hall firmware-entry plan, software Hall MCSDK speed/position feedback interface review, and no-power Debug build-only pass may be accepted only as no-power generated-source / interface / planning / compile evidence. They do not prove PCB2 physical routing, continuity, protection behavior, firmware runtime behavior, MCSDK hook readiness, Hall closed-loop behavior, or powered behavior.
 
+Hardware-stage sync guard: before any hardware-adjacent next-step answer,
+separate three sources: repo snapshot, user's latest现场确认, and raw
+measurement evidence. If the repo snapshot says an older gate is pending but
+the user states a newer现场 stage, such as `CN3 已连接 + B1 不按 +
+24V/0.2A 限流静态电源/nFAULT 检查`, do not silently downgrade back to the
+older gate. First state the conflict, repeat the adopted现场 stage, keep it as
+a candidate stage until raw readings are recorded, and forbid any readiness
+claim that lacks measurement evidence.
+
 ## AI Architecture v2 Handoff
 
 - Use `ai_maintenance` context when the task changes AI workflow docs, local

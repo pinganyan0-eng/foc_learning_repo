@@ -100,6 +100,27 @@ For STM32G474 FOC work, the gate must include the current safety boundary when
 the topic touches PWM, STDRIVE101, nFAULT, current sensing, Hall/SMO, MCSDK,
 Motor Profiler, 24V, the power board, or the motor.
 
+Before giving the next hardware step, Codex must state which hardware stage it
+is adopting and where that stage came from:
+
+- `repo snapshot`: the latest local status files.
+- `user latest现场确认`: the user's newest statement in the current thread.
+- `raw measurement evidence`: DMM readings, current-limit behavior, voltage
+  measurements, screenshots, logs, or photos.
+
+If these sources conflict, Codex must stop and name the conflict before
+continuing. A stale repo snapshot must not silently override the user's latest
+现场 stage. The user's latest stage may be used to frame the next bounded
+checklist, but it is not a passed result until raw measurement evidence is
+recorded.
+
+Example: if the repo says `DMM pending` but the user states `CN3 已连接 + B1
+不按 + 24V/0.2A 限流静态电源/nFAULT 检查`, Codex must first say that the
+repo snapshot appears stale, adopt that现场 stage as the working stage, and
+keep the checklist limited to static power / nFAULT measurements. It must not
+claim power-stage readiness, Hall readiness, motor readiness, or powered
+validation from the stage statement alone.
+
 Default P2 boundary unless the phase gate is explicitly cleared:
 
 - No 24V.

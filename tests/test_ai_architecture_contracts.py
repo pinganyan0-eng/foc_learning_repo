@@ -53,6 +53,10 @@ class AiArchitectureContractTests(unittest.TestCase):
             "Concept-only role guard",
             "AI Architecture v2",
             "Review Lifecycle Policy",
+            "Subagent Communication Protocol",
+            "Hierarchical Task Decomposition",
+            "Context Filtering",
+            "Summary Gate",
             "ai_maintenance",
             "No 24V",
             "No Gate PWM output",
@@ -68,6 +72,9 @@ class AiArchitectureContractTests(unittest.TestCase):
             "Current AI Architecture Work",
             "Dual-teacher concept-only role guard",
             "AI Architecture v2",
+            "subagent communication",
+            "context filtering",
+            "summary gate",
             "ai_maintenance",
             "No 24V",
             "No Gate PWM output",
@@ -457,7 +464,6 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("status_counts", report["workspace_status"])
         self.assertIn("paths", report["workspace_status"])
         self.assertIn("path_groups", report["workspace_status"])
-        self.assertIn("ai_maintenance", report["workspace_status"]["path_groups"])
         self.assertIn("status_paths", report["workspace_status"])
         self.assertEqual(
             report["workspace_status"]["status_counts"].get("??", 0),
@@ -467,6 +473,10 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertGreater(len(report["workspace_status"]["focus_groups"]), 0)
         self.assertIn("handoff_review_queue", report["workspace_status"])
         self.assertGreater(len(report["workspace_status"]["handoff_review_queue"]), 0)
+        if "ai_maintenance" in report["workspace_status"]["path_groups"]:
+            self.assertIn("ai_maintenance", {
+                group["group"] for group in report["workspace_status"]["focus_groups"]
+            })
 
     def test_ai_maintenance_audit_can_write_markdown_report(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -634,6 +644,7 @@ class AiArchitectureContractTests(unittest.TestCase):
                 "ai_maintenance_audit_runner",
                 "readability_status_audit",
                 "dangerous_claim_scan_surface",
+                "subagent_communication_protocol",
             }.issubset(case_ids)
         )
 

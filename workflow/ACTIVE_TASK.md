@@ -6,6 +6,57 @@ implementation, not generated-code editing, not CubeMX / Workbench editing,
 not flashing, not Run / Debug, not hardware validation, and not powered
 testing.
 
+## Current 2026-06-17 Three-Hour Optimization Sprint Addendum
+
+- Task:
+  `TASK-2026-06-17-three-hour-optimization-sprint`.
+- Evidence:
+  `EV-2026-06-17-THREE-HOUR-OPTIMIZATION-SPRINT-001`.
+- Decision:
+  `Three-hour optimization sprint / subagent protocol / Obsidian Chinese learning notes / retrieval maintainability / no hardware or firmware action`.
+- Scope:
+  implemented the requested structured optimization sprint across AI
+  architecture, Obsidian Chinese learning notes, and low-risk retrieval
+  maintainability. `workflow/three_hour_optimization_report_2026-06-17.md`
+  records the timebox, role split, timestamped progress, mid-project review,
+  completed components, retrieval checks, verification plan, and efficiency
+  recommendations.
+- Integration:
+  subagent exploration and implementation outputs were filtered before
+  main-agent integration. Failed subagent slices were inspected and recovered
+  by the main agent rather than accepted blindly.
+- Boundary:
+  repo-maintenance documentation, notes, retrieval, and tests only. No firmware
+  implementation, no generated-code edit, no CubeMX/MCSDK edit, no flash, no
+  24V, no power-board connection, no motor connection, no Gate PWM, no Motor
+  Profiler, no Hall closed-loop, and no sensorless / SMO claim.
+- Review lifecycle:
+  this addendum does not mark the earlier `done + Review Required` software
+  Hall task as `reviewed`; user review still clears strict warnings.
+
+## Current 2026-06-17 AI Architecture Subagent Protocol Addendum
+
+- Task:
+  `TASK-2026-06-17-ai-architecture-subagent-protocol`.
+- Evidence:
+  `EV-2026-06-17-AI-ARCHITECTURE-SUBAGENT-PROTOCOL-001`.
+- Decision:
+  `AI architecture subagent protocol / hierarchical task decomposition / context filtering / summarized handoff / no hardware or firmware action`.
+- Scope:
+  updated `docs/00_project_truth/ai_architecture.md` with a structured
+  subagent communication protocol, hierarchical task decomposition, context
+  filtering rules, a summary gate, and an old-flat-vs-new-filtered comparison.
+  The status files now point at the updated architecture contract so the
+  low-token handoff path keeps the new protocol visible.
+- Boundary:
+  repo-maintenance documentation only. No firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+- Review lifecycle:
+  this addendum does not mark the earlier `done + Review Required` software
+  Hall task as `reviewed`; user review still clears strict warnings.
+
 ## Current 2026-06-17 AI Maintenance Audit Readability Status Addendum
 
 - Task:

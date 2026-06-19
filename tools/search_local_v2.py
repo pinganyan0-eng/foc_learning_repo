@@ -130,6 +130,74 @@ class SearchHit:
     item: dict
 
 
+@dataclass(frozen=True)
+class PhraseBonusRule:
+    name: str
+    bonus: float
+    query_any: tuple[str, ...] = ()
+    text_any: tuple[str, ...] = ()
+    path: str = ""
+
+
+PHRASE_BONUS_RULES: tuple[PhraseBonusRule, ...] = (
+    PhraseBonusRule(
+        "audit_runner_path",
+        0.52,
+        query_any=(
+            "ai maintenance audit",
+            "run_ai_maintenance_audit",
+            "maintenance audit runner",
+        ),
+        path="tools/run_ai_maintenance_audit.py",
+    ),
+    PhraseBonusRule(
+        "readability_status_path",
+        0.52,
+        query_any=(
+            "readability_status",
+            "legacy debt",
+            "legacy mojibake debt",
+            "entry headers ok",
+        ),
+        path="tools/run_ai_maintenance_audit.py",
+    ),
+    PhraseBonusRule(
+        "readability_contract_path",
+        0.52,
+        query_any=("readability", "mojibake", "submission checklist", "evidence register"),
+        path="tools/check_ai_contracts.py",
+    ),
+    PhraseBonusRule(
+        "workflow_closeout_path",
+        0.32,
+        query_any=("workflow_maintenance", "closeout", "收工"),
+        text_any=("session_close_checklist", "收工检查清单"),
+        path="workflow/session_close_checklist.md",
+    ),
+    PhraseBonusRule(
+        "automation_path",
+        0.32,
+        query_any=("automation",),
+        text_any=("no repo writes",),
+        path="workflow/automation_playbook.md",
+    ),
+    PhraseBonusRule(
+        "learning_feedback_path",
+        0.32,
+        query_any=("learning", "feedback"),
+        text_any=("learning_feedback_loop", "learning feedback loop"),
+        path="workflow/learning_feedback_loop.md",
+    ),
+    PhraseBonusRule(
+        "repo_maintenance_path",
+        0.32,
+        query_any=("repo maintenance", "仓库维护"),
+        text_any=("仓库维护任务",),
+        path="workflow/definition_of_done.md",
+    ),
+)
+
+
 def normalize_path(path: str) -> str:
     return path.replace("\\", "/")
 
@@ -175,50 +243,57 @@ def source_bonus(path: str) -> float:
     return bonus
 
 
+def contains_any(haystack: str, needles: tuple[str, ...]) -> bool:
+    return any(needle in haystack for needle in needles)
+
+
+def configured_phrase_bonus(
+    *,
+    query_lower: str,
+    text_lower: str,
+    normalized_path: str,
+) -> float:
+    bonus = 0.0
+    for rule in PHRASE_BONUS_RULES:
+        if rule.query_any and not contains_any(query_lower, rule.query_any):
+            continue
+        if rule.text_any and not contains_any(text_lower, rule.text_any):
+            continue
+        if rule.path and normalized_path != rule.path:
+            continue
+        bonus += rule.bonus
+    return bonus
+
+
 def phrase_bonus(query: str, text: str, path: str = "") -> float:
+    query_lower = query.lower()
     query_terms = set(tokenize(query))
     text_lower = text.lower()
     normalized_path = normalize_path(path)
-    bonus = 0.0
+    bonus = configured_phrase_bonus(
+        query_lower=query_lower,
+        text_lower=text_lower,
+        normalized_path=normalized_path,
+    )
 
     if {"j", "e", "o", "c"} & query_terms and "jeoc" in text_lower:
         bonus += 0.03
-    if "printf" in query.lower() and "printf" in text_lower:
+    if "printf" in query_lower and "printf" in text_lower:
         bonus += 0.06
     if "中断" in query and ("isr" in text_lower or "中断" in text):
         bonus += 0.04
-    if "hall" in query.lower() and all(term.lower() in text_lower for term in ("pa0", "pa1", "pb4")):
+    if "hall" in query_lower and all(term.lower() in text_lower for term in ("pa0", "pa1", "pb4")):
         bonus += 0.08
-    if "dmm" in query.lower() and "pending" in query.lower() and "dmm" in text_lower and "pending" in text_lower:
+    if "dmm" in query_lower and "pending" in query_lower and "dmm" in text_lower and "pending" in text_lower:
         bonus += 0.08
-    if "review" in query.lower() and "lifecycle" in query.lower() and ("reviewed" in text_lower or "review required" in text_lower):
+    if "review" in query_lower and "lifecycle" in query_lower and ("reviewed" in text_lower or "review required" in text_lower):
         bonus += 0.07
-    if "ai_maintenance" in query.lower() and "ai_maintenance" in text:
+    if "ai_maintenance" in query_lower and "ai_maintenance" in text:
         bonus += 0.07
     if (
-        "ai maintenance audit" in query.lower()
-        or "run_ai_maintenance_audit" in query.lower()
-        or "maintenance audit runner" in query.lower()
-    ) and normalized_path == "tools/run_ai_maintenance_audit.py":
-        bonus += 0.52
-    if (
-        "readability_status" in query.lower()
-        or "legacy debt" in query.lower()
-        or "legacy mojibake debt" in query.lower()
-        or "entry headers ok" in query.lower()
-    ) and normalized_path == "tools/run_ai_maintenance_audit.py":
-        bonus += 0.52
-    if (
-        "readability" in query.lower()
-        or "mojibake" in query.lower()
-        or "submission checklist" in query.lower()
-        or "evidence register" in query.lower()
-    ) and normalized_path == "tools/check_ai_contracts.py":
-        bonus += 0.52
-    if (
-        "dangerous" in query.lower()
-        or "positive claim" in query.lower()
-        or "hardware claim" in query.lower()
+        "dangerous" in query_lower
+        or "positive claim" in query_lower
+        or "hardware claim" in query_lower
     ) and (
         "dangerous_claim_scan_paths" in text_lower
         or "dangerous_positive_claims" in text_lower
@@ -226,33 +301,26 @@ def phrase_bonus(query: str, text: str, path: str = "") -> float:
         bonus += 0.16
         if normalized_path == "tools/check_ai_contracts.py":
             bonus += 0.24
-    if ("skill" in query.lower() or "stm32g474-foc-assistant" in query.lower()) and (
+    if ("skill" in query_lower or "stm32g474-foc-assistant" in query_lower) and (
         "this skill is a v2 router" in text_lower
         or "project skill maintenance" in text_lower
         or "stm32g474-foc-assistant" in text_lower
     ):
         bonus += 0.16
-    if ("workflow_maintenance" in query.lower() or "closeout" in query.lower() or "收工" in query) and (
-        "session_close_checklist" in text_lower or "收工检查清单" in text
+    if (
+        ("workflow_maintenance" in query_lower or "closeout" in query_lower)
+        and "session_close_checklist" in text_lower
     ):
         bonus += 0.16
-        if normalized_path == "workflow/session_close_checklist.md":
-            bonus += 0.32
-    if "automation" in query.lower() and "no repo writes" in text_lower:
+    if "automation" in query_lower and "no repo writes" in text_lower:
         bonus += 0.16
-        if normalized_path == "workflow/automation_playbook.md":
-            bonus += 0.32
-    if ("learning" in query.lower() or "feedback" in query.lower()) and (
+    if ("learning" in query_lower or "feedback" in query_lower) and (
         "learning_feedback_loop" in text_lower or "learning feedback loop" in text_lower
     ):
         bonus += 0.16
-        if normalized_path == "workflow/learning_feedback_loop.md":
-            bonus += 0.32
-    if ("repo maintenance" in query.lower() or "仓库维护" in query) and "仓库维护任务" in text:
+    if ("repo maintenance" in query_lower or "仓库维护" in query) and "仓库维护任务" in text:
         bonus += 0.16
-        if normalized_path == "workflow/definition_of_done.md":
-            bonus += 0.32
-    if "esp32" in query.lower() and "foc" in text_lower and ("实时" in text or "real-time" in text_lower):
+    if "esp32" in query_lower and "foc" in text_lower and ("实时" in text or "real-time" in text_lower):
         bonus += 0.06
 
     return bonus

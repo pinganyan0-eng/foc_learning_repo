@@ -49,6 +49,66 @@
   connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
   closed-loop, and no sensorless / SMO claim.
 
+## 2026-06-17 Three-Hour Optimization Sprint Implemented
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-17-three-hour-optimization-sprint`.
+- Evidence:
+  `EV-2026-06-17-THREE-HOUR-OPTIMIZATION-SPRINT-001`.
+- Decision:
+  `Three-hour optimization sprint / subagent protocol / Obsidian Chinese learning notes / retrieval maintainability / no hardware or firmware action`.
+- Implemented a structured optimization sprint using subagent discovery and
+  bounded implementation slices. All subagent outputs were filtered into
+  summaries before main-agent integration.
+- Architecture:
+  added the subagent communication protocol, hierarchical task decomposition,
+  context filtering, summary gate, and before/after comparison in
+  `docs/00_project_truth/ai_architecture.md`.
+- Obsidian:
+  added Chinese-first learning tags, concept/glossary/review templates, sample
+  learning cards, cross-linking strategy, Dataview queries, and retrieval
+  checks under `notes/10_learning/` and `notes/99_templates/`.
+- Project optimization:
+  finished a focused maintainability refactor in `tools/search_local_v2.py`
+  by moving path-specific phrase boosts into configured rules, with regression
+  coverage in `tests/test_search_local_v2.py`.
+- Report:
+  `workflow/three_hour_optimization_report_2026-06-17.md` records the timebox,
+  subagent roles, timestamped progress log, mid-project review, completed
+  components, retrieval checks, verification plan, and efficiency
+  recommendations.
+- Boundary:
+  repo-maintenance documentation, notes, retrieval, and tests only. This does
+  not change firmware, generated code, CubeMX/MCSDK config, hardware
+  parameters, DMM results, or powered-test evidence.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
+## 2026-06-17 AI Architecture Subagent Protocol Added
+
+- Added the no-power repository maintenance task:
+  `TASK-2026-06-17-ai-architecture-subagent-protocol`.
+- Evidence:
+  `EV-2026-06-17-AI-ARCHITECTURE-SUBAGENT-PROTOCOL-001`.
+- Decision:
+  `AI architecture subagent protocol / hierarchical task decomposition / context filtering / summarized handoff / no hardware or firmware action`.
+- Updated `docs/00_project_truth/ai_architecture.md` with a structured
+  subagent communication protocol, hierarchical task decomposition, context
+  filtering rules, a summary gate, and a before/after comparison of old flat
+  handoff versus the new filtered hierarchy.
+- Mirrored the architecture update in `workflow/CURRENT_SNAPSHOT.md` and
+  `workflow/ACTIVE_TASK.md` so low-token handoff keeps the new protocol visible.
+- Boundary:
+  this is repo-maintenance documentation only. It does not change firmware,
+  generated code, CubeMX/MCSDK config, hardware parameters, DMM results, or
+  powered-test evidence.
+- Safety boundary unchanged: no DMM table fill, no firmware implementation, no
+  generated-code edit, no CubeMX/MCSDK edit, no flash, no 24V, no power-board
+  connection, no motor connection, no Gate PWM, no Motor Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+
 ## 2026-06-10 Entry Readability Contract Added
 
 - Added the no-power repository maintenance task:

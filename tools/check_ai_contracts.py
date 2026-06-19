@@ -61,6 +61,7 @@ REQUIRED_RETRIEVAL_CASES = {
     "readability_status_audit",
     "dangerous_claim_scan_surface",
     "entry_readability_contract",
+    "subagent_communication_protocol",
 }
 
 WORKFLOW_MAINTENANCE_FILES = (
@@ -303,6 +304,10 @@ def check_snapshot_and_architecture(report: CheckReport) -> None:
             "Review Lifecycle Policy",
             "user review clears strict warnings",
             "ai_maintenance",
+            "Subagent Communication Protocol",
+            "Hierarchical Task Decomposition",
+            "Context Filtering",
+            "Summary Gate",
         ):
             if phrase not in architecture:
                 report.warn(f"ai_architecture.md does not mention {phrase}.")
@@ -311,6 +316,8 @@ def check_snapshot_and_architecture(report: CheckReport) -> None:
         snapshot = read("workflow/CURRENT_SNAPSHOT.md")
         if "AI Architecture v2" not in snapshot:
             report.warn("CURRENT_SNAPSHOT.md does not mention AI Architecture v2.")
+        if "subagent communication" not in snapshot:
+            report.warn("CURRENT_SNAPSHOT.md does not mention subagent communication.")
 
 
 def check_indexes(report: CheckReport) -> None:
@@ -340,6 +347,7 @@ def check_indexes(report: CheckReport) -> None:
         "readability_status",
         "dangerous_claim_scan_surface",
         "entry_readability_contract",
+        "three_hour_optimization_report",
         "project_skill_router",
         "project_skill_no_power",
         "project_skill_workflow",
@@ -369,6 +377,7 @@ def check_indexes(report: CheckReport) -> None:
             "readability_status",
             "entry readability headers",
             "dangerous positive hardware claims",
+            "PHRASE_BONUS_RULES",
         ):
             if phrase not in tools_text:
                 report.warn(f"tools/README.md does not mention {phrase}.")

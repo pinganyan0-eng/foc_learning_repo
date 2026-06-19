@@ -23,5 +23,17 @@ tags:
 
 - [[notes/00_home/foc_dashboard|FOC 总控台]]
 - [[notes/00_home/today|今日工作台]]
+- [[notes/10_learning/learning_index|中文学习索引]]
 - [[notes/90_system/obsidian_workflow|笔记工作流]]
 - [[notes/90_system/plugin_setup|插件安装清单]]
+
+## 中文学习卡片
+
+- 中文优先概念、术语和复习卡统一放在 `notes/10_learning/chinese/`。
+- 新卡优先从 `notes/99_templates/chinese_concept_card.md`、
+  `notes/99_templates/chinese_term_card.md` 或
+  `notes/99_templates/chinese_review_card.md` 创建。
+- 基础标签使用 `foc/learning/zh`，再叠加 `foc/concept`、
+  `foc/glossary` 或 `foc/review`。
+- 这些卡片是个人学习材料；影响项目事实、实验结论、接口契约或答辩卖点时，
+  仍要回写到 `docs/`、`experiments/`、`interfaces/` 或 `deliverables/`。

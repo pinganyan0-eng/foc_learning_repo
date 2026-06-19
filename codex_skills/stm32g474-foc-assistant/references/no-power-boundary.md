@@ -14,6 +14,26 @@ review, interface review, host-side checks, and build-only records. It cannot
 support powered behavior, motor behavior, Hall closed-loop behavior, or
 sensorless behavior.
 
+## Hardware Stage Sync Guard
+
+Before any hardware-adjacent next-step answer, separate:
+
+- repo snapshot;
+- user's latest现场确认;
+- raw measurement evidence.
+
+If the repo snapshot and the user's latest现场确认 disagree, state the conflict
+before giving a checklist. Do not silently fall back to an older repo gate. Use
+the user's latest现场确认 only as the working stage for the next bounded
+measurement, not as proof that the stage passed.
+
+For example, if local status still says `DMM pending` but the user says `CN3 已
+连接 + B1 不按 + 24V/0.2A 限流静态电源/nFAULT 检查`, treat the repo status as
+possibly stale, repeat that现场 stage, and limit the response to static
+power/nFAULT readings with current-limit and rollback rules. Do not claim
+continuity, power-stage readiness, Hall readiness, motor readiness, or powered
+validation without raw readings.
+
 ## Forbidden Actions And Claims
 
 Unless a later dated phase-gate decision opens the action:

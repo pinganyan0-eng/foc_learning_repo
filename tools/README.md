@@ -56,6 +56,9 @@
 - `build_vector_store.py`：构建本地检索索引。
 - `ask_local.py`：基于本地资料问答。
 - `search_local_v2.py`：带最低分阈值、事实源优先级、查询扩展和检索评测的本地证据检索。
+  维护路径定向加分时，优先更新 `PhraseBonusRule` / `PHRASE_BONUS_RULES`
+  而不是继续添加长串条件分支，并补充 `tests/test_search_local_v2.py`
+  回归用例。
 - `build_context_pack.py`：按任务模式生成低 token 上下文包，避免每次读取长历史文件；`workflow_maintenance` 覆盖自动化、学习闭环、收工、DoD 和上交清单维护。
 - `check_ai_contracts.py`：检查 AI 架构入口、当前任务、安全边界、学习队列、项目工作流契约和索引是否漂移。
 - `record_learning_session.py`：追加学习记录，并在出现薄弱点时自动分配稳定 `WP-001` 编号。

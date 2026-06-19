@@ -156,6 +156,60 @@ Only the main Codex execution path should write project truth files such as
 `CURRENT_STATUS.md`, `workflow/ACTIVE_TASK.md`, `workflow/evidence_register.md`,
 and `learning/*`.
 
+## Subagent Communication Protocol
+
+Subagents are scoped helpers, not parallel owners. The main agent keeps the
+task contract, decides what to ask, and merges the result before any repo
+write or user-facing claim.
+
+### Hierarchical Task Decomposition
+
+Use a simple top-down chain:
+
+1. User request.
+2. Main-agent task packet with goal, boundary, and expected output.
+3. Scoped subagent request with only the files or facts needed.
+4. Subagent response with paths, facts, uncertainty, and conflicts.
+5. Main-agent synthesis into one decision or one repo edit.
+
+Subagents do not receive the whole workspace by default. They receive the
+minimum filtered context needed for their role, and they return only the
+minimum evidence needed for the main agent to continue.
+
+### Context Filtering
+
+Filter context before each subagent call:
+
+- Include only the task sentence, the local rule that matters, and the exact
+  source files or command output needed.
+- Exclude long history, unrelated status pages, and broad legacy notes unless
+  the current question depends on them.
+- Preserve source paths and concrete uncertainties, but omit raw dumps when a
+  short summary is enough.
+- If two sources conflict, keep the conflict visible in the subagent summary
+  and defer the resolution to the main agent.
+
+### Summary Gate
+
+Subagent output must be summarized before it reaches the main agent's final
+decision loop.
+
+- The subagent returns a short evidence digest, not a transcript.
+- The main agent collapses repeated facts, keeps source paths, and records only
+  the decision-relevant points.
+- If a subagent finds a mismatch, the summary must name the mismatch and the
+  most conservative interpretation.
+
+### Flat Handoff Versus Filtered Hierarchy
+
+| Old flat handoff | New filtered hierarchy |
+| --- | --- |
+| Read large context once, then pass verbose notes directly. | Decompose the task, then send each helper only the filtered slice it needs. |
+| History, current facts, and guesses often arrive mixed together. | Facts, uncertainty, and conflicts stay separated until main-agent synthesis. |
+| Every helper sees almost the same bundle. | Each helper sees a role-specific bundle with explicit boundaries. |
+| The next step re-reads long notes to recover the real signal. | The main agent receives a short summary with source paths and decision points. |
+| Responsibility can blur between helpers and the main turn. | The main agent keeps ownership of the final repo action and final claim. |
+
 ## Automation Policy
 
 Automations should stay cheap and conservative:

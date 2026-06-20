@@ -16,7 +16,7 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   `python tools/build_context_pack.py --mode ai_maintenance`.
 - Project workflow maintenance context:
   `python tools/build_context_pack.py --mode workflow_maintenance`.
-- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance.
+- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance / STDRIVE101 single-input wake fault result and nFAULT cause review recorded.
 - Current PCB2 no-power DMM summary result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`
   records the user-reported continuity rows as `通` for
@@ -53,6 +53,31 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and
   `REG12 = 0.33 V` before any `10 kohm` stimulus was installed. This is
   baseline evidence only, not a wake result.
+- Current single-input wake result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md`
+  records the user-reported bounded diagnostic with
+  `CN3_14 / 3V3 -> 10 kohm -> CN3_2 / LIN1`: HSPY stayed `CV`,
+  current was `0.046 A`, `LIN1 = 3 V`, `REG12 = 12 V`, and
+  `nFAULT = 0 V`. The user later reported post-off
+  `VS / 24V_FUSED = 0 V`. Decision: `REG12` rose under the single-input
+  stimulus, but `nFAULT = 0 V` is a stop-rule event; no retry, no alternate
+  input stimulus, no motor, no PWM, no Motor Pilot / Profiler, and no
+  powered-drive readiness claim.
+- Current nFAULT cause review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md`
+  ranks VDS monitoring after the `LIN1` low-side command as the primary
+  review target, with REG12 sequence / accidental external REG12 tie, CP
+  comparator, thermal shutdown, and external nFAULT pull-down as secondary
+  targets. Next checkpoint is no-power DMM on `LIN1` and `nFAULT`, or a
+  marked source packet for `SCREF`, `CP`, `REG12`, and `OUT1`; no powered
+  retry is authorized.
+- Current nFAULT no-power DMM result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_no_power_dmm_result_2026-06-20.md`
+  records `LIN1-3V3 = 66 kohm no beep`, `LIN1-GND = 60 kohm no beep`,
+  `nFAULT-3V3 = 5 kohm no beep`, and `nFAULT-GND = 500 ohm no beep`.
+  LIN1 persistent rail short is not indicated, but the `nFAULT` low-resistance
+  path to GND must be explained before any repeat powered wake. Next checkpoint:
+  no-power swapped-probe and diode-mode checks on `CN3_13 / nFAULT` only.
 - Current strategy: use ST MCSDK for the motor-control framework, keep Hall closed-loop as the safe fallback path, and treat SMO/PLL sensorless as a later stretch goal.
 - Real-time boundary: STM32 owns FOC. ESP32-C3 displays, forwards, and alerts only.
 

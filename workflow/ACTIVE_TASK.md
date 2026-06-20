@@ -1,10 +1,101 @@
 # Current Task
 
-This is the current single task. It records the no-power software Hall firmware
-entry plan for the future `PA0/PA1/PB4` adapter. It is not STM32 firmware
+This is the current single task page. The newest hardware-adjacent record is
+the STDRIVE101 nFAULT no-power DMM result. It is not STM32 firmware
 implementation, not generated-code editing, not CubeMX / Workbench editing,
-not flashing, not Run / Debug, not hardware validation, and not powered
-testing.
+not flashing, not Run / Debug, not motor validation, and not powered-drive
+readiness.
+
+## Current 2026-06-20 STDRIVE101 nFAULT No-Power DMM Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-nfault-no-power-dmm-result`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-NFAULT-NO-POWER-DMM-RESULT-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_no_power_dmm_result_2026-06-20.md`.
+- User-reported raw readings:
+  `CN3_2 / LIN1` to `CN3_14 / 3V3` = no beep / `66 kohm`;
+  `CN3_2 / LIN1` to `CN3_15 / GND` = no beep / `60 kohm`;
+  `CN3_13 / nFAULT` to `CN3_14 / 3V3` = no beep / `5 kohm`;
+  `CN3_13 / nFAULT` to `CN3_15 / GND` = no beep / `500 ohm`.
+- Decision:
+  `STDRIVE101 nFAULT no-power DMM result / LIN1 to 3V3 66 kohm no beep /
+  LIN1 to GND 60 kohm no beep / nFAULT to 3V3 5 kohm no beep / nFAULT to GND
+  500 ohm no beep / LIN1 persistent rail short not indicated / nFAULT-to-GND
+  low-resistance path requires explanation / no repeat powered wake / no
+  PWM-output validation / no powered-drive readiness`.
+- Boundary:
+  no power and no unknown-node probing. This does not authorize repeat powered
+  wake, alternate input stimulus, firmware implementation, generated-code
+  edits, CubeMX / Workbench edits, flash, Run / Debug, motor connection,
+  Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  perform only no-power checks on already identified CN3 pins: repeat
+  `nFAULT` to `GND` and `nFAULT` to `3V3` with probe orientation swapped, and
+  use diode mode in both directions if available.
+
+## Current 2026-06-20 STDRIVE101 Single-Input Wake nFAULT Cause Review
+
+- Task:
+  `TASK-2026-06-20-stdrive101-single-input-wake-nfault-cause-review`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-SINGLE-INPUT-WAKE-NFAULT-CAUSE-REVIEW-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md`.
+- Decision:
+  `STDRIVE101 single-input wake nFAULT cause review / REG12 wake observed but
+  clean wake failed / primary review target VDS monitoring after LIN1 low-side
+  command / secondary targets REG12 sequence or accidental external REG12 tie,
+  CP comparator, thermal shutdown, external nFAULT pull-down / next step
+  no-power DMM and source packet only / no repeat powered wake / no PWM-output
+  validation / no powered-drive readiness`.
+- Scope:
+  ranks plausible `nFAULT` causes using the STDRIVE101 datasheet, project
+  protection notes, and the user-reported wake result.
+- Boundary:
+  this is no-power / source review only. It does not authorize repeat powered
+  wake, alternate input stimulus, firmware implementation, generated-code
+  edits, CubeMX / Workbench edits, flash, Run / Debug, motor connection,
+  Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  with HSPY output OFF, `VS / 24V_FUSED < 1 V`, motor disconnected, and the
+  `10 kohm` stimulus removed, collect raw no-power DMM results for
+  `CN3_2-LIN1` to `3V3` / `GND` and `CN3_13-nFAULT` to `3V3` / `GND`, or
+  provide a source packet identifying `SCREF`, `CP`, `REG12`, and `OUT1`.
+
+## Current 2026-06-19 STDRIVE101 Single-Input Wake Fault Result
+
+- Task:
+  `TASK-2026-06-19-stdrive101-single-input-wake-fault-result`.
+- Evidence:
+  `EV-2026-06-19-STDRIVE101-SINGLE-INPUT-WAKE-FAULT-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md`.
+- User-reported raw readings:
+  `wake_supply_state = CV`, `wake_supply_current_A = 0.046 A`,
+  `wake_CN3_2_LIN1_V = 3 V`, `wake_CN3_13_nFAULT_V = 0 V`,
+  `wake_REG12_V = 12 V`, and post-off `VS / 24V_FUSED = 0 V`.
+- Decision:
+  `STDRIVE101 REG12 single-input wake result / CN3_14 3V3 through 10 kohm to
+  CN3_2 LIN1 / LIN1 3 V / HSPY CV 0.046 A / REG12 rose to 12 V / nFAULT 0 V
+  stop-rule event / post-off VS reported 0 V / no retry before fault-cause
+  review / no PWM-output validation / no powered-drive readiness`.
+- Scope:
+  records the bounded diagnostic result only. It separates the observed
+  `REG12` rise from the failing `nFAULT` state.
+- Boundary:
+  this does not authorize a repeat powered wake diagnostic, a different input
+  stimulus, firmware implementation, generated-code edits, CubeMX / Workbench
+  edits, flash, Run / Debug, motor connection, Gate PWM, Motor Pilot,
+  Motor Profiler, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  keep HSPY output OFF, remove the `10 kohm` stimulus resistor if not already
+  removed after confirming `VS / 24V_FUSED < 1 V`, then proceed only with
+  no-power or source review of `nFAULT` causes and board conditions.
 
 ## Current 2026-06-19 Software Hall Code-Entry Boundary After DMM
 

@@ -1,3 +1,93 @@
+## 2026-06-20 STDRIVE101 nFAULT No-Power DMM Result Recorded
+
+- Added the no-power DMM result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_no_power_dmm_result_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-NFAULT-NO-POWER-DMM-RESULT-001`.
+- User-reported raw readings:
+  `CN3_2 / LIN1` to `CN3_14 / 3V3` = no beep / `66 kohm`;
+  `CN3_2 / LIN1` to `CN3_15 / GND` = no beep / `60 kohm`;
+  `CN3_13 / nFAULT` to `CN3_14 / 3V3` = no beep / `5 kohm`;
+  `CN3_13 / nFAULT` to `CN3_15 / GND` = no beep / `500 ohm`.
+- Decision:
+  `STDRIVE101 nFAULT no-power DMM result / LIN1 to 3V3 66 kohm no beep /
+  LIN1 to GND 60 kohm no beep / nFAULT to 3V3 5 kohm no beep / nFAULT to GND
+  500 ohm no beep / LIN1 persistent rail short not indicated / nFAULT-to-GND
+  low-resistance path requires explanation / no repeat powered wake / no
+  PWM-output validation / no powered-drive readiness`.
+- Interpretation:
+  the `LIN1` readings do not show a persistent hard short after removing the
+  wake stimulus. The `nFAULT -> GND = 500 ohm` reading is a new low-resistance
+  board-level clue that must be explained, likely by LED / indicator path,
+  DMM polarity interaction, parallel leakage, or an assembly issue. It does
+  not by itself prove the STDRIVE101 internal fault cause.
+- Next boundary:
+  remain no-power. Probe only identified CN3 pins next: repeat
+  `nFAULT` to `GND` and `nFAULT` to `3V3` with swapped probe orientation, and
+  use diode mode in both directions if available. Do not probe `SCREF`, `CP`,
+  `REG12`, or `OUT1` by guesswork.
+
+## 2026-06-20 STDRIVE101 Single-Input Wake nFAULT Cause Review Added
+
+- Added the no-power / source-review artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-SINGLE-INPUT-WAKE-NFAULT-CAUSE-REVIEW-001`.
+- Decision:
+  `STDRIVE101 single-input wake nFAULT cause review / REG12 wake observed but
+  clean wake failed / primary review target VDS monitoring after LIN1 low-side
+  command / secondary targets REG12 sequence or accidental external REG12 tie,
+  CP comparator, thermal shutdown, external nFAULT pull-down / next step
+  no-power DMM and source packet only / no repeat powered wake / no PWM-output
+  validation / no powered-drive readiness`.
+- Review result:
+  VDS monitoring is the primary source-review target because `LIN1` high can
+  command phase-1 low-side on after `REG12` rises, and a failure to pull
+  `OUT1` near ground while low-side is commanded can fit the latched
+  `nFAULT` pattern. This is an inference, not proof.
+- Next user checkpoint:
+  no power. Confirm `10k removed = yes`, `VS / 24V_FUSED < 1 V`, then record
+  raw DMM results for `CN3_2-LIN1` to `3V3` / `GND` and
+  `CN3_13-nFAULT` to `3V3` / `GND`, or provide a marked source packet for
+  `SCREF`, `CP`, `REG12`, and `OUT1`.
+- Boundary:
+  this does not authorize a repeat powered wake diagnostic, alternate input
+  stimulus, firmware implementation, flash, Run / Debug, motor connection,
+  Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+
+## 2026-06-19 STDRIVE101 Single-Input Wake Fault Result Recorded
+
+- Added the bounded wake result record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md`.
+- Evidence:
+  `EV-2026-06-19-STDRIVE101-SINGLE-INPUT-WAKE-FAULT-001`.
+- User-reported raw readings:
+  `wake_supply_state = CV`, `wake_supply_current_A = 0.046 A`,
+  `wake_CN3_2_LIN1_V = 3 V`, `wake_CN3_13_nFAULT_V = 0 V`, and
+  `wake_REG12_V = 12 V`.
+- User-reported power-down follow-up:
+  `post_off_VS_or_24V_FUSED_V = 0 V`.
+- Decision:
+  `STDRIVE101 REG12 single-input wake result / CN3_14 3V3 through 10 kohm to
+  CN3_2 LIN1 / LIN1 3 V / HSPY CV 0.046 A / REG12 rose to 12 V / nFAULT 0 V
+  stop-rule event / post-off VS reported 0 V / no retry before fault-cause
+  review / no PWM-output validation / no powered-drive readiness`.
+- Interpretation:
+  the `10 kohm` stimulus reached `LIN1`, and `REG12` rose into the expected
+  regulator range, but the diagnostic did not pass as a clean wake condition
+  because `nFAULT` was low.
+- Boundary:
+  this result does not authorize another powered wake attempt, a different
+  input stimulus, firmware implementation, flash, Run / Debug, motor
+  connection, Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop,
+  sensorless operation, power-stage readiness, or motor readiness.
+- Next boundary:
+  keep HSPY output OFF, remove the `10 kohm` stimulus resistor if not already
+  removed after confirming `VS / 24V_FUSED < 1 V`, and review STDRIVE101
+  `nFAULT` causes and board conditions before any repeat diagnostic is
+  proposed.
+
 ## 2026-06-19 Software Hall Code-Entry Boundary After DMM Added
 
 - Added the no-power post-DMM code-entry boundary:

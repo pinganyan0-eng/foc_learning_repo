@@ -67,11 +67,29 @@ output.
   the route is unchanged. The 2026-06-19 no-power DMM summary is now recorded
   as `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`.
 - Latest STDRIVE101 wake-related evidence:
+  `stdrive101_nfault_no_power_dmm_result_2026-06-20.md` records the follow-up
+  no-power DMM results: `LIN1-3V3 = 66 kohm no beep`,
+  `LIN1-GND = 60 kohm no beep`, `nFAULT-3V3 = 5 kohm no beep`, and
+  `nFAULT-GND = 500 ohm no beep`. It does not show a persistent `LIN1` rail
+  short, but it requires explaining the low-resistance `nFAULT` path to GND
+  before any repeat powered wake is proposed.
+  `stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md` records
+  the no-power/source review after `REG12 = 12 V` and `nFAULT = 0 V`. It
+  ranks VDS monitoring after the `LIN1` low-side command as the primary
+  review target, with REG12 sequence / accidental external REG12 tie, CP
+  comparator, thermal shutdown, and external nFAULT pull-down as secondary
+  targets. It opens only no-power DMM / source-packet collection.
+  `stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md` records the
+  bounded single-input wake result with `CN3_14 / 3V3 -> 10 kohm ->
+  CN3_2 / LIN1`: HSPY `CV`, `0.046 A`, `LIN1 = 3 V`, `nFAULT = 0 V`,
+  `REG12 = 12 V`, and post-off `VS / 24V_FUSED = 0 V`. This observed
+  `REG12` rising, but it is a stop-rule event because `nFAULT` was low; no
+  repeat powered wake diagnostic is allowed before fault-cause review.
   `stdrive101_reg12_single_input_wake_baseline_result_2026-06-19.md` records
   the pre-stimulus baseline as `CV`, `0.036 A`, `VS / 24V_FUSED = 24 V`,
   `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`.
-  This is not a wake result and does not validate PWM, Hall closed-loop
-  behavior, sensorless behavior, power-stage readiness, or motor readiness.
+  The baseline and wake result do not validate PWM, Hall closed-loop behavior,
+  sensorless behavior, power-stage readiness, or motor readiness.
 - Missing evidence: accepted final Workbench selected-field screenshots,
   Packet A / firmware feasibility proof for the current PCB2
   `HIN/LIN -> PA15/PB3/PB10/PA8/PA9/PA10` route and `PA0/PA1/PB4` software
@@ -119,6 +137,23 @@ Forbidden in this directory and this P2 stage:
   `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`
   before any `10 kohm` stimulus. Current decision is `pre-stimulus baseline
   satisfied only`; it is not a wake result or powered-drive readiness.
+- `stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md`:
+  user-reported bounded STDRIVE101 single-input wake result with
+  `CN3_14 / 3V3 -> 10 kohm -> CN3_2 / LIN1`. It records HSPY `CV`,
+  `0.046 A`, `LIN1 = 3 V`, `nFAULT = 0 V`, `REG12 = 12 V`, and post-off
+  `VS / 24V_FUSED = 0 V`. Current decision is `REG12` rose under stimulus,
+  but `nFAULT = 0 V` is a stop-rule event; no retry before fault-cause
+  review and no powered-drive readiness.
+- `stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md`:
+  no-power / source review of why `nFAULT` went low after the single-input
+  wake result. Current decision is `primary review target VDS monitoring after
+  LIN1 low-side command`; next checkpoint is no-power DMM on `LIN1` and
+  `nFAULT`, or a marked source packet for `SCREF`, `CP`, `REG12`, and `OUT1`.
+- `stdrive101_nfault_no_power_dmm_result_2026-06-20.md`:
+  user-reported no-power DMM follow-up on `LIN1` and `nFAULT`. It records
+  no hard short indication on `LIN1`, but `nFAULT -> GND = 500 ohm` as a
+  low-resistance path requiring swapped-probe / diode-mode checks or source
+  evidence before any repeat powered wake.
 - `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`:
   user-reported no-power DMM continuity / short-check summary for the current
   PCB2 route. It records expected continuity for the `CN3_10-PA0`,

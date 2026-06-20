@@ -1,6 +1,6 @@
 # Current Snapshot
 
-Last updated: 2026-06-19
+Last updated: 2026-06-20
 
 This is the short current-state page for low-token AI handoff. It summarizes
 the current project stage and safety boundary. Historical detail remains in
@@ -11,7 +11,8 @@ the current project stage and safety boundary. Historical detail remains in
 - Main project: STM32G474 edge-gateway FOC drive learning and competition
   project.
 - Current stage: P2 MCSDK no-power precheck, PCB2 no-power DMM summary
-  recorded, and software Hall no-power firmware-entry planning.
+  recorded, software Hall no-power firmware-entry planning, and STDRIVE101
+  single-input wake nFAULT cause review.
 - Current PCB2 no-power DMM result:
   `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md` records the
   user-reported table as `通` for `CN3_10-PA0`, `CN3_11-PA1`,
@@ -43,12 +44,35 @@ the current project stage and safety boundary. Historical detail remains in
   the user-reported pre-stimulus baseline as `CV`, `0.036 A`,
   `VS / 24V_FUSED = 24 V`, `CN3_14 / 3V3 = 3.3 V`,
   `CN3_13 / nFAULT = 3.3 V`, and `REG12 = 0.33 V`. This closes only the
-  baseline condition; no `10 kohm` stimulus was installed and no wake result
-  exists yet.
-- The single-input wake diagnostic remains a bounded power-stage diagnostic:
-  no motor, no firmware PWM, no Motor Pilot, no Motor Profiler, no Hall
-  closed-loop claim, no sensorless claim, and no power-stage or motor
-  readiness claim.
+  baseline condition.
+- Current single-input wake result:
+  `stdrive101_reg12_single_input_wake_fault_result_2026-06-19.md` records the
+  user-reported bounded diagnostic with `CN3_14 / 3V3 -> 10 kohm ->
+  CN3_2 / LIN1`: HSPY `CV`, `0.046 A`, `LIN1 = 3 V`, `nFAULT = 0 V`,
+  `REG12 = 12 V`, and post-off `VS / 24V_FUSED = 0 V`. The diagnostic
+  observed `REG12` rising, but did not pass as a clean wake condition because
+  `nFAULT` was low. No retry or alternate input stimulus is allowed before
+  fault-cause review.
+- Current nFAULT cause review:
+  `stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md` records
+  the no-power/source review. It ranks VDS monitoring after the `LIN1`
+  low-side command as the primary review target, with REG12 sequence /
+  accidental external REG12 tie, CP comparator, thermal shutdown, and
+  external nFAULT pull-down as secondary targets. Next checkpoint is no-power
+  DMM on `LIN1` and `nFAULT`, or a marked source packet for `SCREF`, `CP`,
+  `REG12`, and `OUT1`.
+- Current nFAULT no-power DMM result:
+  `stdrive101_nfault_no_power_dmm_result_2026-06-20.md` records
+  `LIN1-3V3 = 66 kohm no beep`, `LIN1-GND = 60 kohm no beep`,
+  `nFAULT-3V3 = 5 kohm no beep`, and `nFAULT-GND = 500 ohm no beep`.
+  This does not show a persistent `LIN1` rail short, but it creates a new
+  no-power blocker: explain the low-resistance `nFAULT` path to GND using
+  swapped-probe / diode-mode checks or source evidence before any repeat
+  powered wake is proposed.
+- The single-input wake diagnostic remains stopped at a bounded
+  fault-result boundary: no motor, no firmware PWM, no Motor Pilot, no Motor
+  Profiler, no Hall closed-loop claim, no sensorless claim, and no
+  power-stage or motor readiness claim.
 - Current real-world blocker update: PCB2 is reported populated / in hand, the
   route is unchanged, and the 2026-06-19 no-power DMM summary is now recorded.
   The next allowed hardware-adjacent step is still no-power only: review the

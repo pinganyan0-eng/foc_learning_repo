@@ -1,10 +1,419 @@
 # Current Task
 
 This is the current single task page. The newest hardware-adjacent record is
-the STDRIVE101 nFAULT no-power DMM result. It is not STM32 firmware
-implementation, not generated-code editing, not CubeMX / Workbench editing,
-not flashing, not Run / Debug, not motor validation, and not powered-drive
+the STDRIVE101 manual gate-test USB-only runtime lockout preparation after the
+lockout object-only build pass, object-only target, lockout source package,
+manual gate-test firmware plan, R3_2 MCSDK PWM output path source closure,
+PWM/gate no-power source review, clean single-input wake retest,
+all-inputs-low static recheck, USB-only input-state check, and USB + 24 V
+static recheck. It is not flashing, not Run / Debug, not USB runtime
+execution, not motor validation, not PWM validation, and not powered-drive
 readiness.
+
+## Current 2026-06-20 STDRIVE101 Manual Gate-Test USB-Only Runtime Lockout Prep
+
+- Task:
+  `TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-prep`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-PREP-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_usb_only_runtime_lockout_prep_2026-06-20.md`.
+- Decision:
+  `STDRIVE101 manual gate-test USB-only runtime lockout preparation no-power /
+  object-only lockout build pass carried forward / exact source and object
+  provenance recorded / future runtime must be USB-only with no 24 V, motor
+  disconnected, power board not powered, and six driver inputs expected low /
+  preparation only / no flash / no runtime / no PWM-output validation / no
+  powered-drive readiness`.
+- Boundary:
+  preparation evidence only. No flash, Run / Debug, USB runtime execution,
+  24 V powered runtime, Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness is opened.
+- Next checkpoint:
+  linked-image build-boundary plan or build-only record for the lockout image;
+  do not execute runtime yet.
+
+## Current 2026-06-20 STDRIVE101 Manual Gate-Test Lockout Object-Only Build Pass
+
+- Task:
+  `TASK-2026-06-20-stdrive101-manual-gate-test-lockout-object-build-pass-no-power`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LOCKOUT-OBJECT-BUILD-PASS-NO-POWER-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_lockout_object_build_pass_2026-06-20.md`.
+- Decision:
+  `STDRIVE101 manual gate-test lockout object-only build pass no-power /
+  repo-local CMake object library configured with STM32Cube GNU Arm GCC
+  14.3.1 and Ninja 1.13.2 / stdrive101_gate_lockout_objects built successfully
+  / gate_test_lockout.c.obj and main_lockout.c.obj produced / no lockout ELF
+  HEX BIN MAP linked image produced / no flash / no runtime / no PWM-output
+  validation / no powered-drive readiness`.
+- Boundary:
+  no-power object-build evidence only. No flash, Run / Debug, 24 V powered
+  runtime, Gate PWM output, Motor Pilot, Motor Profiler, motor connection,
+  Hall closed loop, sensorless operation, power-stage readiness, or motor
+  readiness is opened.
+- Next checkpoint:
+  write USB-only runtime lockout preparation; do not execute runtime yet.
+
+## Current 2026-06-20 STDRIVE101 Manual Gate-Test Lockout Object-Only Target
+
+- Task:
+  `TASK-2026-06-20-stdrive101-manual-gate-test-lockout-object-target-no-power`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LOCKOUT-OBJECT-TARGET-NO-POWER-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_lockout_object_target_2026-06-20.md`.
+- Build target:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_test_lockout_build_only_2026-06-20/CMakeLists.txt`.
+- Decision:
+  `STDRIVE101 manual gate-test lockout object-only target no-power /
+  repo-local CMake object library target added for the isolated lockout source
+  package / target compiles only gate_test_lockout.c and main_lockout.c object
+  files / no ELF HEX BIN link target / REPO_ROOT path corrected and CMSIS
+  headers resolved / sandbox blocked external Ninja during configure and
+  auto-review escalation returned 503 / no object build pass claimed / no
+  flash / no runtime / no PWM-output validation / no powered-drive readiness`.
+- Boundary:
+  build-target setup evidence only. No flash, Run / Debug, 24 V powered
+  runtime, Gate PWM output, Motor Pilot, Motor Profiler, motor connection,
+  Hall closed loop, sensorless operation, power-stage readiness, or motor
+  readiness is opened.
+- Next checkpoint:
+  rerun CMake configure and build the object-only target when external-tool
+  approval is available; record object files, compiler diagnostics, sizes, and
+  hashes.
+
+## Current 2026-06-20 STDRIVE101 Manual Gate-Test Lockout Source Package
+
+- Task:
+  `TASK-2026-06-20-stdrive101-manual-gate-test-lockout-source-package-no-power`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LOCKOUT-SOURCE-PACKAGE-NO-POWER-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_lockout_source_package_2026-06-20.md`.
+- Source package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_test_lockout_build_only_2026-06-20/`.
+- Decision:
+  `STDRIVE101 manual gate-test lockout source package no-power / repo-local
+  isolated lockout source added / six driver input pins forced GPIO low /
+  PB12 nFAULT kept as input / TIM1 CCER cleared / TIM1 MOE and automatic
+  output cleared / TIM1 break left enabled / forbidden normal MCSDK start and
+  command ingress symbols absent from lockout Src and Inc / source package only
+  / no embedded build target yet / no flash / no runtime / no PWM-output
+  validation / no powered-drive readiness`.
+- Boundary:
+  source-package and static-inspection evidence only. No flash, Run / Debug,
+  24 V powered runtime, Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness, or
+  motor readiness is opened.
+- Next checkpoint:
+  create a separate repo-local embedded build target or an explicitly copied
+  external Workbench clone for compile-only checking; still no flash, runtime,
+  24 V, PWM output, or motor.
+
+## Current 2026-06-20 STDRIVE101 Manual Gate-Test Firmware Plan
+
+- Task:
+  `TASK-2026-06-20-stdrive101-manual-gate-test-firmware-plan-no-power`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-FIRMWARE-PLAN-NO-POWER-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_firmware_plan_no_power_2026-06-20.md`.
+- Decision:
+  `STDRIVE101 manual gate-test firmware plan no-power / normal MCSDK start path
+  remains blocked / future gate-test must use an isolated lockout firmware path
+  that avoids MC_StartMotor1, MCI_START, PC13 start-stop, MCP command ingress,
+  Motor Pilot, Hall closed-loop paths, speed-loop paths, and motor connection /
+  plan only / no PWM-output validation / no powered-drive readiness`.
+- Planned lockout shape:
+  a later separate firmware task must keep the first lockout image isolated
+  from normal MCSDK start, hold `PA8`, `PA9`, `PA10`, `PB13`, `PB14`, and
+  `PB15` low, leave `PB12 / nFAULT` as input only, keep TIM1 `MOE = 0`, keep
+  all relevant `CCER` outputs disabled, keep automatic output disabled, and
+  keep break protection enabled.
+- Boundary:
+  plan-only / no-power evidence. No firmware edit, build, flash, Run / Debug,
+  24 V powered runtime, PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness, or
+  motor readiness is opened.
+- Next checkpoint:
+  review the no-power plan. If accepted later, open a separate build-only
+  implementation task for an isolated lockout image; do not start from normal
+  `MC_StartMotor1()` / `MCI_START`.
+
+## Current 2026-06-20 STDRIVE101 R3_2 MCSDK PWM Output Path Source Closure
+
+- Task:
+  `TASK-2026-06-20-stdrive101-r3-2-mcsdk-pwm-output-path-source-closure`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-R3-2-MCSDK-PWM-OUTPUT-PATH-SOURCE-CLOSURE-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_r3_2_mcsdk_pwm_output_path_source_closure_2026-06-20.md`.
+- Reviewed source:
+  Workbench project-local
+  `MCSDK_v6.4.2-Full/MotorControl/MCSDK/MCLib/G4xx/Src/r3_2_g4xx_pwm_curr_fdbk.c`,
+  SHA256 `D3787B25374154AB1DC6A2CABD05DE299D5691DA92DDC4DE4BEC93DE81BE2451`.
+- Decision:
+  `STDRIVE101 R3_2 MCSDK PWM output path source closure / exact local
+  Workbench MCSDK r3_2_g4xx_pwm_curr_fdbk.c found and hashed / R3_2 output
+  enable behavior reviewed / normal generated MCSDK start remains blocked for
+  powered PWM because start path disables BRK before low-side boot-cap and
+  R3_2_TurnOnLowSides enables TIM1 main outputs with 0-tick low-sides-on
+  semantics / no PWM-output validation / no powered-drive readiness`.
+- Boundary:
+  no motor, Gate PWM output, Motor Pilot, Motor Profiler, firmware Flash /
+  Run / Debug, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness.
+- Next checkpoint:
+  separate no-power-only manual gate-test firmware plan; do not use normal
+  `MC_StartMotor1()` / `MCI_START`, PC13 start/stop, MCP command ingress,
+  Motor Pilot, Hall closed-loop paths, speed-loop paths, or a motor.
+
+## Current 2026-06-20 STDRIVE101 PWM/Gate-Test No-Power Source Review
+
+- Task:
+  `TASK-2026-06-20-stdrive101-pwm-gate-test-no-power-source-review`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-PWM-GATE-TEST-NO-POWER-SOURCE-REVIEW-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pwm_gate_test_no_power_source_review_2026-06-20.md`.
+- Decision:
+  `STDRIVE101 PWM gate-test no-power source review / static hardware screen
+  passed for planning only / generated MCSDK direct PWM gate remains blocked by
+  command-ingress, external R3_2 implementation, BKIN polarity, Hall-route, and
+  generation-log trust gaps / no PWM-output validation / no powered-drive
+  readiness`.
+- Key findings:
+  `main.c` has no direct `MC_StartMotor1()` autostart, but runtime start
+  ingress exists through PC13 start/stop and MCSDK command paths. A valid
+  start command can set `DirectCommand = MCI_START`; the generated state path
+  reaches `R3_2_TurnOnLowSides()` and later `PWMC_SwitchOnPWM()`. The actual
+  R3_2 PWM implementation is pulled from an external MCSDK file that is not
+  packet-local, TIM1 BKIN / `nFAULT` polarity is not closed, and the
+  generation log contains PWM / BKIN / MotorControl invalid-parameter messages.
+- Boundary:
+  no motor, Gate PWM output, Motor Pilot, Motor Profiler, firmware Flash /
+  Run / Debug, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness.
+- Next checkpoint:
+  the R3_2 source closure has now been recorded; the remaining next checkpoint
+  is a separate no-power-only manual gate-test firmware plan.
+
+## Current 2026-06-20 STDRIVE101 USB + 24V Static Recheck Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-usb24-static-recheck`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-USB24-STATIC-RECHECK-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_usb24_static_recheck_result_2026-06-20.md`.
+- User-reported raw readings:
+  HSPY `CV`, current about `0.045 A`, `CN3_1` through `CN3_6` all close to
+  `0 V`, `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and
+  `REG12 = 0.3 V`.
+- Decision:
+  `STDRIVE101 USB plus 24V static recheck result / USB-STLINK connected /
+  HSPY CV about 0.045 A / CN3_1 through CN3_6 all close to 0 V / CN3_14
+  3.3 V / nFAULT 3.3 V / REG12 about 0.3 V / no MCU-facing driver input high
+  and no REG12 wake observed in USB plus 24V static state / no PWM-output
+  validation / no powered-drive readiness`.
+- Boundary:
+  bounded static diagnostic evidence only. This does not authorize motor
+  connection, Gate PWM, Motor Pilot, Motor Profiler, firmware Flash / Run /
+  Debug, Hall closed loop, sensorless operation, power-stage readiness, or
+  motor readiness.
+- Next checkpoint:
+  no-power firmware/source planning for a future explicit PWM/gate-test phase
+  gate. Do not connect a motor or run PWM.
+
+## Current 2026-06-20 STDRIVE101 USB-Only MCU Default Input State Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-usbonly-mcu-default-input-state`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-USBONLY-MCU-DEFAULT-INPUT-STATE-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_usbonly_mcu_default_input_state_result_2026-06-20.md`.
+- User-reported raw readings:
+  `CN3_1` through `CN3_6` all close to `0 V`; `P13 = 3.3 V` and
+  `P14 = 3.3 V`, interpreted from the requested table as
+  `CN3_13 / nFAULT = 3.3 V` and `CN3_14 / 3V3 = 3.3 V`.
+- Decision:
+  `STDRIVE101 USB-only MCU default input state result / HSPY OFF no 24 V /
+  USB-STLINK connected / CN3_1 through CN3_6 all close to 0 V / interpreted
+  CN3_13 nFAULT 3.3 V / interpreted CN3_14 3V3 3.3 V / no MCU-facing driver
+  input high observed in USB-only state / no PWM-output validation / no
+  powered-drive readiness`.
+- Boundary:
+  USB-only / no-24V evidence only. This does not authorize motor connection,
+  Gate PWM, Motor Pilot, Motor Profiler, firmware Flash / Run / Debug, Hall
+  closed loop, sensorless operation, power-stage readiness, or motor
+  readiness.
+- Next checkpoint:
+  separate bounded static 24 V check with USB/ST-LINK connected and no
+  firmware command. Do not connect a motor or run PWM.
+
+## Current 2026-06-20 STDRIVE101 All-Inputs-Low Static Recheck Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-all-inputs-low-static-recheck`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-ALL-INPUTS-LOW-STATIC-RECHECK-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_all_inputs_low_static_recheck_result_2026-06-20.md`.
+- User-reported raw readings:
+  HSPY `CV`, current about `0.045 A`, `CN3_1` through `CN3_6` all close to
+  `0 V`, `CN3_14 / 3V3 = 3.3 V`, `CN3_13 / nFAULT = 3.3 V`, and
+  `REG12 = 0.3 V`.
+- Decision:
+  `STDRIVE101 all-inputs-low static recheck result / 10 kohm wake stimulus
+  removed / HSPY CV about 0.045 A / CN3_1 through CN3_6 all close to 0 V /
+  CN3_14 3.3 V / nFAULT 3.3 V / REG12 about 0.3 V / standby-like recovery
+  confirmed after clean LIN1 wake retest / no PWM-output validation / no
+  powered-drive readiness`.
+- Boundary:
+  bounded static diagnostic evidence only. Before any later wiring change,
+  HSPY output must be OFF and `VS / 24V_FUSED < 1 V` must be rechecked. This
+  does not authorize motor connection, Gate PWM, Motor Pilot, Motor Profiler,
+  firmware Run / Debug, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  no-24V USB/ST-LINK default-state check of MCU-facing driver inputs. Do not
+  connect a motor or run PWM.
+
+## Current 2026-06-20 STDRIVE101 Single-Input Wake Retest Clean Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-single-input-wake-retest-clean-result`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-SINGLE-INPUT-WAKE-RETEST-CLEAN-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_reg12_single_input_wake_retest_clean_result_2026-06-20.md`.
+- User-reported retest readings:
+  `retest_supply_state = CV`, `retest_supply_current_A = 0.048 A`,
+  `retest_CN3_2_LIN1_V = 3.13 V`, `retest_CN3_13_nFAULT_V = 3.3 V`,
+  and `retest_REG12_V = 12 V`.
+- User-reported recovery readings:
+  `recovery_supply_state = CV`, `recovery_supply_current_A = 0.045 A`,
+  `recovery_CN3_13_nFAULT_V = 3.3 V`, and
+  `recovery_REG12_V = 0.33 V`.
+- Decision:
+  `STDRIVE101 REG12 single-input wake retest clean result / CN3_14 3V3 through
+  10 kohm to CN3_2 LIN1 / LIN1 3.13 V / HSPY CV 0.048 A / REG12 rose to
+  12 V / nFAULT stayed 3.3 V / recovery all-inputs-low REG12 0.33 V and
+  nFAULT 3.3 V / previous nFAULT-low wake blocker not reproduced after
+  gate-source pulldown rework / no PWM-output validation / no powered-drive
+  readiness`.
+- Boundary:
+  bounded diagnostic evidence only. Before any later wiring change, HSPY
+  output must be OFF and `VS / 24V_FUSED < 1 V` must be rechecked. This does
+  not authorize motor connection, Gate PWM, Motor Pilot, Motor Profiler,
+  firmware Run / Debug, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  return to no-power planning / source review unless a separate bounded phase
+  gate is opened. Do not connect a motor or run PWM.
+
+## Current 2026-06-20 STDRIVE101 Gate-Source Pulldown Rework Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-gate-source-pulldown-rework-result`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-GATE-SOURCE-PULLDOWN-REWORK-RESULT-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_source_pulldown_rework_result_2026-06-20.md`.
+- User-reported final six-route readings after rework:
+  `VS_OFF_V = 0 V`, `Q1_GS = 10 kohm`, `Q3_GS = 10 kohm`,
+  `Q5_GS = 10 kohm`, `Q2_GS = 10 kohm`, `Q4_GS = 10 kohm`, and
+  `Q6_GS = 10 kohm`, with `10k_removed = yes`.
+- Decision:
+  `STDRIVE101 gate-source pulldown rework result / Q1-GS 10 kohm / Q3-GS
+  10 kohm / Q5-GS 10 kohm / Q2-GS 10 kohm / Q4-GS 10 kohm / Q6-GS 10 kohm /
+  previous gate-source pulldown anomaly branch no longer indicated / original
+  nFAULT cause not proven / no repeat powered wake yet / no PWM-output
+  validation / no powered-drive readiness`.
+- Boundary:
+  no power and no unknown-node probing. `VS_OFF_V = 0 V` closes the missing
+  power-off-voltage field for this record, but `VS / 24V_FUSED < 1 V` must be
+  rechecked before any later wiring change or powered retest. This does not
+  authorize repeat powered wake, alternate input stimulus, firmware
+  implementation, generated-code edits, CubeMX / Workbench edits, flash,
+  Run / Debug, motor connection, Gate PWM, Motor Pilot, Motor Profiler,
+  Hall closed loop, sensorless operation, power-stage readiness, or motor
+  readiness.
+- Next checkpoint:
+  decide whether to continue no-power evidence or prepare a separate bounded
+  single-input wake retest plan. Do not connect a motor or run PWM.
+
+## Current 2026-06-20 STDRIVE101 Protection Nodes No-Power DMM Result
+
+- Task:
+  `TASK-2026-06-20-stdrive101-protection-nodes-no-power-dmm-result`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-PROTECTION-NODES-NO-POWER-DMM-RESULT-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_protection_nodes_no_power_dmm_result_2026-06-20.md`.
+- User-reported raw readings:
+  `SCREF-3V3 = 12 kohm`, `SCREF-GND = 12 kohm`,
+  `CP-GND = 1.54 Mohm` rising to about `2 Mohm` with no resistance-mode beep,
+  `REG12-GND = 0.2 Mohm` rising to `0.28 Mohm`,
+  `REG12-VS = 40 kohm` steady, `OUT1-GND = no beep`, and
+  `OUT1-VS` diode mode `OL` in both directions.
+- Decision:
+  `STDRIVE101 protection-node no-power DMM result / SCREF to 3V3 12 kohm /
+  SCREF to GND 12 kohm / CP to GND 1.54 Mohm rising to about 2 Mohm no beep /
+  REG12 to GND 0.2 Mohm rising to 0.28 Mohm / REG12 to VS 40 kohm steady /
+  OUT1 to GND no beep / OUT1 to VS diode OL both directions / stable hard
+  short not indicated on CP, REG12, or OUT1 in the reported rows / VDS
+  low-side path remains the primary review target / next no-power Q2 low-side
+  path checks only / no repeat powered wake / no PWM-output validation / no
+  powered-drive readiness`.
+- Boundary:
+  no power and no unknown-node probing. The corrected table did not restate
+  `VS_OFF_V`; confirm `VS / 24V_FUSED < 1 V` before any later measurement.
+  This does not authorize repeat powered wake, alternate input stimulus,
+  firmware implementation, generated-code edits, CubeMX / Workbench edits,
+  flash, Run / Debug, motor connection, Gate PWM, Motor Pilot, Motor Profiler,
+  Hall closed loop, sensorless operation, power-stage readiness, or motor
+  readiness.
+- Next checkpoint:
+  no-power Q2 low-side path checks only, using confidently identified component
+  pads. If Q2 source, Q2 drain / `OUT1`, Q2 gate / `GLS1`, `ADC_U`, or `R25`
+  pads are uncertain, request a clear board photo or EDA/netlist crop instead
+  of probing by guesswork.
+
+## Current 2026-06-20 STDRIVE101 Fault Review Schematic Marking
+
+- Task:
+  `TASK-2026-06-20-stdrive101-fault-review-schematic-marking`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-FAULT-REVIEW-SCHEMATIC-MARKING-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_fault_review_schematic_marking_2026-06-20.md`.
+- Marked images:
+  `hardware/schematic/annotated/stdrive101_fault_review_full_marked_2026-06-20.png`,
+  `hardware/schematic/annotated/stdrive101_driver_control_nodes_marked_2026-06-20.png`,
+  and
+  `hardware/schematic/annotated/stdrive101_phase_u_out1_gls1_q2_marked_2026-06-20.png`.
+- Decision:
+  `STDRIVE101 fault review schematic marking / source image marked for CN8-CN3,
+  LIN1, nFAULT, CP, SCREF, REG12, OUT1, GHS1, GLS1, Q2 low-side path, and
+  GND domains / supports VDS-monitoring source review after LIN1 low-side
+  command / no unknown-node probing / no repeat powered wake / no PWM-output
+  validation / no powered-drive readiness`.
+- Boundary:
+  source-image marking only. It does not authorize repeat powered wake,
+  alternate input stimulus, firmware implementation, generated-code edits,
+  CubeMX / Workbench edits, flash, Run / Debug, motor connection, Gate PWM,
+  Motor Pilot, Motor Profiler, Hall closed loop, sensorless operation,
+  power-stage readiness, or motor readiness.
+- Next checkpoint:
+  no power. Use the marked images only to identify physical board areas. If
+  `SCREF`, `CP`, `REG12`, `OUT1`, `GLS1`, or Q2 terminals cannot be identified
+  with certainty, request a clear board photo or EDA/netlist crop instead of
+  probing by guesswork.
 
 ## Current 2026-06-20 STDRIVE101 nFAULT No-Power DMM Result
 
@@ -18,12 +427,14 @@ readiness.
   `CN3_2 / LIN1` to `CN3_14 / 3V3` = no beep / `66 kohm`;
   `CN3_2 / LIN1` to `CN3_15 / GND` = no beep / `60 kohm`;
   `CN3_13 / nFAULT` to `CN3_14 / 3V3` = no beep / `5 kohm`;
-  `CN3_13 / nFAULT` to `CN3_15 / GND` = no beep / `500 ohm`.
+  `CN3_13 / nFAULT` to `CN3_15 / GND` = no beep / `10 kohm`.
 - Decision:
   `STDRIVE101 nFAULT no-power DMM result / LIN1 to 3V3 66 kohm no beep /
   LIN1 to GND 60 kohm no beep / nFAULT to 3V3 5 kohm no beep / nFAULT to GND
-  500 ohm no beep / LIN1 persistent rail short not indicated / nFAULT-to-GND
-  low-resistance path requires explanation / no repeat powered wake / no
+  10 kohm no beep / LIN1 persistent rail short not indicated / nFAULT
+  persistent rail short not indicated / VDS monitoring after LIN1 low-side
+  command remains the primary review target / source packet or identified
+  no-power protection-node checks needed before any repeat powered wake / no
   PWM-output validation / no powered-drive readiness`.
 - Boundary:
   no power and no unknown-node probing. This does not authorize repeat powered
@@ -32,9 +443,9 @@ readiness.
   Gate PWM, Motor Pilot, Motor Profiler, Hall closed loop, sensorless
   operation, power-stage readiness, or motor readiness.
 - Next checkpoint:
-  perform only no-power checks on already identified CN3 pins: repeat
-  `nFAULT` to `GND` and `nFAULT` to `3V3` with probe orientation swapped, and
-  use diode mode in both directions if available.
+  no power. Provide a marked source packet or confidently identified no-power
+  protection-node checks for `SCREF`, `CP`, `REG12`, `OUT1`, and the related
+  low-side-1 gate / MOSFET nodes. Do not probe unknown points by guesswork.
 
 ## Current 2026-06-20 STDRIVE101 Single-Input Wake nFAULT Cause Review
 

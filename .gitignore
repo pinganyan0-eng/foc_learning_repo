@@ -5,6 +5,7 @@ __pycache__/
 .DS_Store
 
 # Local build outputs
+.tmp/
 **/build/
 **/.cache/
 **/Debug/

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.foc_learning_repo/schemas/ai_architecture_eval.schema.json",
+  "title": "FOC Learning AI Architecture Eval Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "question",
+    "must_include",
+    "must_not_include",
+    "expected_risk_level",
+    "expected_requires_internet"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-[0-9]{3}$"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "must_include": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "must_not_include": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "expected_risk_level": {
+      "type": "string",
+      "enum": [
+        "高风险",
+        "中风险",
+        "低风险"
+      ]
+    },
+    "expected_requires_internet": {
+      "type": "boolean"
+    }
+  }
+}

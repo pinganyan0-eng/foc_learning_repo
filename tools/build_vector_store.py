@@ -13,13 +13,22 @@ TOKEN_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*|\d+(?:\.\d+)?|[\u4e00-\u9fff]")
 TEXT_SUFFIXES = {".md", ".txt"}
 
 MAINTENANCE_SOURCE_FILES = (
+    "docs/00_project_truth/fact_registry.jsonl",
+    "docs/00_project_truth/fact_registry.schema.json",
+    "evals/ai_architecture_eval.schema.json",
+    "evals/fact_conflict_eval.jsonl",
+    "evals/hardware_safety_eval.jsonl",
+    "evals/internet_required_eval.jsonl",
     "retrieval_eval/queries.json",
     "tests/test_ai_architecture_contracts.py",
+    "tests/test_fact_registry_and_ai_evals.py",
+    "tools/ask_local.py",
     "tests/test_search_local_v2.py",
     "tools/build_context_pack.py",
     "tools/build_vector_store.py",
     "tools/check_ai_contracts.py",
     "tools/check_project_skill_install.py",
+    "tools/run_ai_architecture_evals.py",
     "tools/run_ai_maintenance_audit.py",
     "tools/search_local_v2.py",
 )

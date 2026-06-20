@@ -39,7 +39,7 @@ NO_POWER_BOUNDARY = (
 )
 PATH_GROUP_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("personal_notes_or_obsidian", (".obsidian/", "notes/")),
-    ("ai_maintenance", ("AI_CONTEXT.md", "tools/", "retrieval_eval/", "tests/")),
+    ("ai_maintenance", ("AI_CONTEXT.md", "tools/", "retrieval_eval/", "evals/", "tests/")),
     ("project_skill", ("codex_skills/",)),
     ("workflow_status", ("CURRENT_STATUS.md", "workflow/")),
     ("project_truth_docs", ("docs/", "deliverables/")),
@@ -186,6 +186,11 @@ def step_catalog(*, repo_only_skill: bool) -> dict[str, AuditStep]:
             "Run local retrieval regression cases.",
             python_command("tools/search_local_v2.py", "--eval"),
         ),
+        "ai_architecture_evals": AuditStep(
+            "ai_architecture_evals",
+            "Run local AI architecture safety and internet-requirement evals.",
+            python_command("tools/run_ai_architecture_evals.py"),
+        ),
         "unit_tests": AuditStep(
             "unit_tests",
             "Run the repository unit test suite.",
@@ -219,6 +224,7 @@ def full_step_ids() -> tuple[str, ...]:
         "ai_contracts",
         "build_vector_store",
         "retrieval_eval",
+        "ai_architecture_evals",
         "unit_tests",
         "compileall",
         "git_status",

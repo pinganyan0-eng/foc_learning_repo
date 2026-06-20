@@ -29,6 +29,37 @@ PROJECT_SKILL_FILES = (
     "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
 )
 
+FACT_REGISTRY_PATH = "docs/00_project_truth/fact_registry.jsonl"
+FACT_REGISTRY_SCHEMA_PATH = "docs/00_project_truth/fact_registry.schema.json"
+AI_ARCHITECTURE_EVAL_SCHEMA_PATH = "evals/ai_architecture_eval.schema.json"
+AI_ARCHITECTURE_EVAL_FILES = (
+    "evals/hardware_safety_eval.jsonl",
+    "evals/internet_required_eval.jsonl",
+    "evals/fact_conflict_eval.jsonl",
+)
+FACT_REGISTRY_REQUIRED_FIELDS = (
+    "fact_id",
+    "claim",
+    "source_path",
+    "authority_level",
+    "risk_level",
+    "status",
+    "allowed_actions",
+    "forbidden_actions",
+    "last_reviewed",
+    "notes",
+)
+AI_EVAL_REQUIRED_FIELDS = (
+    "id",
+    "question",
+    "must_include",
+    "must_not_include",
+    "expected_risk_level",
+    "expected_requires_internet",
+)
+VALID_FACT_RISK_LEVELS = {"critical", "high", "medium", "low"}
+VALID_EVAL_RISK_LEVELS = {"高风险", "中风险", "低风险"}
+
 UTF8_CORE_FILES = (
     "AI_CONTEXT.md",
     "workflow/CURRENT_SNAPSHOT.md",
@@ -39,9 +70,15 @@ UTF8_CORE_FILES = (
     "deliverables/submission_checklist.md",
     "docs/00_project_truth/project_context.md",
     "docs/00_project_truth/ai_architecture.md",
+    FACT_REGISTRY_PATH,
+    FACT_REGISTRY_SCHEMA_PATH,
+    AI_ARCHITECTURE_EVAL_SCHEMA_PATH,
     "docs/file_map.md",
     "tools/README.md",
+    "tools/ask_local.py",
+    "tools/run_ai_architecture_evals.py",
     "retrieval_eval/queries.json",
+    *AI_ARCHITECTURE_EVAL_FILES,
     *PROJECT_SKILL_FILES,
 )
 
@@ -226,12 +263,19 @@ def check_required_files(report: CheckReport) -> None:
         "workflow/ACTIVE_TASK.md",
         "docs/00_project_truth/project_context.md",
         "docs/00_project_truth/ai_architecture.md",
+        FACT_REGISTRY_PATH,
+        FACT_REGISTRY_SCHEMA_PATH,
+        AI_ARCHITECTURE_EVAL_SCHEMA_PATH,
+        "tools/ask_local.py",
         "tools/build_context_pack.py",
         "tools/check_ai_contracts.py",
         "tools/check_project_skill_install.py",
+        "tools/run_ai_architecture_evals.py",
         "tools/run_ai_maintenance_audit.py",
         "retrieval_eval/queries.json",
+        *AI_ARCHITECTURE_EVAL_FILES,
         "tests/test_ai_architecture_contracts.py",
+        "tests/test_fact_registry_and_ai_evals.py",
         *WORKFLOW_MAINTENANCE_FILES,
         *PROJECT_SKILL_FILES,
     ):
@@ -335,6 +379,15 @@ def check_indexes(report: CheckReport) -> None:
         "learning_feedback_loop",
         "session_close_checklist",
         "search_local_v2",
+        "ask_local",
+        "fact_registry",
+        "fact_registry_schema",
+        "ai_architecture_eval_schema",
+        "hardware_safety_eval",
+        "internet_required_eval",
+        "fact_conflict_eval",
+        "run_ai_architecture_evals",
+        "ai_architecture_evals",
         "check_project_skill_install",
         "run_ai_maintenance_audit",
         "git status --short",
@@ -365,6 +418,15 @@ def check_indexes(report: CheckReport) -> None:
             "ai_maintenance",
             "workflow_maintenance",
             "search_local_v2.py --eval",
+            "ask_local.py",
+            "fact_registry.jsonl",
+            "fact_registry.schema.json",
+            "ai_architecture_eval.schema.json",
+            "run_ai_architecture_evals.py",
+            "hardware_safety_eval.jsonl",
+            "internet_required_eval.jsonl",
+            "fact_conflict_eval.jsonl",
+            "ai_architecture_evals",
             "stm32g474-foc-assistant/SKILL.md",
             "install_project_skill.ps1",
             "git status --short",
@@ -395,8 +457,17 @@ def check_context_pack_modes(report: CheckReport) -> None:
         "workflow/automation_playbook.md",
         "workflow/session_close_checklist.md",
         "workflow/learning_feedback_loop.md",
+        "docs/00_project_truth/fact_registry.jsonl",
+        "docs/00_project_truth/fact_registry.schema.json",
+        "tools/ask_local.py",
+        "tools/run_ai_architecture_evals.py",
+        "evals/ai_architecture_eval.schema.json",
+        "evals/hardware_safety_eval.jsonl",
+        "evals/internet_required_eval.jsonl",
+        "evals/fact_conflict_eval.jsonl",
         "retrieval_eval/queries.json",
         "tests/test_ai_architecture_contracts.py",
+        "tests/test_fact_registry_and_ai_evals.py",
         "tools/check_project_skill_install.py",
         "tools/run_ai_maintenance_audit.py",
         "codex_skills/stm32g474-foc-assistant/SKILL.md",
@@ -443,16 +514,276 @@ def check_retrieval_eval(report: CheckReport) -> None:
         report.error(f"retrieval_eval/queries.json is missing required case: {required_id}")
 
 
+def load_json_object(report: CheckReport, relative_path: str) -> dict[str, object]:
+    path = ROOT / relative_path
+    if not path.is_file():
+        report.error(f"Missing JSON file: {relative_path}")
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        report.error(f"{relative_path} is not valid JSON: {exc}")
+        return {}
+    if not isinstance(data, dict):
+        report.error(f"{relative_path} must be a JSON object.")
+        return {}
+    return data
+
+
+def schema_properties(schema: dict[str, object], relative_path: str, report: CheckReport) -> dict[str, object]:
+    properties = schema.get("properties")
+    if not isinstance(properties, dict):
+        report.error(f"{relative_path} schema must define object properties.")
+        return {}
+    return properties
+
+
+def check_required_schema_fields(
+    report: CheckReport,
+    *,
+    relative_path: str,
+    schema: dict[str, object],
+    required_fields: tuple[str, ...],
+) -> None:
+    if schema.get("type") != "object":
+        report.error(f"{relative_path} schema type must be object.")
+    if schema.get("additionalProperties") is not False:
+        report.error(f"{relative_path} schema must set additionalProperties to false.")
+
+    required = schema.get("required")
+    if not isinstance(required, list):
+        report.error(f"{relative_path} schema required must be a list.")
+        return
+    required_set = set(str(item) for item in required)
+    for field in required_fields:
+        if field not in required_set:
+            report.error(f"{relative_path} schema required is missing field: {field}")
+
+
+def check_schema_files(report: CheckReport) -> None:
+    fact_schema = load_json_object(report, FACT_REGISTRY_SCHEMA_PATH)
+    eval_schema = load_json_object(report, AI_ARCHITECTURE_EVAL_SCHEMA_PATH)
+
+    if fact_schema:
+        check_required_schema_fields(
+            report,
+            relative_path=FACT_REGISTRY_SCHEMA_PATH,
+            schema=fact_schema,
+            required_fields=FACT_REGISTRY_REQUIRED_FIELDS,
+        )
+        properties = schema_properties(fact_schema, FACT_REGISTRY_SCHEMA_PATH, report)
+        risk_property = properties.get("risk_level", {})
+        if not isinstance(risk_property, dict) or set(risk_property.get("enum", [])) != VALID_FACT_RISK_LEVELS:
+            report.error(f"{FACT_REGISTRY_SCHEMA_PATH} risk_level enum does not match contract.")
+        status_property = properties.get("status", {})
+        if not isinstance(status_property, dict) or status_property.get("const") != "active":
+            report.error(f"{FACT_REGISTRY_SCHEMA_PATH} status must be const active.")
+        for list_field in ("allowed_actions", "forbidden_actions"):
+            property_value = properties.get(list_field, {})
+            if not isinstance(property_value, dict) or property_value.get("minItems") != 1:
+                report.error(f"{FACT_REGISTRY_SCHEMA_PATH} {list_field} must require at least one item.")
+
+    if eval_schema:
+        check_required_schema_fields(
+            report,
+            relative_path=AI_ARCHITECTURE_EVAL_SCHEMA_PATH,
+            schema=eval_schema,
+            required_fields=AI_EVAL_REQUIRED_FIELDS,
+        )
+        properties = schema_properties(eval_schema, AI_ARCHITECTURE_EVAL_SCHEMA_PATH, report)
+        risk_property = properties.get("expected_risk_level", {})
+        if not isinstance(risk_property, dict) or set(risk_property.get("enum", [])) != VALID_EVAL_RISK_LEVELS:
+            report.error(f"{AI_ARCHITECTURE_EVAL_SCHEMA_PATH} expected_risk_level enum does not match contract.")
+        internet_property = properties.get("expected_requires_internet", {})
+        if not isinstance(internet_property, dict) or internet_property.get("type") != "boolean":
+            report.error(f"{AI_ARCHITECTURE_EVAL_SCHEMA_PATH} expected_requires_internet must be boolean.")
+
+
+def load_jsonl_records(report: CheckReport, relative_path: str) -> list[dict[str, object]]:
+    path = ROOT / relative_path
+    if not path.is_file():
+        report.error(f"Missing JSONL file: {relative_path}")
+        return []
+
+    records: list[dict[str, object]] = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            record = json.loads(stripped)
+        except json.JSONDecodeError as exc:
+            report.error(f"{relative_path}:{line_number} is not valid JSONL: {exc}")
+            continue
+        if not isinstance(record, dict):
+            report.error(f"{relative_path}:{line_number} JSONL record is not an object.")
+            continue
+        records.append(record)
+    return records
+
+
+def check_fact_registry(report: CheckReport) -> None:
+    records = load_jsonl_records(report, FACT_REGISTRY_PATH)
+    if not records:
+        return
+
+    if len(records) < 30:
+        report.error(f"{FACT_REGISTRY_PATH} must contain at least 30 records.")
+
+    seen_ids: set[str] = set()
+    for index, record in enumerate(records, start=1):
+        for field in FACT_REGISTRY_REQUIRED_FIELDS:
+            if field not in record:
+                report.error(f"{FACT_REGISTRY_PATH}:{index} missing field: {field}")
+
+        fact_id = record.get("fact_id")
+        if not isinstance(fact_id, str) or not fact_id.startswith("FACT-"):
+            report.error(f"{FACT_REGISTRY_PATH}:{index} has invalid fact_id.")
+        elif fact_id in seen_ids:
+            report.error(f"{FACT_REGISTRY_PATH} has duplicate fact_id: {fact_id}")
+        else:
+            seen_ids.add(fact_id)
+
+        for scalar_field in (
+            "claim",
+            "source_path",
+            "authority_level",
+            "risk_level",
+            "status",
+            "last_reviewed",
+            "notes",
+        ):
+            value = record.get(scalar_field)
+            if not isinstance(value, str) or not value.strip():
+                report.error(f"{FACT_REGISTRY_PATH}:{index} has invalid {scalar_field}.")
+
+        if record.get("risk_level") not in VALID_FACT_RISK_LEVELS:
+            report.error(f"{FACT_REGISTRY_PATH}:{index} has invalid risk_level: {record.get('risk_level')}")
+        if record.get("status") != "active":
+            report.warn(f"{FACT_REGISTRY_PATH}:{index} status is not active: {record.get('status')}")
+
+        for list_field in ("allowed_actions", "forbidden_actions"):
+            value = record.get(list_field)
+            if not isinstance(value, list) or not value or not all(
+                isinstance(item, str) and item.strip() for item in value
+            ):
+                report.error(f"{FACT_REGISTRY_PATH}:{index} has invalid {list_field}.")
+
+    combined_text = "\n".join(
+        " ".join(
+            [
+                str(record.get("claim", "")),
+                str(record.get("notes", "")),
+                " ".join(
+                    str(item)
+                    for item in record.get("allowed_actions", [])
+                    if isinstance(item, str)
+                ),
+                " ".join(
+                    str(item)
+                    for item in record.get("forbidden_actions", [])
+                    if isinstance(item, str)
+                ),
+            ]
+        )
+        for record in records
+    )
+    for phrase in (
+        "24 V",
+        "CN3",
+        "CN8",
+        "Gate",
+        "OUTx",
+        "BOOTx",
+        "high-side Vgs",
+        "ordinary",
+        "PWM",
+        "BKIN",
+        "B1",
+        "STOP latch",
+        "MCSDK",
+        "FOC runtime",
+        "internet verification",
+    ):
+        if phrase not in combined_text:
+            report.error(f"{FACT_REGISTRY_PATH} is missing required coverage phrase: {phrase}")
+
+
+def check_ai_architecture_evals(report: CheckReport) -> None:
+    all_records: list[tuple[str, int, dict[str, object]]] = []
+    seen_ids: set[str] = set()
+
+    for relative_path in AI_ARCHITECTURE_EVAL_FILES:
+        records = load_jsonl_records(report, relative_path)
+        if not records:
+            report.error(f"{relative_path} must contain at least one eval case.")
+        for index, record in enumerate(records, start=1):
+            all_records.append((relative_path, index, record))
+            for field in AI_EVAL_REQUIRED_FIELDS:
+                if field not in record:
+                    report.error(f"{relative_path}:{index} missing field: {field}")
+
+            eval_id = record.get("id")
+            if not isinstance(eval_id, str) or not eval_id:
+                report.error(f"{relative_path}:{index} has invalid id.")
+            elif eval_id in seen_ids:
+                report.error(f"duplicate AI architecture eval id: {eval_id}")
+            else:
+                seen_ids.add(eval_id)
+
+            question = record.get("question")
+            if not isinstance(question, str) or not question.strip():
+                report.error(f"{relative_path}:{index} has invalid question.")
+            for list_field in ("must_include", "must_not_include"):
+                value = record.get(list_field)
+                if not isinstance(value, list) or not all(
+                    isinstance(item, str) and item.strip() for item in value
+                ):
+                    report.error(f"{relative_path}:{index} has invalid {list_field}.")
+            if record.get("expected_risk_level") not in VALID_EVAL_RISK_LEVELS:
+                report.error(
+                    f"{relative_path}:{index} has invalid expected_risk_level: "
+                    f"{record.get('expected_risk_level')}"
+                )
+            if not isinstance(record.get("expected_requires_internet"), bool):
+                report.error(f"{relative_path}:{index} expected_requires_internet must be boolean.")
+
+    if len(all_records) < 20:
+        report.error("AI architecture evals must contain at least 20 total cases.")
+
+    require_text(
+        report,
+        "tools/run_ai_architecture_evals.py",
+        (
+            "answer_query",
+            "format_report",
+            "expected_requires_internet",
+            "must_not_include",
+            "AI architecture evals: ok",
+        ),
+        label="AI architecture eval runner",
+    )
+
+
 def check_vector_store_contract(report: CheckReport) -> None:
     if not exists("tools/build_vector_store.py"):
         return
     text = read("tools/build_vector_store.py")
     for phrase in (
         "MAINTENANCE_SOURCE_FILES",
+        "docs/00_project_truth/fact_registry.jsonl",
+        "docs/00_project_truth/fact_registry.schema.json",
+        "evals/ai_architecture_eval.schema.json",
+        "evals/hardware_safety_eval.jsonl",
+        "evals/internet_required_eval.jsonl",
+        "evals/fact_conflict_eval.jsonl",
         "retrieval_eval/queries.json",
         "tests/test_ai_architecture_contracts.py",
+        "tests/test_fact_registry_and_ai_evals.py",
+        "tools/ask_local.py",
         "tools/check_ai_contracts.py",
         "tools/check_project_skill_install.py",
+        "tools/run_ai_architecture_evals.py",
         "tools/run_ai_maintenance_audit.py",
         "tools/search_local_v2.py",
     ):
@@ -678,6 +1009,8 @@ def check_project_skill_contracts(report: CheckReport) -> None:
             "--write-report",
             "build_vector_store",
             "retrieval_eval",
+            "ai_architecture_evals",
+            "run_ai_architecture_evals.py",
             "git_status",
             '("git", "status", "--short")',
             "preserve_output=True",
@@ -746,6 +1079,9 @@ def run_checks() -> CheckReport:
     check_indexes(report)
     check_context_pack_modes(report)
     check_retrieval_eval(report)
+    check_schema_files(report)
+    check_fact_registry(report)
+    check_ai_architecture_evals(report)
     check_vector_store_contract(report)
     check_utf8_readability(report)
     check_readability_headers(report)

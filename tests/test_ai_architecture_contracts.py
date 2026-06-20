@@ -201,6 +201,11 @@ class AiArchitectureContractTests(unittest.TestCase):
 
         self.assertIn("# AI Maintenance Context", result.stdout)
         self.assertIn("docs/00_project_truth/ai_architecture.md", result.stdout)
+        self.assertIn("docs/00_project_truth/fact_registry.jsonl", result.stdout)
+        self.assertIn("docs/00_project_truth/fact_registry.schema.json", result.stdout)
+        self.assertIn("tools/run_ai_architecture_evals.py", result.stdout)
+        self.assertIn("evals/ai_architecture_eval.schema.json", result.stdout)
+        self.assertIn("evals/hardware_safety_eval.jsonl", result.stdout)
         self.assertIn("retrieval_eval/queries.json", result.stdout)
         self.assertIn("tools/check_ai_contracts.py", result.stdout)
 
@@ -237,6 +242,10 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("workflow/learning_feedback_loop.md", result.stdout)
         self.assertIn("workflow/definition_of_done.md", result.stdout)
         self.assertIn("tools/check_project_skill_install.py", result.stdout)
+        self.assertIn("tools/run_ai_architecture_evals.py", result.stdout)
+        self.assertIn("docs/00_project_truth/fact_registry.jsonl", result.stdout)
+        self.assertIn("docs/00_project_truth/fact_registry.schema.json", result.stdout)
+        self.assertIn("evals/ai_architecture_eval.schema.json", result.stdout)
         self.assertIn("tools/run_ai_maintenance_audit.py", result.stdout)
         self.assertIn("codex_skills/stm32g474-foc-assistant/SKILL.md", result.stdout)
         self.assertIn(
@@ -552,6 +561,21 @@ class AiArchitectureContractTests(unittest.TestCase):
             "workflow/session_close_checklist.md",
             "workflow/learning_feedback_loop.md",
             "repo_maintenance_dod",
+            "FACT_REGISTRY_PATH",
+            "FACT_REGISTRY_SCHEMA_PATH",
+            "AI_ARCHITECTURE_EVAL_SCHEMA_PATH",
+            "AI_ARCHITECTURE_EVAL_FILES",
+            "check_schema_files",
+            "check_fact_registry",
+            "check_ai_architecture_evals",
+            "run_ai_architecture_evals.py",
+            "fact_registry.jsonl",
+            "fact_registry.schema.json",
+            "ai_architecture_eval.schema.json",
+            "hardware_safety_eval.jsonl",
+            "internet_required_eval.jsonl",
+            "fact_conflict_eval.jsonl",
+            "ai_architecture_evals",
             "PROJECT_SKILL_FILES",
             "check_project_skill_contracts",
             "check_project_skill_install.py",
@@ -658,9 +682,18 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertTrue(
             {
                 "retrieval_eval/queries.json",
+                "docs/00_project_truth/fact_registry.jsonl",
+                "docs/00_project_truth/fact_registry.schema.json",
+                "evals/ai_architecture_eval.schema.json",
+                "evals/hardware_safety_eval.jsonl",
+                "evals/internet_required_eval.jsonl",
+                "evals/fact_conflict_eval.jsonl",
                 "tests/test_ai_architecture_contracts.py",
+                "tests/test_fact_registry_and_ai_evals.py",
+                "tools/ask_local.py",
                 "tools/check_ai_contracts.py",
                 "tools/check_project_skill_install.py",
+                "tools/run_ai_architecture_evals.py",
                 "tools/run_ai_maintenance_audit.py",
                 "tools/search_local_v2.py",
             }.issubset(source_paths)

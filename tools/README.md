@@ -21,6 +21,23 @@
 - `python tools/search_local_v2.py --eval` runs local retrieval regression
   cases from `retrieval_eval/queries.json`. Passing eval is source-finding
   evidence only, not hardware validation.
+- `docs/00_project_truth/fact_registry.jsonl` is the structured fact registry
+  for high-risk no-power boundaries, current connector language, MCSDK/FOC
+  trust limits, and internet-verification rules.
+- `docs/00_project_truth/fact_registry.schema.json` defines the local schema
+  for one fact registry record. `check_ai_contracts.py` checks this schema
+  against the required project fields and risk-level enum.
+- `python tools/ask_local.py "question"` runs offline TF-IDF retrieval plus
+  fact registry matching. Output includes task-type judgment, risk level,
+  internet-required flag, structured fact hits, and forbidden-action reminders.
+- `evals/ai_architecture_eval.schema.json` defines the local schema for one
+  AI architecture eval case.
+- `evals/hardware_safety_eval.jsonl`, `evals/internet_required_eval.jsonl`,
+  and `evals/fact_conflict_eval.jsonl` define local AI architecture eval
+  cases for hardware-safety, internet-required, and fact-conflict behavior.
+- `python tools/run_ai_architecture_evals.py` runs those local
+  `ai_architecture_evals` without calling an external LLM. Passing them is AI
+  architecture evidence only, not hardware validation.
 - `codex_skills/stm32g474-foc-assistant/SKILL.md` is the project Skill v2
   router. Its references cover project navigation, no-power boundaries,
   learning feedback, and workflow maintenance.
@@ -35,7 +52,8 @@
   only the repo-local project Skill source and is safe for tests or CI.
 - `python tools/run_ai_maintenance_audit.py` runs the full no-power AI
   maintenance audit: Skill validation, install drift check, context pack,
-  AI contracts, vector-store rebuild, retrieval eval, unit tests, compileall,
+  AI contracts, vector-store rebuild, retrieval eval, `ai_architecture_evals`,
+  unit tests, compileall,
   `git status --short` dirty-worktree handoff capture, and `git diff --check`.
   The audit preserves full `git_status` output even when other step output is
   tail-limited by `--max-output-chars`, and exposes a parsed

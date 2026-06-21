@@ -1,3 +1,1094 @@
+## 2026-06-21 STDRIVE101 Gate-Waveform Candidate Residual-Voltage Isolation Result Recorded
+
+- Added the waveform candidate residual-voltage isolation result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-RESIDUAL-VOLTAGE-ISOLATION-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-residual-voltage-isolation-result`.
+- Prior blocker:
+  the waveform candidate USB-only DMM result reported
+  `VS / 24V_FUSED = 2 V` and `REG12 = 0.3 V` after the candidate image copy.
+- User-confirmed isolation setup:
+  USB / ST-LINK disconnected; HSPY / 24 V OFF and physically disconnected;
+  motor disconnected; no `10 kohm` wake resistor or LIN1 stimulus installed;
+  DMM black probe on GND.
+- User-confirmed readings:
+  `VS / 24V_FUSED = 0 V` and `REG12 = 0 V`.
+- Decision:
+  `STDRIVE101 gate-waveform candidate residual-voltage isolation result /
+  USB-STLINK disconnected / HSPY 24 V off and physically disconnected / motor
+  disconnected / no 10 kohm wake resistor or LIN1 stimulus installed /
+  user-confirmed VS / 24V_FUSED = 0 V / user-confirmed REG12 = 0 V / earlier
+  candidate USB-only VS / 24V_FUSED = 2 V cleared after USB disconnect /
+  persistent VS backfeed not indicated in this candidate isolation check /
+  residual-voltage blocker cleared only / next checkpoint may only be a
+  separate candidate 24 V static no-motor phase-gate or execution entry after
+  fresh preconditions / no Run Debug / no 24 V command from this record / no
+  Gate PWM output / no Motor Pilot / no Motor Profiler / no motor connection /
+  no powered-drive readiness`.
+- Boundary:
+  this clears only the immediate candidate residual-voltage blocker. It does
+  not validate 24 V behavior, Gate PWM output, Motor Pilot, Motor Profiler,
+  motor behavior, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  do not repeat the residual-voltage isolation check unless the physical state,
+  image, wiring, or measured value changes. The next engineering checkpoint
+  may only be a separate candidate 24 V static no-motor phase-gate or
+  execution entry, still with the motor disconnected and with no Run / Debug,
+  no Gate PWM output, no Motor Pilot, no Motor Profiler, and no motor-readiness
+  claim.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Candidate USB-Only DMM Result Recorded
+
+- Added the waveform candidate USB-only DMM result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_usb_only_dmm_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DMM-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-dmm-result`.
+- User-reported DMM readings after the candidate USB-only download:
+  `CN3_1` through `CN3_6 = 0 V`, `CN3_13 = 3 V`,
+  `CN3_14 = 3 V`, `VS / 24V_FUSED = 2 V`, and `REG12 = 0.3 V`.
+  Board heat / smell / sound / reset-loop status was not reported in this
+  latest row.
+- Decision:
+  `STDRIVE101 gate-waveform candidate USB-only DMM result / user-reported
+  CN3_1 through CN3_6 all 0 V / user-reported CN3_13 = 3 V / user-reported
+  CN3_14 = 3 V / user-reported VS / 24V_FUSED = 2 V / user-reported
+  REG12 = 0.3 V / board heat smell sound reset-loop status not reported in
+  this latest row / six driver-input stop-rule not hit / VS residual-voltage
+  boundary is active because VS / 24V_FUSED is above the prior <1 V USB-only
+  boundary / USB-only DMM result is not a pass for upward hardware progression
+  / no Run Debug / no 24 V command / no Gate PWM output / no Motor Pilot / no
+  Motor Profiler / no motor connection / no powered-drive readiness`.
+- Boundary:
+  the six MCU-facing driver inputs stayed low in the reported USB-only DMM
+  table, so the six-input stop-rule was not hit. However,
+  `VS / 24V_FUSED = 2 V` keeps the residual-voltage boundary active and
+  blocks upward hardware progression. This is not a pass for 24 V, Gate PWM,
+  or motor work.
+- Next checkpoint:
+  superseded by the later waveform candidate residual-voltage isolation result,
+  which records `VS / 24V_FUSED = 0 V` and `REG12 = 0 V` after USB / ST-LINK
+  disconnect. Do not repeat the full CN3 table or the residual-voltage
+  isolation check unless the physical state, image, wiring, or measured value
+  changes.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Candidate USB-Only Download Result Recorded
+
+- Added the waveform candidate USB-only download result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_usb_only_download_result_2026-06-21.md`.
+- Added the waveform candidate USB-only download execution entry:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_usb_only_download_execution_entry_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DOWNLOAD-RESULT-001`
+  and
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DOWNLOAD-EXECUTION-ENTRY-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-download-result`
+  and
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-download-execution-entry`.
+- User authorization:
+  `允许复制 candidate BIN 到 D:`.
+- Candidate BIN:
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.bin`,
+  size `1852` bytes, SHA256
+  `362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31`.
+- Copy result:
+  `D:` was `NOD_G474RE`; `D:\FAIL.TXT` was absent before copy; the candidate
+  BIN was copied once to `D:\stdrive101_gate_waveform_candidate_image.bin`;
+  after a short wait `D:` was still `NOD_G474RE`, `D:\FAIL.TXT` was absent,
+  and the target BIN was no longer visible, consistent with ST-LINK
+  mass-storage consumption. `DETAILS.TXT` reported `Version: V3J17M10` and
+  `Build: Oct 17 2025 15:12:06`.
+- Decision:
+  `STDRIVE101 gate-waveform candidate USB-only download result / candidate BIN
+  copied once to D: NOD_G474RE by ST-LINK mass storage / source BIN SHA256
+  362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31 /
+  no FAIL.TXT before copy / no FAIL.TXT after copy / target BIN not retained
+  on D: after copy, consistent with ST-LINK mass-storage consumption /
+  candidate board image download result only / no CN3 DMM post-download result
+  yet / no measured waveform result yet / no Run Debug / no 24 V command / no
+  Motor Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  the board image is now treated as the waveform candidate image for the next
+  bounded checks. This record is a USB-only download result only. Because the
+  candidate image calls `gate_waveform_candidate_run_once()` once after reset
+  and then holds idle low, this record does not prove absence of a boot-time
+  output transition. It also does not prove CN3 state, waveform correctness,
+  24 V behavior, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  superseded by the later waveform candidate residual-voltage isolation result,
+  which clears the immediate residual-voltage blocker only and changes the
+  live checkpoint to a separate candidate 24 V static no-motor phase-gate or
+  execution entry. Do not connect a motor or use Run / Debug, Motor Pilot, or
+  Motor Profiler from this download result.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Candidate BIN Artifact Record No-Power
+
+- Added the waveform candidate BIN artifact record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_bin_artifact_record_no_power_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-BIN-ARTIFACT-RECORD-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-bin-artifact-record-no-power`.
+- Candidate image:
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.elf`
+  with ELF SHA256
+  `10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C` and
+  MAP SHA256
+  `170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C`.
+- Generated BIN:
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.bin`,
+  size `1852` bytes, SHA256
+  `362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31`.
+- Conversion evidence:
+  the local fallback ELF32 `PT_LOAD` converter was checked against the
+  already-recorded neutral-wrapper objcopy BIN; both hashes matched
+  `CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71`.
+- Decision:
+  `STDRIVE101 gate-waveform candidate BIN artifact record no-power / Gate E2
+  waveform candidate linked ELF converted to downloadable BIN / converter
+  output validated against the prior neutral-wrapper objcopy BIN / candidate
+  ELF SHA256 10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C
+  / candidate MAP SHA256
+  170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C /
+  candidate BIN SHA256
+  362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31 /
+  candidate BIN size 1852 bytes / retained MAP symbol
+  gate_waveform_candidate_run_once at 0x080005bc / no forbidden normal-MCSDK
+  MAP symbols found in the checked screen / BIN artifact only / no USB copy /
+  no flash / no Run Debug / no 24 V execution / no Gate PWM output / no Motor
+  Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  this is downloadable BIN artifact evidence only. It does not change the
+  image currently on the board, does not copy to ST-LINK mass storage, does
+  not execute Gate PWM output, and does not authorize Motor Pilot, Motor
+  Profiler, motor connection, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  only a separate waveform-candidate USB-only download execution entry after
+  explicit user confirmation and authorization. Keep HSPY / 24 V OFF and the
+  motor disconnected until then.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper 24V Static Scope Baseline Result Recorded
+
+- Added the neutral-wrapper 24V static scope baseline result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_24v_static_scope_baseline_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-24V-STATIC-SCOPE-BASELINE-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-24v-static-scope-baseline-result`.
+- User-reported readings:
+  oscilloscope ground on `CN3_15 / GND`; `CN3_1` / `CN3_2`,
+  `CN3_3` / `CN3_4`, and `CN3_5` / `CN3_6` all observed as `0 V` straight
+  lines; HSPY `CV` about `0.036 A`; `nFAULT = 3.3 V`; no board heat / smell /
+  sound / reset-loop symptom.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper 24V static scope baseline result /
+  oscilloscope ground on CN3_15 GND / HSPY CV about 0.036 A / CN3_1 and CN3_2
+  0 V straight lines / CN3_3 and CN3_4 same 0 V straight lines / CN3_5 and
+  CN3_6 same 0 V straight lines / nFAULT remains 3.3 V / no board heat smell
+  sound reset-loop reported / all six MCU-facing driver inputs static-low in
+  this no-motor no-PWM baseline / no waveform output executed / no Run Debug /
+  no Gate PWM output / no Motor Pilot / no Motor Profiler / no motor
+  connection / no powered-drive readiness`.
+- Boundary:
+  this is static oscilloscope baseline evidence only. It does not authorize or
+  validate Gate PWM output, waveform correctness, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  turn HSPY output OFF after this baseline. The next engineering checkpoint
+  may only be a separate no-motor, short-window, instrumented waveform
+  execution entry with exact probe points, stop rules, and rollback.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper 24V Static No-Motor Result Recorded
+
+- Added the neutral-wrapper 24V static no-motor result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_24v_static_no_motor_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-24V-STATIC-NO-MOTOR-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-24v-static-no-motor-result`.
+- User-reported readings:
+  HSPY `CV`, current `0.036 A`, `VS / 24V_FUSED = 24 V`,
+  `CN3_1` through `CN3_6 = 0 V`, `CN3_13 / nFAULT = 3.3 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `REG12 = 0.2 V`, and no board heat / smell /
+  sound / reset-loop symptom.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper 24V static no-motor result /
+  HSPY CV 0.036 A / VS 24V_FUSED = 24 V / CN3_1 through CN3_6 all 0 V /
+  CN3_13 nFAULT = 3.3 V / CN3_14 3V3 = 3.3 V / REG12 = 0.2 V / no board
+  heat smell sound reset-loop reported / six driver-input stop-rule not hit /
+  nFAULT high in static no-motor state / bounded 24 V static no-motor check
+  clean for this table only / no Run Debug / no Gate PWM output / no Motor
+  Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  this is bounded 24 V static no-motor measurement evidence only. It does not
+  authorize Gate PWM output, Motor Pilot, Motor Profiler, motor connection,
+  Hall closed loop, sensorless operation, power-stage readiness, or motor
+  readiness.
+- Next checkpoint:
+  turn HSPY output OFF after this static measurement. The next engineering
+  checkpoint may only be a separate no-motor instrumented gate-waveform gate,
+  not motor power-up.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper Residual-Voltage Isolation Result Recorded
+
+- Added the neutral-wrapper residual-voltage isolation result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_residual_voltage_isolation_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-RESIDUAL-VOLTAGE-ISOLATION-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-residual-voltage-isolation-result`.
+- Prior blocker:
+  the neutral-wrapper USB-only DMM completion result reported
+  `VS / 24V_FUSED = 2 V`, `REG12 = 0.5 V`, and no board heat / smell /
+  sound / reset-loop symptom.
+- Isolation setup:
+  USB / ST-LINK disconnected; HSPY / 24 V OFF and physically disconnected;
+  motor disconnected; no `10 kohm` wake resistor or LIN1 stimulus installed;
+  DMM black probe on GND.
+- User-reported isolation readings:
+  `VS / 24V_FUSED = 0 V` and `REG12 = 0 V`.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper residual-voltage isolation result /
+  USB-STLINK disconnected / HSPY 24 V off and physically disconnected / motor
+  disconnected / no 10 kohm wake resistor or LIN1 stimulus installed /
+  user-reported VS / 24V_FUSED = 0 V / user-reported REG12 = 0 V / earlier
+  USB-only VS / 24V_FUSED = 2 V cleared after USB disconnect / persistent VS
+  backfeed not indicated in this isolation check / residual-voltage isolation
+  blocker cleared only / no Run Debug / no 24 V execution / no Gate PWM output /
+  no Motor Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  this clears only the immediate residual-voltage blocker raised by the earlier
+  USB-only `VS / 24V_FUSED = 2 V` reading. It does not authorize 24 V, Run /
+  Debug, Gate PWM output, Motor Pilot, Motor Profiler, motor connection, Hall
+  closed loop, sensorless operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  do not repeat the residual-voltage isolation check unless the physical state,
+  image, wiring, or measured value changes. The next engineering checkpoint is
+  a separate dated next-stage phase-gate decision, not direct motor power-up.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Completion Result Recorded
+
+- Added the neutral-wrapper USB-only DMM completion result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_completion_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-COMPLETION-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-dmm-completion-result`.
+- Completed DMM table:
+  carried forward `CN3_1` through `CN3_6 = 0 V`, `P13 = 3.3 V`, and
+  `P14 = 3.3 V`; newly reported `VS / 24V_FUSED = 2 V`,
+  `REG12 = 0.5 V`, and no board heat / smell / sound / reset-loop symptom.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper USB-only DMM completion result /
+  user-reported CN3_1 through CN3_6 all 0 V / user-reported P13 = 3.3 V and
+  P14 = 3.3 V, recorded as the requested CN3_13 / nFAULT and CN3_14 / 3V3
+  labels if P13/P14 map to that header / user-reported VS / 24V_FUSED = 2 V /
+  user-reported REG12 = 0.5 V / no board heat smell sound reset-loop reported /
+  six driver-input stop-rule not hit / VS residual boundary is not clean
+  because VS / 24V_FUSED is above the prior <1 V USB-only boundary / USB-only
+  DMM table complete but not a pass for upward hardware progression / no Run
+  Debug / no 24 V / no Gate PWM output / no Motor Pilot / no Motor Profiler /
+  no motor connection / no powered-drive readiness`.
+- Boundary:
+  this is completed USB-only DMM measurement evidence only. It does not
+  authorize 24 V, Run / Debug, Gate PWM output, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness. The table is not treated as a clean pass
+  because `VS / 24V_FUSED = 2 V` is above the prior `< 1 V` boundary.
+- Next checkpoint:
+  superseded for the live checkpoint by the later residual-voltage isolation
+  result, which records `VS / 24V_FUSED = 0 V` and `REG12 = 0 V` after
+  USB / ST-LINK disconnect.
+
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded
+
+- Added the neutral-wrapper USB-only DMM partial result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-dmm-partial-result`.
+- User-reported readings:
+  `CN3_1` through `CN3_6` are all `0 V`; `P13 = 3.3 V`; `P14 = 3.3 V`.
+  `P13` and `P14` are recorded against the requested `CN3_13 / nFAULT` and
+  `CN3_14 / 3V3` rows using the same header-label mapping as the prior
+  USB-only table.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper USB-only DMM partial result /
+  user-reported CN3_1 through CN3_6 all 0 V / user-reported P13 = 3.3 V and
+  P14 = 3.3 V, recorded as the requested CN3_13 / nFAULT and CN3_14 / 3V3
+  labels if P13/P14 map to that header / six driver-input stop-rule not hit /
+  VS / 24V_FUSED not reported in this partial record / REG12 not reported /
+  board heat smell sound reset-loop status not reported / partial USB-only
+  DMM evidence only / no full DMM neutral-state pass / no Run Debug / no 24 V /
+  no Gate PWM output / no Motor Pilot / no Motor Profiler / no motor
+  connection / no powered-drive readiness`.
+- Boundary:
+  this is partial USB-only DMM measurement evidence after the neutral-wrapper
+  USB-only ST-LINK mass-storage download. It does not authorize 24 V, Run /
+  Debug, Gate PWM output, Motor Pilot, Motor Profiler, motor connection, Hall
+  closed loop, sensorless operation, power-stage readiness, or motor
+  readiness.
+- Next checkpoint:
+  do not repeat the already reported `CN3_1` through `CN3_6` rows unless the
+  physical state changes. With black probe on GND, USB-only still active,
+  24 V still disconnected, and motor still disconnected, report only
+  `VS / 24V_FUSED`, `REG12`, and board heat / smell / sound / reset-loop
+  status. If any later recheck of `CN3_1` through `CN3_6` is stably above
+  `0.3 V`, stop, keep 24 V disconnected, and record the raw reading.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only Download Result Recorded
+
+- Added the neutral-wrapper USB-only download result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_usb_only_download_result_2026-06-21.md`.
+- Added the neutral-wrapper USB-only download execution entry:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_usb_only_download_execution_entry_2026-06-21.md`.
+- Added the neutral-wrapper BIN artifact record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_bin_artifact_record_no_power_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-RESULT-001`,
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-EXECUTION-ENTRY-001`, and
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-BIN-ARTIFACT-RECORD-NO-POWER-001`.
+- Tasks:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-download-result`,
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-download-execution-entry`, and
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-bin-artifact-record-no-power`.
+- Candidate image identity:
+  `.tmp/gwnw_build_2026-06-21_clean/stdrive101_gate_waveform_neutral_wrapper_image.elf`
+  SHA256 `C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591`;
+  MAP SHA256
+  `5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83`;
+  generated BIN
+  `.tmp/gwnw_build_2026-06-21_clean/stdrive101_gate_waveform_neutral_wrapper_image.bin`
+  size `1044` bytes, SHA256
+  `CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71`.
+- Download result:
+  the user confirmed `USB-only`, `24V disconnected`, and `motor disconnected`,
+  and explicitly allowed copying the neutral-wrapper BIN to `D:`. Pre-copy
+  checks showed `D:` volume label `NOD_G474RE`, source BIN hash
+  `CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71`,
+  and no `D:\FAIL.TXT`. The BIN was copied once to
+  `D:\stdrive101_gate_waveform_neutral_wrapper_image.bin`. After a short
+  wait, `D:` was still `NOD_G474RE`, `D:\FAIL.TXT` was absent, and the target
+  BIN was no longer visible, consistent with ST-LINK mass-storage consumption.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper USB-only download result /
+  neutral-wrapper BIN copied once to D: NOD_G474RE by ST-LINK mass storage /
+  source BIN SHA256 CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71 /
+  no FAIL.TXT before copy / no FAIL.TXT after copy / target BIN not retained
+  on D: after copy, consistent with ST-LINK mass-storage consumption /
+  download result only / no DMM neutral-state measurement result yet / no
+  Run Debug / no 24 V / no Gate PWM output / no Motor Pilot / no Motor
+  Profiler / no motor connection / no powered-drive readiness`.
+- Boundary:
+  this is a USB-only ST-LINK mass-storage download result for the neutral-
+  wrapper image only. It does not record the CN3 / REG12 DMM neutral-state
+  result yet. It does not authorize 24 V, Run / Debug, Gate PWM output,
+  Motor Pilot, Motor Profiler, motor connection, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  direct USB-only DMM table with 24 V still disconnected and motor still
+  disconnected: `VS / 24V_FUSED`, `CN3_1` through `CN3_6`,
+  `CN3_13 / nFAULT`, `CN3_14 / 3V3`, `REG12`, and board heat / smell /
+  sound / reset-loop status. If any `CN3_1` through `CN3_6` is stably above
+  `0.3 V`, stop, disconnect USB if needed, keep 24 V disconnected, and
+  record the raw reading.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only Neutral-State Phase-Gate Plan Recorded
+
+- Added the neutral-wrapper USB-only neutral-state phase-gate plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_usb_only_neutral_state_phase_gate_plan_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-NEUTRAL-STATE-PHASE-GATE-PLAN-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-neutral-state-phase-gate-plan`.
+- Candidate image boundary carried forward:
+  `.tmp/gwnw_build_2026-06-21_clean/stdrive101_gate_waveform_neutral_wrapper_image.elf`
+  SHA256 `C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591`;
+  MAP SHA256
+  `5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83`.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper USB-only neutral-state phase-gate
+  plan / plan only / neutral-wrapper build-only record accepted as
+  image-boundary evidence / neutral-wrapper ELF and MAP hashes carried forward
+  / source-review packages remain source-review only and have no CMakeLists /
+  build-only image uses main_neutral_wrapper.c and excludes old
+  main_waveform_candidate.c / retained ELF symbol table has
+  gate_waveform_neutral_wrapper_hold_idle_forever and has no
+  gate_waveform_candidate_run_once / MAP lists gate_waveform_candidate_run_once
+  only as a discarded zero-address input section from gate_waveform_candidate.c
+  / future USB-only execution-entry must separately name transfer method,
+  exact image hash, optional BIN hash if generated, measurement instrument,
+  pre/post measurement table, rollback path, and stop rules / phase-gate plan
+  only / no flash / no Run Debug / no USB runtime execution / no 24 V / no
+  Gate PWM output / no Motor Pilot / no Motor Profiler / no motor connection /
+  no powered-drive readiness`.
+- Boundary:
+  this is phase-gate planning only. It performs no flash, no Run / Debug, no
+  USB runtime execution, no 24 V, no Gate PWM output, no oscilloscope probing
+  on live gate or phase nodes, no Motor Pilot, no Motor Profiler, and no motor
+  connection. It also makes no power-stage readiness or motor readiness claim.
+- Important DMM limitation:
+  the neutral-wrapper retained ELF no longer contains
+  `gate_waveform_candidate_run_once`, so it is better suited than the earlier
+  Gate E2 `run_once()` image for a future DMM-only neutral-state check. DMM
+  can still show only steady firmware-controlled neutral state after firmware
+  reaches the wrapper loop; it cannot prove reset-time pin state or absence of
+  a very short transient on real hardware.
+- Next checkpoint:
+  only a separate neutral-wrapper USB-only neutral-state execution-entry record
+  after explicit user request and freshly confirmed preconditions. It is not
+  flash, not Run / Debug, not USB runtime execution in this record, not 24 V,
+  not Gate PWM output, not Motor Pilot, not Motor Profiler, and not motor
+  connection. Gate E4 remains closed.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper Build-Only Record No-Power Recorded
+
+- Added the neutral-wrapper no-power build-only record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_build_only_record_no_power_2026-06-21.md`.
+- Added the separate neutral-wrapper build-only package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_neutral_wrapper_build_only_2026-06-21/`.
+- Source packages carried forward:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_source_package_2026-06-21/`
+  and
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_neutral_wrapper_source_package_2026-06-21/`.
+- Clean build directory:
+  `.tmp/gwnw_build_2026-06-21_clean/`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-BUILD-ONLY-RECORD-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-build-only-record-no-power`.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper build-only record no-power /
+  object-only and linked-image build-only evidence for the neutral-wrapper
+  source review / separate build-only package defines
+  GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK and
+  GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK / source-review packages remain
+  source-review only and have no CMakeLists / build inputs include reviewed
+  gate_waveform_candidate.c and wrapper main_neutral_wrapper.c / old
+  main_waveform_candidate.c excluded from build.ninja and CMake source inputs /
+  Generic arm CMake configure and Ninja build passed in short clean build dir /
+  object target stdrive101_gate_waveform_neutral_wrapper_objects and linked
+  target stdrive101_gate_waveform_neutral_wrapper_image built / ELF and MAP
+  artifacts produced and hashed / ELF symbol table retains
+  gate_waveform_neutral_wrapper_hold_idle_forever and does not retain
+  gate_waveform_candidate_run_once / MAP lists gate_waveform_candidate_run_once
+  only as a discarded zero-address input section from gate_waveform_candidate.c
+  / no HEX or BIN target / build-only evidence / no flash / no Run Debug / no
+  USB runtime execution / no 24 V / no Gate PWM output / no Motor Pilot / no
+  Motor Profiler / no motor connection / no powered-drive readiness`.
+- Build observations:
+  clean configure used `CMAKE_SYSTEM_NAME=Generic`,
+  `CMAKE_SYSTEM_PROCESSOR=arm`,
+  `CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY`, STM32Cube GNU Arm GCC
+  `14.3.1`, and Ninja `1.13.2`. Clean build produced
+  `stdrive101_gate_waveform_neutral_wrapper_objects` and
+  `stdrive101_gate_waveform_neutral_wrapper_image`. Clean ELF SHA256 is
+  `C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591`;
+  clean MAP SHA256 is
+  `5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83`.
+  `arm-none-eabi-size` reports `text=1044`, `data=0`, `bss=1536`,
+  `dec=2580`, `hex=a14`. Linker memory report is RAM
+  `1536 B / 128 KB / 1.17%` and FLASH `1044 B / 512 KB / 0.20%`.
+- Key symbol boundary:
+  retained ELF symbols include `gate_waveform_candidate_force_idle_low`,
+  `gate_waveform_neutral_wrapper_hold_idle_forever`, `main`,
+  `Reset_Handler`, `SystemInit`, and `_estack`. The retained ELF symbol table
+  has no `gate_waveform_candidate_run_once` and no
+  `main_waveform_candidate` symbol. The MAP shows
+  `.text.gate_waveform_candidate_run_once` only in the discarded input-section
+  area at `0x00000000`, which is expected with `-ffunction-sections` and
+  `--gc-sections`.
+- Boundary:
+  this is build-only evidence only. It does not authorize firmware flash,
+  Run / Debug, USB runtime execution, 24 V, Gate PWM output, oscilloscope
+  probing on live gate or phase nodes, normal generated MCSDK app execution,
+  Motor Pilot, Motor Profiler, motor connection, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  neutral-wrapper USB-only neutral-state phase-gate plan or review only. It is
+  not flash, not Run / Debug, not USB runtime execution, not 24 V, not Gate
+  PWM output, not Motor Pilot, not Motor Profiler, and not motor connection.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Neutral-Wrapper Source Review No-Power Recorded
+
+- Added the neutral-wrapper no-power source review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_neutral_wrapper_source_review_no_power_2026-06-21.md`.
+- Added the neutral-wrapper source-review package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_neutral_wrapper_source_package_2026-06-21/`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-SOURCE-REVIEW-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-source-review-no-power`.
+- Decision:
+  `STDRIVE101 gate-waveform neutral-wrapper source review no-power /
+  source-side wrapper package created for review only / package has no
+  CMakeLists and has GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK #error guard /
+  wrapper replaces future candidate entry point only / wrapper calls
+  gate_waveform_candidate_force_idle_low before the forever loop and inside
+  the forever loop / wrapper source contains no gate_waveform_candidate_run_once
+  call / no TIM1 waveform-window or output-enable path in wrapper source /
+  current Gate E2 run_once image remains unsuitable for proving no boot
+  transient with DMM-only evidence / source review only / no build / no flash /
+  no Run Debug / no USB runtime execution / no 24 V / no Gate PWM output / no
+  Motor Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Source package boundary:
+  the package intentionally has no `CMakeLists.txt`; the header requires
+  `GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK` and raises `#error` until a later
+  dated neutral-wrapper build-only boundary is opened. No object, ELF, MAP,
+  HEX, or BIN artifact is produced or claimed here.
+- Static source review:
+  `main_neutral_wrapper.c` defines `main()` and calls
+  `gate_waveform_neutral_wrapper_hold_idle_forever()`, which calls
+  `gate_waveform_candidate_force_idle_low()` once before the forever loop and
+  then forever inside the loop. Wrapper `Inc/` and `Src/` contain no
+  `gate_waveform_candidate_run_once()` call and no TIM1 waveform-window or
+  TIM1 output-enable helper.
+- Future build-only requirement:
+  any later neutral-wrapper build-only package must include the reviewed
+  `gate_waveform_candidate.c`, exclude the old `main_waveform_candidate.c`,
+  use `main_neutral_wrapper.c` as the only entry point, and record forbidden
+  source / ELF / MAP screens.
+- Boundary:
+  this is source-review evidence only. It does not authorize object-only
+  build, linked-image build, firmware flash, Run / Debug, USB runtime
+  execution, 24 V, Gate PWM output, oscilloscope probing on live gate or phase
+  nodes, normal generated MCSDK app execution, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  neutral-wrapper build-only boundary plan or build-only record only. It is
+  not USB runtime execution, not 24 V, not Gate PWM output, not Motor Pilot,
+  not Motor Profiler, and not motor connection.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform USB-Only Neutral-State Phase-Gate Plan Recorded
+
+- Added the Gate E3 USB-only neutral-state phase-gate plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_usb_only_neutral_state_phase_gate_plan_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-USBONLY-NEUTRAL-STATE-PHASE-GATE-PLAN-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-usbonly-neutral-state-phase-gate-plan`.
+- Candidate image boundary carried forward:
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.elf`
+  SHA256 `10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C`;
+  MAP SHA256
+  `170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C`.
+- Decision:
+  `STDRIVE101 gate-waveform USB-only neutral-state phase-gate plan / Gate E3
+  plan only / Gate E2 linked-image build-only record accepted as image-boundary
+  evidence / candidate ELF and MAP hashes carried forward / current waveform
+  candidate main calls gate_waveform_candidate_run_once once and then loops
+  forcing idle low / DMM-only future check can prove only post-window steady
+  idle and cannot prove absence of a reset-time or boot-time transient /
+  later USB-only execution-entry must separately name flash or transfer
+  method, exact image hash, measurement instrument, pre/post measurement
+  table, rollback path, and stop rules / phase-gate plan only / no flash / no
+  Run Debug / no USB runtime execution / no 24 V / no Gate PWM output / no
+  Motor Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  this is phase-gate planning only. It performs no flash, no Run / Debug, no
+  USB runtime execution, no 24 V, no Gate PWM output, no oscilloscope probing
+  on live gate or phase nodes, no Motor Pilot, no Motor Profiler, and no motor
+  connection. It also makes no power-stage readiness or motor readiness claim.
+- Important DMM limitation:
+  the Gate E2 candidate is not a pure lockout image. Its current `main()` calls
+  `gate_waveform_candidate_run_once()` once and then loops forcing idle low.
+  Therefore a future DMM-only USB check can record only steady post-window
+  idle state; it cannot prove there was no reset-time or boot-time transient.
+- Next checkpoint:
+  only a separate Gate E3 USB-only neutral-state execution-entry record after
+  explicit user request and freshly confirmed preconditions, or a source-side
+  neutral-wrapper review if the team rejects the current `run_once()` image
+  for a DMM-only neutral-state check. Gate E4 remains closed.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Build-Only Record No-Power Recorded
+
+- Added the Gate E2 no-power build-only record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_build_only_record_no_power_2026-06-21.md`.
+- Added the separate Gate E2 build-only package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_build_only_2026-06-21/`.
+- Source package carried forward:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_source_package_2026-06-21/`.
+- Clean build directory:
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-BUILD-ONLY-RECORD-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-build-only-record-no-power`.
+- Decision:
+  `STDRIVE101 gate-waveform build-only record no-power / Gate E2 object-only
+  and linked-image build-only evidence for the exact Gate E1 reviewed source
+  package / separate build-only package defines
+  GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK / Gate E1 source package remains
+  source-review only and has no CMakeLists / Generic arm CMake configure and
+  Ninja build passed / object target
+  stdrive101_gate_waveform_candidate_objects and linked target
+  stdrive101_gate_waveform_candidate_image built / ELF and MAP artifacts
+  produced and hashed / -nostdlib minimal runtime keeps newlib malloc free
+  paths out of the MAP / forbidden source ELF MAP screens clean / build-only
+  evidence / no flash / no Run Debug / no USB runtime / no 24 V / no Gate PWM
+  output / no Motor Pilot / no Motor Profiler / no motor connection / no
+  powered-drive readiness`.
+- Build boundary:
+  the Gate E1 source package still has no `CMakeLists.txt`; only the Gate E2
+  build-only package defines `GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK`.
+  CMake configured as `Generic` / `arm` with
+  `CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY`, STM32Cube GNU Arm GCC
+  `14.3.1`, and Ninja `1.13.2`.
+- Built targets and artifacts:
+  `stdrive101_gate_waveform_candidate_objects` and
+  `stdrive101_gate_waveform_candidate_image` built successfully. The clean ELF
+  is
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.elf`
+  SHA256 `10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C`;
+  the clean MAP is
+  `.tmp/manual_gate_waveform_build_only_2026-06-21_clean/stdrive101_gate_waveform_candidate_image.map`
+  SHA256 `170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C`.
+  `arm-none-eabi-size` reports `text=1852`, `data=0`, `bss=1544`,
+  `dec=3396`, `hex=d44`; linker memory use is RAM `1544 B / 128 KB /
+  1.18%` and FLASH `1852 B / 512 KB / 0.35%`.
+- Key symbols:
+  `g_pfnVectors`, `disable_tim1_outputs_keep_counter`,
+  `wait_for_pwm_periods_or_fault`,
+  `gate_waveform_candidate_force_idle_low`,
+  `gate_waveform_candidate_run_once`, `main`, `__libc_init_array`, `_init`,
+  `_fini`, `Reset_Handler`, `SystemInit`, and `_estack` are recorded from the
+  clean ELF.
+- Forbidden screens:
+  source/build, ELF symbol, and MAP screens are clean for normal generated
+  MCSDK start / command ingress / PWM-output enable / Hall / PID /
+  speed-loop / delay / printf / dynamic-allocation terms. README-only
+  boundary text hits are not source or symbol paths.
+- Boundary:
+  this is build-only evidence. It does not authorize firmware flash, Run /
+  Debug, USB runtime execution, 24 V, Gate PWM output, oscilloscope probing on
+  live gate or phase nodes, normal generated MCSDK app execution, Motor Pilot,
+  Motor Profiler, motor connection, Hall closed loop, sensorless operation,
+  power-stage readiness, or motor readiness.
+- Next checkpoint:
+  Gate E3 only: a separate USB-only neutral-state phase-gate plan or review
+  for the Gate E2 image. Gate E3 must still not open flash, Run / Debug, USB
+  runtime execution, 24 V, Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, or readiness claims by default.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Isolated Source Package Review No-Power Recorded
+
+- Added the Gate E1 no-power source-package review:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_isolated_source_package_review_no_power_2026-06-21.md`.
+- Added the reviewed source package:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_waveform_source_package_2026-06-21/`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-ISOLATED-SOURCE-PACKAGE-REVIEW-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-isolated-source-package-review-no-power`.
+- Decision:
+  `STDRIVE101 gate-waveform isolated source package review no-power / Gate E1
+  source package created for review only / package has no CMakeLists and has a
+  Gate E2 compile-acknowledgement #error guard / future isolated waveform
+  image remains separate from normal generated MCSDK app and lockout image /
+  candidate driver inputs fixed as PA8 PA9 PA10 PB13 PB14 PB15 / startup and
+  shutdown force all six low / waveform constants frozen at 1 kHz, 100
+  permille duty, 16 period window, 8 pre-idle periods, 32 post-idle periods,
+  DTG 0x90 / TIM1 MOE CCER break AOE and dead-time policy visible in source /
+  nFAULT stop path disables TIM1 outputs and forces all six low / source
+  review only / no build / no flash / no Run Debug / no USB runtime / no
+  24 V / no Gate PWM output / no Motor Pilot / no Motor Profiler / no motor
+  connection / no powered-drive readiness`.
+- Source package boundary:
+  the package intentionally has no `CMakeLists.txt`; the header requires
+  `GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK` and raises `#error` until a
+  later dated Gate E2 build-only boundary is opened. No object, ELF, MAP, HEX,
+  or BIN artifact is produced or claimed here.
+- Static source review:
+  the package fixes candidate driver-input pins as `PA8`, `PA9`, `PA10`,
+  `PB13`, `PB14`, and `PB15`; uses `gate_waveform_candidate_force_idle_low()`
+  before and after the candidate window; freezes the candidate constants at
+  `1 kHz`, `100` permille duty, `16` window periods, `8` pre-idle periods,
+  `32` post-idle periods, and `DTG 0x90`; makes TIM1 `MOE`, `CCER`, break,
+  AOE clearing, dead-time, and complementary-output policy visible in source;
+  and polls `nFAULT` through `wait_for_pwm_periods_or_fault()`, which disables
+  TIM1 outputs and forces all six pins low on a fault.
+- Forbidden-source screen:
+  source-path review found no `MC_StartMotor1`, `MCI_START`, PC13 start /
+  stop, MCP, ASPEP, `R3_2_TurnOnLowSides`, `PWMC_SwitchOnPWM`,
+  `LL_TIM_EnableAllOutputs`, Hall, PID, speed-loop, blocking delay, printf, or
+  dynamic-allocation source path in `Inc/` or `Src/`. The only text hits for
+  Motor Pilot / Motor Profiler are boundary language in the package README.
+- Boundary:
+  this is source-review evidence only. It does not authorize object-only
+  build, linked-image build, firmware flash, Run / Debug, USB runtime
+  execution, 24 V, Gate PWM output, oscilloscope probing on live gate or phase
+  nodes, normal generated MCSDK app execution, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  Gate E2 only: a separate object-only and linked-image build-only boundary
+  plan or build-only record for this exact reviewed source package. Gate E2
+  still must not open flash, Run / Debug, USB runtime execution, 24 V, Gate
+  PWM output, Motor Pilot, Motor Profiler, motor connection, or readiness
+  claims.
+
+## 2026-06-20 STDRIVE101 Gate-Waveform Image Design Plan No-Power Recorded
+
+- Added the Gate E0 no-power design-boundary plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_image_design_plan_no_power_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-GATE-WAVEFORM-IMAGE-DESIGN-PLAN-NO-POWER-001`.
+- Task:
+  `TASK-2026-06-20-stdrive101-gate-waveform-image-design-plan-no-power`.
+- Decision:
+  `STDRIVE101 gate-waveform image design plan no-power / Gate E0 only /
+  separate isolated waveform candidate required / normal generated MCSDK app
+  and command ingress remain blocked / six candidate driver inputs fixed as
+  PA8 PA9 PA10 PB13 PB14 PB15 / idle state must force all six low before and
+  after any future candidate window / future TIM1 MOE CCER break AOE dead-time
+  and complementary-overlap policy required before source or build / design
+  plan only / no flash / no Run Debug / no 24 V / no Gate PWM output / no
+  Motor Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Boundary:
+  this is Gate E0 design planning only. It creates no source package, makes no
+  CMake edits, runs no build, flashes no firmware, performs no Run / Debug,
+  executes no USB runtime, applies no 24 V, emits no Gate PWM output, probes no
+  live gate or phase waveform, starts no normal generated MCSDK application,
+  opens no Motor Pilot or Motor Profiler path, connects no motor, and makes no
+  Hall closed-loop, sensorless, power-stage readiness, or motor readiness
+  claim.
+- Required future image shape:
+  any later waveform candidate must be a separate isolated image, not the
+  normal generated MCSDK app and not the existing lockout image. The only
+  candidate driver-input pins are `PA8`, `PA9`, `PA10`, `PB13`, `PB14`, and
+  `PB15`; all six must be forced low before and after any future candidate
+  window. TIM1 `MOE`, `CCER`, break, AOE, dead-time, polarity, and
+  complementary-overlap policy must be reviewed before any source or build.
+- Next checkpoint:
+  Gate E1 only: a separate isolated waveform source-package planning/review
+  record, or a build-side boundary plan that still has no build, flash, Run /
+  Debug, USB runtime execution, 24 V, Gate PWM output, Motor Pilot, Motor
+  Profiler, motor connection, or readiness claim.
+
+## 2026-06-20 STDRIVE101 Gate-Waveform / PWM-Output No-Power Phase-Gate Plan Recorded
+
+- Added the no-power phase-gate plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_pwm_output_no_power_phase_gate_plan_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-GATE-WAVEFORM-PWM-OUTPUT-NO-POWER-PHASE-GATE-PLAN-001`.
+- Decision:
+  `STDRIVE101 gate-waveform PWM-output no-power phase-gate plan / 24V static
+  lockout carry-forward result accepted as static boundary evidence /
+  linked lockout image and USB-only runtime lockout result carried forward as
+  driver-input-low evidence / normal generated MCSDK PWM path remains blocked /
+  future gate-waveform execution gates, instrumentation requirements,
+  rollback path, and stop rules named as future-only items / phase-gate plan
+  only / no flash / no Run Debug / no 24 V / no Gate PWM output / no Motor
+  Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Carried-forward evidence:
+  the 24V static lockout carry-forward result closes the duplicate static
+  measurement branch and carries forward HSPY `CV`, about `0.045 A`,
+  `CN3_1` through `CN3_6` close to `0 V`, `nFAULT = 3.3 V`,
+  `CN3_14 / 3V3 = 3.3 V`, `REG12 = 0.3 V`, plus the USB-only lockout
+  runtime result with the reviewed lockout image and driver-input stop rule
+  not hit.
+- Future ladder named only:
+  Gate E0 no-power waveform-image design plan, Gate E1 isolated source
+  package, Gate E2 build-only linked image, Gate E3 USB-only neutral-state
+  runtime check, Gate E4 future scope-only no-motor execution-entry, and
+  Gate E5 result record. None of these execution gates are opened by this
+  record.
+- Boundary:
+  this is plan-only evidence. It does not authorize firmware flash,
+  Run / Debug, USB runtime execution, 24 V, Gate PWM output, oscilloscope
+  probing on live gate or phase nodes, normal generated MCSDK app execution,
+  Motor Pilot, Motor Profiler, motor connection, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  Gate E0 only: a separate no-power waveform-image design plan, or source /
+  build review that keeps all execution actions closed.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test 24V Static Lockout Carry-Forward Result Recorded
+
+- Added the no-repeat carry-forward result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_24v_static_lockout_carry_forward_result_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-CARRY-FORWARD-RESULT-001`.
+- Decision:
+  `STDRIVE101 manual gate-test 24V static lockout carry-forward result /
+  no repeated measurement / existing USB plus 24V static recheck carried
+  forward with HSPY CV about 0.045 A, CN3_1 through CN3_6 all close to 0 V,
+  nFAULT 3.3 V, CN3_14 3.3 V, REG12 0.3 V / USB-only lockout runtime result
+  carried forward as reviewed lockout image driver-input-low evidence /
+  static baseline accepted for no-repeat gating only / no claim of new 24V
+  lockout measurement under lockout image / no Gate PWM output / no Motor
+  Pilot / no Motor Profiler / no motor connection / no powered-drive
+  readiness`.
+- Carried-forward USB + 24 V static evidence:
+  HSPY `CV`; current about `0.045 A`; motor disconnected; wake stimulus
+  removed; `CN3_1` through `CN3_6` all close to `0 V`;
+  `CN3_13 / nFAULT = 3.3 V`; `CN3_14 / 3V3 = 3.3 V`; and `REG12 = 0.3 V`.
+- Carried-forward USB-only lockout runtime evidence:
+  ELF SHA256 `87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6`;
+  BIN SHA256
+  `CBF833C8E9289D8B4A952C32C641CAA94928F1F8119C5DC528EBD779915EA6BE`;
+  `CN3_1` through `CN3_6 = 0 V`; `CN3_13 / nFAULT = 3.3 V`;
+  `CN3_14 / 3V3 = 3.3 V`; `REG12 = 0 V`; driver-input stop rule not hit.
+- Boundary:
+  this is a consolidation record, not a new hardware measurement. It closes
+  the duplicate-measurement branch opened by the 24V static lockout
+  execution-entry record after the user clarified that the equivalent
+  USB + 24 V all-inputs-low static check was already measured and recorded.
+  It does not claim a fresh simultaneous `lockout image + 24 V` direct
+  measurement and does not authorize firmware flash, new Run / Debug, normal
+  generated MCSDK app run, Gate PWM output, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  create only a no-power phase-gate plan for the next higher-risk step, such
+  as gate-waveform / PWM-output planning. Do not execute PWM, Motor Pilot,
+  Motor Profiler, or motor work from this record.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test 24V Static Lockout Execution Entry Recorded
+
+- Added the 24V static lockout execution-entry record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_24v_static_lockout_execution_entry_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-EXECUTION-ENTRY-001`.
+- Decision:
+  `STDRIVE101 manual gate-test 24V static lockout execution entry / user
+  confirmed HSPY output OFF, HSPY set to 24 V 0.2 A, VS 24V_FUSED close to
+  0 V and below 1 V, motor disconnected, wake stimulus removed, Motor Pilot
+  and Motor Profiler closed, no abnormal heat smell sound / USB-only lockout
+  result accepted as driver-input-low evidence / opens exactly one bounded
+  24 V static lockout measurement pass / no Gate PWM output / no Motor Pilot /
+  no Motor Profiler / no motor connection / no powered-drive readiness`.
+- User-confirmed entry gates:
+  HSPY output `OFF`; HSPY set to `24 V / 0.2 A`; `VS / 24V_FUSED` close to
+  `0 V` and below `1 V`; motor disconnected; `10 kohm` wake resistor /
+  `LIN1` stimulus removed; Motor Pilot / Profiler closed; no abnormal heat /
+  smell / sound.
+- Boundary:
+  this opened exactly one bounded 24 V static lockout measurement pass as a
+  historical execution-entry record. The later carry-forward result closes
+  the duplicate-measurement branch without repeating the same static table. It
+  does not flash, does not Run / Debug, does not run a normal generated MCSDK
+  app, does not open Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness.
+- Next checkpoint:
+  superseded by the carry-forward result; do not repeat the 24 V static table
+  unless the image, wiring, board condition, or tool state changes.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test 24V Static Lockout Phase-Gate Plan Recorded
+
+- Added the 24V static lockout phase-gate plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_24v_static_lockout_phase_gate_plan_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-PHASE-GATE-PLAN-001`.
+- Decision:
+  `STDRIVE101 manual gate-test 24V static lockout phase-gate plan / USB-only
+  runtime lockout result accepted as driver-input-low evidence / earlier USB
+  plus 24V static baseline carried forward / candidate 24V static lockout
+  execution preconditions, measurement table, rollback path, and stop rules
+  named / phase-gate plan only / no 24V execution in this record / no Gate PWM
+  output / no Motor Pilot / no Motor Profiler / no motor connection / no
+  powered-drive readiness`.
+- Accepted evidence:
+  USB-only lockout result records `CN3_1` through `CN3_6 = 0 V`,
+  `CN3_13 / nFAULT = 3.3 V`, `CN3_14 / 3V3 = 3.3 V`, `REG12 = 0 V`,
+  and driver-input stop rule not hit. The earlier USB plus 24V static
+  baseline records HSPY `CV`, about `0.045 A`, six driver inputs close to
+  `0 V`, `CN3_13 / nFAULT = 3.3 V`, `CN3_14 / 3V3 = 3.3 V`, and
+  `REG12 = 0.3 V`.
+- Boundary:
+  this is a phase-gate plan only. It does not apply 24V, does not flash, does
+  not Run / Debug, does not run a normal generated MCSDK app, does not open
+  Gate PWM output, Motor Pilot, Motor Profiler, motor connection, Hall closed
+  loop, sensorless operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  only a later separate 24 V static lockout execution-entry record may apply
+  HSPY, and only after explicit user request plus freshly confirmed
+  preconditions.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test USB-Only Runtime Lockout Result Recorded
+
+- Added the USB-only runtime lockout result record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_usb_only_runtime_lockout_result_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-RESULT-001`.
+- Decision:
+  `STDRIVE101 manual gate-test USB-only runtime lockout result / reviewed
+  lockout ELF converted to BIN and copied through ST-LINK mass storage /
+  no FAIL.TXT after copy / user-reported CN3_1 through CN3_6 all 0 V /
+  nFAULT 3.3 V / CN3_14 3.3 V / REG12 0 V / driver-input stop rule not hit /
+  USB-only runtime evidence only / no 24 V / no PWM-output validation /
+  no Motor Pilot / no Motor Profiler / no motor connection / no
+  powered-drive readiness`.
+- Download evidence:
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.elf`,
+  SHA256 `87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6`;
+  generated `.bin`, SHA256
+  `CBF833C8E9289D8B4A952C32C641CAA94928F1F8119C5DC528EBD779915EA6BE`;
+  copied to ST-LINK mass-storage `D:` / `NOD_G474RE`; no `FAIL.TXT` after
+  copy.
+- User-reported USB-only readings:
+  `CN3_1 = 0 V`, `CN3_2 / LIN1 = 0 V`, `CN3_3 = 0 V`,
+  `CN3_4 = 0 V`, `CN3_5 = 0 V`, `CN3_6 = 0 V`,
+  `CN3_13 / nFAULT = 3.3 V`, `CN3_14 / 3V3 = 3.3 V`,
+  and `REG12 = 0 V`.
+- Boundary:
+  this proves only the USB-only lockout runtime measurement state. It does not
+  authorize 24 V, Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness, or
+  motor readiness.
+- Next checkpoint:
+  a separate dated phase-gate review before any later 24 V static lockout
+  check, PWM/gate waveform task, or motor task is considered.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test USB-Only Runtime Lockout Execution Entry Recorded
+
+- Added the USB-only runtime lockout execution-entry record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_usb_only_runtime_lockout_execution_entry_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-EXECUTION-ENTRY-001`.
+- Decision:
+  `STDRIVE101 manual gate-test USB-only runtime lockout execution entry /
+  user confirmed HSPY 24 V OFF and physically disconnected, VS 24V_FUSED
+  below 1 V, motor disconnected, wake stimulus removed, Motor Pilot and Motor
+  Profiler closed, no abnormal heat smell sound / linked-image ELF hash matched
+  / opens exactly one USB-only lockout flash-run measurement pass / no 24 V /
+  no PWM-output validation / no Motor Pilot / no Motor Profiler / no motor
+  connection / no powered-drive readiness`.
+- Candidate image:
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.elf`,
+  SHA256 `87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6`.
+- User-confirmed physical boundary:
+  HSPY / 24 V `OFF` and physically disconnected; `VS / 24V_FUSED < 1 V`;
+  motor disconnected; `10 kohm` wake resistor / `LIN1` stimulus removed;
+  Motor Pilot / Profiler closed; no abnormal heat / smell / sound.
+- Boundary:
+  opens only one USB-only lockout flash / run measurement pass using the exact
+  candidate ELF. Still no 24 V, no Gate PWM output, no Motor Pilot, no Motor
+  Profiler, no motor connection, no Hall closed loop, no sensorless operation,
+  no power-stage readiness, and no motor readiness.
+- Next checkpoint:
+  after the user measures `CN3_1` through `CN3_6`, `CN3_13 / nFAULT`,
+  `CN3_14 / 3V3`, and `REG12`, create a separate runtime result record.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test USB-Only Runtime Lockout Phase-Gate Plan Recorded
+
+- Added the USB-only runtime lockout phase-gate plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_usb_only_runtime_lockout_phase_gate_plan_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-PHASE-GATE-PLAN-001`.
+- Decision:
+  `STDRIVE101 manual gate-test USB-only runtime lockout phase-gate plan
+  no-power / linked-image build-only record accepted as image-boundary
+  evidence / candidate USB-only runtime preconditions, measurement table, and
+  stop rules named / phase-gate plan only / no flash / no Run Debug / no USB
+  runtime execution / no 24 V / no PWM-output validation / no powered-drive
+  readiness`.
+- Candidate image carried forward:
+  `stdrive101_gate_lockout_image`,
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.elf`,
+  SHA256 `87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6`;
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.map`,
+  SHA256 `A020546A3D1D56B1C509939161BD80E5A25EC5843C928B9BC13E8D07684FF6C0`.
+- Later execution gates named:
+  explicit user request to execute USB-only lockout runtime, matching ELF hash
+  or replacement build-only record, HSPY / 24 V OFF and disconnected,
+  `VS / 24V_FUSED < 1 V`, motor disconnected, wake resistor removed,
+  Motor Pilot / Profiler closed, and no normal MCSDK ingress.
+- Boundary:
+  this is a phase-gate plan only. It does not authorize flash, Run / Debug,
+  USB runtime execution, 24 V, Gate PWM output, Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  only a later separate USB-only runtime execution record may execute anything,
+  and only after explicit user request plus the named preconditions.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test Linked-Image Build-Only Record Recorded
+
+- Added the linked-image build-only record:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_linked_image_build_only_record_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-ONLY-RECORD-001`.
+- Decision:
+  `STDRIVE101 manual gate-test linked-image build-only record no-power /
+  repo-local CMake linked target stdrive101_gate_lockout_image added /
+  Generic bare-metal CMake configure and Ninja build passed / ELF and MAP
+  artifacts produced and hashed / forbidden source ELF MAP screens clean /
+  build-only evidence / no flash / no Run Debug / no USB runtime / no 24 V /
+  no PWM-output validation / no powered-drive readiness`.
+- Build target:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/manual_gate_test_lockout_build_only_2026-06-20/CMakeLists.txt`
+  now keeps `stdrive101_gate_lockout_objects` and adds linked target
+  `stdrive101_gate_lockout_image`.
+- Build result:
+  CMake configured with `CMAKE_SYSTEM_NAME=Generic`,
+  `CMAKE_SYSTEM_PROCESSOR=arm`, STM32Cube GNU Arm GCC `14.3.1`, and Ninja;
+  `cmake --build .tmp\manual_gate_test_lockout_linked_image --target
+  stdrive101_gate_lockout_image --verbose` exited `0`.
+- Produced artifacts:
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.elf`,
+  `24788` bytes, SHA256
+  `87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6`;
+  `.tmp/manual_gate_test_lockout_linked_image/stdrive101_gate_lockout_image.map`,
+  `123825` bytes, SHA256
+  `A020546A3D1D56B1C509939161BD80E5A25EC5843C928B9BC13E8D07684FF6C0`.
+- Size / memory:
+  `text=1356`, `data=0`, `bss=1568`, RAM `1568 B / 128 KB`, FLASH
+  `1356 B / 512 KB`.
+- Boundary:
+  this is linked-image build-only evidence. It does not authorize flash,
+  Run / Debug, USB runtime execution, 24 V, Gate PWM output, Motor Pilot,
+  Motor Profiler, motor connection, Hall closed loop, sensorless operation,
+  power-stage readiness, or motor readiness.
+- Next checkpoint:
+  write a separate USB-only runtime lockout phase-gate plan or review before
+  any runtime is discussed; do not execute runtime yet.
+
+## 2026-06-20 STDRIVE101 Manual Gate-Test Linked-Image Build-Boundary Plan Recorded
+
+- Added the linked-image build-boundary plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_manual_gate_test_linked_image_build_boundary_plan_2026-06-20.md`.
+- Evidence:
+  `EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-BOUNDARY-PLAN-001`.
+- Decision:
+  `STDRIVE101 manual gate-test linked-image build-boundary plan no-power /
+  object-only lockout build pass and USB-only runtime lockout preparation
+  carried forward / future link inputs and minimum image artifacts named /
+  boundary plan only / no linked image built / no flash / no runtime / no
+  PWM-output validation / no powered-drive readiness`.
+- Candidate future link inputs are fixed to repo-local
+  `apps/stm32_g474_foc/nucleo_g474re_baseline/` startup, linker script,
+  `system_stm32g4xx.c`, `syscalls.c`, and `sysmem.c`, with SHA256 hashes
+  recorded in the plan.
+- Future target name, if a later build-only task creates it:
+  `stdrive101_gate_lockout_image`; minimum future artifacts are ELF and MAP.
+- Boundary:
+  this is a boundary-plan record only. It does not create a linked image,
+  does not edit CMake, and does not authorize flash, Run / Debug, USB runtime
+  execution, 24 V, Gate PWM output, Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness.
+- Next checkpoint:
+  create a separate linked-image build-only record for the lockout image; do
+  not execute runtime yet.
+
 ## 2026-06-20 STDRIVE101 Manual Gate-Test USB-Only Runtime Lockout Prep Recorded
 
 - Added the USB-only runtime lockout preparation record:

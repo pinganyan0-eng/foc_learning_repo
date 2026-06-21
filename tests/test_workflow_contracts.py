@@ -1962,5 +1962,2387 @@ class SoftwareHallFirmwareEntryPlanTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
 
+class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
+    def test_linked_image_boundary_plan_records_no_power_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_linked_image_build_boundary_plan_2026-06-20.md"
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test linked-image build-boundary plan no-power",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-BOUNDARY-PLAN-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-linked-image-build-boundary-plan-no-power",
+            "No ELF, MAP, HEX, BIN, or other linked lockout image is produced or claimed",
+            "stdrive101_gate_lockout_image",
+            "ELF and MAP",
+            "startup_stm32g474xx.s",
+            "STM32G474XX_FLASH.ld",
+            "system_stm32g4xx.c",
+            "syscalls.c",
+            "sysmem.c",
+            "MC_StartMotor1",
+            "MCI_START",
+            "R3_2_TurnOnLowSides",
+            "PWMC_SwitchOnPWM",
+            "LL_TIM_EnableAllOutputs",
+            "no linked image built",
+            "flash",
+            "Run / Debug",
+            "USB runtime execution",
+            "24 V",
+            "Gate PWM output",
+            "Motor Pilot",
+            "Motor Profiler",
+            "motor connection",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_linked_image_boundary_plan_is_registered_without_runtime_upgrade(self):
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "stdrive101_manual_gate_test_linked_image_build_boundary_plan_2026-06-20.md",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-BOUNDARY-PLAN-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-linked-image-build-boundary-plan-no-power",
+            "STDRIVE101 manual gate-test linked-image build-boundary plan no-power",
+            "boundary plan only",
+            "no linked image built",
+            "future target",
+            "stdrive101_gate_lockout_image",
+            "ELF plus MAP",
+            "no flash",
+            "no runtime",
+            "no PWM-output validation",
+            "no powered-drive readiness",
+            "separate linked-image build-only record",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_linked_image_build_only_record_records_artifacts_and_boundary(self):
+        record = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_linked_image_build_only_record_2026-06-20.md"
+        )
+        cmake = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_test_lockout_build_only_2026-06-20/CMakeLists.txt"
+        )
+        text = record + cmake
+
+        for phrase in (
+            "STDRIVE101 manual gate-test linked-image build-only record no-power",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-ONLY-RECORD-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-linked-image-build-only-record-no-power",
+            "add_executable(stdrive101_gate_lockout_image",
+            "startup_stm32g474xx.s",
+            "STM32G474XX_FLASH.ld",
+            "system_stm32g4xx.c",
+            "syscalls.c",
+            "sysmem.c",
+            "CMAKE_SYSTEM_NAME=Generic",
+            "CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+            "stdrive101_gate_lockout_image.elf",
+            "stdrive101_gate_lockout_image.map",
+            "87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6",
+            "A020546A3D1D56B1C509939161BD80E5A25EC5843C928B9BC13E8D07684FF6C0",
+            "1356 0 1568 2924 b6c",
+            "RAM:        1568 B",
+            "FLASH:        1356 B",
+            "no forbidden source matches",
+            "no forbidden ELF symbol matches",
+            "no forbidden MAP matches",
+            "no flash",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "Motor Pilot",
+            "Motor Profiler",
+            "motor connection",
+            "no readiness claim",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_linked_image_build_only_record_is_registered_without_runtime_upgrade(self):
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "stdrive101_manual_gate_test_linked_image_build_only_record_2026-06-20.md",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-LINKED-IMAGE-BUILD-ONLY-RECORD-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-linked-image-build-only-record-no-power",
+            "STDRIVE101 manual gate-test linked-image build-only record no-power",
+            "repo-local CMake linked target stdrive101_gate_lockout_image added",
+            "Generic bare-metal CMake configure and Ninja build passed",
+            "ELF and MAP artifacts produced and hashed",
+            "forbidden source ELF MAP screens clean",
+            "build-only evidence",
+            "stdrive101_gate_lockout_image.elf",
+            "stdrive101_gate_lockout_image.map",
+            "no flash",
+            "no Run Debug",
+            "no USB runtime",
+            "no 24 V",
+            "no PWM-output validation",
+            "no powered-drive readiness",
+            "separate USB-only runtime lockout phase-gate plan",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_usb_only_runtime_phase_gate_plan_records_no_execution_boundary(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_phase_gate_plan_2026-06-20.md"
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test USB-only runtime lockout phase-gate plan no-power",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-phase-gate-plan",
+            "linked-image build-only record accepted as image-boundary evidence",
+            "phase-gate plan only",
+            "no flash",
+            "no Run Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no PWM-output validation",
+            "no powered-drive readiness",
+            "stdrive101_gate_lockout_image",
+            "stdrive101_gate_lockout_image.elf",
+            "87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6",
+            "stdrive101_gate_lockout_image.map",
+            "A020546A3D1D56B1C509939161BD80E5A25EC5843C928B9BC13E8D07684FF6C0",
+            "explicitly asks to execute the USB-only lockout runtime check",
+            "HSPY / 24 V is OFF",
+            "`VS / 24V_FUSED`",
+            "below `1 V`",
+            "Motor disconnected",
+            "wake resistor / LIN1 stimulus is removed",
+            "Motor Pilot and Motor Profiler closed / unused",
+            "Do not fill this table in this record",
+            "stable reading above `0.3 V`",
+            "Do not continue by trying one more time",
+            "The next engineering checkpoint is not motor power",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_usb_only_runtime_phase_gate_plan_is_registered_without_runtime_upgrade(self):
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_phase_gate_plan_2026-06-20.md",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-phase-gate-plan",
+            "STDRIVE101 manual gate-test USB-only runtime lockout phase-gate plan no-power",
+            "linked-image build-only record accepted as image-boundary evidence",
+            "candidate USB-only runtime preconditions",
+            "measurement table",
+            "stop rules named",
+            "phase-gate plan only",
+            "no flash",
+            "no Run Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no PWM-output validation",
+            "no powered-drive readiness",
+            "only a later separate USB-only runtime execution record",
+            "explicit user request",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_usb_only_runtime_execution_entry_opens_only_lockout_measurement(self):
+        text = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_execution_entry_2026-06-20.md"
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test USB-only runtime lockout execution entry",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-EXECUTION-ENTRY-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-execution-entry",
+            "USB-only lockout runtime 检查",
+            "HSPY / 24 V `OFF` and physically disconnected",
+            "`VS / 24V_FUSED < 1 V`",
+            "motor disconnected",
+            "wake resistor / `LIN1` stimulus removed",
+            "Motor Pilot / Profiler closed",
+            "no abnormal heat / smell / sound",
+            "87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6",
+            "opens exactly one USB-only lockout flash-run measurement pass",
+            "Still forbidden",
+            "24 V",
+            "Gate PWM output or PWM validation",
+            "Motor Pilot",
+            "Motor Profiler",
+            "motor connection",
+            "any normal generated MCSDK application run",
+            "Do not infer values",
+            "Expected safe result for `CN3_1` through `CN3_6`: close to `0 V`",
+            "stable above `0.3 V`",
+            "does not contain the measured runtime result yet",
+            "create a separate runtime result record",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_usb_only_runtime_execution_entry_is_registered_without_powered_upgrade(self):
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_execution_entry_2026-06-20.md",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-EXECUTION-ENTRY-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-execution-entry",
+            "STDRIVE101 manual gate-test USB-only runtime lockout execution entry",
+            "user confirmed HSPY 24 V OFF and physically disconnected",
+            "VS 24V_FUSED below 1 V",
+            "linked-image ELF hash matched",
+            "opens exactly one USB-only lockout flash-run measurement pass",
+            "no 24 V",
+            "no PWM-output validation",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "separate runtime result record",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_usb_only_runtime_lockout_result_records_measurements_without_powered_upgrade(self):
+        result = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_result_2026-06-20.md"
+        )
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test USB-only runtime lockout result",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-USBONLY-RUNTIME-LOCKOUT-RESULT-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-usbonly-runtime-lockout-result",
+            "reviewed lockout ELF converted to BIN and copied through ST-LINK mass storage",
+            "no FAIL.TXT after copy",
+            "87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6",
+            "CBF833C8E9289D8B4A952C32C641CAA94928F1F8119C5DC528EBD779915EA6BE",
+            "`CN3_1` driver input | `0 V`",
+            "`CN3_2 / LIN1` | `0 V`",
+            "`CN3_3` driver input | `0 V`",
+            "`CN3_4` driver input | `0 V`",
+            "`CN3_5` driver input | `0 V`",
+            "`CN3_6` driver input | `0 V`",
+            "`CN3_13 / nFAULT` | `3.3 V`",
+            "`CN3_14 / 3V3` | `3.3 V`",
+            "`REG12` | `0 V`",
+            "driver-input stop rule not hit",
+            "USB-only runtime evidence only",
+            "no 24 V",
+            "no PWM-output validation",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Not usable to claim 24 V behavior",
+            "separate dated phase-gate review",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_24v_static_lockout_phase_gate_records_planning_without_powered_upgrade(self):
+        plan = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_24v_static_lockout_phase_gate_plan_2026-06-20.md"
+        )
+        combined = (
+            plan
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test 24V static lockout phase-gate plan",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-24v-static-lockout-phase-gate-plan",
+            "USB-only runtime lockout result accepted as driver-input-low evidence",
+            "earlier USB plus 24V static baseline carried forward",
+            "candidate 24V static lockout execution preconditions",
+            "measurement table",
+            "rollback path",
+            "stop rules",
+            "phase-gate plan only",
+            "no 24V execution in this record",
+            "no flash",
+            "no Run / Debug",
+            "no normal generated MCSDK app run",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Do not fill this table in this record",
+            "HSPY is set to `24 V / 0.2 A`",
+            "Black lead on board GND",
+            "stable reading above `0.3 V`",
+            "HSPY output OFF first",
+            "Do not continue by trying one more time",
+            "The next engineering checkpoint is not motor power",
+            "later separate 24 V static lockout execution-entry record",
+            "Not usable to claim 24 V runtime behavior",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_24v_static_lockout_execution_entry_is_historical_after_carry_forward(self):
+        entry = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_24v_static_lockout_execution_entry_2026-06-20.md"
+        )
+        combined = (
+            entry
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test 24V static lockout execution entry",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-EXECUTION-ENTRY-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-24v-static-lockout-execution-entry",
+            "user confirmed HSPY output OFF",
+            "HSPY set to 24 V 0.2 A",
+            "VS 24V_FUSED close to 0 V and below 1 V",
+            "motor disconnected",
+            "wake stimulus removed",
+            "Motor Pilot and Motor Profiler closed",
+            "no abnormal heat smell sound",
+            "USB-only lockout result accepted as driver-input-low evidence",
+            "opens exactly one bounded 24 V static lockout measurement pass",
+            "historical execution-entry record",
+            "later carry-forward result closes",
+            "duplicate-measurement branch",
+            "no firmware flash",
+            "no new Run / Debug",
+            "no normal generated MCSDK app run",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Black lead stays on board GND",
+            "stable above `0.3 V`",
+            "current is above `0.08 A`",
+            "`REG12` rises unexpectedly above `1 V`",
+            "Do not continue by trying one more time",
+            "superseded by the carry-forward result",
+            "do not repeat the 24 V static table",
+            "Not usable to claim PWM validation",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_24v_static_lockout_carry_forward_result_records_no_repeat_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_manual_gate_test_24v_static_lockout_carry_forward_result_2026-06-20.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 manual gate-test 24V static lockout carry-forward result",
+            "EV-2026-06-20-STDRIVE101-MANUAL-GATE-TEST-24V-STATIC-LOCKOUT-CARRY-FORWARD-RESULT-001",
+            "TASK-2026-06-20-stdrive101-manual-gate-test-24v-static-lockout-carry-forward-result",
+            "stdrive101_manual_gate_test_24v_static_lockout_carry_forward_result_2026-06-20.md",
+            "no repeated measurement",
+            "stdrive101_usb24_static_recheck_result_2026-06-20.md",
+            "HSPY CV about 0.045 A",
+            "CN3_1 through CN3_6 all close to 0 V",
+            "nFAULT 3.3 V",
+            "CN3_14 3.3 V",
+            "REG12 0.3 V",
+            "stdrive101_manual_gate_test_usb_only_runtime_lockout_result_2026-06-20.md",
+            "87BF3F7A28949F8DB654927292083609E52AB46C511CB6191D03B280DBFFE9B6",
+            "CBF833C8E9289D8B4A952C32C641CAA94928F1F8119C5DC528EBD779915EA6BE",
+            "driver-input stop rule not hit",
+            "no claim of new 24V lockout measurement under lockout image",
+            "static baseline accepted for no-repeat gating only",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "no-power phase-gate plan",
+            "gate-waveform / PWM-output planning",
+            "Not usable to claim 24 V runtime behavior",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_pwm_output_phase_gate_records_no_execution_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_pwm_output_no_power_phase_gate_plan_2026-06-20.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        plan = read_repo_text(artifact)
+        combined = (
+            plan
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform PWM-output no-power phase-gate plan",
+            "EV-2026-06-20-STDRIVE101-GATE-WAVEFORM-PWM-OUTPUT-NO-POWER-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-20-stdrive101-gate-waveform-pwm-output-no-power-phase-gate-plan",
+            "stdrive101_gate_waveform_pwm_output_no_power_phase_gate_plan_2026-06-20.md",
+            "24V static lockout carry-forward result accepted as static boundary evidence",
+            "linked lockout image and USB-only runtime lockout result carried forward as driver-input-low evidence",
+            "normal generated MCSDK PWM path remains blocked",
+            "future gate-waveform execution gates",
+            "instrumentation requirements",
+            "rollback path",
+            "stop rules named as future-only items",
+            "phase-gate plan only",
+            "no flash",
+            "no Run Debug",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Gate E0",
+            "Gate E1",
+            "Gate E2",
+            "Gate E3",
+            "Gate E4",
+            "Gate E5",
+            "USB-only neutral-state check",
+            "scope-only no-motor execution-entry",
+            "oscilloscope probing on live gate or phase nodes",
+            "Next checkpoint is Gate E0 only",
+            "Not usable to claim PWM validation",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_image_design_plan_records_gate_e0_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_image_design_plan_no_power_2026-06-20.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        plan = read_repo_text(artifact)
+        combined = (
+            plan
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform image design plan no-power",
+            "EV-2026-06-20-STDRIVE101-GATE-WAVEFORM-IMAGE-DESIGN-PLAN-NO-POWER-001",
+            "TASK-2026-06-20-stdrive101-gate-waveform-image-design-plan-no-power",
+            "stdrive101_gate_waveform_image_design_plan_no_power_2026-06-20.md",
+            "Gate E0 only",
+            "separate isolated waveform candidate required",
+            "normal generated MCSDK app and command ingress remain blocked",
+            "six candidate driver inputs fixed as PA8 PA9 PA10 PB13 PB14 PB15",
+            "idle state must force all six low before and after any future candidate window",
+            "future TIM1 MOE CCER break AOE dead-time and complementary-overlap policy required before source or build",
+            "design plan only",
+            "no source package",
+            "no CMake edit",
+            "no build",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "`PA8`",
+            "`PA9`",
+            "`PA10`",
+            "`PB13`",
+            "`PB14`",
+            "`PB15`",
+            "`MOE`",
+            "`CCER`",
+            "complementary-overlap",
+            "`MC_StartMotor1`",
+            "`MCI_START`",
+            "PC13 start / stop",
+            "MCP / ASPEP command ingress",
+            "Motor Pilot",
+            "Motor Profiler",
+            "Gate E1 isolated waveform source-package planning/review",
+            "Not usable to claim PWM validation",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_isolated_source_package_review_records_gate_e1_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_isolated_source_package_review_no_power_2026-06-21.md"
+        )
+        package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_source_package_2026-06-21"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+        self.assertTrue((ROOT / package / "README.md").exists())
+        self.assertTrue((ROOT / package / "Inc" / "gate_waveform_candidate.h").exists())
+        self.assertTrue((ROOT / package / "Src" / "gate_waveform_candidate.c").exists())
+        self.assertTrue((ROOT / package / "Src" / "main_waveform_candidate.c").exists())
+        self.assertFalse((ROOT / package / "CMakeLists.txt").exists())
+
+        review = read_repo_text(artifact)
+        source = (
+            read_repo_text(package + "/Inc/gate_waveform_candidate.h")
+            + read_repo_text(package + "/Src/gate_waveform_candidate.c")
+            + read_repo_text(package + "/Src/main_waveform_candidate.c")
+        )
+        combined = (
+            review
+            + source
+            + read_repo_text(package + "/README.md")
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform isolated source package review no-power",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-ISOLATED-SOURCE-PACKAGE-REVIEW-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-isolated-source-package-review-no-power",
+            "stdrive101_gate_waveform_isolated_source_package_review_no_power_2026-06-21.md",
+            "manual_gate_waveform_source_package_2026-06-21",
+            "Gate E1 source package created for review only",
+            "package has no CMakeLists",
+            "Gate E2 compile-acknowledgement #error guard",
+            "GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK",
+            "Gate E1 source package only: open and record a dated Gate E2 build-only boundary before compiling.",
+            "future isolated waveform image remains separate from normal generated MCSDK app and lockout image",
+            "candidate driver inputs fixed as PA8 PA9 PA10 PB13 PB14 PB15",
+            "startup and shutdown force all six low",
+            "1 kHz",
+            "100 permille duty",
+            "16 period window",
+            "8 pre-idle periods",
+            "32 post-idle periods",
+            "DTG 0x90",
+            "TIM1 MOE CCER break AOE and dead-time policy visible in source",
+            "nFAULT stop path disables TIM1 outputs and forces all six low",
+            "source review only",
+            "no build",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "`PA8`",
+            "`PA9`",
+            "`PA10`",
+            "`PB13`",
+            "`PB14`",
+            "`PB15`",
+            "gate_waveform_candidate_force_idle_low",
+            "wait_for_pwm_periods_or_fault",
+            "disable_tim1_outputs_keep_counter",
+            "command_ingress_present = false",
+            "No `CMakeLists.txt`",
+            "no forbidden source matches",
+            "Next checkpoint is Gate E2 only",
+            "object-only and linked-image build-only boundary plan",
+            "Not usable to claim compiled firmware",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        forbidden_source_terms = (
+            "MC_StartMotor1",
+            "MCI_START",
+            "PC13",
+            "MCP",
+            "ASPEP",
+            "Motor Pilot",
+            "Motor Profiler",
+            "R3_2_TurnOnLowSides",
+            "PWMC_SwitchOnPWM",
+            "LL_TIM_EnableAllOutputs",
+            "HALL_M1",
+            "PID_",
+            "STC_",
+            "HAL_Delay",
+            "printf",
+            "malloc",
+            "free",
+        )
+        for phrase in forbidden_source_terms:
+            self.assertNotIn(phrase, source)
+
+    def test_gate_waveform_build_only_record_records_gate_e2_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_build_only_record_no_power_2026-06-21.md"
+        )
+        source_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_source_package_2026-06-21"
+        )
+        build_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_build_only_2026-06-21"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+        self.assertTrue((ROOT / build_package / "README.md").exists())
+        self.assertTrue((ROOT / build_package / "CMakeLists.txt").exists())
+        self.assertTrue((ROOT / build_package / "Src" / "minimal_runtime.c").exists())
+        self.assertFalse((ROOT / source_package / "CMakeLists.txt").exists())
+
+        record = read_repo_text(artifact)
+        cmake = read_repo_text(build_package + "/CMakeLists.txt")
+        runtime = read_repo_text(build_package + "/Src/minimal_runtime.c")
+        combined = (
+            record
+            + cmake
+            + runtime
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform build-only record no-power",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-BUILD-ONLY-RECORD-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-build-only-record-no-power",
+            "manual_gate_waveform_build_only_2026-06-21",
+            "manual_gate_waveform_source_package_2026-06-21",
+            "Gate E2 object-only and linked-image build-only evidence",
+            "GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK",
+            "Gate E1 source package remains source-review only and has no CMakeLists",
+            "CMAKE_SYSTEM_NAME=Generic",
+            "CMAKE_SYSTEM_PROCESSOR=arm",
+            "CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+            "GNU Tools for STM32",
+            "14.3.1",
+            "ninja 1.13.2",
+            "stdrive101_gate_waveform_candidate_objects",
+            "stdrive101_gate_waveform_candidate_image",
+            "stdrive101_gate_waveform_candidate_image.elf",
+            "stdrive101_gate_waveform_candidate_image.map",
+            "10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C",
+            "170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C",
+            "text=1852",
+            "data=0",
+            "bss=1544",
+            "dec=3396",
+            "hex=d44",
+            "RAM",
+            "1.18%",
+            "FLASH",
+            "0.35%",
+            "08000000 R g_pfnVectors",
+            "08000420 t disable_tim1_outputs_keep_counter",
+            "0800051c t wait_for_pwm_periods_or_fault",
+            "080005a4 T gate_waveform_candidate_force_idle_low",
+            "080005bc T gate_waveform_candidate_run_once",
+            "080006a4 T main",
+            "080006b8 T __libc_init_array",
+            "080006c4 T _init",
+            "080006d0 T _fini",
+            "080006dc W Reset_Handler",
+            "0800072e T SystemInit",
+            "20020000 R _estack",
+            "-nostdlib",
+            "minimal runtime",
+            "no forbidden source or CMake path matches",
+            "no forbidden ELF symbol matches",
+            "no forbidden MAP matches",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Gate E3 only",
+            "USB-only neutral-state phase-gate plan",
+            "not runtime execution",
+            "Not usable to claim flashability",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_build_only_record_does_not_create_runtime_artifacts(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_build_only_record_no_power_2026-06-21.md"
+        )
+        build_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_build_only_2026-06-21"
+        )
+        cmake = read_repo_text(build_package + "/CMakeLists.txt")
+        record = read_repo_text(artifact)
+
+        for phrase in (
+            "add_library(stdrive101_gate_waveform_candidate_objects OBJECT",
+            "add_executable(stdrive101_gate_waveform_candidate_image",
+            "Src/minimal_runtime.c",
+            "startup_stm32g474xx.s",
+            "system_stm32g4xx.c",
+            "STM32G474XX_FLASH.ld",
+            "GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK",
+            "-nostdlib",
+        ):
+            self.assertIn(phrase, cmake)
+
+        for forbidden in (
+            "add_custom_command",
+            ".hex",
+            ".bin",
+            "objcopy",
+            "FLASH_RUN",
+        ):
+            self.assertNotIn(forbidden, cmake)
+
+        for phrase in (
+            "No HEX or BIN target is defined here.",
+            "No HEX / BIN target",
+            "Gate E3 must be a plan or review unless a later separate dated execution-entry explicitly opens USB-only runtime",
+            "Still forbidden after this Gate E2 record",
+            "USB runtime execution",
+            "24 V",
+            "Gate PWM output",
+        ):
+            self.assertIn(phrase, record)
+
+    def test_gate_waveform_usb_only_neutral_state_plan_records_gate_e3_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_usb_only_neutral_state_phase_gate_plan_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        plan = read_repo_text(artifact)
+        main_source = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_source_package_2026-06-21/Src/main_waveform_candidate.c"
+        )
+        combined = (
+            plan
+            + main_source
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform USB-only neutral-state phase-gate plan",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-USBONLY-NEUTRAL-STATE-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-usbonly-neutral-state-phase-gate-plan",
+            "stdrive101_gate_waveform_usb_only_neutral_state_phase_gate_plan_2026-06-21.md",
+            "Gate E3 plan only",
+            "Gate E2 linked-image build-only record accepted as image-boundary evidence",
+            "candidate ELF and MAP hashes carried forward",
+            "10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C",
+            "170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C",
+            "gate_waveform_candidate_run_once",
+            "gate_waveform_candidate_force_idle_low",
+            "current waveform candidate main calls gate_waveform_candidate_run_once once and then loops forcing idle low",
+            "DMM-only future check can prove only post-window steady idle and cannot prove absence of a reset-time or boot-time transient",
+            "later USB-only execution-entry must separately name flash or transfer method",
+            "measurement instrument",
+            "pre/post measurement table",
+            "rollback path",
+            "stop rules",
+            "phase-gate plan only",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "future DMM-only USB check can record only steady post-window idle state",
+            "cannot prove there was no reset-time or boot-time transient",
+            "Do not fill this table in this record",
+            "explicit user request",
+            "freshly confirmed preconditions",
+            "source-side neutral-wrapper review",
+            "Gate E4 remains closed",
+            "Not usable to claim flashability",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_usb_only_neutral_state_plan_is_not_execution(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_usb_only_neutral_state_phase_gate_plan_2026-06-21.md"
+        )
+        plan = read_repo_text(artifact)
+
+        for phrase in (
+            "This record is planning only",
+            "Firmware runtime action:",
+            "none in this record",
+            "No flash, no Run / Debug, no USB runtime execution",
+            "Do not use this table to execute now",
+            "This record does not open Gate E4",
+            "Still forbidden after this Gate E3 plan",
+            "USB runtime execution",
+            "24 V",
+            "Gate PWM output",
+            "oscilloscope probing on live gate or phase nodes",
+            "Motor Pilot / Profiler",
+            "motor connection",
+        ):
+            self.assertIn(phrase, plan)
+
+    def test_gate_waveform_neutral_wrapper_source_review_records_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_source_review_no_power_2026-06-21.md"
+        )
+        package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_neutral_wrapper_source_package_2026-06-21"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+        self.assertTrue((ROOT / package / "README.md").exists())
+        self.assertTrue((ROOT / package / "Inc" / "gate_waveform_neutral_wrapper.h").exists())
+        self.assertTrue((ROOT / package / "Src" / "main_neutral_wrapper.c").exists())
+        self.assertFalse((ROOT / package / "CMakeLists.txt").exists())
+
+        review = read_repo_text(artifact)
+        package_readme = read_repo_text(package + "/README.md")
+        header = read_repo_text(package + "/Inc/gate_waveform_neutral_wrapper.h")
+        source = read_repo_text(package + "/Src/main_neutral_wrapper.c")
+        combined = (
+            review
+            + package_readme
+            + header
+            + source
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform neutral-wrapper source review no-power",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-SOURCE-REVIEW-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-source-review-no-power",
+            "stdrive101_gate_waveform_neutral_wrapper_source_review_no_power_2026-06-21.md",
+            "manual_gate_waveform_neutral_wrapper_source_package_2026-06-21",
+            "source-side wrapper package created for review only",
+            "package has no CMakeLists",
+            "GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK",
+            "Neutral-wrapper source package only: open and record a dated build-only boundary before compiling.",
+            "wrapper replaces future candidate entry point only",
+            "gate_waveform_candidate_force_idle_low before the forever loop and inside the forever loop",
+            "wrapper source contains no gate_waveform_candidate_run_once call",
+            "no TIM1 waveform-window or output-enable path in wrapper source",
+            "current Gate E2 run_once image remains unsuitable for proving no boot transient with DMM-only evidence",
+            "source review only",
+            "no build",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "AE04E5D1FE022F0B730F968E1CD82131A37CA6DC75E66EC9B51C87F26450C25D",
+            "4E541FF0E4D64AAA8CADFA3182A257843C94B10A7F2EA4E954A55346751B363B",
+            "265587CDBE9CB63E2A95D5D06C4F7BBEEE967BDAECE88383782C794DF9A76310",
+            "gate_waveform_neutral_wrapper_hold_idle_forever",
+            "future build-only package must include reviewed `gate_waveform_candidate.c`, exclude old `main_waveform_candidate.c`, and use this wrapper `main_neutral_wrapper.c` as the only entry point",
+            "no forbidden source matches in wrapper `Inc/` or `Src/`",
+            "neutral-wrapper build-only boundary plan or build-only record",
+            "Not usable to claim compiled firmware",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for phrase in (
+            "GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK",
+            "#error",
+        ):
+            self.assertIn(phrase, header)
+
+        for phrase in (
+            "gate_waveform_candidate_force_idle_low",
+            "gate_waveform_neutral_wrapper_hold_idle_forever",
+            "int main(void)",
+            "for (;;)",
+        ):
+            self.assertIn(phrase, source)
+
+        for forbidden in (
+            "gate_waveform_candidate_run_once",
+            "configure_tim1_for_candidate_window",
+            "arm_candidate_outputs",
+            "TIM_BDTR_MOE",
+            "TIM_CCER",
+            "MC_StartMotor1",
+            "MCI_START",
+            "PC13",
+            "MCP",
+            "ASPEP",
+            "Motor Pilot",
+            "Motor Profiler",
+            "R3_2_TurnOnLowSides",
+            "PWMC_SwitchOnPWM",
+            "LL_TIM_EnableAllOutputs",
+            "HALL_M1",
+            "PID_",
+            "STC_",
+            "HAL_Delay",
+            "printf",
+            "malloc",
+            "free",
+        ):
+            self.assertNotIn(forbidden, header + source)
+
+    def test_gate_waveform_neutral_wrapper_source_review_is_not_runtime(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_source_review_no_power_2026-06-21.md"
+        )
+        package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_neutral_wrapper_source_package_2026-06-21"
+        )
+        review = read_repo_text(artifact)
+        combined = (
+            review
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        self.assertFalse((ROOT / package / "CMakeLists.txt").exists())
+
+        for phrase in (
+            "This record is source-review evidence only",
+            "none in this record",
+            "No object build, linked-image build, flash, Run /",
+            "No object file, ELF, MAP, HEX, or BIN is produced by this package",
+            "The package is readable source review evidence, not a build target",
+            "This source review does not prove runtime behavior",
+            "This record still does not prove",
+            "that the wrapper compiles",
+            "that a linked neutral-wrapper image exists",
+            "that USB-only DMM readings will be idle-low",
+            "Still forbidden after this neutral-wrapper source review",
+            "USB runtime execution",
+            "24 V",
+            "Gate PWM output",
+            "oscilloscope probing on live gate or phase nodes",
+            "Motor Pilot / Profiler",
+            "motor connection",
+            "neutral-wrapper build-only boundary plan or build-only record",
+            "not USB runtime",
+            "still with no flash, Run / Debug, USB runtime execution, 24 V, Gate PWM output",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_neutral_wrapper_build_only_package_records_sources(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_build_only_record_no_power_2026-06-21.md"
+        )
+        waveform_source_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_source_package_2026-06-21"
+        )
+        wrapper_source_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_neutral_wrapper_source_package_2026-06-21"
+        )
+        build_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_neutral_wrapper_build_only_2026-06-21"
+        )
+
+        self.assertTrue((ROOT / artifact).exists())
+        self.assertTrue((ROOT / build_package / "README.md").exists())
+        self.assertTrue((ROOT / build_package / "CMakeLists.txt").exists())
+        self.assertTrue((ROOT / build_package / "Src" / "minimal_runtime.c").exists())
+        self.assertFalse((ROOT / waveform_source_package / "CMakeLists.txt").exists())
+        self.assertFalse((ROOT / wrapper_source_package / "CMakeLists.txt").exists())
+
+        cmake = read_repo_text(build_package + "/CMakeLists.txt")
+        readme = read_repo_text(build_package + "/README.md")
+        runtime = read_repo_text(build_package + "/Src/minimal_runtime.c")
+        record = read_repo_text(artifact)
+
+        for phrase in (
+            "add_library(stdrive101_gate_waveform_neutral_wrapper_objects OBJECT",
+            "add_executable(stdrive101_gate_waveform_neutral_wrapper_image",
+            "GATE_WAVEFORM_CANDIDATE_GATE_E2_BUILD_ACK",
+            "GATE_WAVEFORM_NEUTRAL_WRAPPER_BUILD_ACK",
+            "manual_gate_waveform_source_package_2026-06-21",
+            "manual_gate_waveform_neutral_wrapper_source_package_2026-06-21",
+            "Src/gate_waveform_candidate.c",
+            "Src/main_neutral_wrapper.c",
+            "Src/minimal_runtime.c",
+            "startup_stm32g474xx.s",
+            "system_stm32g4xx.c",
+            "STM32G474XX_FLASH.ld",
+            "-nostdlib",
+            "No HEX or BIN target is defined here.",
+            "__libc_init_array",
+            "_init",
+            "_fini",
+        ):
+            self.assertIn(phrase, cmake + readme + runtime + record)
+
+        for forbidden in (
+            "main_waveform_candidate.c",
+            "add_custom_command",
+            ".hex",
+            ".bin",
+            "objcopy",
+            "FLASH_RUN",
+        ):
+            self.assertNotIn(forbidden, cmake)
+
+        build_ninja = ROOT / ".tmp/gwnw_build_2026-06-21_clean/build.ninja"
+        if build_ninja.exists():
+            ninja_text = build_ninja.read_text(encoding="utf-8")
+            self.assertIn("gate_waveform_candidate.c", ninja_text)
+            self.assertIn("main_neutral_wrapper.c", ninja_text)
+            self.assertNotIn("main_waveform_candidate", ninja_text)
+            for forbidden in (
+                "add_custom_command",
+                ".hex",
+                ".bin",
+                "objcopy",
+                "FLASH_RUN",
+                "ST-LINK",
+                "NOD_G474RE",
+            ):
+                self.assertNotIn(forbidden, ninja_text)
+
+    def test_gate_waveform_neutral_wrapper_build_only_record_keeps_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_build_only_record_no_power_2026-06-21.md"
+        )
+        build_package = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "manual_gate_waveform_neutral_wrapper_build_only_2026-06-21"
+        )
+        record = read_repo_text(artifact)
+        cmake = read_repo_text(build_package + "/CMakeLists.txt")
+        combined = (
+            record
+            + cmake
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform neutral-wrapper build-only record no-power",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-BUILD-ONLY-RECORD-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-build-only-record-no-power",
+            "manual_gate_waveform_neutral_wrapper_build_only_2026-06-21",
+            "object-only and linked-image build-only evidence for the neutral-wrapper source review",
+            "source-review packages remain source-review only and have no CMakeLists",
+            "build inputs include reviewed",
+            "gate_waveform_candidate.c",
+            "main_neutral_wrapper.c",
+            "old main_waveform_candidate.c excluded",
+            "CMAKE_SYSTEM_NAME=Generic",
+            "CMAKE_SYSTEM_PROCESSOR=arm",
+            "CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+            "GNU Tools for STM32",
+            "14.3.1",
+            "ninja 1.13.2",
+            "stdrive101_gate_waveform_neutral_wrapper_objects",
+            "stdrive101_gate_waveform_neutral_wrapper_image",
+            "stdrive101_gate_waveform_neutral_wrapper_image.elf",
+            "stdrive101_gate_waveform_neutral_wrapper_image.map",
+            "C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591",
+            "5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83",
+            "text=1044",
+            "data=0",
+            "bss=1536",
+            "dec=2580",
+            "hex=a14",
+            "1.17%",
+            "0.20%",
+            "08000000 R g_pfnVectors",
+            "0800035c T gate_waveform_candidate_force_idle_low",
+            "08000374 T gate_waveform_neutral_wrapper_hold_idle_forever",
+            "08000382 T main",
+            "080003b4 W Reset_Handler",
+            "08000406 T SystemInit",
+            "20020000 R _estack",
+            "retained ELF symbol table has no `gate_waveform_candidate_run_once`",
+            "`main_waveform_candidate` symbol",
+            ".text.gate_waveform_candidate_run_once",
+            "discarded-input-section area",
+            "0x00000000",
+            "-ffunction-sections",
+            "--gc-sections",
+            "No HEX or BIN target is defined here.",
+            "no forbidden retained ELF symbol matches",
+            "no forbidden MAP matches",
+            "build-only evidence",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "neutral-wrapper USB-only neutral-state phase-gate plan or review",
+            "not runtime execution",
+            "Not usable to claim flashability",
+            "absence of real reset-time transient on hardware",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_neutral_wrapper_build_only_record_is_not_runtime(self):
+        record = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_build_only_record_no_power_2026-06-21.md"
+        )
+
+        for phrase in (
+            "This record is build-only evidence",
+            "It does not authorize:",
+            "firmware flash",
+            "Run / Debug",
+            "USB runtime execution",
+            "applying 24 V",
+            "Gate PWM output on hardware",
+            "oscilloscope probing on live gate or phase nodes",
+            "normal generated MCSDK application execution",
+            "Motor Pilot",
+            "Motor Profiler",
+            "motor connection",
+            "Hall closed loop",
+            "sensorless operation",
+            "power-stage readiness or motor readiness claims",
+            "This build-only record still does not prove",
+            "that this ELF should be flashed",
+            "reset-time or runtime pin behavior on real hardware",
+            "that USB-only DMM readings would be idle-low",
+            "Still forbidden after this neutral-wrapper build-only record",
+        ):
+            self.assertIn(phrase, record)
+
+        for forbidden in (
+            "opens exactly one USB-only",
+            "opens one bounded",
+            "HSPY is set to",
+            "Do not fill this table",
+            "copy through ST-LINK",
+            "FAIL.TXT",
+        ):
+            self.assertNotIn(forbidden, record)
+
+    def test_gate_waveform_neutral_wrapper_usb_only_plan_records_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_neutral_state_phase_gate_plan_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        plan = read_repo_text(artifact)
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only Neutral-State Phase-Gate Plan",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-NEUTRAL-STATE-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-neutral-state-phase-gate-plan",
+            "neutral-wrapper build-only record accepted as",
+            "image-boundary evidence",
+            "C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591",
+            "5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83",
+            "main_neutral_wrapper.c",
+            "main_waveform_candidate.c",
+            "gate_waveform_neutral_wrapper_hold_idle_forever",
+            "has no `gate_waveform_candidate_run_once`",
+            ".text.gate_waveform_candidate_run_once",
+            "discarded input-section area",
+            "0x00000000",
+            "This record is planning only",
+            "future USB-only execution-entry must separately name transfer method",
+            "optional BIN hash if generated",
+            "measurement instrument",
+            "pre/post measurement table",
+            "rollback path",
+            "stop rules",
+            "Do not use this table to execute now",
+            "User explicitly asks to execute the neutral-wrapper USB-only neutral-state check",
+            "DMM can show steady neutral state after firmware reaches the wrapper loop",
+            "DMM cannot prove reset-time pin state before firmware control",
+            "Do not fill this table in this record",
+            "disconnect USB if needed",
+            "do not retry",
+            "This record does not open Gate E4",
+            "Gate E4 remains future-only",
+            "Still forbidden after this neutral-wrapper USB-only neutral-state plan",
+            "flash",
+            "Run / Debug",
+            "USB runtime execution",
+            "24 V",
+            "Gate PWM output",
+            "Motor Pilot / Profiler",
+            "motor connection",
+            "power-stage readiness or motor readiness claims",
+        ):
+            self.assertIn(phrase, plan)
+
+    def test_gate_waveform_neutral_wrapper_usb_only_plan_is_registered_as_plan_only(self):
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_neutral_state_phase_gate_plan_2026-06-21.md",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-NEUTRAL-STATE-PHASE-GATE-PLAN-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-neutral-state-phase-gate-plan",
+            "STDRIVE101 gate-waveform neutral-wrapper USB-only neutral-state phase-gate plan",
+            "neutral-wrapper build-only record accepted as image-boundary evidence",
+            "neutral-wrapper ELF and MAP hashes carried forward",
+            "source-review packages remain source-review only and have no CMakeLists",
+            "build-only image uses main_neutral_wrapper.c and excludes old",
+            "retained ELF symbol table has",
+            "gate_waveform_neutral_wrapper_hold_idle_forever",
+            "has no gate_waveform_candidate_run_once",
+            "discarded zero-address input section",
+            "phase-gate planning only",
+            "no flash",
+            "no Run Debug",
+            "no Run / Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "only a separate neutral-wrapper USB-only neutral-state execution-entry",
+            "explicit user request",
+            "freshly confirmed preconditions",
+            "Gate E4 remains closed",
+            "Not usable to claim flashability",
+            "reset-time pin behavior",
+            "absence of real transient on hardware",
+            "power-stage readiness",
+            "motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_gate_waveform_neutral_wrapper_bin_artifact_record_has_downloadable_identity_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_bin_artifact_record_no_power_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        record = read_repo_text(artifact)
+        combined = (
+            record
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform neutral-wrapper BIN artifact record no-power",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-BIN-ARTIFACT-RECORD-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-bin-artifact-record-no-power",
+            "stdrive101_gate_waveform_neutral_wrapper_bin_artifact_record_no_power_2026-06-21.md",
+            "neutral-wrapper ELF converted to BIN with STM32Cube GNU Arm objcopy",
+            "C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591",
+            "5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83",
+            "CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71",
+            "BIN size",
+            "1044",
+            "arm-none-eabi-objcopy",
+            "gate_waveform_neutral_wrapper_hold_idle_forever",
+            "has no retained gate_waveform_candidate_run_once",
+            "D: NOD_G474RE",
+            "no FAIL.TXT before copy",
+            "No BIN copy was attempted in this record",
+            "artifact preparation only",
+            "no flash",
+            "no Run Debug",
+            "no USB runtime execution",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "neutral-wrapper BIN copied once to D:",
+            "no FAIL.TXT after copy",
+            "target BIN not retained on D: after copy",
+            "Copy Result",
+            "direct DMM readings",
+        ):
+            self.assertNotIn(forbidden, record)
+
+    def test_gate_waveform_neutral_wrapper_usb_only_download_entry_opens_one_copy_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_download_execution_entry_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        entry = read_repo_text(artifact)
+        combined = (
+            entry
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform neutral-wrapper USB-only download execution entry",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-EXECUTION-ENTRY-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-download-execution-entry",
+            "user confirmed USB-only, 24V disconnected, motor disconnected",
+            "allowed copying neutral-wrapper BIN to D:",
+            "C47C02D379DC5312095DF786BF8C99B58D42323AD9227D0903BCB8C98AAD9591",
+            "5FB24B2735EFFD402C26BDC3B0D267B26B06DC6522A6B5B5D876491BA9A42A83",
+            "CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71",
+            "D: volume label NOD_G474RE detected and FAIL.TXT absent before copy",
+            "opens exactly one USB-only mass-storage BIN copy",
+            "Transfer target",
+            "D:\\stdrive101_gate_waveform_neutral_wrapper_image.bin",
+            "Power",
+            "USB / ST-LINK only",
+            "HSPY / 24 V",
+            "disconnected",
+            "Motor",
+            "disconnected",
+            "Do not use Motor Pilot",
+            "Motor Profiler",
+            "Run / Debug",
+            "24 V",
+            "Gate PWM output",
+            "motor connection",
+            "no powered-drive readiness",
+            "does not contain the copy",
+            "measured neutral-state result yet",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertNotIn("no FAIL.TXT after copy", entry)
+        self.assertNotIn("target BIN not retained on D: after copy", entry)
+
+    def test_gate_waveform_neutral_wrapper_usb_only_download_result_is_not_dmm_pass(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_download_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 gate-waveform neutral-wrapper USB-only download result",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-download-result",
+            "neutral-wrapper BIN copied once to D: NOD_G474RE by ST-LINK mass storage",
+            "source BIN SHA256 CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71",
+            "no FAIL.TXT before copy",
+            "no FAIL.TXT after copy",
+            "target BIN not retained on D: after copy",
+            "consistent with ST-LINK mass-storage consumption",
+            "download result only",
+            "no DMM neutral-state measurement result yet",
+            "Version: V3J17M10",
+            "Build:   Oct 17 2025 15:12:06",
+            "Copy-Item",
+            "Next Measurement Table",
+            "`VS / 24V_FUSED`",
+            "`CN3_1` driver input",
+            "`CN3_2 / LIN1`",
+            "`CN3_6` driver input",
+            "`CN3_13 / nFAULT`",
+            "`CN3_14 / 3V3`",
+            "`REG12`",
+            "stop-rule hit",
+            "stably above `0.3 V`",
+            "direct USB-only DMM table",
+            "no Run Debug",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "DMM neutral-state pass",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+    def test_gate_waveform_neutral_wrapper_download_status_is_superseded_after_residual_result(self):
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only Download Result Recorded",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-RESULT-001",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DOWNLOAD-EXECUTION-ENTRY-001",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-BIN-ARTIFACT-RECORD-NO-POWER-001",
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_download_result_2026-06-21.md",
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_download_execution_entry_2026-06-21.md",
+            "stdrive101_gate_waveform_neutral_wrapper_bin_artifact_record_no_power_2026-06-21.md",
+            "direct USB-only DMM",
+            "later USB-only DMM partial, DMM completion, and residual-voltage isolation\n"
+            "  results supersede this download record's live checkpoint",
+            "the newest live\n  checkpoint is a separate dated next-stage phase-gate decision",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-RESIDUAL-VOLTAGE-ISOLATION-RESULT-001",
+            "stdrive101_gate_waveform_neutral_wrapper_residual_voltage_isolation_result_2026-06-21.md",
+            "no 24 V execution",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertNotIn(
+            "The current repo-side checkpoint is complete through the neutral-wrapper\n"
+            "USB-only neutral-state phase-gate plan",
+            active_task,
+        )
+
+    def test_gate_waveform_neutral_wrapper_usbonly_dmm_partial_result_records_reported_rows(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        record = read_repo_text(artifact)
+        combined = (
+            record
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-dmm-partial-result",
+            "partial user-reported DMM readings",
+            "user-reported CN3_1 through CN3_6 all 0 V",
+            "P13 = 3.3 V",
+            "P14 = 3.3 V",
+            "`CN3_1` driver input | `0 V` | reported",
+            "`CN3_2 / LIN1` | `0 V` | reported",
+            "`CN3_6` driver input | `0 V` | reported",
+            "`CN3_13 / nFAULT` | `3.3 V` | reported as `P13`",
+            "`CN3_14 / 3V3` | `3.3 V` | reported as `P14`",
+            "`VS / 24V_FUSED` | not reported in this partial record",
+            "`REG12` | not reported in this partial record",
+            "board heat / smell / sound / reset loop | not reported in this partial record",
+            "six driver-input stop-rule not hit",
+            "driver-input reading was stably above `0.3 V`",
+            "no full DMM neutral-state pass",
+            "no Run Debug",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "full DMM neutral-state result is complete",
+            "24 V behavior validated",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, record)
+
+    def test_gate_waveform_neutral_wrapper_usbonly_dmm_completion_result_records_vs_boundary(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_completion_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        record = read_repo_text(artifact)
+        combined = (
+            record
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Completion Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-COMPLETION-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-usbonly-dmm-completion-result",
+            "completed user-reported USB-only DMM table",
+            "user-reported CN3_1 through CN3_6 all 0 V",
+            "P13 = 3.3 V",
+            "P14 = 3.3 V",
+            "VS / 24V_FUSED = 2 V",
+            "REG12 = 0.5 V",
+            "board heat / smell / sound / reset loop = none",
+            "`VS / 24V_FUSED` | `2 V` | reported; above prior `< 1 V` USB-only boundary",
+            "`REG12` | `0.5 V` | reported",
+            "six driver-input stop-rule not hit",
+            "The voltage-boundary stop condition is active for upward progression",
+            "not a pass for upward hardware progression",
+            "superseded by the later residual-voltage isolation result",
+            "VS / 24V_FUSED = 0 V",
+            "REG12 = 0 V",
+            "no Run Debug",
+            "no 24 V",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, record)
+
+    def test_gate_waveform_neutral_wrapper_24v_static_no_motor_result_records_clean_static_table_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_24v_static_no_motor_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper 24V Static No-Motor Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-24V-STATIC-NO-MOTOR-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-24v-static-no-motor-result",
+            "bounded 24 V static check",
+            "HSPY CV 0.036 A",
+            "VS 24V_FUSED = 24 V",
+            "CN3_1 through CN3_6 all 0 V",
+            "CN3_13 nFAULT = 3.3 V",
+            "CN3_14 3V3 = 3.3 V",
+            "REG12 = 0.2 V",
+            "no board heat smell sound reset-loop reported",
+            "six driver-input stop-rule not hit",
+            "nFAULT high in static no-motor state",
+            "bounded 24 V static no-motor check\n  clean for this table only",
+            "superseded for the live checkpoint by the later 24V static scope baseline",
+            "Keep HSPY / 24 V OFF and the\n  motor disconnected until then",
+            "no Run Debug",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+        self.assertIn("not motor power-up", checkpoint)
+
+    def test_gate_waveform_candidate_bin_artifact_record_has_downloadable_identity_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_candidate_bin_artifact_record_no_power_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        record = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            record
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Candidate BIN Artifact Record No-Power - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-BIN-ARTIFACT-RECORD-NO-POWER-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-candidate-bin-artifact-record-no-power",
+            "stdrive101_gate_waveform_candidate_bin_artifact_record_no_power_2026-06-21.md",
+            "Gate E2 waveform candidate linked ELF converted to downloadable BIN",
+            "converter output validated against the prior neutral-wrapper objcopy BIN",
+            "10BA818730E259AEBA8A5C5E5C96CFBA32FCB90AAA4136B775022B9D69ADCE7C",
+            "170EA77C566F98CF9EF2AC88F76B154238A5404DC705AAE3917BEAE7C1503D4C",
+            "362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31",
+            "candidate BIN size 1852 bytes",
+            "CA2A42F2F83C42EA9E7BEC628BD8656A422DBE767CFFD5A5865BE781603D3D71",
+            "Load base | `0x08000000`",
+            "Load end | `0x0800073c`",
+            "retained MAP symbol\n  gate_waveform_candidate_run_once at 0x080005bc",
+            "0x080005bc gate_waveform_candidate_run_once",
+            "no forbidden normal-MCSDK\n  MAP symbols found in the checked screen",
+            "BIN artifact only",
+            "no USB copy",
+            "no board image change",
+            "no flash",
+            "no Run Debug",
+            "no 24 V execution",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "waveform-candidate USB-only download execution entry",
+            "explicit user confirmation and authorization",
+            "HSPY / 24 V is OFF and physically disconnected",
+            "motor is disconnected",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "USB copy result",
+            "copied once to D:",
+            "no FAIL.TXT after copy",
+            "Gate PWM output validated",
+            "waveform correctness validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, record)
+
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("not motor power-up", checkpoint)
+
+    def test_gate_waveform_candidate_usb_only_dmm_result_blocks_upward_progression_on_vs_residual(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_candidate_usb_only_dmm_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Candidate USB-Only DMM Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DMM-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-dmm-result",
+            "stdrive101_gate_waveform_candidate_usb_only_dmm_result_2026-06-21.md",
+            "CN3_1 through CN3_6 all 0 V",
+            "CN3_13 = 3 V",
+            "CN3_14 = 3 V",
+            "VS / 24V_FUSED = 2 V",
+            "REG12 = 0.3 V",
+            "board heat smell sound reset-loop status not reported in\n  this latest row",
+            "six driver-input stop-rule not hit",
+            "VS residual-voltage\n  boundary is active",
+            "not a pass for upward hardware progression",
+            "residual-voltage isolation check only",
+            "USB / ST-LINK disconnected",
+            "black probe on GND",
+            "remeasure only:",
+            "Do not repeat the full CN3 table",
+            "no Run Debug",
+            "no 24 V command",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("no longer another residual-voltage repeat", checkpoint)
+        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not motor power-up", checkpoint)
+        self.assertNotIn("- `VS / 24V_FUSED`;", checkpoint)
+        self.assertNotIn("- `REG12`.", checkpoint)
+
+        for forbidden in (
+            "24 V behavior validated",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+    def test_gate_waveform_candidate_residual_voltage_isolation_result_clears_residual_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Candidate Residual-Voltage Isolation Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-RESIDUAL-VOLTAGE-ISOLATION-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-candidate-residual-voltage-isolation-result",
+            "bounded residual-voltage isolation check",
+            "USB / ST-LINK disconnected",
+            "HSPY / 24 V OFF and physically disconnected",
+            "motor disconnected",
+            "no `10 kohm` wake resistor or LIN1 stimulus installed",
+            "DMM black probe on GND",
+            "VS / 24V_FUSED = 0 V",
+            "REG12 = 0 V",
+            "earlier candidate USB-only VS / 24V_FUSED = 2 V cleared after USB disconnect",
+            "persistent VS backfeed not indicated in this candidate isolation check",
+            "residual-voltage blocker cleared only",
+            "separate candidate 24 V static no-motor phase-gate or execution entry",
+            "fresh preconditions",
+            "no Run Debug",
+            "no 24 V command from this record",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("no longer another residual-voltage repeat", checkpoint)
+        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not motor power-up", checkpoint)
+
+        for forbidden in (
+            "24 V behavior validated",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+    def test_gate_waveform_candidate_usb_only_download_entry_opens_one_copy_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_candidate_usb_only_download_execution_entry_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        entry = read_repo_text(artifact)
+        combined = (
+            entry
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/ACTIVE_TASK.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Candidate USB-Only Download Execution Entry - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DOWNLOAD-EXECUTION-ENTRY-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-download-execution-entry",
+            "user explicitly authorized copying candidate BIN to D:",
+            "362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31",
+            "D: volume label NOD_G474RE detected",
+            "FAIL.TXT absent before copy",
+            "opens exactly one USB-only ST-LINK\n  mass-storage candidate BIN copy",
+            "Transfer target",
+            "D:\\stdrive101_gate_waveform_candidate_image.bin",
+            "USB / ST-LINK mass storage only",
+            "Motor Pilot / Motor Profiler not used",
+            "candidate image is a `run_once()` image",
+            "must not\nclaim that no MCU output transition occurred",
+            "no measured\nwaveform validation",
+            "no Run Debug",
+            "no 24 V command",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "does not contain the copy\nresult",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertNotIn("no FAIL.TXT after copy", entry)
+        self.assertNotIn("target BIN not retained on D: after copy", entry)
+
+    def test_gate_waveform_candidate_usb_only_download_result_is_not_measurement_pass(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_candidate_usb_only_download_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Candidate USB-Only Download Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-USBONLY-DOWNLOAD-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-candidate-usbonly-download-result",
+            "candidate BIN copied once to D: NOD_G474RE by ST-LINK mass storage",
+            "source BIN SHA256\n  362C510E4F682751F0721B54F306F6E144951F03F9FF875E68E238D92A29BB31",
+            "no FAIL.TXT before copy",
+            "no FAIL.TXT after copy",
+            "target BIN not retained\n  on D: after copy",
+            "consistent with ST-LINK mass-storage consumption",
+            "candidate board image download result only",
+            "no CN3 DMM post-download result\n  yet",
+            "no measured waveform result yet",
+            "board image is now treated as the waveform candidate image",
+            "does not prove absence of a boot-time output transition",
+            "`gate_waveform_candidate_run_once()` once after reset",
+            "Version: V3J17M10",
+            "Build:   Oct 17 2025 15:12:06",
+            "Copy-Item",
+            "Runtime Interpretation Limit",
+            "No probe was used in this record",
+            "Next USB-Only Measurement Table",
+            "`VS / 24V_FUSED`",
+            "`CN3_1` driver input",
+            "`CN3_2 / LIN1`",
+            "`CN3_6` driver input",
+            "`CN3_13 / nFAULT`",
+            "`CN3_14 / 3V3`",
+            "`REG12`",
+            "stably above `0.3 V`",
+            "superseded by the later waveform candidate residual-voltage isolation result",
+            "clears the immediate residual-voltage blocker only",
+            "separate candidate 24 V static no-motor phase-gate",
+            "no Run Debug",
+            "no 24 V command",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "CN3 state validated",
+            "waveform correctness validated",
+            "no MCU output transition occurred",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("not motor power-up", checkpoint)
+
+    def test_gate_waveform_neutral_wrapper_24v_static_scope_baseline_result_records_all_six_inputs_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_24v_static_scope_baseline_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper 24V Static Scope Baseline Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-24V-STATIC-SCOPE-BASELINE-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-24v-static-scope-baseline-result",
+            "oscilloscope static baseline on the six STDRIVE101 MCU-facing driver inputs",
+            "oscilloscope ground on CN3_15 GND",
+            "HSPY CV about 0.036 A",
+            "CN3_1 and CN3_2\n  0 V straight lines",
+            "CN3_3 and CN3_4 same 0 V straight lines",
+            "CN3_5 and\n  CN3_6 same 0 V straight lines",
+            "nFAULT remains 3.3 V",
+            "no board heat smell\n  sound reset-loop reported",
+            "all six MCU-facing driver inputs static-low in\n  this no-motor no-PWM baseline",
+            "no waveform output executed",
+            "no Run Debug",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+            "Oscilloscope ground | `CN3_15 / GND`",
+            "CH1 first pair | `CN3_1`",
+            "CH2 first pair | `CN3_2 / LIN1`",
+            "CH1 second pair | `CN3_3`",
+            "CH2 second pair | `CN3_4`",
+            "CH1 third pair | `CN3_5`",
+            "CH2 third pair | `CN3_6`",
+            "`CN3_1`, `CN3_2 / LIN1`",
+            "`CN3_3`, `CN3_4`",
+            "`CN3_5`, `CN3_6`",
+            "Turn HSPY output OFF after this baseline",
+            "separate no-motor, short-window,\ninstrumented waveform execution entry",
+            "exact probe points, stop rules, and rollback",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "Gate PWM output validated",
+            "waveform correctness validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+        self.assertIn(
+            "Superseded for the live checkpoint by `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-BIN-ARTIFACT-RECORD-NO-POWER-001`",
+            combined,
+        )
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("not motor power-up", checkpoint)
+
+    def test_gate_waveform_neutral_wrapper_residual_voltage_isolation_result_clears_residual_only(self):
+        artifact = (
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "stdrive101_gate_waveform_neutral_wrapper_residual_voltage_isolation_result_2026-06-21.md"
+        )
+        self.assertTrue((ROOT / artifact).exists())
+
+        result = read_repo_text(artifact)
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            result
+            + read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper Residual-Voltage Isolation Result - 2026-06-21",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-RESIDUAL-VOLTAGE-ISOLATION-RESULT-001",
+            "TASK-2026-06-21-stdrive101-gate-waveform-neutral-wrapper-residual-voltage-isolation-result",
+            "bounded residual-voltage isolation check",
+            "USB / ST-LINK disconnected",
+            "HSPY / 24 V OFF and physically disconnected",
+            "motor disconnected",
+            "no `10 kohm` wake resistor or LIN1 stimulus installed",
+            "VS / 24V_FUSED = 0 V",
+            "REG12 = 0 V",
+            "earlier USB-only VS / 24V_FUSED = 2 V cleared after USB disconnect",
+            "persistent VS backfeed not indicated in this isolation check",
+            "residual-voltage isolation blocker cleared only",
+            "superseded for the live checkpoint by the later 24V static no-motor result",
+            "no Run Debug",
+            "no 24 V execution",
+            "no Gate PWM output",
+            "no Motor Pilot",
+            "no Motor Profiler",
+            "no motor connection",
+            "no powered-drive readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        self.assertIn(
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            checkpoint,
+        )
+        self.assertIn("no longer another residual-voltage repeat", checkpoint)
+        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not motor power-up", checkpoint)
+
+        for forbidden in (
+            "24 V behavior validated",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, result)
+
+    def test_gate_waveform_neutral_wrapper_usbonly_dmm_partial_result_is_superseded_by_later_results(self):
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + active_task
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+
+        for phrase in (
+            "newest hardware-adjacent record is\n"
+            "the STDRIVE101 gate-waveform candidate residual-voltage isolation result",
+            "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md",
+            "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
+            "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded",
+            "`CN3_1` through `CN3_6` are all `0 V`",
+            "`P13 = 3.3 V`",
+            "`P14 = 3.3 V`",
+            "The current repo-side checkpoint is complete through the waveform candidate\n"
+            "residual-voltage isolation result",
+            "neutral-wrapper 24V static scope baseline",
+            "24V static no-motor result",
+            "residual-voltage isolation result",
+            "candidate USB-only download execution entry",
+        ):
+            self.assertIn(phrase, combined)
+
+        for expected_checkpoint_phrase in (
+            "no longer another residual-voltage repeat",
+            "candidate 24 V static no-motor phase-gate",
+            "not motor power-up",
+        ):
+            self.assertIn(expected_checkpoint_phrase, checkpoint)
+
+        for superseded_row in (
+            "- `VS / 24V_FUSED`;",
+            "- `REG12`.",
+            "- `CN3_1`;",
+            "- `CN3_2 / LIN1`;",
+            "- `CN3_3`;",
+            "- `CN3_4`;",
+            "- `CN3_5`;",
+            "- `CN3_6`;",
+            "- `CN3_13 / nFAULT`;",
+            "- `CN3_14 / 3V3`;",
+        ):
+            self.assertNotIn(superseded_row, checkpoint)
+
+
 if __name__ == "__main__":
     unittest.main()

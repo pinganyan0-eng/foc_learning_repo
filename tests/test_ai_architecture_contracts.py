@@ -389,10 +389,10 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("contract_status", report)
         self.assertTrue(report["contract_status"]["available"])
         self.assertEqual(0, report["contract_status"]["error_count"])
-        self.assertGreaterEqual(report["contract_status"]["warning_count"], 2)
+        self.assertGreaterEqual(report["contract_status"]["warning_count"], 1)
         self.assertGreaterEqual(
             report["contract_status"]["review_lifecycle_warning_count"],
-            2,
+            1,
         )
         self.assertEqual(0, report["contract_status"]["unexpected_warning_count"])
         self.assertFalse(report["contract_status"]["strict_ready"])
@@ -632,7 +632,7 @@ class AiArchitectureContractTests(unittest.TestCase):
             checker.is_dangerous_claim_scan_candidate(ROOT / "tools/check_ai_contracts.py")
         )
 
-    def test_ai_contract_checker_warns_when_done_task_has_pending_verification(self):
+    def test_ai_contract_checker_warns_for_review_required_but_not_pending_verification(self):
         result = subprocess.run(
             [sys.executable, "tools/check_ai_contracts.py", "--json"],
             cwd=ROOT,
@@ -644,6 +644,10 @@ class AiArchitectureContractTests(unittest.TestCase):
         report = json.loads(result.stdout)
 
         self.assertIn(
+            "ACTIVE_TASK.md is done and still requires review.",
+            report["warnings"],
+        )
+        self.assertNotIn(
             "ACTIVE_TASK.md is done but its Verification section still contains Pending.",
             report["warnings"],
         )

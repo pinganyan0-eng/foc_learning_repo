@@ -1,3 +1,42 @@
+## 2026-06-22 MCSDK / Host-Side FOC Math Comparison Boundary Plan Added
+
+- Added MCSDK / host-side FOC comparison boundary plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md`.
+- Added static generated-source pipeline check:
+  `tests/test_mcsdk_foc_pipeline_static.py`.
+- Evidence:
+  `EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-MATH-COMPARISON-BOUNDARY-PLAN-001`.
+- Task:
+  `TASK-2026-06-22-p2-mcsdk-host-side-foc-math-comparison-boundary-plan`.
+- Decision:
+  `MCSDK host-side FOC math comparison boundary plan / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  host-side no-power comparison plan only. The plan records how future
+  no-power work may compare MCSDK generated-source clues with
+  `src/foc_core_model.py`,
+  `tests/fixtures/foc_core_golden_vectors.json`, and
+  `tests/test_foc_core_vectors.py`.
+- Static finding:
+  the archived generated `mc_tasks_foc.c` source contains the pipeline
+  `PWMC_GetPhaseCurrents -> MCM_Clarke -> MCM_Park -> PI_Controller ->
+  Circle_Limitation -> MCM_Rev_Park -> PWMC_SetPhaseVoltage`.
+- MCSDK boundary:
+  MCSDK remains the intended motor-control framework generation path. This
+  plan is not MCSDK convention proof, not firmware implementation, not MCSDK
+  integration, not compare-register evidence, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+- Boundary:
+  no Workbench/CubeMX edit, no generated-code edit, no firmware code, no
+  build or flash claim, no Run / Debug, no 24V, no power-board connection, no
+  motor connection, no Gate PWM output, no Motor Pilot / Profiler, no Hall
+  closed-loop, and no sensorless / SMO claim.
+- Verification:
+  `python -m unittest discover -s tests` passed: 223 tests OK;
+  `python -m compileall src tests` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  existing `ACTIVE_TASK.md is done and still requires review` warning;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-22 Host-Side No-Power FOC Golden Vectors Added
 
 - Added host-side no-power FOC golden vectors:

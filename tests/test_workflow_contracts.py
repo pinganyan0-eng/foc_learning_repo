@@ -908,6 +908,58 @@ class FocCoreHostModelWorkflowTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
+    def test_mcsdk_host_side_foc_boundary_plan_records_plan_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md"
+        )
+
+        for phrase in (
+            "MCSDK / Host-Side FOC Math Comparison Boundary Plan",
+            "MCSDK host-side FOC math comparison boundary plan / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "src/foc_core_model.py",
+            "tests/fixtures/foc_core_golden_vectors.json",
+            "tests/test_foc_core_vectors.py",
+            "MCSDK remains the intended motor-control framework generation path",
+            "compare only sign, scaling, saturation, duty representation, and naming assumptions",
+            "not proof that MCSDK generated code matches the Python model",
+            "not firmware implementation",
+            "MCSDK integration",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "No 24V",
+            "No Gate PWM output",
+            "No Hall closed-loop claim",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_mcsdk_host_side_foc_boundary_plan_is_registered(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "TASK-2026-06-22-p2-mcsdk-host-side-foc-math-comparison-boundary-plan",
+            "EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-MATH-COMPARISON-BOUNDARY-PLAN-001",
+            "mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md",
+            "tests/test_mcsdk_foc_pipeline_static.py",
+            "MCSDK host-side FOC math comparison boundary plan / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "host-side no-power comparison plan only",
+            "not MCSDK convention proof",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
 
 class SoftwareHallMcsdkIntegrationProbeWorkflowTests(unittest.TestCase):
     def test_integration_probe_records_read_only_clues_only(self):

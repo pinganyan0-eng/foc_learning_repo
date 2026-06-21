@@ -71,6 +71,32 @@ readiness, and no motor-readiness claim.
   or Motor Profiler, validate Hall closed-loop, validate sensorless / SMO,
   prove power-stage readiness, or prove motor readiness.
 
+## Current 2026-06-22 MCSDK / Host-Side FOC Math Comparison Boundary Plan Addendum
+
+- Task:
+  `TASK-2026-06-22-p2-mcsdk-host-side-foc-math-comparison-boundary-plan`.
+- Evidence:
+  `EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-MATH-COMPARISON-BOUNDARY-PLAN-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md`.
+- Static test:
+  `tests/test_mcsdk_foc_pipeline_static.py`.
+- Decision:
+  `MCSDK host-side FOC math comparison boundary plan / no firmware
+  implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  host-side no-power comparison plan only. The plan records how future
+  no-power work may compare MCSDK generated-source clues with the host-side
+  FOC model and golden vectors.
+- Static finding:
+  the archived generated source contains
+  `PWMC_GetPhaseCurrents -> MCM_Clarke -> MCM_Park -> PI_Controller ->
+  Circle_Limitation -> MCM_Rev_Park -> PWMC_SetPhaseVoltage`.
+- Boundary:
+  not MCSDK convention proof, not firmware implementation, not MCSDK
+  integration, not compare-register evidence, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+
 ## Current 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result
 
 - Task:
@@ -2679,6 +2705,9 @@ Stable carry-forward phrases:
 - `TASK-2026-06-22-p2-host-side-no-power-foc-golden-vectors` /
   `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-GOLDEN-VECTORS-001`:
   `Host-side no-power FOC golden vectors / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- `TASK-2026-06-22-p2-mcsdk-host-side-foc-math-comparison-boundary-plan` /
+  `EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-MATH-COMPARISON-BOUNDARY-PLAN-001`:
+  `MCSDK host-side FOC math comparison boundary plan / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
 
 ## Next User Checkpoint
 

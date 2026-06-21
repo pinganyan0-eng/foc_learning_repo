@@ -98,6 +98,15 @@ output.
   readiness`. These vectors are not MCSDK convention proof, not compare
   register evidence, not Gate PWM validation, not power-stage readiness, and
   not motor readiness.
+- Latest MCSDK / host-side FOC comparison-boundary evidence:
+  `mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md` records a
+  host-side no-power comparison plan only and
+  `tests/test_mcsdk_foc_pipeline_static.py` checks the archived generated
+  source pipeline. Current decision is `MCSDK host-side FOC math comparison
+  boundary plan / no firmware implementation / no MCSDK integration / no PWM
+  output / no motor readiness`. It is not MCSDK convention proof, not compare
+  register evidence, not Gate PWM validation, not power-stage readiness, and
+  not motor readiness.
 - Latest STDRIVE101 wake-related evidence:
   `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
   records the user-reported oscilloscope check on the six STDRIVE101
@@ -868,6 +877,13 @@ Forbidden in this directory and this P2 stage:
   FOC golden vectors / no firmware implementation / no MCSDK integration / no
   PWM output / no motor readiness`; it proves only host-side no-power math
   replay behavior and is not MCSDK convention proof.
+- `mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md`: read-only
+  MCSDK / host-side FOC math comparison boundary plan. Current decision is
+  `MCSDK host-side FOC math comparison boundary plan / no firmware
+  implementation / no MCSDK integration / no PWM output / no motor readiness`;
+  it is host-side no-power comparison plan only, not MCSDK convention proof,
+  not compare-register evidence, not Gate PWM validation, not power-stage
+  readiness, and not motor readiness.
 - `software_hall_mcsdk_integration_probe_2026-05-27.md`: read-only probe of
   the 2026-05-21 generated-project clue files for speed/position feedback
   integration points. Current decision is `MCSDK Hall integration points

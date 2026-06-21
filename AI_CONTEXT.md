@@ -40,6 +40,16 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   MCSDK generated code uses the same sign/scaling convention, not compare
   register evidence, not Gate PWM validation, not MCSDK hook readiness, not
   power-stage readiness, and not motor readiness.
+- Current MCSDK / host-side FOC math comparison boundary plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md`
+  records a host-side no-power comparison plan only, plus
+  `tests/test_mcsdk_foc_pipeline_static.py` as a static check of the archived
+  generated-source FOC pipeline. Decision: `MCSDK host-side FOC math
+  comparison boundary plan / no firmware implementation / no MCSDK
+  integration / no PWM output / no motor readiness`. MCSDK remains the
+  intended motor-control framework generation path. This plan is not MCSDK
+  convention proof, not compare-register evidence, not Gate PWM validation,
+  not power-stage readiness, and not motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records the user-reported return to the minimal PA7 hold-high diagnostic.

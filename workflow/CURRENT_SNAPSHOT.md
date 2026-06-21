@@ -722,6 +722,17 @@ the current project stage and safety boundary. Historical detail remains in
   / no motor readiness`. These are host-side math regression fixtures only;
   they are not MCSDK convention proof, compare-register evidence, Gate PWM
   validation, power-stage readiness, or motor readiness.
+- MCSDK / host-side FOC math comparison boundary plan:
+  `mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md` records a
+  host-side no-power comparison plan only, with
+  `tests/test_mcsdk_foc_pipeline_static.py` checking that the archived
+  generated-source pipeline contains
+  `PWMC_GetPhaseCurrents -> MCM_Clarke -> MCM_Park -> PI_Controller ->
+  Circle_Limitation -> MCM_Rev_Park -> PWMC_SetPhaseVoltage`. Decision:
+  `MCSDK host-side FOC math comparison boundary plan / no firmware
+  implementation / no MCSDK integration / no PWM output / no motor readiness`.
+  It is not MCSDK convention proof, compare-register evidence, Gate PWM
+  validation, power-stage readiness, or motor readiness.
 - Strategy: use ST MCSDK for the motor-control framework, keep Hall
   closed-loop as the safe fallback path, and treat SMO/PLL sensorless as a
   later stretch goal.

@@ -44,6 +44,33 @@ readiness, and no motor-readiness claim.
   not Hall closed-loop, not sensorless / SMO validation, not power-stage
   readiness, and not motor readiness.
 
+## Current 2026-06-22 Host-Side No-Power FOC Golden Vectors Addendum
+
+- Task:
+  `TASK-2026-06-22-p2-host-side-no-power-foc-golden-vectors`.
+- Evidence:
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-GOLDEN-VECTORS-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_golden_vectors_review_2026-06-22.md`.
+- Fixture and replay test:
+  `tests/fixtures/foc_core_golden_vectors.json` and
+  `tests/test_foc_core_vectors.py`.
+- Decision:
+  `Host-side no-power FOC golden vectors / no firmware implementation / no
+  MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  replayable host-side regression fixtures for Clarke / Park / PI /
+  inverse Park / host-side zero-sequence duty math and current-loop state.
+- MCSDK boundary:
+  these vectors freeze only the current Python model convention. They are not
+  proof of MCSDK sign convention, scaling convention, duty representation,
+  timing, saturation behavior, or hook readiness.
+- Boundary:
+  host-side no-power math fixture evidence only. It does not configure TIM1,
+  write compare registers, drive gates, validate PWM safety, run Motor Pilot
+  or Motor Profiler, validate Hall closed-loop, validate sensorless / SMO,
+  prove power-stage readiness, or prove motor readiness.
+
 ## Current 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result
 
 - Task:
@@ -2649,6 +2676,9 @@ Stable carry-forward phrases:
 - `TASK-2026-06-22-p2-host-side-no-power-foc-algorithm-model` /
   `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-ALGORITHM-MODEL-001`:
   `Host-side no-power FOC algorithm model / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- `TASK-2026-06-22-p2-host-side-no-power-foc-golden-vectors` /
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-GOLDEN-VECTORS-001`:
+  `Host-side no-power FOC golden vectors / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
 
 ## Next User Checkpoint
 

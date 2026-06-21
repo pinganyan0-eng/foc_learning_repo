@@ -89,6 +89,15 @@ output.
   firmware, not MCSDK hook evidence, not Gate PWM validation, not Hall
   closed-loop, not sensorless validation, not power-stage readiness, and not
   motor readiness.
+- Latest host-side FOC golden-vector evidence:
+  `host_side_no_power_foc_golden_vectors_review_2026-06-22.md` records
+  `tests/fixtures/foc_core_golden_vectors.json` and
+  `tests/test_foc_core_vectors.py` as host-side no-power FOC math regression
+  fixtures. Current decision is `Host-side no-power FOC golden vectors / no
+  firmware implementation / no MCSDK integration / no PWM output / no motor
+  readiness`. These vectors are not MCSDK convention proof, not compare
+  register evidence, not Gate PWM validation, not power-stage readiness, and
+  not motor readiness.
 - Latest STDRIVE101 wake-related evidence:
   `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
   records the user-reported oscilloscope check on the six STDRIVE101
@@ -852,6 +861,13 @@ Forbidden in this directory and this P2 stage:
   algorithm model / no firmware implementation / no MCSDK integration / no PWM
   output / no motor readiness`; it proves only host-side algorithm behavior
   while MCSDK remains the intended framework generation path.
+- `host_side_no_power_foc_golden_vectors_review_2026-06-22.md`: review of
+  the host-side FOC golden vectors in
+  `tests/fixtures/foc_core_golden_vectors.json` and replay test
+  `tests/test_foc_core_vectors.py`. Current decision is `Host-side no-power
+  FOC golden vectors / no firmware implementation / no MCSDK integration / no
+  PWM output / no motor readiness`; it proves only host-side no-power math
+  replay behavior and is not MCSDK convention proof.
 - `software_hall_mcsdk_integration_probe_2026-05-27.md`: read-only probe of
   the 2026-05-21 generated-project clue files for speed/position feedback
   integration points. Current decision is `MCSDK Hall integration points

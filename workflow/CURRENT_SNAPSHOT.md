@@ -714,6 +714,14 @@ the current project stage and safety boundary. Historical detail remains in
   generation path. It is not firmware implementation, not MCSDK hook evidence,
   not Gate PWM validation, not Hall closed-loop, not sensorless operation, not
   power-stage readiness, and not motor readiness.
+- Host-side no-power FOC golden vectors:
+  `host_side_no_power_foc_golden_vectors_review_2026-06-22.md` records
+  `tests/fixtures/foc_core_golden_vectors.json` and
+  `tests/test_foc_core_vectors.py`. Decision: `Host-side no-power FOC golden
+  vectors / no firmware implementation / no MCSDK integration / no PWM output
+  / no motor readiness`. These are host-side math regression fixtures only;
+  they are not MCSDK convention proof, compare-register evidence, Gate PWM
+  validation, power-stage readiness, or motor readiness.
 - Strategy: use ST MCSDK for the motor-control framework, keep Hall
   closed-loop as the safe fallback path, and treat SMO/PLL sensorless as a
   later stretch goal.

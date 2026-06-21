@@ -1,3 +1,42 @@
+## 2026-06-22 Host-Side No-Power FOC Golden Vectors Added
+
+- Added host-side no-power FOC golden vectors:
+  `tests/fixtures/foc_core_golden_vectors.json`.
+- Added replay tests:
+  `tests/test_foc_core_vectors.py`.
+- Added the review artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_golden_vectors_review_2026-06-22.md`.
+- Evidence:
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-GOLDEN-VECTORS-001`.
+- Task:
+  `TASK-2026-06-22-p2-host-side-no-power-foc-golden-vectors`.
+- Decision:
+  `Host-side no-power FOC golden vectors / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  the vectors replay Clarke, Park, inverse Park, host-side SVPWM-style duty
+  math, PI anti-windup / clamping, and current-loop state behavior against the
+  current Python reference model.
+- MCSDK boundary:
+  these vectors freeze only the current host-side Python convention. They are
+  not proof that MCSDK generated code uses the same sign convention, scaling
+  convention, duty representation, timing, or saturation behavior.
+- Boundary:
+  this is host-side no-power regression fixture evidence only. It does not
+  configure TIM1, write compare registers, provide compare-register evidence,
+  drive gates, validate PWM safety, integrate with MCSDK, validate Hall
+  closed-loop, validate sensorless / SMO, prove power-stage readiness, or
+  prove motor readiness. It is not compare-register evidence, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- Verification:
+  `python -m unittest tests.test_foc_core_vectors` passed: 6 tests OK;
+  `python -m unittest tests.test_workflow_contracts.FocCoreHostModelWorkflowTests`
+  passed: 4 tests OK; `python -m unittest tests.test_foc_core_model` passed:
+  14 tests OK; `python -m unittest discover -s tests` passed: 218 tests OK;
+  `python -m compileall src tests` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  existing `ACTIVE_TASK.md is done and still requires review` warning;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-22 Host-Side No-Power FOC Algorithm Model Added
 
 - Added a host-side no-power FOC algorithm model:

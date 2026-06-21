@@ -853,6 +853,61 @@ class FocCoreHostModelWorkflowTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
+    def test_foc_golden_vectors_review_records_host_side_fixture_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_foc_golden_vectors_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power FOC Golden Vectors Review",
+            "Host-side no-power FOC golden vectors / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "tests/fixtures/foc_core_golden_vectors.json",
+            "tests/test_foc_core_vectors.py",
+            "host-side no-power regression fixtures",
+            "They do not configure TIM1",
+            "write compare registers",
+            "drive gates",
+            "validate PWM safety",
+            "not proof that MCSDK generated code",
+            "Clarke / Park / PI / inverse Park / zero-sequence duty math",
+            "large-vector saturation with `scale`",
+            "externally supplied prior-integrator clamp",
+            "No 24V",
+            "No Gate PWM output",
+            "No Hall closed-loop claim",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_foc_golden_vectors_are_registered_without_hardware_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power FOC Golden Vectors Added",
+            "TASK-2026-06-22-p2-host-side-no-power-foc-golden-vectors",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-GOLDEN-VECTORS-001",
+            "tests/fixtures/foc_core_golden_vectors.json",
+            "tests/test_foc_core_vectors.py",
+            "host_side_no_power_foc_golden_vectors_review_2026-06-22.md",
+            "Host-side no-power FOC golden vectors / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "host-side no-power regression fixture evidence only",
+            "not MCSDK convention proof",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
 
 class SoftwareHallMcsdkIntegrationProbeWorkflowTests(unittest.TestCase):
     def test_integration_probe_records_read_only_clues_only(self):

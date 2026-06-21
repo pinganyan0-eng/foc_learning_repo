@@ -29,6 +29,17 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   not a timer driver, not MCSDK hook evidence, not Gate PWM validation, not
   Hall closed-loop, not sensorless / SMO validation, not power-stage
   readiness, and not motor readiness.
+- Current host-side FOC golden vectors:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_golden_vectors_review_2026-06-22.md`
+  records `tests/fixtures/foc_core_golden_vectors.json` and
+  `tests/test_foc_core_vectors.py` as host-side no-power FOC math regression
+  fixtures. Decision: `Host-side no-power FOC golden vectors / no firmware
+  implementation / no MCSDK integration / no PWM output / no motor readiness`.
+  The vectors replay transform, PI, host-side SVPWM-style duty, and
+  current-loop behavior against the Python model only. They are not proof that
+  MCSDK generated code uses the same sign/scaling convention, not compare
+  register evidence, not Gate PWM validation, not MCSDK hook readiness, not
+  power-stage readiness, and not motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records the user-reported return to the minimal PA7 hold-high diagnostic.

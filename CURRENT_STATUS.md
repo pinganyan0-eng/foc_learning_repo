@@ -1,3 +1,41 @@
+## 2026-06-22 Host-Side No-Power FOC Algorithm Model Added
+
+- Added a host-side no-power FOC algorithm model:
+  `src/foc_core_model.py`.
+- Added unit tests:
+  `tests/test_foc_core_model.py`.
+- Added the review artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_algorithm_model_review_2026-06-22.md`.
+- Evidence:
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-ALGORITHM-MODEL-001`.
+- Task:
+  `TASK-2026-06-22-p2-host-side-no-power-foc-algorithm-model`.
+- Decision:
+  `Host-side no-power FOC algorithm model / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  the model covers Clarke, inverse Clarke, Park, inverse Park, host-side
+  zero-sequence SVPWM-style duty calculation, PI current control with
+  anti-windup, and one host-side current-loop step. It is a Python learning
+  and regression artifact only.
+- MCSDK boundary:
+  ST MCSDK remains the intended motor-control framework generation path. This
+  model does not replace Workbench/CubeMX generation, does not hook into MCSDK,
+  and does not edit generated firmware.
+- Boundary:
+  this is host-side no-power algorithm evidence only. It is not firmware
+  implementation, not MCSDK integration, not a timer driver, not GPIO/ADC/TIM1
+  runtime behavior, not Gate PWM output validation, not Hall closed-loop,
+  not sensorless / SMO validation, not power-stage readiness, and not motor
+  readiness.
+- Verification:
+  `python -m unittest tests.test_foc_core_model` passed: 14 tests OK;
+  `python -m unittest tests.test_workflow_contracts.FocCoreHostModelWorkflowTests`
+  passed: 2 tests OK; `python -m unittest discover -s tests` passed:
+  210 tests OK; `python -m compileall src tests` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  existing `ACTIVE_TASK.md is done and still requires review` warning;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result Recorded
 
 - Added the PA7 / LIN1 wake fault-isolation result:

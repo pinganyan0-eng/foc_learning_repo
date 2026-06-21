@@ -79,6 +79,16 @@ output.
   `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or related output path as the
   primary review target. Do not repeat a motor-connected open-loop run from
   this state.
+- Latest host-side FOC algorithm evidence:
+  `host_side_no_power_foc_algorithm_model_review_2026-06-22.md` records
+  `src/foc_core_model.py` and `tests/test_foc_core_model.py` as a host-side
+  no-power FOC math reference. Current decision is `Host-side no-power FOC
+  algorithm model / no firmware implementation / no MCSDK integration / no PWM
+  output / no motor readiness`. MCSDK remains the intended framework
+  generation path. This proves only host-side algorithm behavior and is not
+  firmware, not MCSDK hook evidence, not Gate PWM validation, not Hall
+  closed-loop, not sensorless validation, not power-stage readiness, and not
+  motor readiness.
 - Latest STDRIVE101 wake-related evidence:
   `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
   records the user-reported oscilloscope check on the six STDRIVE101
@@ -836,6 +846,12 @@ Forbidden in this directory and this P2 stage:
   software Hall golden vectors / no firmware implementation / no MCSDK Hall
   integration / no Hall readiness`; it proves only host-side no-power
   algorithm replay behavior.
+- `host_side_no_power_foc_algorithm_model_review_2026-06-22.md`: review of
+  the host-side FOC math reference model in `src/foc_core_model.py` and
+  `tests/test_foc_core_model.py`. Current decision is `Host-side no-power FOC
+  algorithm model / no firmware implementation / no MCSDK integration / no PWM
+  output / no motor readiness`; it proves only host-side algorithm behavior
+  while MCSDK remains the intended framework generation path.
 - `software_hall_mcsdk_integration_probe_2026-05-27.md`: read-only probe of
   the 2026-05-21 generated-project clue files for speed/position feedback
   integration points. Current decision is `MCSDK Hall integration points

@@ -17,6 +17,18 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
 - Project workflow maintenance context:
   `python tools/build_context_pack.py --mode workflow_maintenance`.
 - Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance / STDRIVE101 single-input wake clean bounded retest, post-retest all-inputs-low static recovery recheck, USB-only MCU-facing driver input default-state check, USB + 24 V static recheck, PWM/gate-test no-power source review, R3_2 MCSDK PWM output path source closure, manual gate-test firmware plan, manual gate-test lockout source package, manual gate-test lockout object-only target, manual gate-test lockout object-only build pass, manual gate-test USB-only runtime lockout preparation, manual gate-test linked-image build-boundary plan, manual gate-test linked-image build-only record, manual gate-test USB-only runtime lockout phase-gate plan, manual gate-test USB-only runtime lockout execution-entry, manual gate-test USB-only runtime lockout result, manual gate-test 24V static lockout phase-gate plan, manual gate-test 24V static lockout execution-entry, manual gate-test 24V static lockout carry-forward result, gate-waveform / PWM-output no-power phase-gate plan, Gate E0 gate-waveform image design plan, Gate E1 isolated source package review, Gate E2 gate-waveform build-only record, Gate E3 USB-only neutral-state phase-gate plan, gate-waveform neutral-wrapper source review, gate-waveform neutral-wrapper build-only record, neutral-wrapper USB-only neutral-state phase-gate plan, neutral-wrapper BIN artifact record, neutral-wrapper USB-only download execution-entry, neutral-wrapper USB-only download result, neutral-wrapper USB-only DMM partial result, neutral-wrapper USB-only DMM completion result, neutral-wrapper residual-voltage isolation result, neutral-wrapper 24V static no-motor result, neutral-wrapper 24V static scope baseline result, waveform candidate BIN artifact record, waveform candidate USB-only download execution-entry, waveform candidate USB-only download result, waveform candidate USB-only DMM result, waveform candidate residual-voltage isolation result, waveform candidate 24V static scope no-waveform result, open-loop CN3 no-waveform correction, open-loop no-rotation result, and PA7 LIN1 wake nFAULT 1.3V fault-isolation result recorded.
+- Current host-side FOC algorithm model:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_algorithm_model_review_2026-06-22.md`
+  records `src/foc_core_model.py` and `tests/test_foc_core_model.py` as
+  host-side no-power FOC math evidence only. Decision:
+  `Host-side no-power FOC algorithm model / no firmware implementation / no
+  MCSDK integration / no PWM output / no motor readiness`. It covers Clarke,
+  inverse Clarke, Park, inverse Park, host-side SVPWM-style duty calculation,
+  PI anti-windup, prior-integrator clamping, and one current-loop step. MCSDK
+  remains the intended framework generation path; this model is not firmware,
+  not a timer driver, not MCSDK hook evidence, not Gate PWM validation, not
+  Hall closed-loop, not sensorless / SMO validation, not power-stage
+  readiness, and not motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records the user-reported return to the minimal PA7 hold-high diagnostic.

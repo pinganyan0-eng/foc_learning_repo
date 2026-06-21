@@ -16,6 +16,34 @@ NUCLEO PB12. This opens no repeated motor run, no Motor Pilot, no Motor
 Profiler, no Hall closed-loop validation, no sensorless claim, no power-stage
 readiness, and no motor-readiness claim.
 
+## Current 2026-06-22 Host-Side No-Power FOC Algorithm Model Addendum
+
+- Task:
+  `TASK-2026-06-22-p2-host-side-no-power-foc-algorithm-model`.
+- Evidence:
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-ALGORITHM-MODEL-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/host_side_no_power_foc_algorithm_model_review_2026-06-22.md`.
+- Code:
+  `src/foc_core_model.py` and `tests/test_foc_core_model.py`.
+- Decision:
+  `Host-side no-power FOC algorithm model / no firmware implementation / no
+  MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  host-side Python model for Clarke, inverse Clarke, Park, inverse Park,
+  host-side SVPWM-style duty calculation, PI current control with anti-windup,
+  prior-integrator clamping, and one current-loop step.
+- MCSDK boundary:
+  MCSDK remains the intended motor-control framework generation path. This
+  model is a learning and regression reference, not a replacement for MCSDK,
+  not an MCSDK hook, and not generated firmware.
+- Boundary:
+  host-side no-power algorithm evidence only. It is not firmware
+  implementation, not GPIO/ADC/TIM1 runtime behavior, not Gate PWM output
+  validation, not Gate PWM safety, not Motor Pilot / Motor Profiler readiness,
+  not Hall closed-loop, not sensorless / SMO validation, not power-stage
+  readiness, and not motor readiness.
+
 ## Current 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result
 
 - Task:
@@ -2618,6 +2646,9 @@ Stable carry-forward phrases:
 - `TASK-2026-05-27-p2-software-hall-mcsdk-speed-position-feedback-interface-review` /
   `EV-2026-05-27-P2-SOFTWARE-HALL-MCSDK-SPEED-POSITION-INTERFACE-001`:
   `Software Hall MCSDK speed/position feedback interface review / no firmware implementation / no MCSDK hook / no Hall readiness`.
+- `TASK-2026-06-22-p2-host-side-no-power-foc-algorithm-model` /
+  `EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-ALGORITHM-MODEL-001`:
+  `Host-side no-power FOC algorithm model / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
 
 ## Next User Checkpoint
 

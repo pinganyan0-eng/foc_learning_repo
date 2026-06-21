@@ -792,6 +792,68 @@ class SoftwareHallGoldenVectorsWorkflowTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
 
+class FocCoreHostModelWorkflowTests(unittest.TestCase):
+    def test_foc_core_model_review_records_host_side_algorithm_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_foc_algorithm_model_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power FOC Algorithm Model Review",
+            "Host-side no-power FOC algorithm model / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "src/foc_core_model.py",
+            "tests/test_foc_core_model.py",
+            "MCSDK remains the intended motor-control framework generation path",
+            "clarke_abc",
+            "inverse_clarke",
+            "park",
+            "inverse_park",
+            "svpwm",
+            "pi_step",
+            "current_control_step",
+            "phase current samples",
+            "d/q PI current control",
+            "host-side SVPWM duty calculation",
+            "externally supplied prior-integrator clamp",
+            "q-axis current request phase-duty direction",
+            "not a timer driver",
+            "not firmware implementation",
+            "No 24V",
+            "No Gate PWM output",
+            "No Hall closed-loop claim",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_foc_core_model_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power FOC Algorithm Model Added",
+            "TASK-2026-06-22-p2-host-side-no-power-foc-algorithm-model",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-FOC-ALGORITHM-MODEL-001",
+            "src/foc_core_model.py",
+            "tests/test_foc_core_model.py",
+            "host_side_no_power_foc_algorithm_model_review_2026-06-22.md",
+            "Host-side no-power FOC algorithm model / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness",
+            "host-side no-power algorithm evidence only",
+            "MCSDK remains the intended motor-control framework generation path",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+
 class SoftwareHallMcsdkIntegrationProbeWorkflowTests(unittest.TestCase):
     def test_integration_probe_records_read_only_clues_only(self):
         review = read_repo_text(

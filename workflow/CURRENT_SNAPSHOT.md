@@ -704,6 +704,16 @@ the current project stage and safety boundary. Historical detail remains in
 - No-power build-only status: Debug build command completed with exit code `0`
   on 2026-05-27 for
   `QIANSAI_G474_STDRIVE101_FOC_P2`; this is local compile evidence only.
+- Host-side no-power FOC algorithm model:
+  `host_side_no_power_foc_algorithm_model_review_2026-06-22.md` records
+  `src/foc_core_model.py` and `tests/test_foc_core_model.py`. Decision:
+  `Host-side no-power FOC algorithm model / no firmware implementation / no
+  MCSDK integration / no PWM output / no motor readiness`. It is useful for
+  learning and regression-testing Clarke, Park, PI, host-side SVPWM-style duty
+  math, and a one-step current-loop flow, while MCSDK remains the framework
+  generation path. It is not firmware implementation, not MCSDK hook evidence,
+  not Gate PWM validation, not Hall closed-loop, not sensorless operation, not
+  power-stage readiness, and not motor readiness.
 - Strategy: use ST MCSDK for the motor-control framework, keep Hall
   closed-loop as the safe fallback path, and treat SMO/PLL sensorless as a
   later stretch goal.

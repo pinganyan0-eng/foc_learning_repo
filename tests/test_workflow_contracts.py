@@ -3856,8 +3856,8 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             self.assertNotIn(forbidden, record)
 
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("not motor power-up", checkpoint)
@@ -3916,12 +3916,13 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
+        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
         self.assertIn("not motor power-up", checkpoint)
         self.assertNotIn("- `VS / 24V_FUSED`;", checkpoint)
         self.assertNotIn("- `REG12`.", checkpoint)
@@ -3988,12 +3989,13 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
+        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
         self.assertIn("not motor power-up", checkpoint)
 
         for forbidden in (
@@ -4133,8 +4135,8 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             self.assertNotIn(forbidden, result)
 
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("not motor power-up", checkpoint)
@@ -4214,8 +4216,8 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             combined,
         )
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("not motor power-up", checkpoint)
@@ -4270,12 +4272,13 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
         self.assertIn(
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             checkpoint,
         )
         self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("candidate 24 V static no-motor phase-gate", checkpoint)
+        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
+        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
         self.assertIn("not motor power-up", checkpoint)
 
         for forbidden in (
@@ -4306,15 +4309,15 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
 
         for phrase in (
             "newest hardware-adjacent record is\n"
-            "the STDRIVE101 gate-waveform candidate residual-voltage isolation result",
+            "the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result",
             "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md",
             "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
             "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded",
             "`CN3_1` through `CN3_6` are all `0 V`",
             "`P13 = 3.3 V`",
             "`P14 = 3.3 V`",
-            "The current repo-side checkpoint is complete through the waveform candidate\n"
-            "residual-voltage isolation result",
+            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
+            "1.3V fault-isolation result",
             "neutral-wrapper 24V static scope baseline",
             "24V static no-motor result",
             "residual-voltage isolation result",
@@ -4324,7 +4327,8 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
 
         for expected_checkpoint_phrase in (
             "no longer another residual-voltage repeat",
-            "candidate 24 V static no-motor phase-gate",
+            "not another candidate 24 V static scope repeat",
+            "not another motor-connected\nopen-loop run",
             "not motor power-up",
         ):
             self.assertIn(expected_checkpoint_phrase, checkpoint)

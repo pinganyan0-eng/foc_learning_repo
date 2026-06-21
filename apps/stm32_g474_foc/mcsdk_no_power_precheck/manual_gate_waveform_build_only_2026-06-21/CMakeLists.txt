@@ -69,6 +69,20 @@ add_executable(stdrive101_gate_waveform_candidate_image
     "${NUCLEO_BASELINE_CORE_SRC_DIR}/system_stm32g4xx.c"
 )
 
+add_executable(stdrive101_force_gpio_toggle_image
+    Src/force_gpio_toggle_main.c
+    Src/minimal_runtime.c
+    "${NUCLEO_BASELINE_DIR}/startup_stm32g474xx.s"
+    "${NUCLEO_BASELINE_CORE_SRC_DIR}/system_stm32g4xx.c"
+)
+
+add_executable(stdrive101_pa7_hold_high_image
+    Src/pa7_hold_high_main.c
+    Src/minimal_runtime.c
+    "${NUCLEO_BASELINE_DIR}/startup_stm32g474xx.s"
+    "${NUCLEO_BASELINE_CORE_SRC_DIR}/system_stm32g4xx.c"
+)
+
 set_target_properties(stdrive101_gate_waveform_candidate_image PROPERTIES
     OUTPUT_NAME stdrive101_gate_waveform_candidate_image
     SUFFIX ".elf"
@@ -97,5 +111,69 @@ target_link_options(stdrive101_gate_waveform_candidate_image PRIVATE
 )
 
 target_link_libraries(stdrive101_gate_waveform_candidate_image PRIVATE
+    gcc
+)
+
+set_target_properties(stdrive101_force_gpio_toggle_image PROPERTIES
+    OUTPUT_NAME stdrive101_force_gpio_toggle_image
+    SUFFIX ".elf"
+)
+
+target_compile_definitions(stdrive101_force_gpio_toggle_image PRIVATE
+    STM32G474xx
+)
+
+target_include_directories(stdrive101_force_gpio_toggle_image PRIVATE
+    "${CMSIS_DEVICE_DIR}"
+    "${CMSIS_CORE_DIR}"
+)
+
+target_compile_options(stdrive101_force_gpio_toggle_image PRIVATE
+    ${GATE_WAVEFORM_COMPILE_OPTIONS}
+)
+
+target_link_options(stdrive101_force_gpio_toggle_image PRIVATE
+    -mcpu=cortex-m4
+    -mthumb
+    -T "${NUCLEO_BASELINE_LINKER_SCRIPT}"
+    -nostdlib
+    -Wl,-Map=$<TARGET_FILE_DIR:stdrive101_force_gpio_toggle_image>/stdrive101_force_gpio_toggle_image.map
+    -Wl,--gc-sections
+    -Wl,--print-memory-usage
+)
+
+target_link_libraries(stdrive101_force_gpio_toggle_image PRIVATE
+    gcc
+)
+
+set_target_properties(stdrive101_pa7_hold_high_image PROPERTIES
+    OUTPUT_NAME stdrive101_pa7_hold_high_image
+    SUFFIX ".elf"
+)
+
+target_compile_definitions(stdrive101_pa7_hold_high_image PRIVATE
+    STM32G474xx
+)
+
+target_include_directories(stdrive101_pa7_hold_high_image PRIVATE
+    "${CMSIS_DEVICE_DIR}"
+    "${CMSIS_CORE_DIR}"
+)
+
+target_compile_options(stdrive101_pa7_hold_high_image PRIVATE
+    ${GATE_WAVEFORM_COMPILE_OPTIONS}
+)
+
+target_link_options(stdrive101_pa7_hold_high_image PRIVATE
+    -mcpu=cortex-m4
+    -mthumb
+    -T "${NUCLEO_BASELINE_LINKER_SCRIPT}"
+    -nostdlib
+    -Wl,-Map=$<TARGET_FILE_DIR:stdrive101_pa7_hold_high_image>/stdrive101_pa7_hold_high_image.map
+    -Wl,--gc-sections
+    -Wl,--print-memory-usage
+)
+
+target_link_libraries(stdrive101_pa7_hold_high_image PRIVATE
     gcc
 )

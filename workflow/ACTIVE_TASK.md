@@ -1,24 +1,98 @@
 # Current Task
 
 This is the current single task page. The newest hardware-adjacent record is
-the STDRIVE101 gate-waveform candidate residual-voltage isolation result after
-the candidate USB-only DMM result, candidate USB-only download result,
-candidate USB-only download execution entry, candidate BIN artifact record,
-neutral-wrapper 24V static scope baseline result, 24V static no-motor result,
-residual-voltage isolation result, USB-only DMM completion result, partial
-result, neutral-wrapper download result, neutral-wrapper download execution
-entry, neutral-wrapper BIN artifact record, USB-only neutral-state phase-gate
-plan, neutral-wrapper build-only record, neutral-wrapper source review,
-Gate E3 USB-only neutral-state phase-gate plan, Gate E2 build-only record,
-Gate E1 isolated source package review, Gate E0 gate-waveform image design
-plan, and earlier manual gate-test records. It records the user-confirmed
-residual-voltage isolation readings after USB / ST-LINK disconnect:
-`VS / 24V_FUSED = 0 V` and `REG12 = 0 V`. The earlier candidate USB-only
-`VS / 24V_FUSED = 2 V` reading cleared after USB disconnect, so persistent VS
-backfeed is not indicated in this candidate isolation check and the immediate
-residual-voltage blocker is cleared only. This opens no Run / Debug, no 24 V
-command from this record, no Gate PWM output, no Motor Pilot, no Motor
-Profiler, no motor connection, power-stage readiness, or motor readiness claim.
+the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result after the
+open-loop CN3 no-waveform correction, open-loop no-rotation result,
+gate-waveform candidate records, neutral-wrapper records, and earlier manual
+gate-test records. It records that the PA7 hold-high diagnostic now reaches
+the power board and wakes STDRIVE101: `PA7 / CN10-15 = 3.3 V`,
+`CN8 P2 / LIN1 = 3.3 V`, `VS / 24V_FUSED = 24 V`, and `REG12 = 12 V`.
+However, `nFAULT` remained `1.3 V` on both `CN8 P13` and
+`NUCLEO CN10-16`, and power-board `CN8 P13` remained `1.3 V` after the
+`nFAULT -> PB12` wire was disconnected. Corrected R3 checks show the pull-up
+chain is populated and continuous, so the current blocker is a
+power-board-side STDRIVE101 fault state, not PA7, the LIN1 wire, R3 value, or
+NUCLEO PB12. This opens no repeated motor run, no Motor Pilot, no Motor
+Profiler, no Hall closed-loop validation, no sensorless claim, no power-stage
+readiness, and no motor-readiness claim.
+
+## Current 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result
+
+- Task:
+  `TASK-2026-06-21-stdrive101-pa7-lin1-wake-nfault-1v3-fault-isolation`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-PA7-LIN1-WAKE-NFAULT-1V3-FAULT-ISOLATION-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`.
+- Firmware image:
+  `.tmp/stdrive101_pa7_hold_high_2026-06-21_clean/stdrive101_pa7_hold_high_image.bin`,
+  size `716` bytes, SHA256
+  `1446F3E8A297FB82AAD4FA2710082C76245407116D3E83A21506B38912977F77`.
+- User-reported measurements:
+  `PA7 / CN10-15 = 3.3 V`; `CN8 P2 / LIN1 = 3.3 V`;
+  `VS / 24V_FUSED = 24 V`; `REG12 = 12 V`; `CN8 P13 / nFAULT = 1.3 V`;
+  `NUCLEO CN10-16 / PB12 = 1.3 V`; after disconnecting the
+  `nFAULT -> PB12` wire, power-board `CN8 P13 / nFAULT` remained `1.3 V`.
+- Corrected no-power checks:
+  `R3 body = 10 kohm`; `R3 3V3 side -> CN8 P14 / 3V3 = 0 ohm`;
+  `R3 nFAULT side -> CN8 P13 / nFAULT = 0 ohm`; SCREF-related checks
+  reported `SCREF -> GND = 33 kohm`, `SCREF -> 3V3 = 33 kohm`,
+  `R1 / R2 body = 33 kohm / 20 kohm`, and both checked R2 endpoint
+  continuities as `0 ohm`.
+- Decision:
+  `STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault isolation result / PA7
+  hold-high image copied by ST-LINK mass storage / PA7 CN10-15 = 3.3 V /
+  CN8 P2 LIN1 = 3.3 V / VS 24V_FUSED = 24 V / REG12 = 12 V / nFAULT =
+  1.3 V on both CN8 P13 and NUCLEO CN10-16 / nFAULT remains 1.3 V after
+  PB12 wire disconnected / R3 pull-up body and endpoint continuity corrected
+  as 10 kohm and 0 ohm / R3 pull-up value and NUCLEO PB12 not primary
+  blocker / STDRIVE101 wakes but reports or holds a power-board-side fault
+  state / current primary hypothesis is low-side phase-U VDS or related
+  driver-output path after LIN1 stimulus / no repeated motor run / no Motor
+  Pilot / no Motor Profiler / no Hall closed-loop validation / no sensorless
+  claim / no power-stage readiness / no motor-readiness claim`.
+- Boundary:
+  fault-isolation evidence only. This does not validate PWM output,
+  phase-output behavior, power-stage readiness, motor readiness, Hall closed
+  loop, sensorless operation, or safe drive operation.
+- Next checkpoint:
+  do not repeat the motor-connected open-loop run. The next teacher-reviewed
+  diagnostic should distinguish a `LIN1 / GLS1 / Q2 / OUT1` low-side path
+  issue from a common STDRIVE101 protection / CP / SCREF / soldering / chip
+  issue. A bounded motor-disconnected `HIN1` wake comparison may be considered
+  only after review.
+
+## Current 2026-06-21 STDRIVE101 Gate-Waveform Candidate 24V Static Scope No-Waveform Result
+
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-24v-static-scope-no-waveform-result`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-24V-STATIC-SCOPE-NO-WAVEFORM-RESULT-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`.
+- User-reported readings:
+  `CN3_1 / CN3_2`: no waveform; `CN3_3 / CN3_4`: no waveform;
+  `CN3_5 / CN3_6`: no waveform; HSPY `CV`, current `0.036 A`;
+  `nFAULT = 3.3 V`; abnormal heat / smell / sound / reset-loop symptom:
+  none.
+- Decision:
+  `STDRIVE101 gate-waveform candidate 24V static scope no-waveform result /
+  waveform candidate image / HSPY CV 0.036 A / CN3_1 and CN3_2 no waveform /
+  CN3_3 and CN3_4 no waveform / CN3_5 and CN3_6 no waveform / nFAULT remains
+  3.3 V / no board heat smell sound reset-loop symptom / no observed
+  MCU-facing driver-input waveform in this no-motor bounded check / no Run
+  Debug / no Motor Pilot / no Motor Profiler / no motor connection / no
+  powered-drive readiness`.
+- Boundary:
+  bounded no-motor oscilloscope observation only. This does not authorize
+  Motor Pilot, Motor Profiler, motor connection, Hall closed loop, sensorless
+  operation, power-stage readiness, or motor readiness.
+- Next checkpoint:
+  do not repeat the same candidate 24 V static scope check unless the image,
+  wiring, board condition, trigger method, measurement setup, or observed value
+  changes. The next engineering step should be source/build/runtime-entry
+  review for why the candidate waveform was not observed, or a deliberate
+  return to a lower-risk neutral-wrapper / lockout path.
 
 ## Current 2026-06-21 STDRIVE101 Gate-Waveform Candidate Residual-Voltage Isolation Result
 
@@ -2547,31 +2621,28 @@ Stable carry-forward phrases:
 
 ## Next User Checkpoint
 
-The current repo-side checkpoint is complete through the waveform candidate
-residual-voltage isolation result:
+The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT
+1.3V fault-isolation result:
 
-`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md`
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
 
-The immediate user checkpoint is no longer another residual-voltage repeat.
-The residual-voltage blocker is cleared only. The next engineering checkpoint
-may only be a separate candidate 24 V static no-motor phase-gate or execution
-entry.
+The immediate user checkpoint is no longer another residual-voltage repeat,
+not another candidate 24 V static scope repeat, and not another motor-connected
+open-loop run. The latest isolation evidence shows `PA7` reaches `LIN1` and
+STDRIVE101 wakes to `REG12 = 12 V`, but `nFAULT` stays at `1.3 V` on the
+power-board side even after PB12 is disconnected.
 
-Candidate next-stage preconditions to confirm before that separate record:
+Next engineering work should be teacher-reviewed fault isolation around the
+power-board / STDRIVE101 side, especially whether the issue is concentrated in
+the `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U path or a common protection /
+CP / SCREF / soldering / chip problem. It is not motor power-up and does not
+open Run / Debug, Motor Pilot, Motor Profiler, motor connection, power-stage
+readiness, or motor readiness.
 
-- current board image remains the waveform candidate image;
-- HSPY / 24 V is OFF before setup and starts from a current-limited state;
-- no `10 kohm` wake resistor or LIN1 stimulus;
-- motor disconnected;
-- oscilloscope or DMM measurement points are named before applying 24 V;
-- stop rules and rollback are stated before applying 24 V.
-
-That next checkpoint is still static no-motor only. It is not motor power-up
-and does not open Run / Debug, Motor Pilot, Motor Profiler, Gate PWM output,
-motor connection, power-stage readiness, or motor readiness.
-
-Do not repeat the residual-voltage isolation check unless the physical state,
-image, wiring, or measured value changes.
+Do not repeat the residual-voltage isolation check, the same candidate 24 V
+static scope check, or the motor-connected open-loop run unless the physical
+state, image, wiring, trigger method, measurement setup, or observed value
+changes and a separate dated phase gate opens the action.
 
 ## Verification
 

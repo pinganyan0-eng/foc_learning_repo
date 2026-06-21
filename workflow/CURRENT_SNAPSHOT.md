@@ -42,8 +42,41 @@ the current project stage and safety boundary. Historical detail remains in
   24V static no-motor result, neutral-wrapper 24V static scope baseline
   result, waveform candidate BIN artifact record, waveform candidate
   USB-only download execution-entry, waveform candidate USB-only download
-  result, waveform candidate USB-only DMM result, and waveform candidate
-  residual-voltage isolation result.
+  result, waveform candidate USB-only DMM result, waveform candidate
+  residual-voltage isolation result, waveform candidate 24V static scope
+  no-waveform result, open-loop CN3 no-waveform correction, open-loop
+  no-rotation result, and PA7 LIN1 wake nFAULT 1.3V fault-isolation result.
+- Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
+  `stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
+  records that the PA7 hold-high diagnostic now reaches the power board:
+  `PA7 / CN10-15 = 3.3 V` and `CN8 P2 / LIN1 = 3.3 V`. With HSPY applied,
+  the user reported `VS / 24V_FUSED = 24 V` and `REG12 = 12 V`, so
+  STDRIVE101 wake is occurring, but `nFAULT` remained `1.3 V` on both
+  `CN8 P13` and `NUCLEO CN10-16`; after disconnecting the `nFAULT -> PB12`
+  wire, power-board `CN8 P13` still measured `1.3 V`. Corrected R3 checks
+  show `R3 = 10 kohm` and both R3 endpoints continuous to `3V3` and
+  `nFAULT`, so the R3 pull-up value and NUCLEO PB12 are not the primary
+  blockers. Current working hypothesis is a power-board-side STDRIVE101
+  fault state, especially a possible `LIN1 / GLS1 / Q2 / OUT1` low-side
+  phase-U VDS or related driver-output path issue. Do not repeat the
+  motor-connected open-loop run; this record opens no Motor Pilot, Motor
+  Profiler, Hall closed loop, sensorless operation, power-stage readiness, or
+  motor readiness.
+- Current gate-waveform candidate 24V static scope no-waveform result:
+  `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
+  records the user-reported oscilloscope check on the six STDRIVE101
+  MCU-facing driver inputs with the waveform candidate image on the board,
+  HSPY at 24 V, and the motor disconnected. User reported no waveform on
+  `CN3_1 / CN3_2`, no waveform on `CN3_3 / CN3_4`, and no waveform on
+  `CN3_5 / CN3_6`; HSPY stayed `CV` at `0.036 A`; `nFAULT = 3.3 V`; no
+  abnormal board symptom was reported. This is bounded no-motor oscilloscope
+  evidence only and does not open Motor Pilot, Motor Profiler, motor
+  connection, Hall closed loop, sensorless operation, power-stage readiness,
+  or motor readiness. Do not repeat this same check unless the image, wiring,
+  board condition, trigger method, measurement setup, or observed value
+  changes. Next useful work is source/build/runtime-entry review for why the
+  candidate waveform was not observed, or a deliberate return to a lower-risk
+  neutral-wrapper / lockout path.
 - Current gate-waveform candidate residual-voltage isolation result:
   `stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md`
   records the bounded isolation follow-up after the waveform candidate

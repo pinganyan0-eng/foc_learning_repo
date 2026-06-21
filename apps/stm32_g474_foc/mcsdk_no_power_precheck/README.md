@@ -66,7 +66,32 @@ output.
 - Current user handoff: 2026-06-01 PCB2 was reported populated / in hand and
   the route is unchanged. The 2026-06-19 no-power DMM summary is now recorded
   as `pcb2_no_power_dmm_continuity_short_check_result_2026-06-19.md`.
+- Latest STDRIVE101 fault-isolation evidence:
+  `stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
+  records the PA7 hold-high diagnostic after the open-loop / CN3 no-waveform
+  correction. The user reported `PA7 / CN10-15 = 3.3 V`,
+  `CN8 P2 / LIN1 = 3.3 V`, `VS / 24V_FUSED = 24 V`, and `REG12 = 12 V`, but
+  `nFAULT = 1.3 V` on both `CN8 P13` and `NUCLEO CN10-16`; after disconnecting
+  the `nFAULT -> PB12` wire, power-board `CN8 P13` remained `1.3 V`. Corrected
+  R3 checks show `R3 = 10 kohm` and endpoint continuity to `3V3` and `nFAULT`,
+  so the R3 pull-up value and NUCLEO PB12 are not the primary blockers. Current
+  working hypothesis is a power-board-side STDRIVE101 fault state, with the
+  `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or related output path as the
+  primary review target. Do not repeat a motor-connected open-loop run from
+  this state.
 - Latest STDRIVE101 wake-related evidence:
+  `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
+  records the user-reported oscilloscope check on the six STDRIVE101
+  MCU-facing driver inputs with the waveform candidate image on the board,
+  HSPY at 24 V, and the motor disconnected. User reported no waveform on
+  `CN3_1 / CN3_2`, no waveform on `CN3_3 / CN3_4`, and no waveform on
+  `CN3_5 / CN3_6`; HSPY stayed `CV` at `0.036 A`; `nFAULT = 3.3 V`; no
+  abnormal board symptom was reported. This is bounded no-motor oscilloscope
+  evidence only. It opens no Motor Pilot, no Motor Profiler, no motor
+  connection, no Hall closed loop, no sensorless operation, no power-stage
+  readiness, and no motor readiness. Do not repeat this same check unless the
+  image, wiring, board condition, trigger method, measurement setup, or
+  observed value changes.
   `stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md`
   records the bounded isolation follow-up after the waveform candidate
   USB-only DMM result reported `VS / 24V_FUSED = 2 V` and `REG12 = 0.3 V`.

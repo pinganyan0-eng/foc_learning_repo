@@ -16,7 +16,35 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   `python tools/build_context_pack.py --mode ai_maintenance`.
 - Project workflow maintenance context:
   `python tools/build_context_pack.py --mode workflow_maintenance`.
-- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance / STDRIVE101 single-input wake clean bounded retest, post-retest all-inputs-low static recovery recheck, USB-only MCU-facing driver input default-state check, USB + 24 V static recheck, PWM/gate-test no-power source review, R3_2 MCSDK PWM output path source closure, manual gate-test firmware plan, manual gate-test lockout source package, manual gate-test lockout object-only target, manual gate-test lockout object-only build pass, manual gate-test USB-only runtime lockout preparation, manual gate-test linked-image build-boundary plan, manual gate-test linked-image build-only record, manual gate-test USB-only runtime lockout phase-gate plan, manual gate-test USB-only runtime lockout execution-entry, manual gate-test USB-only runtime lockout result, manual gate-test 24V static lockout phase-gate plan, manual gate-test 24V static lockout execution-entry, manual gate-test 24V static lockout carry-forward result, gate-waveform / PWM-output no-power phase-gate plan, Gate E0 gate-waveform image design plan, Gate E1 isolated source package review, Gate E2 gate-waveform build-only record, Gate E3 USB-only neutral-state phase-gate plan, gate-waveform neutral-wrapper source review, gate-waveform neutral-wrapper build-only record, neutral-wrapper USB-only neutral-state phase-gate plan, neutral-wrapper BIN artifact record, neutral-wrapper USB-only download execution-entry, neutral-wrapper USB-only download result, neutral-wrapper USB-only DMM partial result, neutral-wrapper USB-only DMM completion result, neutral-wrapper residual-voltage isolation result, neutral-wrapper 24V static no-motor result, neutral-wrapper 24V static scope baseline result, waveform candidate BIN artifact record, waveform candidate USB-only download execution-entry, waveform candidate USB-only download result, waveform candidate USB-only DMM result, and waveform candidate residual-voltage isolation result recorded.
+- Current stage: P2 MCSDK no-power precheck / Packet A generated-source review / no-power build-only Debug pass recorded / PCB2 no-power DMM summary recorded / software Hall firmware-entry plan and MCSDK speed-position boundary governance / STDRIVE101 single-input wake clean bounded retest, post-retest all-inputs-low static recovery recheck, USB-only MCU-facing driver input default-state check, USB + 24 V static recheck, PWM/gate-test no-power source review, R3_2 MCSDK PWM output path source closure, manual gate-test firmware plan, manual gate-test lockout source package, manual gate-test lockout object-only target, manual gate-test lockout object-only build pass, manual gate-test USB-only runtime lockout preparation, manual gate-test linked-image build-boundary plan, manual gate-test linked-image build-only record, manual gate-test USB-only runtime lockout phase-gate plan, manual gate-test USB-only runtime lockout execution-entry, manual gate-test USB-only runtime lockout result, manual gate-test 24V static lockout phase-gate plan, manual gate-test 24V static lockout execution-entry, manual gate-test 24V static lockout carry-forward result, gate-waveform / PWM-output no-power phase-gate plan, Gate E0 gate-waveform image design plan, Gate E1 isolated source package review, Gate E2 gate-waveform build-only record, Gate E3 USB-only neutral-state phase-gate plan, gate-waveform neutral-wrapper source review, gate-waveform neutral-wrapper build-only record, neutral-wrapper USB-only neutral-state phase-gate plan, neutral-wrapper BIN artifact record, neutral-wrapper USB-only download execution-entry, neutral-wrapper USB-only download result, neutral-wrapper USB-only DMM partial result, neutral-wrapper USB-only DMM completion result, neutral-wrapper residual-voltage isolation result, neutral-wrapper 24V static no-motor result, neutral-wrapper 24V static scope baseline result, waveform candidate BIN artifact record, waveform candidate USB-only download execution-entry, waveform candidate USB-only download result, waveform candidate USB-only DMM result, waveform candidate residual-voltage isolation result, waveform candidate 24V static scope no-waveform result, open-loop CN3 no-waveform correction, open-loop no-rotation result, and PA7 LIN1 wake nFAULT 1.3V fault-isolation result recorded.
+- Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
+  records the user-reported return to the minimal PA7 hold-high diagnostic.
+  `PA7 / CN10-15 = 3.3 V`, `CN8 P2 / LIN1 = 3.3 V`,
+  `VS / 24V_FUSED = 24 V`, and `REG12 = 12 V`, but `nFAULT` remained
+  `1.3 V` on both `CN8 P13` and `NUCLEO CN10-16`; after disconnecting the
+  `nFAULT -> PB12` wire, power-board `CN8 P13` still measured `1.3 V`.
+  User corrected the R3 checks to `R3 = 10 kohm`, R3 3V3 endpoint continuity
+  to `CN8 P14 = 0 ohm`, and R3 nFAULT endpoint continuity to `CN8 P13 =
+  0 ohm`, so the R3 pull-up value and NUCLEO PB12 are not the primary
+  blockers. Current working hypothesis is a power-board-side STDRIVE101 fault
+  state, with `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or related
+  output path as the primary review target. This opens no repeated motor run,
+  no Motor Pilot, no Motor Profiler, no power-stage readiness, and no motor
+  readiness.
+- Current gate-waveform candidate 24V static scope no-waveform result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
+  records the user-reported oscilloscope check on the six STDRIVE101
+  MCU-facing driver inputs with the waveform candidate image on the board,
+  HSPY at 24 V, and the motor disconnected. User reported no waveform on
+  `CN3_1 / CN3_2`, no waveform on `CN3_3 / CN3_4`, and no waveform on
+  `CN3_5 / CN3_6`; HSPY stayed `CV` at `0.036 A`; `nFAULT = 3.3 V`; no
+  abnormal board symptom was reported. This is bounded no-motor oscilloscope
+  evidence only. It opens no Motor Pilot, no Motor Profiler, no motor
+  connection, no Hall closed loop, no sensorless operation, no power-stage
+  readiness, and no motor readiness. Do not repeat this same check unless the
+  image, wiring, board condition, trigger method, measurement setup, or
+  observed value changes.
 - Current gate-waveform candidate residual-voltage isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_residual_voltage_isolation_result_2026-06-21.md`
   records the bounded isolation follow-up after the waveform candidate

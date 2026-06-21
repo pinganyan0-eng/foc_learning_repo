@@ -1,3 +1,79 @@
+## 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result Recorded
+
+- Added the PA7 / LIN1 wake fault-isolation result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-PA7-LIN1-WAKE-NFAULT-1V3-FAULT-ISOLATION-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-pa7-lin1-wake-nfault-1v3-fault-isolation`.
+- User-reported isolation results:
+  `PA7 / CN10-15 = 3.3 V`, `CN8 P2 / LIN1 = 3.3 V`,
+  `VS / 24V_FUSED = 24 V`, `REG12 = 12 V`, and `nFAULT = 1.3 V`.
+  Both `CN8 P13 / nFAULT` and `NUCLEO CN10-16 / PB12` measured `1.3 V`;
+  after disconnecting the `nFAULT -> PB12` wire, power-board `CN8 P13`
+  still measured `1.3 V`.
+- Corrected no-power checks:
+  `R3 body = 10 kohm`,
+  `R3 3V3 side -> CN8 P14 / 3V3 = 0 ohm`, and
+  `R3 nFAULT side -> CN8 P13 / nFAULT = 0 ohm`. SCREF-related checks
+  recorded `SCREF -> GND = 33 kohm`, `SCREF -> 3V3 = 33 kohm`,
+  `R1 / R2 body = 33 kohm / 20 kohm`, and both checked R2 endpoint
+  continuities as `0 ohm`.
+- Decision:
+  `STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault isolation result / PA7
+  hold-high image copied by ST-LINK mass storage / PA7 CN10-15 = 3.3 V /
+  CN8 P2 LIN1 = 3.3 V / VS 24V_FUSED = 24 V / REG12 = 12 V / nFAULT =
+  1.3 V on both CN8 P13 and NUCLEO CN10-16 / nFAULT remains 1.3 V after
+  PB12 wire disconnected / R3 pull-up body and endpoint continuity corrected
+  as 10 kohm and 0 ohm / R3 pull-up value and NUCLEO PB12 not primary
+  blocker / STDRIVE101 wakes but reports or holds a power-board-side fault
+  state / current primary hypothesis is low-side phase-U VDS or related
+  driver-output path after LIN1 stimulus / no repeated motor run / no Motor
+  Pilot / no Motor Profiler / no Hall closed-loop validation / no sensorless
+  claim / no power-stage readiness / no motor-readiness claim`.
+- Boundary:
+  this is fault-isolation evidence only. It does not validate PWM output,
+  phase-output behavior, power-stage readiness, motor readiness, Hall closed
+  loop, sensorless operation, or safe drive operation.
+- Next checkpoint:
+  do not repeat the motor-connected open-loop run. The next teacher-reviewed
+  diagnostic should distinguish a `LIN1 / GLS1 / Q2 / OUT1` low-side path
+  issue from a common STDRIVE101 protection / CP / SCREF / soldering / chip
+  issue. A bounded motor-disconnected comparison using
+  `3.3 V -> 10 kohm -> CN8 P1 / HIN1` may be considered only after review.
+
+## 2026-06-21 STDRIVE101 Gate-Waveform Candidate 24V Static Scope No-Waveform Result Recorded
+
+- Added the waveform candidate 24V static scope no-waveform result:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`.
+- Evidence:
+  `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-24V-STATIC-SCOPE-NO-WAVEFORM-RESULT-001`.
+- Task:
+  `TASK-2026-06-21-stdrive101-gate-waveform-candidate-24v-static-scope-no-waveform-result`.
+- User-reported result:
+  `CN3_1 / CN3_2`, `CN3_3 / CN3_4`, and `CN3_5 / CN3_6` all showed no
+  waveform; HSPY stayed `CV` at `0.036 A`; `nFAULT = 3.3 V`; no abnormal
+  board symptom was reported.
+- Decision:
+  `STDRIVE101 gate-waveform candidate 24V static scope no-waveform result /
+  waveform candidate image / HSPY CV 0.036 A / CN3_1 and CN3_2 no waveform /
+  CN3_3 and CN3_4 no waveform / CN3_5 and CN3_6 no waveform / nFAULT remains
+  3.3 V / no board heat smell sound reset-loop symptom / no observed
+  MCU-facing driver-input waveform in this no-motor bounded check / no Run
+  Debug / no Motor Pilot / no Motor Profiler / no motor connection / no
+  powered-drive readiness`.
+- Boundary:
+  this records only the bounded no-motor oscilloscope observation for the
+  waveform candidate image. It does not authorize Motor Pilot, Motor Profiler,
+  motor connection, Hall closed loop, sensorless operation, power-stage
+  readiness, or motor readiness.
+- Next checkpoint:
+  do not repeat the same candidate 24 V static scope check unless the image,
+  wiring, board condition, trigger method, measurement setup, or observed value
+  changes. The next engineering step should be source/build/runtime-entry
+  review for why the candidate waveform was not observed, or a deliberate
+  return to a lower-risk neutral-wrapper / lockout path.
+
 ## 2026-06-21 STDRIVE101 Gate-Waveform Candidate Residual-Voltage Isolation Result Recorded
 
 - Added the waveform candidate residual-voltage isolation result:

@@ -1,3 +1,40 @@
+## 2026-06-22 STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan Added
+
+- Added planning / source-review artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`.
+- Evidence:
+  `EV-2026-06-22-STDRIVE101-NFAULT-1V3-FAULT-TREE-NO-POWER-PLAN-001`.
+- Task:
+  `TASK-2026-06-22-stdrive101-nfault-1v3-fault-tree-no-power-plan`.
+- Decision:
+  `STDRIVE101 nFAULT 1.3V fault-tree no-power plan / power-board-side fault localized / no-power source and photo evidence only / HIN1 comparison remains future teacher-reviewed phase gate / no repeat powered wake / no PWM output / no motor readiness`.
+- Subagent protocol:
+  safety helper Lagrange identified the current blocker as the power-board /
+  STDRIVE101-side `nFAULT = 1.3 V` condition after successful `PA7 -> LIN1`
+  wake. The two additional helper slices were rate-limited, so the main agent
+  recovered by inspecting the local evidence files directly before writing the
+  plan.
+- Scope:
+  consolidates the latest PA7 / LIN1 wake fault-isolation result, earlier
+  nFAULT cause review, schematic marking, and protection-node DMM evidence
+  into a no-power fault tree. The primary working branch remains
+  `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or output-path behavior,
+  but common protection / `CP` / `SCREF` / `REG12` / soldering / chip causes
+  remain unresolved.
+- Boundary:
+  no flash, no Run / Debug, no repeat 24 V wake, no `HIN1` comparison
+  execution, no power-board action beyond no-power inspection, no motor
+  connection, no Gate PWM output, no Motor Pilot / Profiler, no Hall
+  closed-loop, no sensorless / SMO claim, no power-stage readiness, and no
+  motor readiness. The earlier `HIN1` comparison idea remains a future
+  teacher-reviewed phase gate only.
+- Verification:
+  `python -m unittest discover -s tests` passed: 225 tests OK;
+  `python -m compileall src tests` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  existing `ACTIVE_TASK.md is done and still requires review` warning;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-22 MCSDK / Host-Side FOC Math Comparison Boundary Plan Added
 
 - Added MCSDK / host-side FOC comparison boundary plan:

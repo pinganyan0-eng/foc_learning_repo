@@ -1,6 +1,6 @@
 # Current Snapshot
 
-Last updated: 2026-06-21
+Last updated: 2026-06-22
 
 This is the short current-state page for low-token AI handoff. It summarizes
 the current project stage and safety boundary. Historical detail remains in
@@ -45,7 +45,22 @@ the current project stage and safety boundary. Historical detail remains in
   result, waveform candidate USB-only DMM result, waveform candidate
   residual-voltage isolation result, waveform candidate 24V static scope
   no-waveform result, open-loop CN3 no-waveform correction, open-loop
-  no-rotation result, and PA7 LIN1 wake nFAULT 1.3V fault-isolation result.
+  no-rotation result, PA7 LIN1 wake nFAULT 1.3V fault-isolation result, and
+  STDRIVE101 nFAULT 1.3V fault-tree no-power plan.
+- Current STDRIVE101 nFAULT 1.3V fault-tree no-power plan:
+  `stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
+  consolidates the latest PA7 / LIN1 wake fault-isolation result, earlier
+  nFAULT cause review, schematic marking, and protection-node no-power DMM
+  result into a teacher-reviewable no-power fault tree. Decision:
+  `STDRIVE101 nFAULT 1.3V fault-tree no-power plan / power-board-side fault
+  localized / no-power source and photo evidence only / HIN1 comparison
+  remains future teacher-reviewed phase gate / no repeat powered wake / no
+  PWM output / no motor readiness`. The primary working branch remains
+  `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or output-path behavior, but
+  common protection / `CP` / `SCREF` / `REG12` / soldering / chip causes
+  remain unresolved. This opens no repeat 24 V wake, no `HIN1` comparison
+  execution, no Motor Pilot, no Motor Profiler, no Gate PWM output, no motor
+  connection, no power-stage readiness, and no motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records that the PA7 hold-high diagnostic now reaches the power board:

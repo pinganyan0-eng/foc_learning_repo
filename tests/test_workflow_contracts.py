@@ -9,6 +9,22 @@ def read_repo_text(relative_path: str) -> str:
     return (ROOT / relative_path).read_text(encoding="utf-8")
 
 
+def assert_current_nfault_fault_tree_checkpoint(testcase: unittest.TestCase, checkpoint: str):
+    for phrase in (
+        "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
+        "fault-tree no-power plan",
+        "stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+        "not as motor power-up permission",
+        "Do not repeat residual-voltage isolation",
+        "the same candidate 24 V static scope\ncheck",
+        "the motor-connected open-loop run",
+        "the `LIN1` powered wake",
+        "or any\n`HIN1` comparison unless",
+        "separate dated teacher-\nreviewed phase gate opens the action",
+    ):
+        testcase.assertIn(phrase, checkpoint)
+
+
 class CodexDualTeacherGateTests(unittest.TestCase):
     def test_gate_doc_contains_required_opening_and_shape(self):
         text = read_repo_text("workflow/codex_dual_teacher_execution_gate.md")
@@ -3950,7 +3966,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, result)
 
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
     def test_gate_waveform_candidate_bin_artifact_record_has_downloadable_identity_only(self):
         artifact = (
@@ -4024,12 +4040,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, record)
 
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
     def test_gate_waveform_candidate_usb_only_dmm_result_blocks_upward_progression_on_vs_residual(self):
         artifact = (
@@ -4084,15 +4095,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
-        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
         self.assertNotIn("- `VS / 24V_FUSED`;", checkpoint)
         self.assertNotIn("- `REG12`.", checkpoint)
 
@@ -4157,15 +4160,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
-        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
         for forbidden in (
             "24 V behavior validated",
@@ -4303,12 +4298,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, result)
 
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
     def test_gate_waveform_neutral_wrapper_24v_static_scope_baseline_result_records_all_six_inputs_only(self):
         artifact = (
@@ -4384,12 +4374,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             "Superseded for the live checkpoint by `EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-CANDIDATE-BIN-ARTIFACT-RECORD-NO-POWER-001`",
             combined,
         )
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
     def test_gate_waveform_neutral_wrapper_residual_voltage_isolation_result_clears_residual_only(self):
         artifact = (
@@ -4440,15 +4425,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
-        self.assertIn(
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
-            checkpoint,
-        )
-        self.assertIn("no longer another residual-voltage repeat", checkpoint)
-        self.assertIn("not another candidate 24 V static scope repeat", checkpoint)
-        self.assertIn("not another motor-connected\nopen-loop run", checkpoint)
-        self.assertIn("not motor power-up", checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
         for forbidden in (
             "24 V behavior validated",
@@ -4485,8 +4462,8 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             "`CN3_1` through `CN3_6` are all `0 V`",
             "`P13 = 3.3 V`",
             "`P14 = 3.3 V`",
-            "The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT\n"
-            "1.3V fault-isolation result",
+            "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
+            "fault-tree no-power plan",
             "neutral-wrapper 24V static scope baseline",
             "24V static no-motor result",
             "residual-voltage isolation result",
@@ -4494,13 +4471,7 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         ):
             self.assertIn(phrase, combined)
 
-        for expected_checkpoint_phrase in (
-            "no longer another residual-voltage repeat",
-            "not another candidate 24 V static scope repeat",
-            "not another motor-connected\nopen-loop run",
-            "not motor power-up",
-        ):
-            self.assertIn(expected_checkpoint_phrase, checkpoint)
+        assert_current_nfault_fault_tree_checkpoint(self, checkpoint)
 
         for superseded_row in (
             "- `VS / 24V_FUSED`;",
@@ -4515,6 +4486,130 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             "- `CN3_14 / 3V3`;",
         ):
             self.assertNotIn(superseded_row, checkpoint)
+
+
+class Stdrive101NfaultFaultTreeNoPowerPlanTests(unittest.TestCase):
+    ARTIFACT = (
+        "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+        "stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md"
+    )
+    EVIDENCE_ID = (
+        "EV-2026-06-22-STDRIVE101-NFAULT-1V3-FAULT-TREE-NO-POWER-PLAN-001"
+    )
+    TASK_ID = "TASK-2026-06-22-stdrive101-nfault-1v3-fault-tree-no-power-plan"
+    DECISION = (
+        "STDRIVE101 nFAULT 1.3V fault-tree no-power plan / power-board-side "
+        "fault localized / no-power source and photo evidence only / HIN1 "
+        "comparison remains future teacher-reviewed phase gate / no repeat "
+        "powered wake / no PWM output / no motor readiness"
+    )
+
+    def test_fault_tree_plan_exists_and_locks_no_power_scope(self):
+        self.assertTrue((ROOT / self.ARTIFACT).exists())
+
+        text = read_repo_text(self.ARTIFACT)
+
+        for phrase in (
+            "STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan - 2026-06-22",
+            self.EVIDENCE_ID,
+            self.TASK_ID,
+            self.DECISION,
+            "power-board / STDRIVE101-side `nFAULT = 1.3 V` condition",
+            "planning and source-review artifact only",
+            "stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md",
+            "stdrive101_single_input_wake_nfault_cause_review_2026-06-20.md",
+            "stdrive101_fault_review_schematic_marking_2026-06-20.md",
+            "stdrive101_protection_nodes_no_power_dmm_result_2026-06-20.md",
+            "nFAULT remains 1.3 V on CN8 P13 after PB12 is disconnected",
+            "This localizes the latest symptom away from PA7",
+            "`LIN1 / GLS1 / Q2 / OUT1` low-side phase-U path",
+            "common STDRIVE101 protection / soldering / chip fault",
+            "HIN1 comparison idea remains a future teacher-reviewed phase gate",
+            "must not be executed from this plan",
+            "- flash;",
+            "- Run / Debug;",
+            "- repeat 24 V wake;",
+            "- any `HIN1` comparison execution;",
+            "- motor connection;",
+            "- Gate PWM output;",
+            "- Motor Pilot;",
+            "- Motor Profiler;",
+            "- Hall closed-loop claim;",
+            "- sensorless / SMO claim;",
+            "- power-stage readiness;",
+            "- motor readiness;",
+            "- safe drive operation.",
+        ):
+            self.assertIn(phrase, text)
+
+        for forbidden in (
+            "HIN1 comparison authorized",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+            "safe drive operation validated",
+        ):
+            self.assertNotIn(forbidden, text)
+
+    def test_status_register_and_checkpoint_point_to_fault_tree_plan(self):
+        active_task = read_repo_text("workflow/ACTIVE_TASK.md")
+        checkpoint = active_task.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        combined = (
+            read_repo_text("CURRENT_STATUS.md")
+            + read_repo_text("AI_CONTEXT.md")
+            + read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+            + active_task
+            + read_repo_text("workflow/evidence_register.md")
+            + read_repo_text(
+                "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+            )
+        )
+
+        for phrase in (
+            self.ARTIFACT,
+            self.EVIDENCE_ID,
+            self.TASK_ID,
+            self.DECISION,
+            "STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan Added",
+            "no-power source and photo evidence only",
+            "HIN1 comparison remains future teacher-reviewed phase gate",
+            "no repeat powered wake",
+            "power-board-side fault localized",
+            "`LIN1 / GLS1 / Q2 / OUT1`",
+            "common STDRIVE101 protection / CP / SCREF / soldering / chip",
+        ):
+            self.assertIn(phrase, combined)
+
+        for phrase in (
+            "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
+            "fault-tree no-power plan",
+            "Board photo or EDA crop showing U1 STDRIVE101",
+            "Confirm HSPY OFF, VS / 24V_FUSED near 0 V, motor disconnected",
+            "Q2 gate-source = ___",
+            "OUT1 / Q2 drain to Q2 source diode mode = ___",
+            "nFAULT to 3V3 = ___",
+            "nFAULT to GND = ___",
+            "Do not repeat residual-voltage isolation",
+            "the `LIN1` powered wake",
+            "or any\n`HIN1` comparison unless",
+            "separate dated teacher-\nreviewed phase gate opens the action",
+        ):
+            self.assertIn(phrase, checkpoint)
+
+        for forbidden in (
+            "HIN1 comparison authorized",
+            "24 V behavior validated",
+            "Gate PWM output validated",
+            "power-stage readiness validated",
+            "motor readiness validated",
+            "Hall closed loop validated",
+            "sensorless operation validated",
+        ):
+            self.assertNotIn(forbidden, combined)
 
 
 if __name__ == "__main__":

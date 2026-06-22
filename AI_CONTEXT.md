@@ -50,6 +50,19 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   intended motor-control framework generation path. This plan is not MCSDK
   convention proof, not compare-register evidence, not Gate PWM validation,
   not power-stage readiness, and not motor readiness.
+- Current STDRIVE101 nFAULT 1.3V fault-tree no-power plan:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
+  consolidates the PA7 / LIN1 wake fault-isolation result, earlier nFAULT
+  cause review, schematic marking, and protection-node no-power DMM result.
+  Decision: `STDRIVE101 nFAULT 1.3V fault-tree no-power plan /
+  power-board-side fault localized / no-power source and photo evidence only /
+  HIN1 comparison remains future teacher-reviewed phase gate / no repeat
+  powered wake / no PWM output / no motor readiness`. The primary working
+  branch remains `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or output-path
+  behavior, but common protection / `CP` / `SCREF` / `REG12` / soldering /
+  chip causes remain unresolved. This opens no repeat 24 V wake, no `HIN1`
+  comparison execution, no Gate PWM output, no Motor Pilot / Profiler, no motor
+  connection, no power-stage readiness, and no motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records the user-reported return to the minimal PA7 hold-high diagnostic.

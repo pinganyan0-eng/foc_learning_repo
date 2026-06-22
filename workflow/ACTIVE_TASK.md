@@ -16,6 +16,39 @@ NUCLEO PB12. This opens no repeated motor run, no Motor Pilot, no Motor
 Profiler, no Hall closed-loop validation, no sensorless claim, no power-stage
 readiness, and no motor-readiness claim.
 
+## Current 2026-06-22 STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan Addendum
+
+- Task:
+  `TASK-2026-06-22-stdrive101-nfault-1v3-fault-tree-no-power-plan`.
+- Evidence:
+  `EV-2026-06-22-STDRIVE101-NFAULT-1V3-FAULT-TREE-NO-POWER-PLAN-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`.
+- Decision:
+  `STDRIVE101 nFAULT 1.3V fault-tree no-power plan / power-board-side fault
+  localized / no-power source and photo evidence only / HIN1 comparison
+  remains future teacher-reviewed phase gate / no repeat powered wake / no
+  PWM output / no motor readiness`.
+- Subagent protocol:
+  safety helper Lagrange identified the current blocker as the power-board /
+  STDRIVE101-side `nFAULT = 1.3 V` condition after successful `PA7 -> LIN1`
+  wake and recommended a no-power fault-tree plan. Two other helper slices
+  were rate-limited; the main agent recovered by inspecting the local evidence
+  files directly before writing the plan.
+- Scope:
+  consolidates the latest PA7 / LIN1 wake fault-isolation result, earlier
+  nFAULT cause review, schematic marking, and protection-node no-power DMM
+  result into a teacher-reviewable fault tree. The primary working branch
+  remains `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or output-path
+  behavior, while common protection / `CP` / `SCREF` / `REG12` / soldering /
+  chip causes remain unresolved.
+- Boundary:
+  no flash, no Run / Debug, no repeat 24 V wake, no `HIN1` comparison
+  execution, no power-board action beyond no-power inspection, no motor
+  connection, no Gate PWM output, no Motor Pilot / Profiler, no Hall
+  closed-loop, no sensorless / SMO claim, no power-stage readiness, and no
+  motor readiness.
+
 ## Current 2026-06-22 Host-Side No-Power FOC Algorithm Model Addendum
 
 - Task:
@@ -2711,28 +2744,38 @@ Stable carry-forward phrases:
 
 ## Next User Checkpoint
 
-The current repo-side checkpoint is complete through the PA7 LIN1 wake nFAULT
-1.3V fault-isolation result:
+The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V
+fault-tree no-power plan:
 
-`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
 
-The immediate user checkpoint is no longer another residual-voltage repeat,
-not another candidate 24 V static scope repeat, and not another motor-connected
-open-loop run. The latest isolation evidence shows `PA7` reaches `LIN1` and
-STDRIVE101 wakes to `REG12 = 12 V`, but `nFAULT` stays at `1.3 V` on the
-power-board side even after PB12 is disconnected.
+The latest isolation evidence shows `PA7` reaches `LIN1` and STDRIVE101 wakes
+to `REG12 = 12 V`, but `nFAULT` stays at `1.3 V` on the power-board side even
+after PB12 is disconnected. The latest plan keeps this as a power-board /
+STDRIVE101-side fault-tree problem, not as motor power-up permission.
 
-Next engineering work should be teacher-reviewed fault isolation around the
-power-board / STDRIVE101 side, especially whether the issue is concentrated in
-the `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U path or a common protection /
-CP / SCREF / soldering / chip problem. It is not motor power-up and does not
-open Run / Debug, Motor Pilot, Motor Profiler, motor connection, power-stage
-readiness, or motor readiness.
+The immediate user / teacher checkpoint is only a no-power source-photo packet
+or confidently identified no-power DMM rows:
 
-Do not repeat the residual-voltage isolation check, the same candidate 24 V
-static scope check, or the motor-connected open-loop run unless the physical
-state, image, wiring, trigger method, measurement setup, or observed value
-changes and a separate dated phase gate opens the action.
+```text
+1. Board photo or EDA crop showing U1 STDRIVE101, Q1/Q2, OUT1, GLS1, R24,
+   R25, ADC_U, GND_POWER, SCREF R1/R2, CP C1, REG12 C4/C5, R3, LED1.
+2. Confirm HSPY OFF, VS / 24V_FUSED near 0 V, motor disconnected, and LIN1
+   10 kohm stimulus removed before any DMM row.
+3. If pads are certain, raw no-power rows:
+   Q2 gate-source = ___
+   Q2 source to GND_POWER / CN3_15 = ___
+   OUT1 / Q2 drain to Q2 source diode mode = ___
+   OUT1 to VS / 24V_FUSED diode mode = ___
+   nFAULT to 3V3 = ___
+   nFAULT to GND = ___
+```
+
+Do not repeat residual-voltage isolation, the same candidate 24 V static scope
+check, the motor-connected open-loop run, the `LIN1` powered wake, or any
+`HIN1` comparison unless the physical state, image, wiring, trigger method,
+measurement setup, or observed value changes and a separate dated teacher-
+reviewed phase gate opens the action.
 
 ## Verification
 

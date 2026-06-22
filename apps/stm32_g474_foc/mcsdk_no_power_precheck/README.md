@@ -79,6 +79,17 @@ output.
   `LIN1 / GLS1 / Q2 / OUT1` low-side phase-U VDS or related output path as the
   primary review target. Do not repeat a motor-connected open-loop run from
   this state.
+- Latest STDRIVE101 nFAULT fault-tree plan:
+  `stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md` consolidates
+  the PA7 / LIN1 wake fault-isolation result, earlier nFAULT cause review,
+  schematic marking, and protection-node DMM evidence into a no-power
+  teacher-review plan. Current decision is `STDRIVE101 nFAULT 1.3V fault-tree
+  no-power plan / power-board-side fault localized / no-power source and
+  photo evidence only / HIN1 comparison remains future teacher-reviewed phase
+  gate / no repeat powered wake / no PWM output / no motor readiness`. It
+  opens no repeat 24 V wake, no `HIN1` comparison execution, no Gate PWM
+  output, no Motor Pilot / Profiler, no motor connection, no power-stage
+  readiness, and no motor readiness.
 - Latest host-side FOC algorithm evidence:
   `host_side_no_power_foc_algorithm_model_review_2026-06-22.md` records
   `src/foc_core_model.py` and `tests/test_foc_core_model.py` as a host-side
@@ -864,6 +875,15 @@ Forbidden in this directory and this P2 stage:
   software Hall golden vectors / no firmware implementation / no MCSDK Hall
   integration / no Hall readiness`; it proves only host-side no-power
   algorithm replay behavior.
+- `stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`: planning and
+  source-review artifact for the current power-board-side `nFAULT = 1.3 V`
+  blocker after successful `PA7 -> LIN1` wake. Current decision is
+  `STDRIVE101 nFAULT 1.3V fault-tree no-power plan / power-board-side fault
+  localized / no-power source and photo evidence only / HIN1 comparison
+  remains future teacher-reviewed phase gate / no repeat powered wake / no
+  PWM output / no motor readiness`; it opens no repeat 24 V wake, no `HIN1`
+  comparison execution, no Gate PWM output, no power-stage readiness, and no
+  motor readiness.
 - `host_side_no_power_foc_algorithm_model_review_2026-06-22.md`: review of
   the host-side FOC math reference model in `src/foc_core_model.py` and
   `tests/test_foc_core_model.py`. Current decision is `Host-side no-power FOC

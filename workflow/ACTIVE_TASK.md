@@ -2,8 +2,8 @@
 
 This is the current single task page. The newest physical measurement record is
 the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result; the latest
-repo-side checkpoint is the 2026-06-22 STDRIVE101 nFAULT 1.3V fault-tree
-no-power plan. The physical record follows the open-loop CN3 no-waveform
+repo-side checkpoint is the 2026-06-22 MCSDK FOC convention probe
+translation table. The physical record follows the open-loop CN3 no-waveform
 correction, open-loop no-rotation result, gate-waveform candidate records,
 neutral-wrapper records, and earlier manual gate-test records. It records that
 the PA7 hold-high diagnostic now reaches the power board and wakes STDRIVE101:
@@ -164,6 +164,31 @@ motor-readiness claim.
   not MCSDK convention proof, not firmware implementation, not MCSDK
   integration, not compare-register evidence, not Gate PWM validation, not
   power-stage readiness, and not motor readiness.
+
+## Current 2026-06-22 MCSDK FOC Convention Probe Addendum
+
+- Task:
+  `TASK-2026-06-22-p2-mcsdk-foc-convention-probe`.
+- Evidence:
+  `EV-2026-06-22-P2-MCSDK-FOC-CONVENTION-PROBE-001`.
+- Artifact:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_foc_convention_probe_translation_table_2026-06-22.md`.
+- Static test:
+  `tests/test_mcsdk_foc_convention_probe.py`.
+- Decision:
+  `MCSDK FOC convention probe / translation table / host-side no-power generated-source convention mapping only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  read-only generated-source convention clues for Clarke, qd field order, Park
+  and reverse-Park semantics, fixed-point angle representation, PI parameter
+  style, circle limitation, and timer-count PWM representation against the
+  existing host-side FOC model.
+- Boundary:
+  not MCSDK convention proof beyond explicitly source-backed rows, not
+  host-side / MCSDK numerical equivalence evidence, not firmware
+  implementation, not generated-code edit permission, not MCSDK integration,
+  not compare-register evidence, not Gate PWM validation, not MCSDK hook
+  readiness, not hardware validation, not power-stage readiness, and not motor
+  readiness.
 
 ## Current 2026-06-21 STDRIVE101 PA7 LIN1 Wake nFAULT 1.3V Fault Isolation Result
 
@@ -2776,18 +2801,22 @@ Stable carry-forward phrases:
 - `TASK-2026-06-22-p2-mcsdk-host-side-foc-math-comparison-boundary-plan` /
   `EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-MATH-COMPARISON-BOUNDARY-PLAN-001`:
   `MCSDK host-side FOC math comparison boundary plan / no firmware implementation / no MCSDK integration / no PWM output / no motor readiness`.
+- `TASK-2026-06-22-p2-mcsdk-foc-convention-probe` /
+  `EV-2026-06-22-P2-MCSDK-FOC-CONVENTION-PROBE-001`:
+  `MCSDK FOC convention probe / translation table / host-side no-power generated-source convention mapping only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness`.
 
 ## Next User Checkpoint
 
-The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V
-fault-tree no-power plan:
+The current repo-side checkpoint is complete through the MCSDK FOC convention probe
+translation table:
 
-`apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
+`apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_foc_convention_probe_translation_table_2026-06-22.md`
 
-The latest isolation evidence shows `PA7` reaches `LIN1` and STDRIVE101 wakes
-to `REG12 = 12 V`, but `nFAULT` stays at `1.3 V` on the power-board side even
-after PB12 is disconnected. The latest plan keeps this as a power-board /
-STDRIVE101-side fault-tree problem, not as motor power-up permission.
+The latest isolation evidence still shows `PA7` reaches `LIN1` and STDRIVE101
+wakes to `REG12 = 12 V`, but `nFAULT` stays at `1.3 V` on the power-board side
+even after PB12 is disconnected. The latest repo-side algorithm increment adds
+an MCSDK FOC convention translation table only; the hardware side still stays a
+power-board / STDRIVE101 fault-tree problem, not as motor power-up permission.
 
 The immediate user / teacher checkpoint is only a no-power source-photo packet
 or confidently identified no-power DMM rows:

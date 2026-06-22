@@ -10,10 +10,25 @@ def read_repo_text(relative_path: str) -> str:
 
 
 def assert_current_nfault_fault_tree_checkpoint(testcase: unittest.TestCase, checkpoint: str):
+    checkpoint_variants = (
+        (
+            "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
+            "translation table",
+            "mcsdk_foc_convention_probe_translation_table_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\nfault-tree no-power plan",
+            "stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+        ),
+    )
+    testcase.assertTrue(
+        any(all(phrase in checkpoint for phrase in variant) for variant in checkpoint_variants),
+        "checkpoint must point to either the current MCSDK convention-probe step or the earlier nFAULT fault-tree step",
+    )
+
     for phrase in (
-        "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
-        "fault-tree no-power plan",
-        "stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+        "The latest isolation evidence still shows `PA7` reaches `LIN1` and STDRIVE101",
+        "wakes to `REG12 = 12 V`",
         "not as motor power-up permission",
         "Do not repeat residual-voltage isolation",
         "the same candidate 24 V static scope\ncheck",
@@ -971,6 +986,64 @@ class FocCoreHostModelWorkflowTests(unittest.TestCase):
             "not MCSDK convention proof",
             "not compare-register evidence",
             "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_mcsdk_foc_convention_probe_review_records_translation_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_foc_convention_probe_translation_table_2026-06-22.md"
+        )
+
+        for phrase in (
+            "MCSDK FOC Convention Probe Translation Table",
+            "MCSDK FOC convention probe / translation table / host-side no-power generated-source convention mapping only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness",
+            "MCSDK remains the intended motor-control framework generation path",
+            "Host `clarke_abc`",
+            "MCSDK `MCM_Clarke`: `Output.alpha = Input.a;`",
+            "MCSDK `qd_t` stores fields as `q` then `d`",
+            "MCSDK `MCM_Park` writes `Output.q` before `Output.d`",
+            "MCSDK uses `PID_TORQUE_*`, `PID_FLUX_*`, `TF_KPDIV`, `TF_KIDIV`",
+            "MCSDK `PWMC_SetPhaseVoltage` computes sector plus `CntPhA`, `CntPhB`, `CntPhC` timer counts",
+            "not MCSDK convention proof beyond explicitly source-backed rows",
+            "not host-side / MCSDK numerical equivalence evidence",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not MCSDK hook readiness",
+            "not hardware validation",
+            "No 24V.",
+            "No Gate PWM output.",
+            "No motor readiness claim.",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_mcsdk_foc_convention_probe_is_registered(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "TASK-2026-06-22-p2-mcsdk-foc-convention-probe",
+            "EV-2026-06-22-P2-MCSDK-FOC-CONVENTION-PROBE-001",
+            "mcsdk_foc_convention_probe_translation_table_2026-06-22.md",
+            "tests/test_mcsdk_foc_convention_probe.py",
+            "MCSDK FOC convention probe / translation table / host-side no-power generated-source convention mapping only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness",
+            "read-only generated-source convention clues",
+            "not MCSDK convention proof beyond explicitly source-backed rows",
+            "not host-side / MCSDK numerical equivalence evidence",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not MCSDK hook readiness",
+            "not hardware validation",
             "not power-stage readiness",
             "not motor readiness",
         ):
@@ -4457,16 +4530,16 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             "newest physical measurement record is\n"
             "the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result",
             "latest\n"
-            "repo-side checkpoint is the 2026-06-22 STDRIVE101 nFAULT 1.3V fault-tree\n"
-            "no-power plan",
+            "repo-side checkpoint is the 2026-06-22 MCSDK FOC convention probe\n"
+            "translation table",
             "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md",
             "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
             "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded",
             "`CN3_1` through `CN3_6` are all `0 V`",
             "`P13 = 3.3 V`",
             "`P14 = 3.3 V`",
-            "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
-            "fault-tree no-power plan",
+            "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
+            "translation table",
             "neutral-wrapper 24V static scope baseline",
             "24V static no-motor result",
             "residual-voltage isolation result",
@@ -4588,8 +4661,8 @@ class Stdrive101NfaultFaultTreeNoPowerPlanTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
         for phrase in (
-            "The current repo-side checkpoint is complete through the STDRIVE101 nFAULT 1.3V\n"
-            "fault-tree no-power plan",
+            "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
+            "translation table",
             "Board photo or EDA crop showing U1 STDRIVE101",
             "Confirm HSPY OFF, VS / 24V_FUSED near 0 V, motor disconnected",
             "Q2 gate-source = ___",

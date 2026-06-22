@@ -45,8 +45,9 @@ the current project stage and safety boundary. Historical detail remains in
   result, waveform candidate USB-only DMM result, waveform candidate
   residual-voltage isolation result, waveform candidate 24V static scope
   no-waveform result, open-loop CN3 no-waveform correction, open-loop
-  no-rotation result, PA7 LIN1 wake nFAULT 1.3V fault-isolation result, and
-  STDRIVE101 nFAULT 1.3V fault-tree no-power plan.
+  no-rotation result, PA7 LIN1 wake nFAULT 1.3V fault-isolation result,
+  STDRIVE101 nFAULT 1.3V fault-tree no-power plan, and MCSDK FOC convention
+  probe translation-table registration.
 - Current STDRIVE101 nFAULT 1.3V fault-tree no-power plan:
   `stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
   consolidates the latest PA7 / LIN1 wake fault-isolation result, earlier

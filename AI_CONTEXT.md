@@ -50,6 +50,20 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   intended motor-control framework generation path. This plan is not MCSDK
   convention proof, not compare-register evidence, not Gate PWM validation,
   not power-stage readiness, and not motor readiness.
+- Current MCSDK FOC convention probe translation table:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_foc_convention_probe_translation_table_2026-06-22.md`
+  records a host-side no-power generated-source convention mapping only, plus
+  `tests/test_mcsdk_foc_convention_probe.py` as static protection for
+  source-backed rows around Clarke, qd field order, Park / reverse-Park,
+  fixed-point angle representation, PI divisors, circle limitation, and
+  timer-count PWM representation. Decision: `MCSDK FOC convention probe /
+  translation table / host-side no-power generated-source convention mapping
+  only / no firmware implementation / no generated-code edit / no MCSDK
+  integration / no PWM output / no motor readiness`. It is not MCSDK
+  convention proof beyond explicitly source-backed rows, not host-side / MCSDK
+  numerical equivalence evidence, not compare-register evidence, not Gate PWM
+  validation, not MCSDK hook readiness, not hardware validation, not
+  power-stage readiness, and not motor readiness.
 - Current STDRIVE101 nFAULT 1.3V fault-tree no-power plan:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md`
   consolidates the PA7 / LIN1 wake fault-isolation result, earlier nFAULT

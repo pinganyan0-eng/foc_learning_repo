@@ -118,6 +118,20 @@ output.
   output / no motor readiness`. It is not MCSDK convention proof, not compare
   register evidence, not Gate PWM validation, not power-stage readiness, and
   not motor readiness.
+- Latest MCSDK FOC convention-probe evidence:
+  `mcsdk_foc_convention_probe_translation_table_2026-06-22.md` records a
+  host-side no-power generated-source convention mapping only and
+  `tests/test_mcsdk_foc_convention_probe.py` protects source-backed rows for
+  Clarke, qd field order, Park / reverse-Park semantics, fixed-point angle
+  representation, PI divisors, circle limitation, and timer-count PWM
+  representation. Current decision is `MCSDK FOC convention probe /
+  translation table / host-side no-power generated-source convention mapping
+  only / no firmware implementation / no generated-code edit / no MCSDK
+  integration / no PWM output / no motor readiness`. It is not MCSDK
+  convention proof beyond explicitly source-backed rows, not host-side / MCSDK numerical equivalence evidence, not host-side / MCSDK
+  numerical equivalence evidence, not compare-register evidence, not Gate PWM
+  validation, not MCSDK hook readiness, not hardware validation, not
+  power-stage readiness, and not motor readiness.
 - Latest STDRIVE101 wake-related evidence:
   `stdrive101_gate_waveform_candidate_24v_static_scope_no_waveform_result_2026-06-21.md`
   records the user-reported oscilloscope check on the six STDRIVE101

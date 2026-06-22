@@ -124,6 +124,43 @@
   existing `ACTIVE_TASK.md is done and still requires review` warning;
   `git diff --check` passed with only CRLF conversion warnings.
 
+## 2026-06-22 MCSDK FOC Convention Probe Translation Table Added
+
+- Added MCSDK FOC convention probe translation table:
+  `apps/stm32_g474_foc/mcsdk_no_power_precheck/mcsdk_foc_convention_probe_translation_table_2026-06-22.md`.
+- Added static convention-probe test:
+  `tests/test_mcsdk_foc_convention_probe.py`.
+- Evidence:
+  `EV-2026-06-22-P2-MCSDK-FOC-CONVENTION-PROBE-001`.
+- Task:
+  `TASK-2026-06-22-p2-mcsdk-foc-convention-probe`.
+- Decision:
+  `MCSDK FOC convention probe / translation table / host-side no-power generated-source convention mapping only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness`.
+- Scope:
+  read-only generated-source convention clues for Clarke, qd field order,
+  Park / reverse-Park semantics, fixed-point angle representation, PI
+  parameter style, circle limitation, and timer-count PWM representation
+  against the existing host-side FOC model.
+- MCSDK boundary:
+  MCSDK remains the intended motor-control framework generation path. This
+  translation table is not firmware implementation, not generated-code edit
+  permission, not MCSDK integration, and not a bypass around the current
+  STDRIVE101 hardware blocker.
+- Boundary:
+  not MCSDK convention proof beyond explicitly source-backed rows, not
+  host-side / MCSDK numerical equivalence evidence, not compare-register
+  evidence, not Gate PWM validation, not MCSDK hook readiness, not hardware
+  validation, not power-stage readiness, and not motor readiness.
+- Verification:
+  `python -m unittest tests.test_mcsdk_foc_convention_probe` passed;
+  `python -m unittest tests.test_workflow_contracts.FocCoreHostModelWorkflowTests` passed;
+  `python -m unittest discover -s tests` passed;
+  `python -m compileall src tests` passed;
+  `python tools\build_context_pack.py --mode mcsdk_packet --max-chars 350` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  existing `ACTIVE_TASK.md is done and still requires review` warning;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-22 Host-Side No-Power FOC Golden Vectors Added
 
 - Added host-side no-power FOC golden vectors:

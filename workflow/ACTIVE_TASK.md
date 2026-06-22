@@ -1,20 +1,55 @@
 # Current Task
 
-This is the current single task page. The newest hardware-adjacent record is
-the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result after the
-open-loop CN3 no-waveform correction, open-loop no-rotation result,
-gate-waveform candidate records, neutral-wrapper records, and earlier manual
-gate-test records. It records that the PA7 hold-high diagnostic now reaches
-the power board and wakes STDRIVE101: `PA7 / CN10-15 = 3.3 V`,
-`CN8 P2 / LIN1 = 3.3 V`, `VS / 24V_FUSED = 24 V`, and `REG12 = 12 V`.
-However, `nFAULT` remained `1.3 V` on both `CN8 P13` and
-`NUCLEO CN10-16`, and power-board `CN8 P13` remained `1.3 V` after the
-`nFAULT -> PB12` wire was disconnected. Corrected R3 checks show the pull-up
-chain is populated and continuous, so the current blocker is a
-power-board-side STDRIVE101 fault state, not PA7, the LIN1 wire, R3 value, or
-NUCLEO PB12. This opens no repeated motor run, no Motor Pilot, no Motor
-Profiler, no Hall closed-loop validation, no sensorless claim, no power-stage
-readiness, and no motor-readiness claim.
+This is the current single task page. The newest physical measurement record is
+the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result; the latest
+repo-side checkpoint is the 2026-06-22 STDRIVE101 nFAULT 1.3V fault-tree
+no-power plan. The physical record follows the open-loop CN3 no-waveform
+correction, open-loop no-rotation result, gate-waveform candidate records,
+neutral-wrapper records, and earlier manual gate-test records. It records that
+the PA7 hold-high diagnostic now reaches the power board and wakes STDRIVE101:
+`PA7 / CN10-15 = 3.3 V`, `CN8 P2 / LIN1 = 3.3 V`,
+`VS / 24V_FUSED = 24 V`, and `REG12 = 12 V`. However, `nFAULT` remained
+`1.3 V` on both `CN8 P13` and `NUCLEO CN10-16`, and power-board `CN8 P13`
+remained `1.3 V` after the `nFAULT -> PB12` wire was disconnected. Corrected
+R3 checks show the pull-up chain is populated and continuous, so the current
+blocker is a power-board-side STDRIVE101 fault state, not PA7, the LIN1 wire,
+R3 value, or NUCLEO PB12. This opens no repeated motor run, no `HIN1`
+comparison execution, no Motor Pilot, no Motor Profiler, no Hall closed-loop
+validation, no sensorless claim, no power-stage readiness, and no
+motor-readiness claim.
+
+## Current 2026-06-22 STDRIVE101 nFAULT Fault-Tree Retrieval Coverage Addendum
+
+- Task:
+  `TASK-2026-06-22-workflow-stdrive101-nfault-fault-tree-retrieval-coverage`.
+- Evidence:
+  `EV-2026-06-22-WORKFLOW-STDRIVE101-NFAULT-FAULT-TREE-RETRIEVAL-COVERAGE-001`.
+- Decision:
+  `STDRIVE101 nFAULT fault-tree retrieval coverage / latest safety-critical
+  boundary searchable / no hardware validation`.
+- Scope:
+  updates local search and retrieval eval coverage so queries around
+  `STDRIVE101 nFAULT 1.3V fault-tree`, `HIN1`, and `no repeat powered wake`
+  prioritize the current 2026-06-22 fault-tree plan and current snapshot.
+- Subagent protocol:
+  evidence helper Erdos found that the latest fault-tree checkpoint was
+  registered in handoff files but was not yet protected by a targeted
+  retrieval-eval case. The main agent treated this as a safety-critical
+  workflow repair before starting the next MCSDK convention-probe increment.
+- Boundary:
+  workflow retrieval evidence only. This does not validate the hardware,
+  prove the fault cause, authorize repeat powered wake, authorize `HIN1`
+  comparison execution, authorize Gate PWM output, or claim power-stage /
+  motor readiness.
+- Verification:
+  local retrieval ranks the current fault-tree plan first for
+  `STDRIVE101 nFAULT 1.3V fault-tree HIN1 no repeat powered wake`;
+  retrieval eval, JSON validation, targeted search tests, the updated
+  workflow-contract test, full `python -m unittest discover -s tests`,
+  `compileall`, workflow context pack, Skill drift check, AI contracts, quick
+  AI maintenance audit, and `git diff --check` all passed. The only remaining
+  warning is the known `ACTIVE_TASK.md is done and still requires review`
+  lifecycle warning.
 
 ## Current 2026-06-22 STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan Addendum
 

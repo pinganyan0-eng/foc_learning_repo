@@ -61,6 +61,10 @@ QUERY_EXPANSIONS: tuple[tuple[tuple[str, ...], str], ...] = (
         "PCB2 DMM continuity short-check no-power pending not passed board unpowered no powered action",
     ),
     (
+        ("nfault", "1.3v", "fault-tree", "hin1", "stdrive101"),
+        "STDRIVE101 nFAULT 1.3V fault-tree no-power plan HIN1 comparison remains future teacher-reviewed phase gate no repeat powered wake no PWM output no motor readiness source photo EDA crop LIN1 GLS1 Q2 OUT1",
+    ),
+    (
         ("review", "lifecycle", "reviewed", "strict"),
         "ACTIVE_TASK done Review Required reviewed user review clears strict warnings task_state_machine check_ai_contracts",
     ),
@@ -201,6 +205,20 @@ PHRASE_BONUS_RULES: tuple[PhraseBonusRule, ...] = (
         query_any=("esp32",),
         text_any=("ESP32-C3", "实时控制", "real-time boundary"),
         path="docs/00_project_truth/project_context.md",
+    ),
+    PhraseBonusRule(
+        "stdrive101_nfault_fault_tree_plan",
+        0.60,
+        query_any=("nfault", "fault-tree", "hin1", "1.3v"),
+        text_any=("nfault 1.3v fault-tree", "hin1 comparison remains"),
+        path="apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+    ),
+    PhraseBonusRule(
+        "stdrive101_nfault_fault_tree_current_snapshot",
+        0.20,
+        query_any=("nfault", "fault-tree", "hin1", "1.3v"),
+        text_any=("stdrive101 nfault 1.3v fault-tree", "no repeat powered wake"),
+        path="workflow/CURRENT_SNAPSHOT.md",
     ),
 )
 

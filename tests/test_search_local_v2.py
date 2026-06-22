@@ -3,7 +3,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from tools.search_local_v2 import PHRASE_BONUS_RULES, configured_phrase_bonus, phrase_bonus
+from tools.search_local_v2 import PHRASE_BONUS_RULES, configured_phrase_bonus, phrase_bonus, search
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,6 +59,19 @@ class SearchLocalV2Tests(unittest.TestCase):
         )
 
         self.assertIn("docs/00_project_truth/project_context.md", result.stdout)
+
+    def test_stdrive101_nfault_fault_tree_query_prioritizes_current_plan(self):
+        hits = search(
+            "STDRIVE101 nFAULT 1.3V fault-tree HIN1 no repeat powered wake",
+            limit=5,
+        )
+        self.assertGreaterEqual(len(hits), 1)
+        self.assertIn(
+            "stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+            hits[0].item["path"].replace("\\", "/"),
+        )
+        self.assertIn("HIN1 comparison remains", hits[0].item["text"])
+        self.assertIn("no repeat powered wake", hits[0].item["text"])
 
     def test_jeoc_printf_query_hits_realtime_boundary_sources(self):
         result = subprocess.run(

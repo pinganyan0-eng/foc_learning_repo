@@ -4454,8 +4454,11 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
         )[0]
 
         for phrase in (
-            "newest hardware-adjacent record is\n"
+            "newest physical measurement record is\n"
             "the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result",
+            "latest\n"
+            "repo-side checkpoint is the 2026-06-22 STDRIVE101 nFAULT 1.3V fault-tree\n"
+            "no-power plan",
             "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md",
             "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
             "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded",

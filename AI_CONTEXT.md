@@ -63,6 +63,15 @@ This is the default low-token handoff file for the STM32G474 FOC project. Read t
   chip causes remain unresolved. This opens no repeat 24 V wake, no `HIN1`
   comparison execution, no Gate PWM output, no Motor Pilot / Profiler, no motor
   connection, no power-stage readiness, and no motor readiness.
+- Current STDRIVE101 nFAULT fault-tree retrieval coverage:
+  `tools/search_local_v2.py`, `retrieval_eval/queries.json`, and
+  `tests/test_search_local_v2.py` now include targeted coverage for
+  `STDRIVE101 nFAULT 1.3V fault-tree`, `HIN1`, and `no repeat powered wake`
+  queries. Decision: `STDRIVE101 nFAULT fault-tree retrieval coverage /
+  latest safety-critical boundary searchable / no hardware validation`. This
+  is source-finding workflow evidence only; it does not validate hardware,
+  authorize `HIN1` comparison, repeat powered wake, Gate PWM output, Motor
+  Pilot / Profiler, power-stage readiness, or motor readiness.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records the user-reported return to the minimal PA7 hold-high diagnostic.

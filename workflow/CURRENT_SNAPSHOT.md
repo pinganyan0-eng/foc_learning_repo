@@ -61,6 +61,14 @@ the current project stage and safety boundary. Historical detail remains in
   remain unresolved. This opens no repeat 24 V wake, no `HIN1` comparison
   execution, no Motor Pilot, no Motor Profiler, no Gate PWM output, no motor
   connection, no power-stage readiness, and no motor readiness.
+- Current STDRIVE101 nFAULT fault-tree retrieval coverage:
+  `tools/search_local_v2.py`, `retrieval_eval/queries.json`, and
+  `tests/test_search_local_v2.py` now protect the current fault-tree boundary
+  in local retrieval for `nFAULT = 1.3 V`, `fault-tree`, `HIN1`, and
+  `no repeat powered wake` queries. Decision:
+  `STDRIVE101 nFAULT fault-tree retrieval coverage / latest safety-critical
+  boundary searchable / no hardware validation`. This is source-finding
+  workflow evidence only, not hardware validation or readiness evidence.
 - Current PA7 LIN1 wake nFAULT 1.3V fault-isolation result:
   `stdrive101_pa7_lin1_wake_nfault_1v3_fault_isolation_result_2026-06-21.md`
   records that the PA7 hold-high diagnostic now reaches the power board:

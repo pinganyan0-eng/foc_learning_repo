@@ -77,6 +77,9 @@
   维护路径定向加分时，优先更新 `PhraseBonusRule` / `PHRASE_BONUS_RULES`
   而不是继续添加长串条件分支，并补充 `tests/test_search_local_v2.py`
   回归用例。
+  Safety-critical current-boundary queries, such as STDRIVE101 `nFAULT`
+  fault-tree questions, should also have `retrieval_eval/queries.json`
+  coverage and a path-specific `PhraseBonusRule`.
 - `build_context_pack.py`：按任务模式生成低 token 上下文包，避免每次读取长历史文件；`workflow_maintenance` 覆盖自动化、学习闭环、收工、DoD 和上交清单维护。
 - `check_ai_contracts.py`：检查 AI 架构入口、当前任务、安全边界、学习队列、项目工作流契约和索引是否漂移。
 - `record_learning_session.py`：追加学习记录，并在出现薄弱点时自动分配稳定 `WP-001` 编号。

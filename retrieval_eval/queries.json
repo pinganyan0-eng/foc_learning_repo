@@ -65,6 +65,23 @@
     ]
   },
   {
+    "id": "stdrive101_nfault_fault_tree_current_boundary",
+    "query": "STDRIVE101 nFAULT 1.3V fault-tree HIN1 no repeat powered wake",
+    "must_include_any": [
+      "apps/stm32_g474_foc/mcsdk_no_power_precheck/stdrive101_nfault_1v3_fault_tree_no_power_plan_2026-06-22.md",
+      "workflow/CURRENT_SNAPSHOT.md",
+      "AI_CONTEXT.md",
+      "workflow/ACTIVE_TASK.md"
+    ],
+    "expected_terms_any": [
+      "HIN1 comparison remains future teacher-reviewed phase gate",
+      "no repeat powered wake",
+      "no PWM output",
+      "no motor readiness",
+      "LIN1 / GLS1 / Q2 / OUT1"
+    ]
+  },
+  {
     "id": "active_task_review_lifecycle",
     "query": "ACTIVE_TASK review lifecycle done Review Required reviewed strict warnings",
     "must_include_any": [

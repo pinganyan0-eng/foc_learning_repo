@@ -1,3 +1,53 @@
+## 2026-06-22 STDRIVE101 nFAULT Fault-Tree Retrieval Coverage Added
+
+- Added local retrieval coverage for the latest STDRIVE101 `nFAULT = 1.3 V`
+  fault-tree boundary.
+- Evidence:
+  `EV-2026-06-22-WORKFLOW-STDRIVE101-NFAULT-FAULT-TREE-RETRIEVAL-COVERAGE-001`.
+- Task:
+  `TASK-2026-06-22-workflow-stdrive101-nfault-fault-tree-retrieval-coverage`.
+- Decision:
+  `STDRIVE101 nFAULT fault-tree retrieval coverage / latest safety-critical
+  boundary searchable / no hardware validation`.
+- Scope:
+  updated `tools/search_local_v2.py` with an `nFAULT` / `1.3V` /
+  `fault-tree` / `HIN1` query expansion and path-specific phrase bonuses,
+  added a regression case in `retrieval_eval/queries.json`, added
+  `tests/test_search_local_v2.py` coverage, clarified the `ACTIVE_TASK.md`
+  opening, and refreshed the low-token and tool-index handoff surfaces.
+- Subagent protocol:
+  evidence helper Erdos identified that the latest fault-tree plan was
+  recorded in the repo but not reliably prioritized by local retrieval. The
+  main agent prioritized this workflow repair before the next algorithm-side
+  MCSDK convention probe.
+- Boundary:
+  source-finding and workflow-maintenance evidence only. This is not hardware
+  validation, not fault-cause proof, not firmware runtime evidence, not Gate
+  PWM validation, not `HIN1` comparison permission, not power-stage readiness,
+  and not motor readiness. No flash, no Run / Debug, no 24 V, no power-board
+  connection, no motor connection, no Gate PWM output, no Motor Pilot /
+  Profiler, no Hall closed-loop claim, and no sensorless / SMO claim are
+  opened.
+- Verification:
+  `python tools\build_vector_store.py` rebuilt `10281` chunks;
+  targeted `python tools\search_local_v2.py "STDRIVE101 nFAULT 1.3V fault-tree HIN1 no repeat powered wake"`
+  ranked the current fault-tree plan first;
+  `python tools\search_local_v2.py --eval` passed;
+  `python -m json.tool retrieval_eval\queries.json` passed;
+  `python -m unittest tests.test_search_local_v2` passed: 6 tests OK;
+  `python -m unittest tests.test_workflow_contracts.Stdrive101ManualGateTestLinkedImageBoundaryTests.test_gate_waveform_neutral_wrapper_usbonly_dmm_partial_result_is_superseded_by_later_results`
+  passed: 1 test OK;
+  `python -m unittest discover -s tests` passed: 226 tests OK;
+  `python -m compileall src tests` passed;
+  `python tools\build_context_pack.py --mode workflow_maintenance --max-chars 350`
+  passed;
+  `python tools\check_project_skill_install.py` passed;
+  `python tools\check_ai_contracts.py` reported no AI contract errors and the
+  known `ACTIVE_TASK.md is done and still requires review` warning;
+  `python tools\run_ai_maintenance_audit.py --quick --repo-only-skill --json`
+  returned `ok: true`;
+  `git diff --check` passed with only CRLF conversion warnings.
+
 ## 2026-06-22 STDRIVE101 nFAULT 1.3V Fault-Tree No-Power Plan Added
 
 - Added planning / source-review artifact:

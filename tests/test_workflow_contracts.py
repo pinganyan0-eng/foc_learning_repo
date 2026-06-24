@@ -12,6 +12,96 @@ def read_repo_text(relative_path: str) -> str:
 def assert_current_nfault_fault_tree_checkpoint(testcase: unittest.TestCase, checkpoint: str):
     checkpoint_variants = (
         (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "reverse target-omega lock-threshold handoff",
+            "host_side_no_power_reverse_target_omega_lock_threshold_handoff_review_2026-06-24.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "reverse target-omega startup hold",
+            "host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "positive-to-reverse target-omega loss/relock replay",
+            "host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "positive-to-reverse target-omega rate-limit replay",
+            "host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "signed reverse target-omega rate-limit replay",
+            "host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the MCSDK / host-side",
+            "signed reverse speed command snapshot sequence bridge",
+            "mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "signed reverse speed/current command fixture",
+            "host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless speed-loop hold",
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless locked-theta shortest-path blend",
+            "host_side_no_power_sensorless_locked_theta_shortest_path_blend_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless speed/current command policy replay",
+            "host_side_no_power_sensorless_speed_current_command_policy_replay_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the MCSDK sensorless",
+            "observer generated-source boundary review",
+            "mcsdk_sensorless_observer_generated_source_boundary_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the MCSDK / host-side",
+            "sensorless observer snapshot sequence bridge",
+            "mcsdk_host_side_sensorless_observer_snapshot_sequence_bridge_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless startup policy replay",
+            "host_side_no_power_sensorless_startup_policy_replay_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless observer snapshot bridge",
+            "mcsdk_host_side_sensorless_observer_snapshot_bridge_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless replay sequence",
+            "host_side_no_power_sensorless_replay_sequence_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless observer stub",
+            "host_side_no_power_sensorless_observer_stub_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "sensorless frontend contract",
+            "host_side_no_power_sensorless_frontend_review_2026-06-22.md",
+        ),
+        (
+            "The current repo-side checkpoint is complete through the MCSDK / Host-Side FOC",
+            "comparison bridge",
+            "mcsdk_host_side_foc_comparison_bridge_review_2026-06-22.md",
+        ),
+        (
             "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
             "translation table",
             "mcsdk_foc_convention_probe_translation_table_2026-06-22.md",
@@ -23,7 +113,7 @@ def assert_current_nfault_fault_tree_checkpoint(testcase: unittest.TestCase, che
     )
     testcase.assertTrue(
         any(all(phrase in checkpoint for phrase in variant) for variant in checkpoint_variants),
-        "checkpoint must point to either the current MCSDK convention-probe step or the earlier nFAULT fault-tree step",
+        "checkpoint must point to the current reverse target-omega lock-threshold handoff step, the earlier reverse target-omega startup hold step, the earlier positive-to-reverse target-omega loss/relock replay step, the earlier positive-to-reverse target-omega rate-limit replay step, the earlier signed reverse target-omega rate-limit replay step, the earlier signed reverse speed command snapshot sequence bridge step, the earlier signed reverse speed/current command fixture step, the earlier speed-loop hold step, the earlier locked-theta shortest-path blend step, the earlier sensorless speed/current command policy replay step, the earlier MCSDK sensorless observer generated-source boundary step, the earlier sensorless observer snapshot sequence bridge step, the earlier sensorless startup policy replay step, the earlier sensorless observer snapshot bridge step, the earlier sensorless replay sequence step, the earlier sensorless observer stub step, the earlier sensorless frontend step, the earlier MCSDK bridge step, the earlier MCSDK convention-probe step, or the earlier nFAULT fault-tree step",
     )
 
     for phrase in (
@@ -85,6 +175,7 @@ class CodexDualTeacherGateTests(unittest.TestCase):
             "workflow/teaching_contract.md",
             "workflow/prompt_recipes.md",
             "workflow/session_close_checklist.md",
+            "workflow/SUBAGENT_PROTOCOL.md",
             "codex_skills/stm32g474-foc-assistant/SKILL.md",
         )
 
@@ -92,6 +183,28 @@ class CodexDualTeacherGateTests(unittest.TestCase):
             with self.subTest(relative_path=relative_path):
                 text = read_repo_text(relative_path)
                 self.assertIn("workflow/codex_dual_teacher_execution_gate.md", text)
+
+    def test_subagent_protocol_stub_is_non_authoritative_pointer(self):
+        text = read_repo_text("workflow/SUBAGENT_PROTOCOL.md")
+
+        for phrase in (
+            "compatibility stub",
+            "sole authoritative subagent",
+            "docs/00_project_truth/ai_architecture.md",
+            "## Subagent Communication Protocol",
+            "AI_CONTEXT.md",
+            "workflow/CURRENT_SNAPSHOT.md",
+            "workflow/ACTIVE_TASK.md",
+        ):
+            self.assertIn(phrase, text)
+
+        for phrase in (
+            "Hierarchical Task Decomposition",
+            "Context Filtering",
+            "Summary Gate",
+            "Allowed helper roles",
+        ):
+            self.assertNotIn(phrase, text)
 
     def test_codex_role_is_not_redirected_to_chatgpt(self):
         gate = read_repo_text("workflow/codex_dual_teacher_execution_gate.md")
@@ -824,6 +937,1705 @@ class SoftwareHallGoldenVectorsWorkflowTests(unittest.TestCase):
 
 
 class FocCoreHostModelWorkflowTests(unittest.TestCase):
+    def test_sensorless_speed_loop_hold_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Speed-Loop Hold Review",
+            "Host-side no-power sensorless speed-loop hold / lock-aware PI anti-windup fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "sensorless_speed_loop_step(...)",
+            "enabled",
+            "sensorless_speed_loop_step(..., enabled=frontend.locked)",
+            "sensorless_current_control_step(...)",
+            "test_speed_loop_can_hold_pi_state_while_unlocked",
+            "test_replay_sequence_can_hold_speed_loop_pi_until_lock_and_after_loss",
+            "speed_loop_pi_holds_until_lock_and_after_loss",
+            "hold_when_unlocked = true",
+            "ki = 0.5",
+            "[0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0]",
+            "[0.0, 0.0, 1.5, 3.0, 4.5, 4.5, 4.5, 6.0]",
+            "Read-only helper Aquinas",
+            "not firmware speed-loop implementation",
+            "not firmware startup or loss-protection strategy",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_speed_loop_hold_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Sensorless Speed-Loop Hold Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-speed-loop-hold",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-SPEED-LOOP-HOLD-001",
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md",
+            "Host-side no-power sensorless speed-loop hold / lock-aware PI anti-windup fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "sensorless_speed_loop_step(..., enabled=frontend.locked)",
+            "speed_loop_pi_holds_until_lock_and_after_loss",
+            "ki=0.5",
+            "speed_loop_pi_integrator",
+            "q_axis_integrator",
+            "read-only helper Aquinas",
+            "not firmware speed-loop implementation",
+            "not firmware startup or loss-protection strategy",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+        self.assertIn(
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md",
+            checkpoint,
+        )
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_signed_reverse_speed_current_command_fixture_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Signed Reverse Speed / Current Command Fixture Review",
+            "Host-side no-power signed reverse speed/current command fixture / signed speed and iq replay only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "signed_reverse_speed_current_command_holds_until_lock_and_after_loss",
+            "negative `target_omega_e_rad_s = -20.0`",
+            "[0.0, 0.0, -1.5, -2.0, -2.0, 0.0, 0.0, -2.0]",
+            "[0.0, 0.0, -1.5, -1.5, -1.5, 0.0, 0.0, -1.5]",
+            "[0.0, 0.0, -1.5, -3.0, -4.5, -4.5, -4.5, -6.0]",
+            "reverse_tracking_speed_command_snapshot_preserves_signed_q15",
+            "target_omega_q15 = -32768",
+            "requested_iq_q15 = -24576",
+            "Read-only helper Hypatia",
+            "not a firmware reverse-startup strategy",
+            "not MCSDK numerical equivalence",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_signed_reverse_speed_current_command_fixture_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Signed Reverse Speed / Current Command Fixture Added",
+            "TASK-2026-06-23-p2-host-side-no-power-signed-reverse-speed-current-command-fixture",
+            "EV-2026-06-23-P2-HOST-SIDE-NO-POWER-SIGNED-REVERSE-SPEED-CURRENT-COMMAND-FIXTURE-001",
+            "host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md",
+            "Host-side no-power signed reverse speed/current command fixture / signed speed and iq replay only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "signed_reverse_speed_current_command_holds_until_lock_and_after_loss",
+            "speed_loop_target_iq",
+            "[0.0, 0.0, -1.5, -2.0, -2.0, 0.0, 0.0, -2.0]",
+            "effective_target_iq",
+            "[0.0, 0.0, -1.5, -1.5, -1.5, 0.0, 0.0, -1.5]",
+            "q_axis_integrator",
+            "[0.0, 0.0, -1.5, -3.0, -4.5, -4.5, -4.5, -6.0]",
+            "reverse_tracking_speed_command_snapshot_preserves_signed_q15",
+            "target_omega_q15 = -32768",
+            "measured_omega_q15 = -16384",
+            "requested_iq_q15 = -24576",
+            "effective_iq_q15 = -24576",
+            "read-only helper Hypatia",
+            "SensorlessFrontendConfig.startup_target_omega_e_rad_s",
+            "not a firmware reverse-startup strategy",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("signed reverse speed/current command fixture", checkpoint)
+        self.assertIn(
+            "host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md",
+            checkpoint,
+        )
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_signed_reverse_speed_command_snapshot_sequence_bridge_review_records_translation_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md"
+        )
+
+        for phrase in (
+            "MCSDK / Host-Side Signed Reverse Speed Command Snapshot Sequence Bridge Review",
+            "MCSDK host-side signed reverse speed command snapshot sequence bridge / host-side no-power replay-step semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "sensorless_replay_speed_command_snapshot_sequence_cases",
+            "signed_reverse_speed_command_replay_steps_map_to_q15",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots",
+            "target_omega_q15",
+            "measured_omega_q15",
+            "requested_iq_q15",
+            "effective_iq_q15",
+            "[0, 0, -32768, -32768, -32768, -32768, -32768, -32768]",
+            "[1638, 3277, -16384, -16384, -16384, -14746, -13107, -16384]",
+            "[0, 0, -24576, -32768, -32768, 0, 0, -32768]",
+            "[0, 0, -24576, -24576, -24576, 0, 0, -24576]",
+            "Read-only helper Bacon",
+            "not MCSDK numerical equivalence",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_signed_reverse_speed_command_snapshot_sequence_bridge_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "MCSDK / Host-Side Signed Reverse Speed Command Snapshot Sequence Bridge Added",
+            "TASK-2026-06-23-p2-mcsdk-host-side-signed-reverse-speed-command-snapshot-sequence-bridge",
+            "EV-2026-06-23-P2-MCSDK-HOST-SIDE-SIGNED-REVERSE-SPEED-COMMAND-SNAPSHOT-SEQUENCE-BRIDGE-001",
+            "mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md",
+            "MCSDK host-side signed reverse speed command snapshot sequence bridge / host-side no-power replay-step semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "sensorless_replay_speed_command_snapshot_sequence_cases",
+            "signed_reverse_speed_command_replay_steps_map_to_q15",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots",
+            "target_omega_q15",
+            "requested_iq_q15",
+            "effective_iq_q15",
+            "read-only helper Bacon",
+            "not MCSDK numerical equivalence",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("signed reverse speed command snapshot sequence bridge", checkpoint)
+        self.assertIn(
+            "mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md",
+            checkpoint,
+        )
+        self.assertIn("signed reverse speed/current command fixture", checkpoint)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_signed_reverse_target_omega_rate_limit_replay_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Signed Reverse Target-Omega Rate-Limit Replay Review",
+            "Host-side no-power signed reverse target-omega rate-limit replay / command-ramp fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "_ramp_target_omega(...)",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "test_replay_sequence_rate_limits_signed_reverse_target_command",
+            "signed_reverse_target_omega_rate_limit_holds_until_lock_and_after_loss",
+            "signed_reverse_target_omega_rate_limit_replay_steps_map_to_q15",
+            "target_omega_rate_limit_e_rad_s2 = 50.0",
+            "[0.0, 0.0, -5.0, -10.0, -15.0, -15.0, -15.0, -20.0]",
+            "[0.0, 0.0, 0.75, 0.25, -0.5, 0.0, 0.0, -1.5]",
+            "[0.0, 0.0, 0.25, 0.25, 0.0, 0.0, 0.0, -0.5]",
+            "[0.0, 0.0, 0.75, 1.0, 0.5, 0.5, 0.5, -1.0]",
+            "[0, 0, -8192, -16384, -24576, -24576, -24576, -32768]",
+            "[0, 0, 12288, 4096, -8192, 0, 0, -24576]",
+            "Read-only helper Dewey",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not MCSDK numerical equivalence",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_signed_reverse_target_omega_rate_limit_replay_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Signed Reverse Target-Omega Rate-Limit Replay Added",
+            "TASK-2026-06-23-p2-host-side-no-power-signed-reverse-target-omega-rate-limit-replay",
+            "EV-2026-06-23-P2-HOST-SIDE-NO-POWER-SIGNED-REVERSE-TARGET-OMEGA-RATE-LIMIT-REPLAY-001",
+            "host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+            "Host-side no-power signed reverse target-omega rate-limit replay / command-ramp fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "_ramp_target_omega(...)",
+            "signed_reverse_target_omega_rate_limit_holds_until_lock_and_after_loss",
+            "signed_reverse_target_omega_rate_limit_replay_steps_map_to_q15",
+            "speed_loop_target_omega",
+            "[0.0, 0.0, -5.0, -10.0, -15.0, -15.0, -15.0, -20.0]",
+            "speed_loop_target_iq",
+            "[0.0, 0.0, 0.75, 0.25, -0.5, 0.0, 0.0, -1.5]",
+            "speed_loop_pi_integrator",
+            "[0.0, 0.0, 0.25, 0.25, 0.0, 0.0, 0.0, -0.5]",
+            "q_axis_integrator",
+            "[0.0, 0.0, 0.75, 1.0, 0.5, 0.5, 0.5, -1.0]",
+            "target_omega_q15",
+            "[0, 0, -8192, -16384, -24576, -24576, -24576, -32768]",
+            "requested_iq_q15",
+            "[0, 0, 12288, 4096, -8192, 0, 0, -24576]",
+            "read-only helper Dewey",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("signed reverse target-omega rate-limit replay", checkpoint)
+        self.assertIn(
+            "host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+            checkpoint,
+        )
+        self.assertIn("signed reverse speed command snapshot sequence bridge", checkpoint)
+        self.assertIn("signed reverse speed/current command fixture", checkpoint)
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_positive_to_reverse_target_omega_rate_limit_replay_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Positive-To-Reverse Target-Omega Rate-Limit Replay Review",
+            "Host-side no-power positive-to-reverse target-omega rate-limit replay / command-ramp crossing fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "_ramp_target_omega(...)",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "test_replay_sequence_rate_limits_positive_target_across_zero_to_reverse",
+            "positive_to_reverse_target_omega_rate_limit_crosses_zero_while_locked",
+            "positive_to_reverse_target_omega_rate_limit_crossing_steps_map_to_q15",
+            "speed_loop_state.target_omega_e_rad_s = 20.0",
+            "[15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0]",
+            "[1.25, 0.75, 0.0, -1.0, -1.5, -2.0, -2.0, -2.0]",
+            "[0.75, 0.75, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0]",
+            "[1.25, 2.0, 2.0, 1.0, -0.5, -2.0, -3.5, -5.0]",
+            "[24576, 16384, 8192, 0, -8192, -16384, -24576, -32768]",
+            "[20480, 12288, 0, -16384, -24576, -32768, -32768, -32768]",
+            "[20480, 12288, 0, -16384, -24576, -24576, -24576, -24576]",
+            "Read-only helper Kuhn",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware direction reversal strategy",
+            "not MCSDK numerical equivalence",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_positive_to_reverse_replay_and_main_agent_matrix_are_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+        matrix = read_repo_text("workflow/main_agent_priority_matrix_2026-06-23.md")
+
+        combined = status + active + register + snapshot + context + readme + matrix
+
+        for phrase in (
+            "Host-Side Positive-To-Reverse Target-Omega Rate-Limit Replay Added",
+            "TASK-2026-06-23-p2-host-side-no-power-positive-to-reverse-target-omega-rate-limit-replay",
+            "EV-2026-06-23-P2-HOST-SIDE-NO-POWER-POSITIVE-TO-REVERSE-TARGET-OMEGA-RATE-LIMIT-REPLAY-001",
+            "host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+            "Host-side no-power positive-to-reverse target-omega rate-limit replay / command-ramp crossing fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "positive_to_reverse_target_omega_rate_limit_crosses_zero_while_locked",
+            "positive_to_reverse_target_omega_rate_limit_crossing_steps_map_to_q15",
+            "speed_loop_target_omega",
+            "[15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0]",
+            "target_omega_q15",
+            "[24576, 16384, 8192, 0, -8192, -16384, -24576, -32768]",
+            "read-only helper Kuhn",
+            "workflow/main_agent_priority_matrix_2026-06-23.md",
+            "Main-agent priority matrix / sensorless FOC first / filtered subagent task queue / no firmware implementation / no generated-code edit / no hardware action",
+            "P0 | Sensorless host-side command/replay semantics",
+            "P1 | MCSDK source-backed sensorless boundary review",
+            "P1 | Reality-useful hardware fault-tree packet",
+            "sensorless-next-gap-explorer",
+            "mcsdk-boundary-row-explorer",
+            "hardware-packet-checker",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware direction reversal strategy",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("positive-to-reverse target-omega rate-limit replay", checkpoint)
+        self.assertIn(
+            "host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+            checkpoint,
+        )
+        self.assertIn("main-agent priority matrix", checkpoint)
+        self.assertIn("workflow/main_agent_priority_matrix_2026-06-23.md", checkpoint)
+        self.assertIn("signed reverse target-omega rate-limit replay", checkpoint)
+        self.assertIn("signed reverse speed command snapshot sequence bridge", checkpoint)
+
+        for forbidden in (
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_reverse_target_omega_startup_hold_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Reverse Target-Omega Startup Hold Review",
+            "Host-side no-power reverse target-omega startup hold / startup-unlocked target freeze fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "test_replay_sequence_freezes_reverse_target_until_lock_not_startup_strategy",
+            "reverse_target_omega_remains_frozen_until_lock_not_startup_strategy",
+            "reverse_target_omega_startup_hold_steps_map_to_q15",
+            "[20.0, 20.0, 15.0, 10.0, 5.0]",
+            "[0.0, 0.0, 2.0, 2.0, 2.0]",
+            "[0.5, 0.5, 0.5, 0.5, 0.5]",
+            "[0.0, 0.0, 1.5, 1.5, 1.5]",
+            "[0.0, 0.0, 1.5, 3.0, 4.5]",
+            "[false, false, true, true, true]",
+            "[0, 1, 2, 2, 2]",
+            "[32767, 32767, 24576, 16384, 8192]",
+            "[1638, 3277, -16384, -16384, -16384]",
+            "[0, 0, 32767, 32767, 32767]",
+            "[0, 0, 24576, 24576, 24576]",
+            "not a reverse open-loop startup strategy",
+            "startup_target_omega_e_rad_s",
+            "Read-only helper Boole",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not reverse open-loop startup validation",
+            "not MCSDK numerical equivalence",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "reverse open-loop startup validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_reverse_target_omega_startup_hold_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Reverse Target-Omega Startup Hold Added",
+            "TASK-2026-06-24-p2-host-side-no-power-reverse-target-omega-startup-hold",
+            "EV-2026-06-24-P2-HOST-SIDE-NO-POWER-REVERSE-TARGET-OMEGA-STARTUP-HOLD-001",
+            "host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md",
+            "Host-side no-power reverse target-omega startup hold / startup-unlocked target freeze fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "reverse_target_omega_remains_frozen_until_lock_not_startup_strategy",
+            "reverse_target_omega_startup_hold_steps_map_to_q15",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "speed_loop_target_omega",
+            "[20.0, 20.0, 15.0, 10.0, 5.0]",
+            "effective_target_iq",
+            "[0.0, 0.0, 1.5, 1.5, 1.5]",
+            "command_reasons",
+            "unlocked_current_limit",
+            "lock_candidate_count",
+            "[0, 1, 2, 2, 2]",
+            "target_omega_q15",
+            "[32767, 32767, 24576, 16384, 8192]",
+            "measured_omega_q15",
+            "[1638, 3277, -16384, -16384, -16384]",
+            "requested_iq_q15",
+            "[0, 0, 32767, 32767, 32767]",
+            "effective_iq_q15",
+            "[0, 0, 24576, 24576, 24576]",
+            "Read-only helper Boole",
+            "not a reverse open-loop startup strategy",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not reverse open-loop startup validation",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("reverse target-omega startup hold", checkpoint)
+        self.assertIn(
+            "host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md",
+            checkpoint,
+        )
+        self.assertIn("positive-to-reverse target-omega loss/relock replay", checkpoint)
+        self.assertIn(
+            "host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md",
+            checkpoint,
+        )
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "reverse open-loop startup validated",
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_reverse_target_omega_lock_threshold_handoff_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_reverse_target_omega_lock_threshold_handoff_review_2026-06-24.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Reverse Target-Omega Lock-Threshold Handoff Review",
+            "Host-side no-power reverse target-omega lock-threshold handoff / startup-unlocked threshold fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessStartupPolicyConfig.lock_count_required",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "sensorless_startup_policy_step(...)",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "test_replay_sequence_starts_reverse_target_ramp_at_lock_threshold",
+            "reverse_target_omega_lock_threshold_handoff_starts_ramp_only_at_lock",
+            "reverse_target_omega_lock_threshold_handoff_steps_map_to_q15",
+            "[20.0, 20.0, 20.0, 15.0, 10.0]",
+            "[0.0, 0.0, 0.0, 2.0, 2.0]",
+            "[0.5, 0.5, 0.5, 0.5, 0.5]",
+            "[0.0, 0.0, 0.0, 1.5, 1.5]",
+            "[0.0, 0.0, 0.0, 1.5, 3.0]",
+            "[false, false, false, true, true]",
+            "[0, 1, 2, 3, 3]",
+            "[32767, 32767, 32767, 24576, 16384]",
+            "[1638, 3277, 4915, -16384, -16384]",
+            "[0, 0, 0, 32767, 32767]",
+            "[0, 0, 0, 24576, 24576]",
+            "not a reverse open-loop startup strategy",
+            "startup_target_omega_e_rad_s",
+            "Read-only helper Ohm",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not reverse open-loop startup validation",
+            "not MCSDK numerical equivalence",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "reverse open-loop startup validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_reverse_target_omega_lock_threshold_handoff_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Reverse Target-Omega Lock-Threshold Handoff Added",
+            "TASK-2026-06-24-p2-host-side-no-power-reverse-target-omega-lock-threshold-handoff",
+            "EV-2026-06-24-P2-HOST-SIDE-NO-POWER-REVERSE-TARGET-OMEGA-LOCK-THRESHOLD-HANDOFF-001",
+            "host_side_no_power_reverse_target_omega_lock_threshold_handoff_review_2026-06-24.md",
+            "Host-side no-power reverse target-omega lock-threshold handoff / startup-unlocked threshold fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "reverse_target_omega_lock_threshold_handoff_starts_ramp_only_at_lock",
+            "reverse_target_omega_lock_threshold_handoff_steps_map_to_q15",
+            "SensorlessStartupPolicyConfig.lock_count_required",
+            "SensorlessSpeedLoopConfig.hold_when_unlocked",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "speed_loop_target_omega",
+            "[20.0, 20.0, 20.0, 15.0, 10.0]",
+            "effective_target_iq",
+            "[0.0, 0.0, 0.0, 1.5, 1.5]",
+            "command_reasons",
+            "unlocked_current_limit",
+            "lock_candidate_count",
+            "[0, 1, 2, 3, 3]",
+            "target_omega_q15",
+            "[32767, 32767, 32767, 24576, 16384]",
+            "measured_omega_q15",
+            "[1638, 3277, 4915, -16384, -16384]",
+            "requested_iq_q15",
+            "[0, 0, 0, 32767, 32767]",
+            "effective_iq_q15",
+            "[0, 0, 0, 24576, 24576]",
+            "Read-only helper Ohm",
+            "not a reverse open-loop startup strategy",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware reverse-startup strategy",
+            "not reverse open-loop startup validation",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("reverse target-omega lock-threshold handoff", checkpoint)
+        self.assertIn(
+            "host_side_no_power_reverse_target_omega_lock_threshold_handoff_review_2026-06-24.md",
+            checkpoint,
+        )
+        self.assertIn("reverse target-omega startup hold", checkpoint)
+        self.assertIn(
+            "host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md",
+            checkpoint,
+        )
+
+        for forbidden in (
+            "reverse startup behavior validated",
+            "reverse open-loop startup validated",
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_positive_to_reverse_target_omega_loss_relock_replay_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Positive-To-Reverse Target-Omega Loss/Relock Replay Review",
+            "Host-side no-power positive-to-reverse target-omega loss/relock replay / command-ramp hold-loss-relock fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "_ramp_target_omega(...)",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_observer_snapshots(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "test_replay_sequence_holds_positive_to_reverse_ramp_during_loss_and_relock",
+            "positive_to_reverse_target_omega_rate_limit_holds_during_loss_and_relock",
+            "positive_to_reverse_target_omega_rate_limit_loss_relock_steps_map_to_observer_snapshots",
+            "positive_to_reverse_target_omega_rate_limit_loss_relock_steps_map_to_q15",
+            "[15.0, 10.0, 5.0, 0.0, 0.0, 0.0, -5.0, -10.0]",
+            "[1.25, 0.75, 0.0, -1.0, 0.0, 0.0, -1.5, -2.0]",
+            "[0.75, 0.75, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0]",
+            "[1.25, 0.75, 0.0, -1.0, 0.0, 0.0, -1.5, -1.5]",
+            "[1.25, 2.0, 2.0, 1.0, 1.0, 1.0, -0.5, -2.0]",
+            "[true, true, true, true, false, false, true, true]",
+            "[0, 0, 0, 1, 2, 0, 0, 0]",
+            "final_target_omega",
+            "-10.0",
+            "[10430, 11473, 12516, 13559, 25033, -27987, 27119, 17732]",
+            "[16384, 16384, 16384, 16384, 18022, 19661, 16384, 16384]",
+            "[31130, 31130, 31130, 3277, 0, 0, 31130, 31130]",
+            "[24576, 16384, 8192, 0, 0, 0, -8192, -16384]",
+            "[20480, 12288, 0, -16384, 0, 0, -24576, -32768]",
+            "[20480, 12288, 0, -16384, 0, 0, -24576, -24576]",
+            "Read-only helper Locke",
+            "Read-only helper Mill",
+            "Read-only helper Gauss",
+            "Read-only helper Confucius",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware direction reversal strategy",
+            "not an active MCSDK observer instance",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_positive_to_reverse_target_omega_loss_relock_replay_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Positive-To-Reverse Target-Omega Loss/Relock Replay Added",
+            "TASK-2026-06-24-p2-host-side-no-power-positive-to-reverse-target-omega-loss-relock-replay",
+            "EV-2026-06-24-P2-HOST-SIDE-NO-POWER-POSITIVE-TO-REVERSE-TARGET-OMEGA-LOSS-RELOCK-REPLAY-001",
+            "host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md",
+            "Host-side no-power positive-to-reverse target-omega loss/relock replay / command-ramp hold-loss-relock fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "positive_to_reverse_target_omega_rate_limit_holds_during_loss_and_relock",
+            "positive_to_reverse_target_omega_rate_limit_loss_relock_steps_map_to_observer_snapshots",
+            "positive_to_reverse_target_omega_rate_limit_loss_relock_steps_map_to_q15",
+            "SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2",
+            "_ramp_target_omega(...)",
+            "sensorless_current_control_replay_sequence(...)",
+            "sensorless_replay_to_mcsdk_observer_snapshots(...)",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots(...)",
+            "speed_loop_target_omega",
+            "[15.0, 10.0, 5.0, 0.0, 0.0, 0.0, -5.0, -10.0]",
+            "effective_target_iq",
+            "[1.25, 0.75, 0.0, -1.0, 0.0, 0.0, -1.5, -1.5]",
+            "command_reasons",
+            "unlocked_current_limit",
+            "q_axis_integrator",
+            "[1.25, 2.0, 2.0, 1.0, 1.0, 1.0, -0.5, -2.0]",
+            "locked",
+            "[true, true, true, true, false, false, true, true]",
+            "loss_candidate_count",
+            "[0, 0, 0, 1, 2, 0, 0, 0]",
+            "theta_q15",
+            "[10430, 11473, 12516, 13559, 25033, -27987, 27119, 17732]",
+            "omega_q15",
+            "[16384, 16384, 16384, 16384, 18022, 19661, 16384, 16384]",
+            "confidence_q15",
+            "[31130, 31130, 31130, 3277, 0, 0, 31130, 31130]",
+            "target_omega_q15",
+            "[24576, 16384, 8192, 0, 0, 0, -8192, -16384]",
+            "requested_iq_q15",
+            "[20480, 12288, 0, -16384, 0, 0, -24576, -32768]",
+            "effective_iq_q15",
+            "[20480, 12288, 0, -16384, 0, 0, -24576, -24576]",
+            "read-only helpers Locke and Mill",
+            "Read-only helper Gauss",
+            "Read-only helper Confucius",
+            "not firmware speed-loop behavior",
+            "not firmware current limiting",
+            "not a firmware direction reversal strategy",
+            "not an active MCSDK observer instance",
+            "not MCSDK numerical equivalence",
+            "not Gate PWM validation",
+            "not sensorless validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("positive-to-reverse target-omega loss/relock replay", checkpoint)
+        self.assertIn(
+            "host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md",
+            checkpoint,
+        )
+        self.assertIn("positive-to-reverse target-omega rate-limit replay", checkpoint)
+        self.assertIn(
+            "host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md",
+            checkpoint,
+        )
+        self.assertIn("signed reverse target-omega rate-limit replay", checkpoint)
+        self.assertIn("signed reverse speed command snapshot sequence bridge", checkpoint)
+
+        for forbidden in (
+            "direction reversal behavior validated",
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_locked_theta_shortest_path_blend_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_locked_theta_shortest_path_blend_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Locked-Theta Shortest-Path Blend Review",
+            "Host-side no-power sensorless locked-theta shortest-path blend / wrap-boundary tracking fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "sensorless_observer_contract_step",
+            "_shortest_angle_delta_rad",
+            "lock_blend_factor",
+            "tracking_lock_blends_across_wrap_by_shortest_path",
+            "previous theta = 6.1 rad",
+            "observer theta = 0.1 rad",
+            "expected theta = 6.241592653589793 rad",
+            "Read-only helper Schrodinger",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_locked_theta_shortest_path_blend_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Sensorless Locked-Theta Shortest-Path Blend Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-locked-theta-shortest-path-blend",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-LOCKED-THETA-SHORTEST-PATH-BLEND-001",
+            "host_side_no_power_sensorless_locked_theta_shortest_path_blend_review_2026-06-22.md",
+            "Host-side no-power sensorless locked-theta shortest-path blend / wrap-boundary tracking fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "sensorless_observer_contract_step",
+            "_shortest_angle_delta_rad",
+            "lock_blend_factor",
+            "wrap-boundary",
+            "6.241592653589793",
+            "read-only helper Schrodinger",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+        self.assertIn(
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md",
+            checkpoint,
+        )
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_speed_current_command_policy_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_speed_current_command_policy_replay_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Speed / Current Command Policy Replay Review",
+            "Host-side no-power sensorless speed/current command policy replay / lock-aware iq gating fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "src/foc_mcsdk_bridge.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "SensorlessSpeedLoopConfig",
+            "SensorlessSpeedLoopState",
+            "SensorlessSpeedLoopResult",
+            "sensorless_speed_loop_step",
+            "SensorlessCurrentCommandPolicyConfig",
+            "SensorlessCurrentCommandPolicyResult",
+            "sensorless_current_command_policy_step",
+            "McsdkSpeedCommandSnapshot",
+            "speed_command_to_mcsdk_snapshot",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots",
+            "startup before lock",
+            "confirmed loss",
+            "relock",
+            "effective_target_iq = 0",
+            "Read-only helper Ampere",
+            "not firmware speed-loop implementation",
+            "firmware startup or loss-protection strategy",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_speed_current_command_policy_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side Sensorless Speed / Current Command Policy Replay Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-speed-current-command-policy-replay",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-SPEED-CURRENT-COMMAND-POLICY-REPLAY-001",
+            "host_side_no_power_sensorless_speed_current_command_policy_replay_review_2026-06-22.md",
+            "Host-side no-power sensorless speed/current command policy replay / lock-aware iq gating fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "SensorlessSpeedLoopConfig",
+            "SensorlessSpeedLoopState",
+            "SensorlessSpeedLoopResult",
+            "sensorless_speed_loop_step",
+            "SensorlessCurrentCommandPolicyConfig",
+            "SensorlessCurrentCommandPolicyResult",
+            "sensorless_current_command_policy_step",
+            "McsdkSpeedCommandSnapshot",
+            "speed_command_to_mcsdk_snapshot",
+            "sensorless_replay_to_mcsdk_speed_command_snapshots",
+            "lock-aware current-command policy",
+            "startup before lock",
+            "confirmed loss",
+            "relock",
+            "read-only helper Ampere",
+            "not firmware speed-loop implementation",
+            "firmware startup or loss-protection strategy",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+        self.assertIn(
+            "host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md",
+            checkpoint,
+        )
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_startup_policy_replay_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_startup_policy_replay_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Startup Policy Replay Review",
+            "Host-side no-power sensorless startup policy replay / lock-loss-relock fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "SensorlessStartupPolicyConfig",
+            "SensorlessStartupPolicyState",
+            "SensorlessStartupPolicyResult",
+            "sensorless_startup_policy_step",
+            "consecutive high-confidence",
+            "consecutive loss candidates",
+            "startup ramp",
+            "confirmed loss",
+            "relock",
+            "PI integrator continuity",
+            "read-only Bernoulli helper",
+            "not firmware startup state machine",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_startup_policy_replay_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Startup Policy Replay Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-startup-policy-replay",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-STARTUP-POLICY-REPLAY-001",
+            "host_side_no_power_sensorless_startup_policy_replay_review_2026-06-22.md",
+            "Host-side no-power sensorless startup policy replay / lock-loss-relock fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "SensorlessStartupPolicyConfig",
+            "SensorlessStartupPolicyState",
+            "SensorlessStartupPolicyResult",
+            "sensorless_startup_policy_step",
+            "lock/loss/relock",
+            "startup ramp after loss",
+            "not firmware startup logic",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_observer_snapshot_bridge_review_records_translation_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_host_side_sensorless_observer_snapshot_bridge_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "MCSDK / Host-Side Sensorless Observer Snapshot Bridge Review",
+            "MCSDK host-side sensorless observer snapshot bridge / host-side no-power semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_mcsdk_bridge.py",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "McsdkObserverSnapshot",
+            "sensorless_result_to_mcsdk_observer_snapshot",
+            "theta_q15",
+            "omega_q15",
+            "confidence_q15",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_observer_snapshot_bridge_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "MCSDK / Host-Side Sensorless Observer Snapshot Bridge Added",
+            "TASK-2026-06-22-p2-mcsdk-host-side-sensorless-observer-snapshot-bridge",
+            "EV-2026-06-22-P2-MCSDK-HOST-SIDE-SENSORLESS-OBSERVER-SNAPSHOT-BRIDGE-001",
+            "mcsdk_host_side_sensorless_observer_snapshot_bridge_review_2026-06-22.md",
+            "MCSDK host-side sensorless observer snapshot bridge / host-side no-power semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "McsdkObserverSnapshot",
+            "sensorless_result_to_mcsdk_observer_snapshot",
+            "MCSDK-shaped comparison metadata",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_observer_snapshot_sequence_bridge_review_records_translation_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_host_side_sensorless_observer_snapshot_sequence_bridge_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "MCSDK / Host-Side Sensorless Observer Snapshot Sequence Bridge Review",
+            "MCSDK host-side sensorless observer snapshot sequence bridge / host-side no-power replay-step semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_mcsdk_bridge.py",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "sensorless_replay_to_mcsdk_observer_snapshots",
+            "SensorlessReplayResult.steps",
+            "McsdkObserverSnapshot",
+            "theta_q15",
+            "omega_q15",
+            "confidence_q15",
+            "startup ramp",
+            "confirmed loss",
+            "relock",
+            "read-only Anscombe helper",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "No Gate PWM output",
+            "No sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_observer_snapshot_sequence_bridge_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "MCSDK / Host-Side Sensorless Observer Snapshot Sequence Bridge Added",
+            "TASK-2026-06-22-p2-mcsdk-host-side-sensorless-observer-snapshot-sequence-bridge",
+            "EV-2026-06-22-P2-MCSDK-HOST-SIDE-SENSORLESS-OBSERVER-SNAPSHOT-SEQUENCE-BRIDGE-001",
+            "mcsdk_host_side_sensorless_observer_snapshot_sequence_bridge_review_2026-06-22.md",
+            "MCSDK host-side sensorless observer snapshot sequence bridge / host-side no-power replay-step semantic translation only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "sensorless_replay_to_mcsdk_observer_snapshots",
+            "SensorlessReplayResult",
+            "McsdkObserverSnapshot",
+            "replay-step semantic translation",
+            "startup ramp",
+            "confirmed loss",
+            "relock",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_mcsdk_sensorless_observer_generated_source_boundary_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "MCSDK Sensorless Observer Generated-Source Boundary Review Added",
+            "TASK-2026-06-22-p2-mcsdk-sensorless-observer-generated-source-boundary",
+            "EV-2026-06-22-P2-MCSDK-SENSORLESS-OBSERVER-GENERATED-SOURCE-BOUNDARY-001",
+            "mcsdk_sensorless_observer_generated_source_boundary_review_2026-06-22.md",
+            "tests/test_mcsdk_sensorless_observer_boundary_static.py",
+            "MCSDK sensorless observer generated-source boundary / Hall generated-source boundary confirmed / generic CORDIC and STO register symbols noted / no active MCSDK observer instance / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "MotorControl.M1_SPEED_SENSOR=HALL_SENSOR",
+            "MotorControl.SPEED_SENSOR_SELECTION=HALL_SENSORS",
+            "HALL_Init (&HALL_M1);",
+            "STC_Init(pSTC[M1],&PIDSpeedHandle_M1, &HALL_M1._Super);",
+            "MCM_PhaseComputation",
+            "MC_REG_STOPLL",
+            "MC_REG_STOCORDIC",
+            "no active MCSDK observer instance",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        checkpoint = active.split("## Next User Checkpoint", 1)[1].split(
+            "## Verification", 1
+        )[0]
+        self.assertIn("sensorless speed-loop hold", checkpoint)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_replay_sequence_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_replay_sequence_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Replay Sequence Review",
+            "Host-side no-power sensorless multi-step replay / observer-frontend-current-loop state-continuity fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "sensorless_current_control_replay_sequence",
+            "SensorlessFrontendState",
+            "CurrentLoopState",
+            "SensorlessObserverState",
+            "low-confidence startup",
+            "observer lock",
+            "PI integrator carryover",
+            "Read-only helper Bernoulli",
+            "MCSDK-shaped observer-output translation snapshot",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24 V",
+            "no Gate PWM output",
+            "no sensorless / SMO claim",
+        ):
+            self.assertIn(phrase, review)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, review)
+
+    def test_sensorless_replay_sequence_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Replay Sequence Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-replay-sequence",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-REPLAY-SEQUENCE-001",
+            "host_side_no_power_sensorless_replay_sequence_review_2026-06-22.md",
+            "Host-side no-power sensorless multi-step replay / observer-frontend-current-loop state-continuity fixture only / no firmware implementation / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "sensorless_current_control_replay_sequence",
+            "multi-step state-continuity replay",
+            "observer, frontend, and PI state handoff",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+        for forbidden in (
+            "sensorless operation validated",
+            "SMO validation passed",
+            "MCSDK observer equivalence proved",
+            "Gate PWM output validated",
+            "motor readiness validated",
+        ):
+            self.assertNotIn(forbidden, combined)
+
+    def test_sensorless_observer_stub_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_observer_stub_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Observer Stub Review",
+            "Host-side no-power sensorless observer stub / alpha-beta back-EMF contract only / no firmware implementation / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "SensorlessObserverConfig",
+            "SensorlessObserverState",
+            "SensorlessObserverResult",
+            "back_emf_observer_step",
+            "back_emf_alpha = v_alpha - Rs * i_alpha",
+            "phase currents -> Clarke i_alpha/i_beta",
+            "Read-only helper Bernoulli",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "No 24V.",
+            "No Gate PWM output.",
+            "No sensorless / SMO claim.",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_sensorless_observer_stub_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Observer Stub Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-observer-stub",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-OBSERVER-STUB-001",
+            "host_side_no_power_sensorless_observer_stub_review_2026-06-22.md",
+            "Host-side no-power sensorless observer stub / alpha-beta back-EMF contract only / no firmware implementation / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "deterministic host-float alpha-beta back-EMF",
+            "`v_alpha`, `v_beta`, `i_alpha`, and `i_beta`",
+            "back-EMF observer stub",
+            "not MCSDK Observer PLL equivalence",
+            "not MCSDK Observer CORDIC equivalence",
+            "not SMO implementation or validation",
+            "not sensorless validation",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_sensorless_frontend_review_records_host_side_contract_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "host_side_no_power_sensorless_frontend_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Frontend Review",
+            "Host-side no-power sensorless frontend contract / no firmware implementation / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "MCSDK remains the intended motor-control framework generation path",
+            "theta_e_rad",
+            "sensorless_startup_step",
+            "sensorless_observer_contract_step",
+            "sensorless_frontend_step",
+            "sensorless_current_control_step",
+            "startup-versus-tracking semantics",
+            "observer angle-step limiting",
+            "not a claim of ST observer PLL",
+            "No 24V.",
+            "No Gate PWM output.",
+            "No sensorless / SMO claim.",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_sensorless_frontend_is_registered_without_hardware_readiness_claim(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "Host-Side No-Power Sensorless Frontend Added",
+            "TASK-2026-06-22-p2-host-side-no-power-sensorless-frontend",
+            "EV-2026-06-22-P2-HOST-SIDE-NO-POWER-SENSORLESS-FRONTEND-001",
+            "src/foc_sensorless_frontend.py",
+            "tests/fixtures/foc_sensorless_frontend_vectors.json",
+            "tests/test_foc_sensorless_frontend.py",
+            "tests/test_foc_sensorless_frontend_vectors.py",
+            "host_side_no_power_sensorless_frontend_review_2026-06-22.md",
+            "Host-side no-power sensorless frontend contract / no firmware implementation / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+            "host-side `theta_e_rad` producer seam",
+            "not MCSDK observer equivalence proof",
+            "not sensorless validation",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
     def test_foc_core_model_review_records_host_side_algorithm_only(self):
         review = read_repo_text(
             "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
@@ -1044,6 +2856,64 @@ class FocCoreHostModelWorkflowTests(unittest.TestCase):
             "not Gate PWM validation",
             "not MCSDK hook readiness",
             "not hardware validation",
+            "not power-stage readiness",
+            "not motor readiness",
+        ):
+            self.assertIn(phrase, combined)
+
+    def test_mcsdk_foc_bridge_review_records_translation_only(self):
+        review = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/"
+            "mcsdk_host_side_foc_comparison_bridge_review_2026-06-22.md"
+        )
+
+        for phrase in (
+            "MCSDK / Host-Side FOC Comparison Bridge Review",
+            "MCSDK host-side FOC comparison bridge / host-side no-power semantic translation only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness",
+            "src/foc_mcsdk_bridge.py",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "radians_to_q15",
+            "dq_to_mcsdk_qd",
+            "duty_to_counts",
+            "current_loop_result_to_mcsdk_state",
+            "MCSDK remains the intended motor-control framework generation path",
+            "host-side comparison adapter",
+            "field order, angle domain, and PWM representation",
+            "host-side / MCSDK numerical equivalence",
+            "compare-register evidence",
+            "No 24V.",
+            "No Gate PWM output.",
+            "No motor readiness claim.",
+        ):
+            self.assertIn(phrase, review)
+
+    def test_mcsdk_foc_bridge_is_registered(self):
+        status = read_repo_text("CURRENT_STATUS.md")
+        active = read_repo_text("workflow/ACTIVE_TASK.md")
+        register = read_repo_text("workflow/evidence_register.md")
+        snapshot = read_repo_text("workflow/CURRENT_SNAPSHOT.md")
+        context = read_repo_text("AI_CONTEXT.md")
+        readme = read_repo_text(
+            "apps/stm32_g474_foc/mcsdk_no_power_precheck/README.md"
+        )
+
+        combined = status + active + register + snapshot + context + readme
+
+        for phrase in (
+            "TASK-2026-06-22-p2-mcsdk-host-side-foc-comparison-bridge",
+            "EV-2026-06-22-P2-MCSDK-HOST-SIDE-FOC-COMPARISON-BRIDGE-001",
+            "mcsdk_host_side_foc_comparison_bridge_review_2026-06-22.md",
+            "src/foc_mcsdk_bridge.py",
+            "tests/fixtures/foc_mcsdk_bridge_vectors.json",
+            "tests/test_mcsdk_foc_bridge_vectors.py",
+            "MCSDK host-side FOC comparison bridge / host-side no-power semantic translation only / no firmware implementation / no generated-code edit / no MCSDK integration / no PWM output / no motor readiness",
+            "comparison-ready translation rules",
+            "not MCSDK convention proof",
+            "not host-side / MCSDK numerical equivalence evidence",
+            "not compare-register evidence",
+            "not Gate PWM validation",
+            "not MCSDK hook readiness",
             "not power-stage readiness",
             "not motor readiness",
         ):
@@ -4530,16 +6400,20 @@ class Stdrive101ManualGateTestLinkedImageBoundaryTests(unittest.TestCase):
             "newest physical measurement record is\n"
             "the STDRIVE101 PA7 LIN1 wake nFAULT 1.3V fault-isolation result",
             "latest\n"
-            "repo-side checkpoint is the 2026-06-22 MCSDK FOC convention probe\n"
-            "translation table",
+            "repo-side checkpoint is the 2026-06-24 host-side reverse target-omega",
+            "startup hold",
             "stdrive101_gate_waveform_neutral_wrapper_usb_only_dmm_partial_result_2026-06-21.md",
             "EV-2026-06-21-STDRIVE101-GATE-WAVEFORM-NEUTRAL-WRAPPER-USBONLY-DMM-PARTIAL-RESULT-001",
             "STDRIVE101 Gate-Waveform Neutral-Wrapper USB-Only DMM Partial Result Recorded",
             "`CN3_1` through `CN3_6` are all `0 V`",
             "`P13 = 3.3 V`",
             "`P14 = 3.3 V`",
-            "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
-            "translation table",
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "positive-to-reverse target-omega loss/relock replay",
+            "positive-to-reverse target-omega rate-limit replay",
+            "signed reverse target-omega rate-limit replay",
+            "signed reverse speed command snapshot sequence bridge",
+            "signed reverse speed/current command fixture",
             "neutral-wrapper 24V static scope baseline",
             "24V static no-motor result",
             "residual-voltage isolation result",
@@ -4661,8 +6535,10 @@ class Stdrive101NfaultFaultTreeNoPowerPlanTests(unittest.TestCase):
             self.assertIn(phrase, combined)
 
         for phrase in (
-            "The current repo-side checkpoint is complete through the MCSDK FOC convention probe",
-            "translation table",
+            "The current repo-side checkpoint is complete through the host-side no-power",
+            "signed reverse target-omega rate-limit replay",
+            "signed reverse speed command snapshot sequence bridge",
+            "signed reverse speed/current command fixture",
             "Board photo or EDA crop showing U1 STDRIVE101",
             "Confirm HSPY OFF, VS / 24V_FUSED near 0 V, motor disconnected",
             "Q2 gate-source = ___",

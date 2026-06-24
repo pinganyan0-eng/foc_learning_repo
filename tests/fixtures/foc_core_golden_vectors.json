@@ -211,6 +211,23 @@
         "integrator": 1.0,
         "saturated": true
       }
+    },
+    {
+      "name": "explicit_integrator_limit_is_applied",
+      "input": {
+        "error": 2.0,
+        "dt_s": 0.1,
+        "state_integrator": 0.0,
+        "kp": 0.0,
+        "ki": 10.0,
+        "output_limit": 5.0,
+        "integrator_limit": 1.0
+      },
+      "expected": {
+        "output": 1.0,
+        "integrator": 1.0,
+        "saturated": false
+      }
     }
   ],
   "current_loop_cases": [

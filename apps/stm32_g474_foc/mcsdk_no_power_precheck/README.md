@@ -109,6 +109,314 @@ output.
   readiness`. These vectors are not MCSDK convention proof, not compare
   register evidence, not Gate PWM validation, not power-stage readiness, and
   not motor readiness.
+- Earlier host-side sensorless frontend evidence:
+  `host_side_no_power_sensorless_frontend_review_2026-06-22.md` records
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py` as host-side no-power
+  sensorless frontend contract only. Current decision is `Host-side no-power
+  sensorless frontend contract / no firmware implementation / no MCSDK
+  integration / no sensorless claim / no PWM output / no motor readiness`.
+  It proves only a host-side `theta_e_rad` producer seam with
+  startup-versus-tracking mode behavior, confidence-based lock, and
+  observer angle-step limiting. It is not MCSDK observer equivalence proof,
+  not compare-register evidence, not Gate PWM validation, not sensorless
+  validation, not power-stage readiness, and not motor readiness.
+- Earlier host-side sensorless observer-stub evidence:
+  `host_side_no_power_sensorless_observer_stub_review_2026-06-22.md` records
+  an extension of `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py` as host-side no-power
+  observer-stub contract only. Current decision is `Host-side no-power
+  sensorless observer stub / alpha-beta back-EMF contract only / no firmware
+  implementation / no MCSDK integration / no sensorless claim / no PWM output
+  / no motor readiness`. It proves only a deterministic host-float alpha-beta
+  back-EMF replay contract that can feed the existing `theta_e_rad` frontend.
+  It is not MCSDK Observer PLL equivalence, not MCSDK Observer CORDIC
+  equivalence, not SMO implementation or validation, not MCSDK integration,
+  not compare-register evidence, not Gate PWM validation, not sensorless
+  validation, not power-stage readiness, and not motor readiness.
+- Earlier host-side sensorless replay-sequence evidence:
+  `host_side_no_power_sensorless_replay_sequence_review_2026-06-22.md`
+  records a further extension of `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py` as host-side no-power
+  replay sequence only. Current decision is `Host-side no-power sensorless
+  multi-step replay / observer-frontend-current-loop state-continuity fixture
+  only / no firmware implementation / no MCSDK observer equivalence / no MCSDK
+  integration / no sensorless claim / no PWM output / no motor readiness`.
+  It proves only host-side multi-step state-continuity replay for observer,
+  frontend, and PI state handoff. It is not MCSDK Observer PLL equivalence,
+  not MCSDK Observer CORDIC equivalence, not SMO implementation or validation,
+  not sensorless validation, not Gate PWM validation, not power-stage
+  readiness, and not motor readiness.
+- Earlier host-side sensorless startup-policy replay evidence:
+  `host_side_no_power_sensorless_startup_policy_replay_review_2026-06-22.md`
+  records an optional host-side lock/loss/relock policy layer in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless startup policy replay / lock-loss-relock
+  fixture only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`. It proves only host-side consecutive lock/loss counter behavior,
+  startup ramp after loss, relock, and PI state continuity. It is not a
+  firmware startup state machine, not MCSDK Observer PLL equivalence, not MCSDK
+  Observer CORDIC equivalence, not SMO implementation or validation, not
+  sensorless validation, not Gate PWM validation, not power-stage readiness,
+  and not motor readiness.
+- Latest host-side reverse target-omega lock-threshold handoff evidence:
+  `host_side_no_power_reverse_target_omega_lock_threshold_handoff_review_2026-06-24.md`
+  records a host-side no-power startup / unlocked threshold handoff fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power reverse target-omega lock-threshold handoff /
+  startup-unlocked threshold fixture only / no firmware implementation / no
+  generated-code edit / no MCSDK observer equivalence / no MCSDK
+  integration / no sensorless claim / no PWM output / no motor readiness`.
+  It proves only that the existing host-side
+  `SensorlessStartupPolicyConfig.lock_count_required`,
+  `SensorlessSpeedLoopConfig.hold_when_unlocked`, and
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2` paths keep a
+  prior `+20.0` rad/s target frozen while a startup / unlocked frontend state
+  receives `-20.0` rad/s and `lock_candidate_count < 3`, then resume the
+  rate-limited ramp only on the threshold-crossing lock step and emit
+  MCSDK-shaped speed/current snapshot metadata. This is not firmware
+  speed-loop behavior, not firmware current limiting, not a firmware reverse
+  startup strategy, not reverse open-loop startup validation, not MCSDK
+  numerical equivalence, not MCSDK speed-loop hook evidence, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not
+  motor readiness.
+- Upstream host-side reverse target-omega startup hold evidence:
+  `host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md`
+  records a host-side no-power startup / unlocked target-freeze fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power reverse target-omega startup hold /
+  startup-unlocked target freeze fixture only / no firmware implementation /
+  no generated-code edit / no MCSDK observer equivalence / no MCSDK
+  integration / no sensorless claim / no PWM output / no motor readiness`.
+  It proves only that the existing host-side
+  `SensorlessSpeedLoopConfig.hold_when_unlocked` and
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2` paths keep a
+  prior `+20.0` rad/s target frozen while a startup / unlocked frontend state
+  receives `-20.0` rad/s, then resume the rate-limited ramp after lock and
+  emit MCSDK-shaped speed/current snapshot metadata. This is not firmware
+  speed-loop behavior, not firmware current limiting, not a firmware reverse
+  startup strategy, not reverse open-loop startup validation, not MCSDK
+  numerical equivalence, not sensorless validation, not Gate PWM validation,
+  not power-stage readiness, and not motor readiness.
+- Upstream host-side positive-to-reverse target-omega loss/relock replay evidence:
+  `host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md`
+  records a host-side no-power command-ramp loss/relock fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power positive-to-reverse target-omega loss/relock replay /
+  command-ramp hold-loss-relock fixture only / no firmware implementation /
+  no generated-code edit / no MCSDK observer equivalence / no MCSDK
+  integration / no sensorless claim / no PWM output / no motor readiness`.
+  It proves only that the existing host-side
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2` path can ramp
+  from a tracking `+20.0` rad/s target state toward a `-20.0` rad/s command,
+  hold target omega at zero during confirmed loss, resume after relock, and
+  emit MCSDK-shaped observer plus speed/current snapshot metadata. This is not
+  firmware speed-loop behavior, not firmware current limiting, not a firmware
+  direction reversal strategy, not an active MCSDK observer instance, not
+  MCSDK numerical equivalence, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- Upstream host-side positive-to-reverse target-omega rate-limit replay evidence:
+  `host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md`
+  records a host-side no-power command-ramp crossing fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power positive-to-reverse target-omega rate-limit replay /
+  command-ramp crossing fixture only / no firmware implementation / no MCSDK
+  observer equivalence / no MCSDK integration / no sensorless claim / no PWM
+  output / no motor readiness`. It proves only that the existing host-side
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2` path can ramp
+  from a locked `+20.0` rad/s target state through zero to `-20.0` rad/s and
+  emit MCSDK-shaped q15 speed/current metadata. The companion workflow
+  artifact `workflow/main_agent_priority_matrix_2026-06-23.md` records P0/P1/P2
+  main-agent task ordering and read-only helper tracking. This is not firmware
+  speed-loop behavior, not firmware current limiting, not a firmware direction
+  reversal strategy, not MCSDK numerical equivalence, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not motor
+  readiness.
+- Earlier host-side signed reverse target-omega rate-limit replay evidence:
+  `host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md`
+  records a host-side no-power command-ramp fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power signed reverse target-omega rate-limit replay /
+  command-ramp fixture only / no firmware implementation / no MCSDK observer
+  equivalence / no MCSDK integration / no sensorless claim / no PWM output /
+  no motor readiness`. It proves only that the existing host-side
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2` path can ramp a
+  signed reverse target through lock/loss/relock and emit MCSDK-shaped q15
+  speed/current metadata. It is not firmware speed-loop behavior, not firmware
+  current limiting, not a firmware reverse-startup strategy, not MCSDK
+  numerical equivalence, not sensorless validation, not Gate PWM validation,
+  not power-stage readiness, and not motor readiness.
+- Latest MCSDK / host-side signed reverse speed command snapshot sequence
+  bridge evidence:
+  `mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md`
+  records a host-side no-power replay-step semantic translation fixture in
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json` and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `MCSDK host-side signed reverse speed command snapshot sequence bridge /
+  host-side no-power replay-step semantic translation only / no firmware
+  implementation / no generated-code edit / no MCSDK observer equivalence / no
+  MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`. It proves only that the full signed reverse replay can be mapped
+  through `sensorless_replay_to_mcsdk_speed_command_snapshots(...)` into
+  per-step MCSDK-shaped q15 speed/current metadata. It is not firmware, not
+  generated-code edit permission, not MCSDK numerical equivalence, not
+  firmware speed-loop behavior, not firmware current limiting, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not
+  motor readiness.
+- Earlier host-side signed reverse speed/current command fixture evidence:
+  `host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md`
+  records a host-side no-power signed reverse speed/current command fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is
+  `Host-side no-power signed reverse speed/current command fixture / signed
+  speed and iq replay only / no firmware implementation / no MCSDK observer
+  equivalence / no MCSDK integration / no sensorless claim / no PWM output /
+  no motor readiness`. It proves only that the host-side speed/current replay
+  can carry negative `target_omega_e_rad_s`, negative candidate `iq_ref`,
+  symmetric locked current-command clamp, negative effective `iq_ref`,
+  negative q-axis current-loop PI movement, and signed MCSDK-shaped comparison
+  metadata. It is not firmware, not a firmware reverse-startup strategy, not
+  MCSDK integration, not MCSDK numerical equivalence, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not
+  motor readiness.
+- Earlier host-side sensorless speed-loop hold evidence:
+  `host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md`
+  records a host-side no-power lock-aware PI anti-windup fixture in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless speed-loop hold / lock-aware PI anti-windup
+  fixture only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`. It proves only that `SensorlessSpeedLoopConfig.hold_when_unlocked`
+  and `sensorless_speed_loop_step(..., enabled=frontend.locked)` can freeze
+  the host-side speed PI before lock and during confirmed loss in the replay
+  fixture `speed_loop_pi_holds_until_lock_and_after_loss`, with nonzero
+  `ki=0.5`, `speed_loop_pi_integrator` held at
+  `[0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0]`, and current-loop
+  `q_axis_integrator` movement tied to effective `iq_ref` pass-through. It is
+  not firmware speed-loop implementation, not firmware startup or
+  loss-protection strategy, not MCSDK observer equivalence, not SMO
+  implementation or validation, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- Earlier host-side sensorless locked-theta shortest-path blend evidence:
+  `host_side_no_power_sensorless_locked_theta_shortest_path_blend_review_2026-06-22.md`
+  records a host-side no-power wrap-boundary fix in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless locked-theta shortest-path blend /
+  wrap-boundary tracking fixture only / no firmware implementation / no MCSDK
+  observer equivalence / no MCSDK integration / no sensorless claim / no PWM
+  output / no motor readiness`. It proves only that locked host-side tracking
+  blends theta through `_shortest_angle_delta_rad(...)` before applying
+  `lock_blend_factor`, with previous theta near `6.1 rad`, observer theta
+  near `0.1 rad`, and expected theta `6.241592653589793 rad`. It is not
+  firmware, not MCSDK observer equivalence, not SMO implementation or
+  validation, not MCSDK integration, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- Earlier host-side sensorless speed/current command policy replay evidence:
+  `host_side_no_power_sensorless_speed_current_command_policy_replay_review_2026-06-22.md`
+  records a host-side optional speed loop and lock-aware current-command
+  policy layer in `src/foc_sensorless_frontend.py`, plus MCSDK-shaped
+  speed/current command snapshots in `src/foc_mcsdk_bridge.py`. Current
+  decision is `Host-side no-power sensorless speed/current command policy
+  replay / lock-aware iq gating fixture only / no firmware implementation /
+  no MCSDK observer equivalence / no MCSDK integration / no sensorless claim /
+  no PWM output / no motor readiness`. It records
+  `SensorlessSpeedLoopConfig`, `SensorlessSpeedLoopState`,
+  `SensorlessSpeedLoopResult`, `sensorless_speed_loop_step(...)`,
+  `SensorlessCurrentCommandPolicyConfig`,
+  `SensorlessCurrentCommandPolicyResult`,
+  `sensorless_current_command_policy_step(...)`,
+  `McsdkSpeedCommandSnapshot`, `speed_command_to_mcsdk_snapshot(...)`, and
+  `sensorless_replay_to_mcsdk_speed_command_snapshots(...)` for startup
+  before lock, confirmed loss, startup after loss, and relock replay. It is
+  not firmware speed-loop implementation, not firmware startup or
+  loss-protection strategy, not MCSDK Observer PLL equivalence, not MCSDK
+  Observer CORDIC equivalence, not SMO implementation or validation, not
+  sensorless validation, not Gate PWM validation, not power-stage readiness,
+  and not motor readiness.
+- Earlier MCSDK / host-side sensorless observer-snapshot bridge evidence:
+  `mcsdk_host_side_sensorless_observer_snapshot_bridge_review_2026-06-22.md`
+  records a downstream extension of `src/foc_mcsdk_bridge.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py` as host-side no-power semantic
+  translation only. Current decision is `MCSDK host-side sensorless observer
+  snapshot bridge / host-side no-power semantic translation only / no firmware
+  implementation / no generated-code edit / no MCSDK observer equivalence / no
+  MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`. It proves only MCSDK-shaped comparison metadata for host-side
+  sensorless theta, omega, confidence, mode, and locked state. It is not MCSDK
+  Observer PLL equivalence, not MCSDK Observer CORDIC equivalence, not SMO
+  implementation or validation, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- Earlier MCSDK / host-side sensorless observer-snapshot sequence bridge
+  evidence:
+  `mcsdk_host_side_sensorless_observer_snapshot_sequence_bridge_review_2026-06-22.md`
+  records `sensorless_replay_to_mcsdk_observer_snapshots(...)` in
+  `src/foc_mcsdk_bridge.py`, plus
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json` and
+  `tests/test_mcsdk_foc_bridge_vectors.py`, as host-side no-power replay-step
+  semantic translation only. Current decision is `MCSDK host-side sensorless
+  observer snapshot sequence bridge / host-side no-power replay-step semantic
+  translation only / no firmware implementation / no generated-code edit / no
+  MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no
+  PWM output / no motor readiness`. It proves only per-step MCSDK-shaped
+  comparison metadata for host-side startup, tracking, confirmed loss,
+  startup-after-loss, and relock replay states. It is not MCSDK Observer PLL
+  equivalence, not MCSDK Observer CORDIC equivalence, not SMO implementation
+  or validation, not sensorless validation, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+- Latest MCSDK sensorless observer generated-source boundary evidence:
+  `mcsdk_sensorless_observer_generated_source_boundary_review_2026-06-22.md`
+  records `tests/test_mcsdk_sensorless_observer_boundary_static.py` as a
+  source-backed no-power boundary check for the archived 2026-05-27 MCSDK
+  source snapshot. Current decision is `MCSDK sensorless observer
+  generated-source boundary / Hall generated-source boundary confirmed /
+  generic CORDIC and STO register symbols noted / no active MCSDK observer
+  instance / no firmware implementation / no generated-code edit / no MCSDK
+  observer equivalence / no MCSDK integration / no sensorless claim / no PWM
+  output / no motor readiness`. It proves only that the current generated
+  source is Hall-speed-sensor based while generic CORDIC / STO support symbols
+  exist. It is not MCSDK Observer PLL equivalence, not MCSDK Observer CORDIC
+  equivalence, not SMO implementation or validation, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not
+  motor readiness.
 - Latest MCSDK / host-side FOC comparison-boundary evidence:
   `mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md` records a
   host-side no-power comparison plan only and
@@ -129,6 +437,18 @@ output.
   only / no firmware implementation / no generated-code edit / no MCSDK
   integration / no PWM output / no motor readiness`. It is not MCSDK
   convention proof beyond explicitly source-backed rows, not host-side / MCSDK numerical equivalence evidence, not host-side / MCSDK
+  numerical equivalence evidence, not compare-register evidence, not Gate PWM
+  validation, not MCSDK hook readiness, not hardware validation, not
+  power-stage readiness, and not motor readiness.
+- Latest MCSDK / host-side FOC comparison-bridge evidence:
+  `mcsdk_host_side_foc_comparison_bridge_review_2026-06-22.md` records
+  `src/foc_mcsdk_bridge.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py` as host-side no-power semantic
+  translation only. Current decision is `MCSDK host-side FOC comparison bridge
+  / host-side no-power semantic translation only / no firmware implementation
+  / no generated-code edit / no MCSDK integration / no PWM output / no motor
+  readiness`. It is not MCSDK convention proof, not host-side / MCSDK
   numerical equivalence evidence, not compare-register evidence, not Gate PWM
   validation, not MCSDK hook readiness, not hardware validation, not
   power-stage readiness, and not motor readiness.
@@ -911,6 +1231,241 @@ Forbidden in this directory and this P2 stage:
   FOC golden vectors / no firmware implementation / no MCSDK integration / no
   PWM output / no motor readiness`; it proves only host-side no-power math
   replay behavior and is not MCSDK convention proof.
+- `host_side_no_power_sensorless_frontend_review_2026-06-22.md`: review of
+  the host-side sensorless frontend contract in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless frontend contract / no firmware
+  implementation / no MCSDK integration / no sensorless claim / no PWM output
+  / no motor readiness`; it proves only a host-side `theta_e_rad` producer
+  seam and is not MCSDK observer equivalence proof, not sensorless validation,
+  not power-stage readiness, and not motor readiness.
+- `host_side_no_power_sensorless_observer_stub_review_2026-06-22.md`: review
+  of the host-side alpha-beta back-EMF observer stub in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless observer stub / alpha-beta back-EMF contract
+  only / no firmware implementation / no MCSDK integration / no sensorless
+  claim / no PWM output / no motor readiness`; it proves only host-side
+  no-power observer-output replay behavior and is not MCSDK Observer PLL
+  equivalence, not MCSDK Observer CORDIC equivalence, not SMO implementation
+  or validation, not sensorless validation, not power-stage readiness, and not
+  motor readiness.
+- `host_side_no_power_sensorless_replay_sequence_review_2026-06-22.md`:
+  review of the host-side multi-step replay harness in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless multi-step replay /
+  observer-frontend-current-loop state-continuity fixture only / no firmware
+  implementation / no MCSDK observer equivalence / no MCSDK integration / no
+  sensorless claim / no PWM output / no motor readiness`; it proves only
+  host-side multi-step state-continuity replay and is not MCSDK observer
+  equivalence, not SMO validation, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `host_side_no_power_sensorless_startup_policy_replay_review_2026-06-22.md`:
+  review of the host-side lock/loss/relock startup policy fixture in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless startup policy replay / lock-loss-relock
+  fixture only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`; it proves only host-side policy replay state continuity and is
+  not firmware startup logic, not MCSDK observer equivalence, not SMO
+  validation, not sensorless validation, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+- `host_side_no_power_sensorless_speed_current_command_policy_replay_review_2026-06-22.md`:
+  review of the host-side speed/current command policy replay in
+  `src/foc_sensorless_frontend.py`, `src/foc_mcsdk_bridge.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power sensorless speed/current command policy replay / lock-aware iq
+  gating fixture only / no firmware implementation / no MCSDK observer
+  equivalence / no MCSDK integration / no sensorless claim / no PWM output /
+  no motor readiness`; it proves only host-side no-power speed-loop candidate
+  `iq_ref`, lock-aware effective current-command gating, and comparison-only
+  `McsdkSpeedCommandSnapshot` metadata for startup before lock, confirmed
+  loss, startup after loss, and relock. It is not firmware speed-loop
+  implementation, not firmware startup or loss-protection strategy, not MCSDK
+  Observer PLL equivalence, not MCSDK Observer CORDIC equivalence, not SMO
+  implementation or validation, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `mcsdk_host_side_signed_reverse_speed_command_snapshot_sequence_bridge_review_2026-06-23.md`:
+  review of the MCSDK / host-side signed reverse speed command snapshot
+  sequence bridge in `tests/fixtures/foc_mcsdk_bridge_vectors.json` and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `MCSDK
+  host-side signed reverse speed command snapshot sequence bridge /
+  host-side no-power replay-step semantic translation only / no firmware
+  implementation / no generated-code edit / no MCSDK observer equivalence / no
+  MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`; it proves only that
+  `sensorless_replay_to_mcsdk_speed_command_snapshots(...)` can map the full
+  signed reverse replay into per-step MCSDK-shaped q15 speed/current metadata.
+  It is not firmware speed-loop behavior, not firmware current limiting, not
+  MCSDK numerical equivalence, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `host_side_no_power_reverse_target_omega_startup_hold_review_2026-06-24.md`:
+  review of the host-side reverse target-omega startup hold in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power reverse target-omega startup hold / startup-unlocked target freeze
+  fixture only / no firmware implementation / no generated-code edit / no
+  MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no
+  PWM output / no motor readiness`; it proves only host-side startup /
+  unlocked reverse target hold behavior plus MCSDK-shaped speed/current
+  snapshot metadata, not firmware speed-loop behavior, not firmware current
+  limiting, not a firmware reverse startup strategy, not reverse open-loop
+  startup validation, not sensorless validation, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+- `host_side_no_power_positive_to_reverse_target_omega_loss_relock_replay_review_2026-06-24.md`:
+  review of the host-side positive-to-reverse target-omega loss/relock replay
+  in `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power positive-to-reverse target-omega loss/relock replay / command-ramp
+  hold-loss-relock fixture only / no firmware implementation / no
+  generated-code edit / no MCSDK observer equivalence / no MCSDK integration /
+  no sensorless claim / no PWM output / no motor readiness`; it proves only
+  host-side command-ramp loss/relock behavior plus MCSDK-shaped observer and
+  speed/current snapshot metadata, not firmware speed-loop behavior, not
+  firmware current limiting, not a firmware direction reversal strategy, not
+  an active MCSDK observer instance, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `host_side_no_power_positive_to_reverse_target_omega_rate_limit_replay_review_2026-06-23.md`:
+  review of the host-side positive-to-reverse target-omega rate-limit replay in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power positive-to-reverse target-omega rate-limit replay / command-ramp
+  crossing fixture only / no firmware implementation / no MCSDK observer
+  equivalence / no MCSDK integration / no sensorless claim / no PWM output /
+  no motor readiness`; it proves only host-side command-ramp crossing behavior
+  for `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2`, ramped
+  `speed_loop_target_omega`, signed current-command metadata, and
+  MCSDK-shaped q15 snapshots. It is not firmware speed-loop behavior, not
+  firmware current limiting, not a firmware direction reversal strategy, not
+  MCSDK numerical equivalence, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `host_side_no_power_signed_reverse_target_omega_rate_limit_replay_review_2026-06-23.md`:
+  review of the host-side signed reverse target-omega rate-limit replay in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power signed reverse target-omega rate-limit replay / command-ramp
+  fixture only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`; it proves only host-side command-ramp replay behavior for
+  `SensorlessSpeedLoopConfig.target_omega_rate_limit_e_rad_s2`, ramped
+  `speed_loop_target_omega`, signed current-command metadata, and
+  MCSDK-shaped q15 snapshots. It is not firmware speed-loop behavior, not
+  firmware current limiting, not a firmware reverse-startup strategy, not
+  MCSDK numerical equivalence, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `host_side_no_power_signed_reverse_speed_current_command_fixture_review_2026-06-23.md`:
+  review of the host-side signed reverse speed/current command fixture in
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`,
+  `tests/test_foc_sensorless_frontend_vectors.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `Host-side
+  no-power signed reverse speed/current command fixture / signed speed and iq
+  replay only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`; it proves only host-side signed speed/current replay behavior
+  for negative `target_omega_e_rad_s`, negative candidate `iq_ref`, symmetric
+  locked current-command clamp, negative effective `iq_ref`, negative q-axis
+  PI movement, and signed MCSDK-shaped comparison metadata. It is not firmware,
+  not a firmware reverse-startup strategy, not MCSDK integration, not MCSDK
+  numerical equivalence, not sensorless validation, not Gate PWM validation,
+  not power-stage readiness, and not motor readiness.
+- `host_side_no_power_sensorless_speed_loop_hold_review_2026-06-22.md`:
+  review of the host-side speed-loop hold fixture in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless speed-loop hold / lock-aware PI anti-windup
+  fixture only / no firmware implementation / no MCSDK observer equivalence /
+  no MCSDK integration / no sensorless claim / no PWM output / no motor
+  readiness`; it proves only host-side replay behavior for
+  `SensorlessSpeedLoopConfig.hold_when_unlocked`,
+  `sensorless_speed_loop_step(..., enabled=frontend.locked)`, and
+  `speed_loop_pi_holds_until_lock_and_after_loss` with nonzero `ki=0.5`. It is
+  not firmware speed-loop implementation, not firmware startup or
+  loss-protection strategy, not MCSDK observer equivalence, not SMO
+  validation, not sensorless validation, not Gate PWM validation, not
+  power-stage readiness, and not motor readiness.
+- `host_side_no_power_sensorless_locked_theta_shortest_path_blend_review_2026-06-22.md`:
+  review of the host-side locked-theta shortest-path blend in
+  `src/foc_sensorless_frontend.py`,
+  `tests/fixtures/foc_sensorless_frontend_vectors.json`,
+  `tests/test_foc_sensorless_frontend.py`, and
+  `tests/test_foc_sensorless_frontend_vectors.py`. Current decision is
+  `Host-side no-power sensorless locked-theta shortest-path blend /
+  wrap-boundary tracking fixture only / no firmware implementation / no MCSDK
+  observer equivalence / no MCSDK integration / no sensorless claim / no PWM
+  output / no motor readiness`; it proves only that locked tracking blends
+  along `_shortest_angle_delta_rad(...)` before applying `lock_blend_factor`
+  across the `0 / 2*pi` wrap boundary. It is not firmware, not MCSDK observer
+  equivalence, not SMO validation, not MCSDK integration, not sensorless
+  validation, not Gate PWM validation, not power-stage readiness, and not
+  motor readiness.
+- `mcsdk_host_side_sensorless_observer_snapshot_bridge_review_2026-06-22.md`:
+  review of the MCSDK-shaped host-side sensorless observer snapshot bridge in
+  `src/foc_mcsdk_bridge.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `MCSDK
+  host-side sensorless observer snapshot bridge / host-side no-power semantic
+  translation only / no firmware implementation / no generated-code edit / no
+  MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no
+  PWM output / no motor readiness`; it proves only downstream comparison
+  metadata and is not MCSDK observer equivalence, not SMO validation, not
+  sensorless validation, not Gate PWM validation, not power-stage readiness,
+  and not motor readiness.
+- `mcsdk_host_side_sensorless_observer_snapshot_sequence_bridge_review_2026-06-22.md`:
+  review of the MCSDK-shaped per-step host-side sensorless observer snapshot
+  sequence bridge in `src/foc_mcsdk_bridge.py`,
+  `tests/fixtures/foc_mcsdk_bridge_vectors.json`, and
+  `tests/test_mcsdk_foc_bridge_vectors.py`. Current decision is `MCSDK
+  host-side sensorless observer snapshot sequence bridge / host-side no-power
+  replay-step semantic translation only / no firmware implementation / no
+  generated-code edit / no MCSDK observer equivalence / no MCSDK integration /
+  no sensorless claim / no PWM output / no motor readiness`; it proves only
+  downstream per-step comparison metadata and is not MCSDK observer
+  equivalence, not SMO validation, not sensorless validation, not Gate PWM
+  validation, not power-stage readiness, and not motor readiness.
+- `mcsdk_sensorless_observer_generated_source_boundary_review_2026-06-22.md`:
+  source-backed no-power boundary review for the archived generated MCSDK
+  source. It confirms the generated snapshot uses
+  `MotorControl.M1_SPEED_SENSOR=HALL_SENSOR`,
+  `MotorControl.SPEED_SENSOR_SELECTION=HALL_SENSORS`, `HALL_M1`, and
+  `STC_Init(... &HALL_M1._Super)`, while generic `CORDIC`, `STOPLL`, and
+  `STOCORDIC` symbols are support clues only. Current decision is `MCSDK
+  sensorless observer generated-source boundary / Hall generated-source
+  boundary confirmed / generic CORDIC and STO register symbols noted / no
+  active MCSDK observer instance / no firmware implementation / no
+  generated-code edit / no MCSDK observer equivalence / no MCSDK integration /
+  no sensorless claim / no PWM output / no motor readiness`; it is not
+  sensorless validation, not Gate PWM validation, not power-stage readiness,
+  and not motor readiness.
 - `mcsdk_host_side_foc_math_comparison_boundary_plan_2026-06-22.md`: read-only
   MCSDK / host-side FOC math comparison boundary plan. Current decision is
   `MCSDK host-side FOC math comparison boundary plan / no firmware

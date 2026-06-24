@@ -110,6 +110,32 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("build_context_pack.py", tools_readme)
         self.assertIn("check_ai_contracts.py", tools_readme)
 
+    def test_subagent_protocol_stub_points_to_architecture_without_repeating_body(self):
+        stub = read("workflow/SUBAGENT_PROTOCOL.md")
+
+        for phrase in (
+            "compatibility stub",
+            "docs/00_project_truth/ai_architecture.md",
+            "## Subagent Communication Protocol",
+            "workflow/codex_dual_teacher_execution_gate.md",
+            "AI_CONTEXT.md",
+            "workflow/CURRENT_SNAPSHOT.md",
+            "workflow/ACTIVE_TASK.md",
+            "workflow/three_hour_optimization_report_2026-06-17.md",
+        ):
+            self.assertIn(phrase, stub)
+
+        for phrase in (
+            "Hierarchical Task Decomposition",
+            "Context Filtering",
+            "Summary Gate",
+            "Allowed helper roles",
+            "Research helper",
+            "Review helper",
+            "Test helper",
+        ):
+            self.assertNotIn(phrase, stub)
+
     def test_high_value_readability_headers_are_clean(self):
         checker = read("tools/check_ai_contracts.py")
         evidence = read("workflow/evidence_register.md")
@@ -620,6 +646,7 @@ class AiArchitectureContractTests(unittest.TestCase):
         self.assertIn("CURRENT_STATUS.md", scan_paths)
         self.assertIn("workflow/ACTIVE_TASK.md", scan_paths)
         self.assertIn("docs/00_project_truth/ai_architecture.md", scan_paths)
+        self.assertIn("workflow/SUBAGENT_PROTOCOL.md", scan_paths)
         self.assertIn(
             "codex_skills/stm32g474-foc-assistant/references/workflow-maintenance.md",
             scan_paths,

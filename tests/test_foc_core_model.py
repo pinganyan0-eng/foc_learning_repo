@@ -137,6 +137,23 @@ class PiControllerTests(unittest.TestCase):
         self.assertAlmostEqual(result.state.integrator, 1.0)
         self.assertTrue(result.saturated)
 
+    def test_pi_respects_explicit_integrator_limit_distinct_from_output_limit(self):
+        result = pi_step(
+            error=2.0,
+            dt_s=0.1,
+            state=PIState(),
+            config=PIConfig(
+                kp=0.0,
+                ki=10.0,
+                output_limit=5.0,
+                integrator_limit=1.0,
+            ),
+        )
+
+        self.assertAlmostEqual(result.output, 1.0)
+        self.assertAlmostEqual(result.state.integrator, 1.0)
+        self.assertFalse(result.saturated)
+
 
 class CurrentLoopTests(unittest.TestCase):
     def test_zero_error_outputs_centered_pwm(self):

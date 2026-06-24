@@ -1,0 +1,2175 @@
+{
+  "metadata": {
+    "name": "foc_sensorless_frontend_vectors_2026-06-22",
+    "decision": "Host-side no-power reverse target-omega lock-threshold handoff / startup-unlocked threshold fixture only / no firmware implementation / no generated-code edit / no MCSDK observer equivalence / no MCSDK integration / no sensorless claim / no PWM output / no motor readiness",
+    "scope": "host-side no-power sensorless frontend, replay, startup policy, speed-loop hold, signed reverse speed/current command, signed reverse target-omega rate-limit replay, reverse target-omega startup hold, reverse target-omega lock-threshold handoff, positive-to-reverse target-omega crossing replay, current-command policy, and locked-theta shortest-path blend fixture only",
+    "model_path": "src/foc_sensorless_frontend.py",
+    "not_evidence_for": [
+      "firmware implementation",
+      "generated-code edit permission",
+      "MCSDK integration",
+      "MCSDK observer equivalence proof",
+      "firmware startup state machine",
+      "firmware speed loop",
+      "firmware current limiting strategy",
+      "sensorless / SMO validation",
+      "compare-register evidence",
+      "Gate PWM output validation",
+      "power-stage readiness",
+      "motor readiness",
+      "safe drive operation"
+    ],
+    "assumption_note": "These vectors freeze only a host-side theta_e_rad producer contract with startup/tracking behavior, locked-theta shortest-path wrap blending, a deterministic back-EMF observer stub, multi-step state-continuity replay, startup policy lock/loss hysteresis, lock-aware speed-loop PI hold, lock-aware speed/current command gating, signed reverse target speed/current command replay, signed reverse target-omega rate-limit replay, reverse target-omega startup hold that is not a reverse open-loop startup strategy, reverse target-omega lock-threshold handoff, positive-to-reverse target-omega crossing replay, and positive-to-reverse target-omega loss/relock replay. They are not proof that any ST observer PLL, cordic observer, SMO, generated MCSDK source, firmware speed loop, or firmware protection strategy numerically matches this frontend."
+  },
+  "frontend_cases": [
+    {
+      "name": "startup_ramp_without_lock",
+      "config": {
+        "startup_accel_e_rad_s2": 100.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 0.5
+      },
+      "state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "inputs": {
+        "i_alpha": 0.0,
+        "i_beta": 0.0,
+        "v_alpha": 0.0,
+        "v_beta": 0.0,
+        "dt_s": 0.1,
+        "observer_theta_e_rad": null,
+        "observer_omega_e_rad_s": null,
+        "observer_confidence": 0.2
+      },
+      "expected": {
+        "theta_e_rad": 1.0,
+        "omega_e_rad_s": 10.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      }
+    },
+    {
+      "name": "tracking_lock_blends_observer_state",
+      "config": {
+        "startup_accel_e_rad_s2": 0.0,
+        "startup_target_omega_e_rad_s": 0.0,
+        "lock_blend_factor": 0.5
+      },
+      "state": {
+        "theta_e_rad": 0.2,
+        "omega_e_rad_s": 10.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "inputs": {
+        "i_alpha": 0.0,
+        "i_beta": 0.0,
+        "v_alpha": 0.0,
+        "v_beta": 0.0,
+        "dt_s": 0.1,
+        "observer_theta_e_rad": 1.0,
+        "observer_omega_e_rad_s": 30.0,
+        "observer_confidence": 0.95
+      },
+      "expected": {
+        "theta_e_rad": 0.6,
+        "omega_e_rad_s": 20.0,
+        "mode": "tracking",
+        "locked": true,
+        "confidence": 0.95
+      }
+    },
+    {
+      "name": "tracking_lock_blends_across_wrap_by_shortest_path",
+      "config": {
+        "startup_accel_e_rad_s2": 0.0,
+        "startup_target_omega_e_rad_s": 0.0,
+        "lock_blend_factor": 0.5
+      },
+      "state": {
+        "theta_e_rad": 6.1,
+        "omega_e_rad_s": 5.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "inputs": {
+        "i_alpha": 0.0,
+        "i_beta": 0.0,
+        "v_alpha": 0.0,
+        "v_beta": 0.0,
+        "dt_s": 0.1,
+        "observer_theta_e_rad": 0.1,
+        "observer_omega_e_rad_s": 9.0,
+        "observer_confidence": 0.95
+      },
+      "expected": {
+        "theta_e_rad": 6.241592653589793,
+        "omega_e_rad_s": 7.0,
+        "mode": "tracking",
+        "locked": true,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "observer_stub_cases": [
+    {
+      "name": "valid_back_emf_vector_lock_candidate",
+      "config": {
+        "stator_resistance_ohm": 0.5,
+        "bemf_confidence_full_scale_v": 4.0,
+        "max_angle_step_rad": 0.5
+      },
+      "state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "confidence": 0.0
+      },
+      "inputs": {
+        "i_alpha": 1.0,
+        "i_beta": -2.0,
+        "v_alpha": 0.5,
+        "v_beta": 5.0,
+        "dt_s": 0.001,
+        "observer_theta_e_rad": null,
+        "observer_omega_e_rad_s": null,
+        "observer_confidence": 0.0
+      },
+      "expected": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "confidence": 1.0,
+        "back_emf_ab": {
+          "alpha": 0.0,
+          "beta": 6.0
+        },
+        "back_emf_magnitude": 6.0
+      }
+    },
+    {
+      "name": "angle_wrap_uses_shortest_limited_step",
+      "config": {
+        "stator_resistance_ohm": 0.0,
+        "bemf_confidence_full_scale_v": 3.0,
+        "max_angle_step_rad": 0.5
+      },
+      "state": {
+        "theta_e_rad": 6.1,
+        "omega_e_rad_s": 2.0,
+        "confidence": 0.2
+      },
+      "inputs": {
+        "i_alpha": 0.0,
+        "i_beta": 0.0,
+        "v_alpha": 0.0,
+        "v_beta": 3.0,
+        "dt_s": 0.01,
+        "observer_theta_e_rad": null,
+        "observer_omega_e_rad_s": null,
+        "observer_confidence": 0.0
+      },
+      "expected": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 18.31853071795866,
+        "confidence": 1.0,
+        "back_emf_ab": {
+          "alpha": 0.0,
+          "beta": 3.0
+        },
+        "back_emf_magnitude": 3.0
+      }
+    },
+    {
+      "name": "low_signal_confidence_decay",
+      "config": {
+        "stator_resistance_ohm": 0.0,
+        "bemf_confidence_full_scale_v": 1.0,
+        "max_angle_step_rad": 1.0,
+        "confidence_decay_filter": 0.25,
+        "omega_filter": 0.5
+      },
+      "state": {
+        "theta_e_rad": 1.0,
+        "omega_e_rad_s": 20.0,
+        "confidence": 0.8
+      },
+      "inputs": {
+        "i_alpha": 0.0,
+        "i_beta": 0.0,
+        "v_alpha": 0.1,
+        "v_beta": 0.0,
+        "dt_s": 0.001,
+        "observer_theta_e_rad": null,
+        "observer_omega_e_rad_s": null,
+        "observer_confidence": 0.0
+      },
+      "expected": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": -490.0,
+        "confidence": 0.625,
+        "back_emf_ab": {
+          "alpha": 0.1,
+          "beta": 0.0
+        },
+        "back_emf_magnitude": 0.1
+      }
+    }
+  ],
+  "sensorless_current_loop_cases": [
+    {
+      "name": "locked_frontend_feeds_quarter_turn_current_loop",
+      "config": {
+        "startup_accel_e_rad_s2": 0.0,
+        "startup_target_omega_e_rad_s": 0.0,
+        "lock_blend_factor": 1.0
+      },
+      "observer_config": null,
+      "observer_state": null,
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "output_limit": 6.0
+        },
+        "q": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "output_limit": 6.0
+        }
+      },
+      "inputs": {
+        "i_a": 1.0,
+        "i_b": -0.5,
+        "i_c": -0.5,
+        "target_id": 0.0,
+        "target_iq": 0.0,
+        "vbus": 24.0,
+        "dt_s": 0.0001,
+        "observer_theta_e_rad": 1.5707963267948966,
+        "observer_omega_e_rad_s": 5.0,
+        "observer_confidence": 1.0
+      },
+      "expected": {
+        "sensorless": {
+          "theta_e_rad": 1.5707963267948966,
+          "omega_e_rad_s": 5.0,
+          "mode": "tracking",
+          "locked": true
+        },
+        "current_loop": {
+          "current_dq": {
+            "d": 6.123233995736766e-17,
+            "q": -1.0
+          },
+          "svpwm": {
+            "a": 0.46875,
+            "b": 0.53125,
+            "c": 0.53125,
+            "saturated": false
+          }
+        }
+      }
+    },
+    {
+      "name": "back_emf_observer_feeds_frontend_current_loop_and_bridge",
+      "config": {
+        "startup_accel_e_rad_s2": 0.0,
+        "startup_target_omega_e_rad_s": 0.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 0.5
+      },
+      "observer_config": {
+        "stator_resistance_ohm": 0.5,
+        "bemf_confidence_full_scale_v": 4.0,
+        "max_angle_step_rad": 0.5
+      },
+      "observer_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "confidence": 0.0
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "output_limit": 6.0
+        },
+        "q": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "output_limit": 6.0
+        }
+      },
+      "inputs": {
+        "i_a": 1.0,
+        "i_b": -0.5,
+        "i_c": -0.5,
+        "target_id": 0.0,
+        "target_iq": 0.0,
+        "vbus": 24.0,
+        "dt_s": 0.001,
+        "v_alpha": 0.5,
+        "v_beta": 5.0,
+        "observer_theta_e_rad": null,
+        "observer_omega_e_rad_s": null,
+        "observer_confidence": 0.0
+      },
+      "expected": {
+        "observer": {
+          "theta_e_rad": 0.0,
+          "omega_e_rad_s": 0.0,
+          "confidence": 1.0,
+          "back_emf_ab": {
+            "alpha": 0.0,
+            "beta": 5.0
+          },
+          "back_emf_magnitude": 5.0
+        },
+        "sensorless": {
+          "theta_e_rad": 0.0,
+          "omega_e_rad_s": 0.0,
+          "mode": "tracking",
+          "locked": true,
+          "confidence": 1.0
+        },
+        "current_loop": {
+          "current_dq": {
+            "d": 1.0,
+            "q": 0.0
+          },
+          "voltage_dq": {
+            "d": -1.0,
+            "q": 0.0
+          },
+          "svpwm": {
+            "a": 0.46875,
+            "b": 0.53125,
+            "c": 0.53125,
+            "saturated": false,
+            "scale": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "sensorless_replay_sequences": [
+    {
+      "name": "observer_frontend_current_loop_state_continuity",
+      "config": {
+        "startup_accel_e_rad_s2": 0.0,
+        "startup_target_omega_e_rad_s": 0.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 0.5
+      },
+      "observer_config": {
+        "stator_resistance_ohm": 0.0,
+        "bemf_confidence_full_scale_v": 2.0,
+        "max_angle_step_rad": 0.4
+      },
+      "observer_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "confidence": 0.0
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 6.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 6.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.1,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": null,
+          "observer_omega_e_rad_s": null,
+          "observer_confidence": 0.0
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 3.0,
+          "observer_theta_e_rad": null,
+          "observer_omega_e_rad_s": null,
+          "observer_confidence": 0.0
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 3.0,
+          "observer_theta_e_rad": null,
+          "observer_omega_e_rad_s": null,
+          "observer_confidence": 0.0
+        }
+      ],
+      "expected": {
+        "steps": [
+          {
+            "observer": {
+              "theta_e_rad": 5.883185307179586,
+              "omega_e_rad_s": -4.0,
+              "confidence": 0.05
+            },
+            "sensorless": {
+              "theta_e_rad": 0.0,
+              "omega_e_rad_s": 0.0,
+              "mode": "startup",
+              "locked": false
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 1.0
+            }
+          },
+          {
+            "observer": {
+              "theta_e_rad": 0.0,
+              "omega_e_rad_s": 4.0,
+              "confidence": 1.0
+            },
+            "sensorless": {
+              "theta_e_rad": 0.0,
+              "omega_e_rad_s": 4.0,
+              "mode": "tracking",
+              "locked": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 2.0
+            }
+          },
+          {
+            "observer": {
+              "theta_e_rad": 0.0,
+              "omega_e_rad_s": 0.0,
+              "confidence": 1.0
+            },
+            "sensorless": {
+              "theta_e_rad": 0.0,
+              "omega_e_rad_s": 0.0,
+              "mode": "tracking",
+              "locked": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 3.0
+            }
+          }
+        ],
+        "final_state": {
+          "theta_e_rad": 0.0
+        },
+        "final_current_loop_state": {
+          "q_axis_integrator": 3.0
+        },
+        "final_observer_state": {
+          "theta_e_rad": 0.0,
+          "confidence": 1.0
+        }
+      }
+    }
+  ],
+  "sensorless_startup_policy_sequences": [
+    {
+      "name": "startup_lock_loss_and_relock_hysteresis",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.7,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.2,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.4
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.6,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 1.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "steps": [
+          {
+            "sensorless": {
+              "theta_e_rad": 0.1,
+              "omega_e_rad_s": 1.0,
+              "mode": "startup",
+              "locked": false,
+              "confidence": 0.0
+            },
+            "startup_policy": {
+              "tracking_enabled": false,
+              "lock_candidate": false,
+              "loss_candidate": true,
+              "lock_candidate_count": 0,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": false
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 1.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 0.30000000000000004,
+              "omega_e_rad_s": 2.0,
+              "mode": "startup",
+              "locked": false,
+              "confidence": 0.0
+            },
+            "startup_policy": {
+              "tracking_enabled": false,
+              "lock_candidate": true,
+              "loss_candidate": false,
+              "lock_candidate_count": 1,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": false
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 2.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 1.0,
+              "omega_e_rad_s": 10.0,
+              "mode": "tracking",
+              "locked": true,
+              "confidence": 0.9
+            },
+            "startup_policy": {
+              "tracking_enabled": true,
+              "lock_candidate": true,
+              "loss_candidate": false,
+              "lock_candidate_count": 2,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 3.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 1.2,
+              "omega_e_rad_s": 10.0,
+              "mode": "tracking",
+              "locked": true,
+              "confidence": 0.4
+            },
+            "startup_policy": {
+              "tracking_enabled": true,
+              "lock_candidate": false,
+              "loss_candidate": false,
+              "lock_candidate_count": 2,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 4.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 1.4,
+              "omega_e_rad_s": 10.0,
+              "mode": "tracking",
+              "locked": true,
+              "confidence": 0.1
+            },
+            "startup_policy": {
+              "tracking_enabled": true,
+              "lock_candidate": false,
+              "loss_candidate": true,
+              "lock_candidate_count": 2,
+              "loss_candidate_count": 1,
+              "frontend_lock_override": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 5.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 2.5,
+              "omega_e_rad_s": 11.0,
+              "mode": "startup",
+              "locked": false,
+              "confidence": 0.0
+            },
+            "startup_policy": {
+              "tracking_enabled": false,
+              "lock_candidate": false,
+              "loss_candidate": true,
+              "lock_candidate_count": 0,
+              "loss_candidate_count": 2,
+              "frontend_lock_override": false
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 6.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 3.7,
+              "omega_e_rad_s": 12.0,
+              "mode": "startup",
+              "locked": false,
+              "confidence": 0.0
+            },
+            "startup_policy": {
+              "tracking_enabled": false,
+              "lock_candidate": true,
+              "loss_candidate": false,
+              "lock_candidate_count": 1,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": false
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 7.0
+            }
+          },
+          {
+            "sensorless": {
+              "theta_e_rad": 4.0,
+              "omega_e_rad_s": 10.0,
+              "mode": "tracking",
+              "locked": true,
+              "confidence": 0.95
+            },
+            "startup_policy": {
+              "tracking_enabled": true,
+              "lock_candidate": true,
+              "loss_candidate": false,
+              "lock_candidate_count": 2,
+              "loss_candidate_count": 0,
+              "frontend_lock_override": true
+            },
+            "current_loop_state": {
+              "q_axis_integrator": 8.0
+            }
+          }
+        ],
+        "final_state": {
+          "theta_e_rad": 4.0,
+          "omega_e_rad_s": 10.0,
+          "mode": "tracking",
+          "locked": true,
+          "confidence": 0.95
+        },
+        "final_current_loop_state": {
+          "q_axis_integrator": 8.0
+        },
+        "final_startup_policy_state": {
+          "tracking_enabled": true,
+          "lock_candidate_count": 2,
+          "loss_candidate_count": 0
+        }
+      }
+    }
+  ],
+  "sensorless_speed_command_policy_sequences": [
+    {
+      "name": "speed_loop_pi_holds_until_lock_and_after_loss",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.0
+        },
+        "target_omega_e_rad_s": 0.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.7,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.2,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.4
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.6,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": 20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [0.0, 0.0, 1.5, 2.0, 2.0, 0.0, 0.0, 2.0],
+        "speed_loop_target_omega": [0.0, 0.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0],
+        "speed_loop_pi_integrator": [0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0],
+        "effective_target_iq": [0.0, 0.0, 1.5, 1.5, 1.5, 0.0, 0.0, 1.5],
+        "command_reasons": [
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [0.0, 0.0, 1.5, 3.0, 4.5, 4.5, 4.5, 6.0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": 20.0,
+          "speed_pi_integrator": 1.0
+        }
+      }
+    },
+    {
+      "name": "signed_reverse_speed_current_command_holds_until_lock_and_after_loss",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.0
+        },
+        "target_omega_e_rad_s": 0.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.5,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.2,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.0,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.4
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.6,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.5,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [0.0, 0.0, -1.5, -2.0, -2.0, 0.0, 0.0, -2.0],
+        "speed_loop_target_omega": [0.0, 0.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0],
+        "speed_loop_pi_integrator": [0.0, 0.0, -0.5, -1.0, -1.0, -1.0, -1.0, -1.0],
+        "effective_target_iq": [0.0, 0.0, -1.5, -1.5, -1.5, 0.0, 0.0, -1.5],
+        "command_reasons": [
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [0.0, 0.0, -1.5, -3.0, -4.5, -4.5, -4.5, -6.0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": -20.0,
+          "speed_pi_integrator": -1.0
+        }
+      }
+    },
+    {
+      "name": "signed_reverse_target_omega_rate_limit_holds_until_lock_and_after_loss",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "target_omega_rate_limit_e_rad_s2": 50.0,
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.0
+        },
+        "target_omega_e_rad_s": 0.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.5,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.2,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 5.0,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.4
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 4.6,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 3.5,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [0.0, 0.0, 0.75, 0.25, -0.5, 0.0, 0.0, -1.5],
+        "speed_loop_target_omega": [0.0, 0.0, -5.0, -10.0, -15.0, -15.0, -15.0, -20.0],
+        "speed_loop_pi_integrator": [0.0, 0.0, 0.25, 0.25, 0.0, 0.0, 0.0, -0.5],
+        "effective_target_iq": [0.0, 0.0, 0.75, 0.25, -0.5, 0.0, 0.0, -1.5],
+        "command_reasons": [
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [0.0, 0.0, 0.75, 1.0, 0.5, 0.5, 0.5, -1.0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": -20.0,
+          "speed_pi_integrator": -0.5
+        }
+      }
+    },
+    {
+      "name": "reverse_target_omega_remains_frozen_until_lock_not_startup_strategy",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "target_omega_rate_limit_e_rad_s2": 50.0,
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.5
+        },
+        "target_omega_e_rad_s": 20.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.2,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.4,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.6,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [0.0, 0.0, 2.0, 2.0, 2.0],
+        "speed_loop_target_omega": [20.0, 20.0, 15.0, 10.0, 5.0],
+        "speed_loop_pi_integrator": [0.5, 0.5, 0.5, 0.5, 0.5],
+        "effective_target_iq": [0.0, 0.0, 1.5, 1.5, 1.5],
+        "command_reasons": [
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [0.0, 0.0, 1.5, 3.0, 4.5],
+        "locked": [false, false, true, true, true],
+        "lock_candidate_count": [0, 1, 2, 2, 2],
+        "loss_candidate_count": [0, 0, 0, 0, 0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": 5.0,
+          "speed_pi_integrator": 0.5
+        }
+      }
+    },
+    {
+      "name": "reverse_target_omega_lock_threshold_handoff_starts_ramp_only_at_lock",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 3,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": false,
+        "lock_candidate_count": 0,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "target_omega_rate_limit_e_rad_s2": 50.0,
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.5
+        },
+        "target_omega_e_rad_s": 20.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 0.0,
+        "omega_e_rad_s": 0.0,
+        "mode": "startup",
+        "locked": false,
+        "confidence": 0.0
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.2,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.2
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.4,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.6,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.9
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 0.8,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": -10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [0.0, 0.0, 0.0, 2.0, 2.0],
+        "speed_loop_target_omega": [20.0, 20.0, 20.0, 15.0, 10.0],
+        "speed_loop_pi_integrator": [0.5, 0.5, 0.5, 0.5, 0.5],
+        "effective_target_iq": [0.0, 0.0, 0.0, 1.5, 1.5],
+        "command_reasons": [
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [0.0, 0.0, 0.0, 1.5, 3.0],
+        "locked": [false, false, false, true, true],
+        "lock_candidate_count": [0, 1, 2, 3, 3],
+        "loss_candidate_count": [0, 0, 0, 0, 0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": 10.0,
+          "speed_pi_integrator": 0.5
+        }
+      }
+    },
+    {
+      "name": "positive_to_reverse_target_omega_rate_limit_crosses_zero_while_locked",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": true,
+        "lock_candidate_count": 2,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "target_omega_rate_limit_e_rad_s2": 50.0,
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.5
+        },
+        "target_omega_e_rad_s": 20.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 1.0,
+        "omega_e_rad_s": 10.0,
+        "mode": "tracking",
+        "locked": true,
+        "confidence": 0.95
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.1,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.2,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.3,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.5,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.6,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.7,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [1.25, 0.75, 0.0, -1.0, -1.5, -2.0, -2.0, -2.0],
+        "speed_loop_target_omega": [15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0],
+        "speed_loop_pi_integrator": [0.75, 0.75, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "effective_target_iq": [1.25, 0.75, 0.0, -1.0, -1.5, -1.5, -1.5, -1.5],
+        "command_reasons": [
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [1.25, 2.0, 2.0, 1.0, -0.5, -2.0, -3.5, -5.0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": -20.0,
+          "speed_pi_integrator": 0.0
+        }
+      }
+    },
+    {
+      "name": "positive_to_reverse_target_omega_rate_limit_holds_during_loss_and_relock",
+      "config": {
+        "startup_accel_e_rad_s2": 10.0,
+        "startup_target_omega_e_rad_s": 20.0,
+        "lock_blend_factor": 1.0,
+        "observer_max_angle_step_rad": 1.0
+      },
+      "startup_policy_config": {
+        "lock_confidence_threshold": 0.8,
+        "unlock_confidence_threshold": 0.2,
+        "lock_count_required": 2,
+        "unlock_count_required": 2
+      },
+      "startup_policy_state": {
+        "tracking_enabled": true,
+        "lock_candidate_count": 2,
+        "loss_candidate_count": 0
+      },
+      "speed_loop_config": {
+        "speed_pi": {
+          "kp": 0.1,
+          "ki": 0.5,
+          "output_limit": 2.0
+        },
+        "target_omega_rate_limit_e_rad_s2": 50.0,
+        "hold_when_unlocked": true
+      },
+      "speed_loop_state": {
+        "speed_pi": {
+          "integrator": 0.5
+        },
+        "target_omega_e_rad_s": 20.0
+      },
+      "current_command_policy_config": {
+        "unlocked_iq_limit": 0.0,
+        "locked_iq_limit": 1.5
+      },
+      "sensorless_state": {
+        "theta_e_rad": 1.0,
+        "omega_e_rad_s": 10.0,
+        "mode": "tracking",
+        "locked": true,
+        "confidence": 0.95
+      },
+      "gains": {
+        "d": {
+          "kp": 0.0,
+          "ki": 0.0,
+          "output_limit": 20.0
+        },
+        "q": {
+          "kp": 0.0,
+          "ki": 10.0,
+          "output_limit": 20.0
+        }
+      },
+      "inputs": [
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.0,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.1,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.2,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.3,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.4,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.1
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.5,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.6,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        },
+        {
+          "i_a": 0.0,
+          "i_b": 0.0,
+          "i_c": 0.0,
+          "target_id": 0.0,
+          "target_iq": 9.0,
+          "target_omega_e_rad_s": -20.0,
+          "vbus": 24.0,
+          "dt_s": 0.1,
+          "v_alpha": 0.0,
+          "v_beta": 0.0,
+          "observer_theta_e_rad": 1.7,
+          "observer_omega_e_rad_s": 10.0,
+          "observer_confidence": 0.95
+        }
+      ],
+      "expected": {
+        "speed_loop_target_iq": [1.25, 0.75, 0.0, -1.0, 0.0, 0.0, -1.5, -2.0],
+        "speed_loop_target_omega": [15.0, 10.0, 5.0, 0.0, 0.0, 0.0, -5.0, -10.0],
+        "speed_loop_pi_integrator": [0.75, 0.75, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "effective_target_iq": [1.25, 0.75, 0.0, -1.0, 0.0, 0.0, -1.5, -1.5],
+        "command_reasons": [
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "tracking_command",
+          "unlocked_current_limit",
+          "unlocked_current_limit",
+          "tracking_command",
+          "tracking_command"
+        ],
+        "q_axis_integrator": [1.25, 2.0, 2.0, 1.0, 1.0, 1.0, -0.5, -2.0],
+        "locked": [true, true, true, true, false, false, true, true],
+        "loss_candidate_count": [0, 0, 0, 1, 2, 0, 0, 0],
+        "final_speed_loop_state": {
+          "target_omega_e_rad_s": -10.0,
+          "speed_pi_integrator": 0.0
+        }
+      }
+    }
+  ]
+}

@@ -64,6 +64,7 @@ UTF8_CORE_FILES = (
     "AI_CONTEXT.md",
     "workflow/CURRENT_SNAPSHOT.md",
     "workflow/ACTIVE_TASK.md",
+    "workflow/SUBAGENT_PROTOCOL.md",
     "workflow/task_state_machine.md",
     "workflow/codex_dual_teacher_execution_gate.md",
     "workflow/evidence_register.md",
@@ -261,6 +262,7 @@ def check_required_files(report: CheckReport) -> None:
         "AI_CONTEXT.md",
         "workflow/CURRENT_SNAPSHOT.md",
         "workflow/ACTIVE_TASK.md",
+        "workflow/SUBAGENT_PROTOCOL.md",
         "docs/00_project_truth/project_context.md",
         "docs/00_project_truth/ai_architecture.md",
         FACT_REGISTRY_PATH,
@@ -363,6 +365,38 @@ def check_snapshot_and_architecture(report: CheckReport) -> None:
         if "subagent communication" not in snapshot:
             report.warn("CURRENT_SNAPSHOT.md does not mention subagent communication.")
 
+    if exists("workflow/SUBAGENT_PROTOCOL.md"):
+        protocol = read("workflow/SUBAGENT_PROTOCOL.md")
+        required_phrases = (
+            "compatibility stub",
+            "docs/00_project_truth/ai_architecture.md",
+            "## Subagent Communication Protocol",
+            "workflow/codex_dual_teacher_execution_gate.md",
+            "AI_CONTEXT.md",
+            "workflow/CURRENT_SNAPSHOT.md",
+            "workflow/ACTIVE_TASK.md",
+            "workflow/three_hour_optimization_report_2026-06-17.md",
+        )
+        for phrase in required_phrases:
+            if phrase not in protocol:
+                report.warn(f"workflow/SUBAGENT_PROTOCOL.md does not mention {phrase}.")
+
+        forbidden_phrases = (
+            "Hierarchical Task Decomposition",
+            "Context Filtering",
+            "Summary Gate",
+            "Allowed helper roles",
+            "Research helper",
+            "Review helper",
+            "Test helper",
+        )
+        for phrase in forbidden_phrases:
+            if phrase in protocol:
+                report.error(
+                    "workflow/SUBAGENT_PROTOCOL.md must stay a pointer stub and must not duplicate protocol body: "
+                    f"{phrase}"
+                )
+
 
 def check_indexes(report: CheckReport) -> None:
     if not exists("docs/file_map.md"):
@@ -401,6 +435,7 @@ def check_indexes(report: CheckReport) -> None:
         "dangerous_claim_scan_surface",
         "entry_readability_contract",
         "three_hour_optimization_report",
+        "subagent_protocol_stub",
         "project_skill_router",
         "project_skill_no_power",
         "project_skill_workflow",

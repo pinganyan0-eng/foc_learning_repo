@@ -70,6 +70,10 @@
 - `python tools/run_ai_maintenance_audit.py --quick --repo-only-skill --json`
   runs a lightweight environment-independent audit for tests or handoff checks:
   repo-local Skill, context pack, AI contracts, and `git status --short`.
+- `workflow/SUBAGENT_PROTOCOL.md` is a compatibility startup pointer only.
+  The authoritative subagent protocol lives in
+  `docs/00_project_truth/ai_architecture.md` under
+  `## Subagent Communication Protocol`.
 
 - `build_vector_store.py`：构建本地检索索引。
 - `ask_local.py`：基于本地资料问答。
